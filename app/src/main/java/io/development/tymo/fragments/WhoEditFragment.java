@@ -1,0 +1,335 @@
+package io.development.tymo.fragments;
+
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import io.development.tymo.R;
+import io.development.tymo.activities.AddActivity;
+import io.development.tymo.activities.SelectPeopleActivity;
+import io.development.tymo.activities.ShowGuestsActivity;
+import io.development.tymo.adapters.PersonAdapter;
+import io.development.tymo.model_server.ActivityServer;
+import io.development.tymo.model_server.ListUserWrapper;
+import io.development.tymo.model_server.User;
+import io.development.tymo.models.PersonModelWrapper;
+import io.development.tymo.network.NetworkUtil;
+import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.RecyclerItemClickListener;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
+import static android.app.Activity.RESULT_OK;
+import static android.content.Context.MODE_PRIVATE;
+
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class WhoEditFragment extends Fragment implements View.OnClickListener {
+
+    private TextView guestsNumber;
+    private TextView feedVisibility;
+    private ImageView addPersonButton;
+    private int invite = 0;
+    private RecyclerView recyclerView;
+    private MaterialSpinner spinner;
+    private View profilesPhotos;
+    private LinearLayout guestBox;
+    private boolean isEdit = false;
+    private final int GUEST_UPDATE = 37, ADD_GUEST = 39;
+
+    private ArrayList<User> data = new ArrayList<>();
+    private ArrayList<User> listConfirmed = new ArrayList<>();
+    private ArrayList<User> listToInvite = new ArrayList<>();
+    private PersonAdapter adapter;
+
+    private CompositeSubscription mSubscriptions;
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    public static Fragment newInstance(String text) {
+        WhoEditFragment fragment = new WhoEditFragment();
+        return fragment;
+    }
+
+    public WhoEditFragment() {}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_act_who_edit, container, false);
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        mSubscriptions = new CompositeSubscription();
+
+        guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
+        feedVisibility = (TextView) view.findViewById(R.id.feedVisibility);
+        recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
+        profilesPhotos = view.findViewById(R.id.profilesPhotos);
+        guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
+        addPersonButton = (ImageView) view.findViewById(R.id.addGuestButton);
+
+        addPersonButton.setOnClickListener(this);
+
+        feedVisibility.setText(R.string.feed_visibility_1);
+
+
+        spinner = (MaterialSpinner) view.findViewById(R.id.visibilityCalendarPicker);
+        spinner.setItems(getActivity().getResources().getStringArray(R.array.array_who_can_invite));
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                invite = position;
+                if (invite == 2){
+                    feedVisibility.setText(R.string.feed_visibility_2);
+                }
+                else{
+                    feedVisibility.setText(R.string.feed_visibility_1);
+                }
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "visibilityCalendarPicker");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            }
+        });
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setItemAnimator(new LandingAnimator());
+        recyclerView.setNestedScrollingEnabled(false);
+
+        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        addPersonButton.setActivated(false);
+
+        AddActivity addActivity = (AddActivity)getActivity();
+
+        if(addActivity.getActivity() == null || addActivity.getUserList() == null || (addActivity.getUserList() != null && addActivity.getUserList().size() == 0)) {
+            getUser(email);
+            addActivity.setProgress(true);
+        }
+        else {
+            setLayout(addActivity.getActivity(), addActivity.getUserList(), addActivity.getConfirmedList(), addActivity.getEditable());
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position, MotionEvent e) {
+                    SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                    String email = mSharedPreferences.getString(Constants.EMAIL, "");
+                    AddActivity addActivity = (AddActivity) getActivity();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user");
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                    Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
+                    intent.putExtra("guest_list_user", new ListUserWrapper(data));
+                    intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+                    intent.putExtra("is_adm", addActivity.checkIfAdm(addActivity.getAdmList(), email));
+                    intent.putExtra("id_act", addActivity.getActivity().getId());
+                    startActivityForResult(intent, GUEST_UPDATE);
+                }
+
+                @Override
+                public void onLongItemClick(View view, int position, MotionEvent e) {
+                }
+            }));
+        }
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), getClass().getSimpleName(), null /* class override */);
+    }
+
+    private void getUser(String email) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().getProfile(email)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
+    }
+
+    private void handleResponse(User user) {
+        AddActivity addActivity = (AddActivity)getActivity();
+        if(!isEdit) {
+            data = new ArrayList<>();
+            user.setDelete(false);
+            data.add(user);
+            User friend = addActivity.getUserFriend();
+            if(friend != null) {
+                friend.setDelete(false);
+                data.add(friend);
+            }
+            adapter = new PersonAdapter(data, getActivity());
+            recyclerView.setAdapter(adapter);
+            guestsNumber.setText(String.valueOf(data.size()));
+            addPersonButton.setActivated(true);
+        }
+
+        addActivity.setProgress(false);
+    }
+
+    private void handleError(Throwable error) {
+        AddActivity addActivity = (AddActivity)getActivity();
+        addActivity.setProgress(false);
+        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+    }
+
+
+    @Override
+    public void onClick(View v) {
+        if(v == addPersonButton && addPersonButton.isActivated()){
+            Intent intent = new Intent(getActivity(), SelectPeopleActivity.class);
+            ArrayList<String> list = new ArrayList<>();
+
+            for (int i = 0; i < data.size(); i++) {
+                list.add(data.get(i).getEmail());
+            }
+
+            intent.putStringArrayListExtra("guest_list", list);
+            if(isEdit)
+                intent.putExtra("erase_from_list", true);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            startActivityForResult(intent, ADD_GUEST);
+        }
+
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        ArrayList<User> list = new ArrayList<>();
+        if(resultCode == RESULT_OK) {
+            if (requestCode == GUEST_UPDATE) {
+                AddActivity addActivity = (AddActivity) getActivity();
+                ActivityServer activityServer = new ActivityServer();
+
+                SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                activityServer.setId(0);
+                activityServer.setCreator(email);
+
+                addActivity.setActivityGuestInformation(addActivity.getActivity().getId(), activityServer);
+            }else if (requestCode == ADD_GUEST) {
+                if(!isEdit) {
+                    PersonModelWrapper wrap =
+                            (PersonModelWrapper) intent.getSerializableExtra("guest_objs");
+
+                    list.add(data.get(0));
+                    list.addAll(wrap.getItemDetails());
+                    if (list.size() > 1) {
+                        for(int i = 0; i<list.size();i++){
+                            User usr = list.get(i);
+                            usr.setDelete(false);
+                        }
+                        adapter.swap(list);
+                        guestsNumber.setText(String.valueOf(list.size()));
+                    }
+                }else {
+                    AddActivity addActivity = (AddActivity) getActivity();
+                    ActivityServer activityServer = new ActivityServer();
+                    SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                    PersonModelWrapper wrap =
+                            (PersonModelWrapper) intent.getSerializableExtra("guest_objs");
+
+                    listToInvite.clear();
+                    listToInvite.addAll(wrap.getItemDetails());
+                    if(listToInvite.size() > 0) {
+                        activityServer.setId(addActivity.getActivity().getId());
+                        activityServer.setVisibility(Constants.ACT);
+                        activityServer.setCreator(mSharedPreferences.getString(Constants.EMAIL, ""));
+                        for (int i = 0; i < listToInvite.size(); i++)
+                            activityServer.addGuest(listToInvite.get(i).getEmail());
+
+                        addActivity.addGuestToActivity(activityServer);
+                    }
+                }
+            }
+        }
+    }
+
+    public int getPrivacyFromView() {
+        return invite;
+    }
+
+    public List<User> getGuestFromView() {
+        return data;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
+
+    public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean edit){
+        invite = activityServer.getInvitationType();
+
+        spinner.setSelectedIndex(invite);
+
+        if (invite == 2){
+            feedVisibility.setText(R.string.feed_visibility_2);
+        }
+        else{
+            feedVisibility.setText(R.string.feed_visibility_1);
+        }
+
+        isEdit = edit;
+
+        data.clear();
+        listConfirmed.clear();
+        listConfirmed.addAll(confirmed);
+
+        for(int i = 0; i<users.size();i++){
+            User usr = users.get(i);
+            usr.setDelete(false);
+            data.add(usr);
+        }
+
+        adapter = new PersonAdapter(data, getActivity());
+        recyclerView.setAdapter(adapter);
+        guestsNumber.setText(String.valueOf(data.size()));
+        addPersonButton.setActivated(true);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(mSubscriptions != null)
+            mSubscriptions.unsubscribe();
+    }
+}

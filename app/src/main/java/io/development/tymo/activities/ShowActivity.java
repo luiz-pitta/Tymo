@@ -1,0 +1,960 @@
+package io.development.tymo.activities;
+
+import android.app.Dialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.os.Handler;
+import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatRadioButton;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+
+import io.development.tymo.R;
+import io.development.tymo.adapters.ShowActivityFragmentAdapter;
+import io.development.tymo.fragments.WhatShowFragment;
+import io.development.tymo.fragments.WhenShowFragment;
+import io.development.tymo.fragments.WhoShowFragment;
+import io.development.tymo.model_server.ActivityServer;
+import io.development.tymo.model_server.ActivityWrapper;
+import io.development.tymo.model_server.FlagServer;
+import io.development.tymo.model_server.InviteRequest;
+import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.User;
+import io.development.tymo.network.NetworkUtil;
+import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.ServerMessage;
+import io.development.tymo.utils.UpdateButtonController;
+import io.development.tymo.utils.Utilities;
+import retrofit2.adapter.rxjava.HttpException;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
+import rx.subscriptions.CompositeSubscription;
+
+public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private ImageView mBackButton;
+
+    private FragmentNavigator mNavigator;
+
+    private TextView m_title, privacyText;
+    private ImageView m_ic_edit;
+    private ImageView icon1;
+    private ImageView privacyIcon;
+
+    private LinearLayout privacyBox;
+
+    private UpdateButtonController controller;
+
+    private TextView whatText;
+    private TextView whereWhenText;
+    private TextView whoText;
+
+    private ImageView whatButton;
+    private ImageView whereWhenButton;
+    private ImageView whoButton;
+
+    private View whatCorners;
+    private View whereWhenCorners;
+    private View whoCorners;
+
+    private ImageView pieceIcon;
+    private ImageView cubeLowerBoxIcon;
+    private ImageView cubeUpperBoxIcon;
+
+    private View checkButtonBox, deleteButtonBox;
+    private ImageView checkButton, deleteButton;
+    private TextView checkText, deleteText, requiredText;
+
+    private ActivityWrapper activityWrapper;
+    private int selected = 0;
+
+    private ArrayList<User> userList = new ArrayList<>();
+    private ArrayList<User> admList = new ArrayList<>();
+    private User creator_activity;
+    private ArrayList<User> invitedList = new ArrayList<>();
+    private ArrayList<User> confirmedList = new ArrayList<>();
+    private ArrayList<ActivityServer> activityServers;
+    private boolean permissionInvite = false;
+
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Handler handler = new Handler();
+    private CompositeSubscription mSubscriptions;
+
+    private FirebaseAnalytics mFirebaseAnalytics;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_act);
+
+        mSubscriptions = new CompositeSubscription();
+
+        findViewById(R.id.buttonsBar).setVisibility(View.VISIBLE);
+        findViewById(R.id.confirmationBar).setVisibility(View.GONE);
+        findViewById(R.id.magicWandButton).setVisibility(View.GONE);
+
+        privacyBox = (LinearLayout) findViewById(R.id.privacyBox);
+        checkButtonBox = findViewById(R.id.checkButtonBox);
+        deleteButtonBox = findViewById(R.id.deleteButtonBox);
+        checkButton = (ImageView) findViewById(R.id.checkButton);
+        deleteButton = (ImageView) findViewById(R.id.deleteButton);
+        checkText = (TextView) findViewById(R.id.checkText);
+        deleteText = (TextView) findViewById(R.id.deleteText);
+        requiredText = (TextView) findViewById(R.id.requiredText);
+
+        cubeLowerBoxIcon = (ImageView) findViewById(R.id.cubeLowerBoxIcon);
+        cubeUpperBoxIcon = (ImageView) findViewById(R.id.cubeUpperBoxIcon);
+        pieceIcon = (ImageView) findViewById(R.id.pieceIcon);
+
+        whatText = (TextView) findViewById(R.id.whatText);
+        whereWhenText = (TextView) findViewById(R.id.whereWhenText);
+        whoText = (TextView) findViewById(R.id.whoText);
+
+        whatCorners = findViewById(R.id.whatCorners);
+        whereWhenCorners = findViewById(R.id.whereWhenCorners);
+        whoCorners = findViewById(R.id.whoCorners);
+
+        whatButton = (ImageView) findViewById(R.id.whatIcon);
+        whereWhenButton = (ImageView) findViewById(R.id.whereWhenIcon);
+        whoButton = (ImageView) findViewById(R.id.whoIcon);
+
+        whatText.setOnClickListener(this);
+        whereWhenText.setOnClickListener(this);
+        whoText.setOnClickListener(this);
+
+        whatButton.setOnClickListener(this);
+        whereWhenButton.setOnClickListener(this);
+        whoButton.setOnClickListener(this);
+
+        whatCorners.setOnClickListener(this);
+        whereWhenCorners.setOnClickListener(this);
+        whoCorners.setOnClickListener(this);
+
+        privacyBox.setOnClickListener(this);
+
+        requiredText.setVisibility(View.GONE);
+
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
+            }
+        });
+
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
+
+        checkButton.setOnClickListener(this);
+        deleteButton.setOnClickListener(this);
+
+        //set button controller
+        controller = new UpdateButtonController(this);
+        controller.attach(true, whatText, whatButton, whatCorners);
+        controller.attach(false, whereWhenText, whereWhenButton, whereWhenCorners);
+        controller.attach(false, whoText, whoButton, whoCorners);
+        controller.updateAll(Utilities.DEFAULT_POSITION, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
+
+        privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
+        privacyIcon.setVisibility(View.GONE);
+
+        privacyText = (TextView) findViewById(R.id.privacyText);
+
+
+        m_title = (TextView) findViewById(R.id.text);
+        m_title.setText(getResources().getString(R.string.activity));
+
+        m_ic_edit = (ImageView) findViewById(R.id.icon2);
+        m_ic_edit.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
+        m_ic_edit.setOnClickListener(this);
+
+        icon1 = (ImageView) findViewById(R.id.icon1);
+        //icon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_more_vertical));
+        icon1.setVisibility(View.GONE);
+
+        mNavigator = new FragmentNavigator(getFragmentManager(), new ShowActivityFragmentAdapter(), R.id.contentBox);
+        mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
+        mNavigator.onCreate(savedInstanceState);
+
+        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
+        mBackButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        setCurrentTab(mNavigator.getCurrentPosition());
+
+        activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_show");
+
+        ActivityServer activityServer = new ActivityServer();
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        activityServer.setId(0);
+        activityServer.setCreator(email);
+
+        setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
+        setProgress(true);
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
+    }
+
+    public void refreshItems() {
+        // Load items
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                mSwipeRefreshLayout.setRefreshing(false);
+                ActivityServer activityServer = new ActivityServer();
+                SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+                activityServer.setId(0);
+                activityServer.setCreator(email);
+
+                setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
+            }
+        }, 200);
+
+        // Load complete
+    }
+
+    public void setProgress(boolean progress) {
+        if (progress)
+            findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
+        else
+            findViewById(R.id.progressBox).setVisibility(View.GONE);
+    }
+
+
+    private void setActivityInformation(long id, ActivityServer activityServer) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().getActivity2(id, activityServer)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse, this::handleError));
+    }
+
+    private User checkIfInActivity(ArrayList<User> usr) {
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        for (int i = 0; i < usr.size(); i++) {
+            if (email.matches(usr.get(i).getEmail()))
+                return usr.get(i);
+        }
+
+        return null;
+    }
+
+    public boolean checkIfAdm(ArrayList<User> usr, String email) {
+        for (int i = 0; i < usr.size(); i++) {
+            if (email.matches(usr.get(i).getEmail()))
+                return true;
+        }
+
+        return false;
+    }
+
+    private ArrayList<User> setOrderGuests(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountKnows();
+                long id2 = c2.getCountKnows();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountFavorite();
+                long id2 = c2.getCountFavorite();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getInvitation();
+                long id2 = c2.getInvitation();
+
+                if (id1 == 2 || id2 == 2)
+                    return 1;
+                else if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
+    }
+
+    @Nullable
+    private User getCreator(ArrayList<User> users, User creator) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().contains(creator.getEmail()))
+                return users.get(i);
+        }
+        return null;
+    }
+
+    private ArrayList<User> getConfirmedNoAdm(ArrayList<User> users, ArrayList<User> adms) {
+        ArrayList<User> confirmed = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (!checkIfAdm(adms, users.get(i).getEmail()) && users.get(i).getInvitation() == 1)
+                confirmed.add(users.get(i));
+        }
+        return setOrderGuests(confirmed);
+    }
+
+    private ArrayList<User> getInvitedNoAdm(ArrayList<User> users, ArrayList<User> adms) {
+        ArrayList<User> confirmed = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if ((users.get(i).getInvitation() == 0 || users.get(i).getInvitation() == 2) && !checkIfAdm(adms, users.get(i).getEmail()))
+                confirmed.add(users.get(i));
+        }
+        return setOrderGuests(confirmed);
+    }
+
+    private ArrayList<User> getInvitedAdm(ArrayList<User> users, ArrayList<User> adms, User creator) {
+        ArrayList<User> confirmed = new ArrayList<>();
+        for (int i = 0; i < users.size(); i++) {
+            if (!users.get(i).getEmail().contains(creator.getEmail()) && users.get(i).getInvitation() == 1 && checkIfAdm(adms, users.get(i).getEmail())) {
+                users.get(i).setAdm(true);
+                confirmed.add(users.get(i));
+            }
+        }
+        return setOrderGuests(confirmed);
+    }
+
+    private ArrayList<User> getAdmNoCreator(ArrayList<User> adms, User creator) {
+        ArrayList<User> confirmed = new ArrayList<>();
+        for (int i = 0; i < adms.size(); i++) {
+            if (!adms.get(i).getEmail().contains(creator.getEmail())) {
+                adms.get(i).setAdm(true);
+                confirmed.add(adms.get(i));
+            }
+        }
+        return setOrderGuests(confirmed);
+    }
+
+    private boolean checkIfCanInvite(int invitation_type) {
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        switch (invitation_type) {
+            case 0:
+                return checkIfAdm(admList, email);
+            case 1:
+                return checkIfInActivity(invitedList) != null;
+            case 2:
+                return checkIfInActivity(invitedList) != null;
+            default:
+                return false;
+        }
+    }
+
+    private void deleteFlagActReminder(long id, ActivityServer activity) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activity)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleDeleteIgnoreConfirm, this::handleError));
+    }
+
+    private void handleDeleteIgnoreConfirm(Response response) {
+        //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
+        //ACTIVITY_DELETED_SUCCESSFULLY e WITHOUT_NOTIFICATION
+        finish();
+    }
+
+    private void handleResponse(Response response) {
+
+        invitedList.clear();
+        confirmedList.clear();
+        userList.clear();
+        admList.clear();
+
+        userList = response.getPeople();
+        admList = setOrderGuests(response.getAdms());
+        creator_activity = getCreator(userList, response.getUser());
+        if (creator_activity != null)
+            creator_activity.setCreator(true);
+
+
+        invitedList.add(creator_activity);
+        invitedList.addAll(getAdmNoCreator(admList, creator_activity));
+        invitedList.addAll(getConfirmedNoAdm(userList, admList));
+        invitedList.addAll(getInvitedNoAdm(userList, admList));
+
+        confirmedList.add(creator_activity);
+        confirmedList.addAll(getInvitedAdm(userList, admList, creator_activity));
+        confirmedList.addAll(getConfirmedNoAdm(userList, admList));
+
+        if (response.getTags().size() == 0) {
+            finish();
+            Toast.makeText(this, getString(R.string.show_activity_404), Toast.LENGTH_LONG).show();
+        } else {
+
+            ActivityServer activityServer = activityWrapper.getActivityServer();
+
+            User user = checkIfInActivity(userList);
+            m_ic_edit.setVisibility(View.INVISIBLE);
+
+            if (user != null) {
+                privacyIcon.setVisibility(View.VISIBLE);
+                privacyText.setVisibility(View.VISIBLE);
+                findViewById(R.id.arrowIcon).setVisibility(View.VISIBLE);
+                switch (user.getPrivacy()) {
+                    case 0:
+                        privacyIcon.setImageResource(R.drawable.ic_public);
+                        privacyText.setText(getResources().getString(R.string.visibility_public));
+                        selected = 0;
+                        break;
+                    case 1:
+                        privacyIcon.setImageResource(R.drawable.ic_people_two);
+                        privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
+                        selected = 1;
+                        break;
+                    case 2:
+                        privacyIcon.setImageResource(R.drawable.ic_lock);
+                        privacyText.setText(getResources().getString(R.string.visibility_private));
+                        selected = 2;
+                        break;
+                }
+
+                SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                if (checkIfAdm(response.getAdms(), email)) {
+                    m_ic_edit.setVisibility(View.VISIBLE);
+                } else
+                    m_ic_edit.setVisibility(View.INVISIBLE);
+
+                privacyBox.setVisibility(View.VISIBLE);
+
+                if (checkIfCreator(response.getUser().getEmail())) {
+                    deleteButtonBox.setVisibility(View.VISIBLE);
+                    deleteButton.setBackgroundResource(R.drawable.btn_feed_ignore);
+                    deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_600));
+                    deleteButton.setOnClickListener(this);
+                    checkButtonBox.setVisibility(View.GONE);
+                } else if (user.getInvited() > 0) {
+                    if (user.getInvitation() == 1) {
+                        deleteButtonBox.setVisibility(View.VISIBLE);
+                        deleteButton.setBackgroundResource(R.drawable.btn_feed_ignore);
+                        deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_600));
+                        deleteButton.setOnClickListener(this);
+                        checkButtonBox.setVisibility(View.GONE);
+                    } else {
+                        privacyBox.setVisibility(View.GONE);
+                        checkButtonBox.setVisibility(View.VISIBLE);
+                        checkButton.setBackgroundResource(R.drawable.btn_feed_check);
+                        checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
+                        checkButton.setOnClickListener(this);
+                        deleteButtonBox.setVisibility(View.GONE);
+                    }
+                } else if (activityServer.getInvitationType() == 2) {
+                    privacyBox.setVisibility(View.GONE);
+                    checkButtonBox.setVisibility(View.VISIBLE);
+                    checkButton.setBackgroundResource(R.drawable.btn_feed_check);
+                    checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
+                    checkButton.setOnClickListener(this);
+                    deleteButtonBox.setVisibility(View.GONE);
+                } else {
+                    privacyBox.setVisibility(View.GONE);
+                    checkButtonBox.setVisibility(View.GONE);
+                    deleteButtonBox.setVisibility(View.GONE);
+                }
+
+            } else {
+                deleteButtonBox.setVisibility(View.GONE);
+                checkButtonBox.setVisibility(View.GONE);
+                if (activityServer.getInvitationType() == 2) {
+                    checkButtonBox.setVisibility(View.VISIBLE);
+                    checkButton.setBackgroundResource(R.drawable.btn_feed_check);
+                    checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
+                    checkButton.setOnClickListener(this);
+                }
+                privacyBox.setVisibility(View.GONE);
+                privacyIcon.setVisibility(View.INVISIBLE);
+                findViewById(R.id.arrowIcon).setVisibility(View.INVISIBLE);
+            }
+
+            Glide.clear(pieceIcon);
+            Glide.with(this)
+                    .load(activityServer.getCubeIcon())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(pieceIcon);
+
+            cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
+            cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
+
+            m_title.setText(activityServer.getTitle());
+
+            WhatShowFragment whatShowFragment = (WhatShowFragment) mNavigator.getFragment(0);
+            whatShowFragment.setLayout(activityServer, response.getTags());
+            activityServers = response.getWhatsGoingAct();
+
+            WhenShowFragment whenShowFragment = (WhenShowFragment) mNavigator.getFragment(1);
+            if (whenShowFragment != null)
+                whenShowFragment.setLayout(getActivity(), getActivityServers());
+
+            permissionInvite = checkIfCanInvite(getActivity().getInvitationType());
+
+            WhoShowFragment whoShowFragment = (WhoShowFragment) mNavigator.getFragment(2);
+            if (whoShowFragment != null)
+                whoShowFragment.setLayout(activityServer, invitedList, confirmedList, permissionInvite);
+        }
+
+        setProgress(false);
+    }
+
+    public boolean getPermissionInvite() {
+        return permissionInvite;
+    }
+
+    private boolean checkIfCreator(String email_creator) {
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        return email.matches(email_creator);
+    }
+
+    public ArrayList<ActivityServer> getActivityServers() {
+        return activityServers;
+    }
+
+
+    public ArrayList<User> getUserList() {
+        return invitedList;
+    }
+
+    public ArrayList<User> getUserConfirmedList() {
+        return confirmedList;
+    }
+
+    public ArrayList<User> getAdmList() {
+        return admList;
+    }
+
+    public ActivityServer getActivity() {
+        return activityWrapper.getActivityServer();
+    }
+
+    private void handleError(Throwable error) {
+        setProgress(false);
+        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        mNavigator.onSaveInstanceState(outState);
+    }
+
+
+    private void setCurrentTab(int position) {
+        mNavigator.showFragment(position);
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+
+        if (id == R.id.whatText || id == R.id.whatButton || id == R.id.whatCorners) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whatText");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            controller.updateAll(0, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
+            setCurrentTab(0);
+        } else if (id == R.id.whereWhenText || id == R.id.whereWhenButton || id == R.id.whereWhenCorners) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whereWhenText");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            controller.updateAll(1, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
+            setCurrentTab(1);
+        } else if (id == R.id.whoText || id == R.id.whoButton || id == R.id.whoCorners) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whoText");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            controller.updateAll(2, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
+            setCurrentTab(2);
+        } else if (id == R.id.icon2) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            Intent myIntent = new Intent(ShowActivity.this, AddActivity.class);
+            myIntent.putExtra("act_edit", activityWrapper);
+            startActivity(myIntent);
+            finish();
+        } else if (id == R.id.checkButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButton");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            InviteRequest inviteRequest = new InviteRequest();
+
+            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+            inviteRequest.setEmail(email);
+            inviteRequest.setStatus(Constants.YES);
+
+            inviteRequest.setType(Constants.ACT);
+            inviteRequest.setIdAct(getActivity().getId());
+
+            updateInviteRequest(inviteRequest);
+        } else if (id == R.id.deleteButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButton");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            if (checkIfCreator(creator_activity.getEmail())) {
+                createDialogRemove(getActivity().getRepeatType() > 0);
+            } else{
+                InviteRequest inviteRequest = new InviteRequest();
+
+                SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                inviteRequest.setEmail(email);
+                inviteRequest.setStatus(Constants.NO);
+
+                inviteRequest.setType(Constants.ACT);
+                inviteRequest.setIdAct(getActivity().getId());
+
+                updateInviteRequest(inviteRequest);
+            }
+
+        } else if (v == privacyBox) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyBox");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            createDialogPrivacy();
+        }
+    }
+
+    private void createDialogRemove(boolean repeat) {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        TextView button1 = (TextView) customView.findViewById(R.id.buttonText1);
+        TextView button2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+        RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
+        AppCompatRadioButton allRadioButton = (AppCompatRadioButton) customView.findViewById(R.id.allRadioButton);
+
+        editText.setVisibility(View.GONE);
+
+        allRadioButton.setText(getResources().getString(R.string.dialog_delete_plans_all));
+
+        if (repeat) {
+            radioGroup.setVisibility(View.VISIBLE);
+            radioGroup.setOrientation(LinearLayout.VERTICAL);
+            button1.setText(getResources().getString(R.string.cancel));
+            button2.setText(getResources().getString(R.string.confirm));
+            text2.setVisibility(View.VISIBLE);
+            text1.setText(getResources().getString(R.string.dialog_delete_plans_text));
+            text2.setText(getResources().getString(R.string.dialog_delete_plans_text2));
+        } else {
+            button1.setText(getResources().getString(R.string.no));
+            button2.setText(getResources().getString(R.string.yes));
+            text2.setVisibility(View.GONE);
+            text1.setVisibility(View.VISIBLE);
+            text1.setText(getResources().getString(R.string.dialog_delete_plans_title));
+        }
+
+        Dialog dg = new Dialog(this, R.style.NewDialog);
+
+        dg.setContentView(customView);
+        dg.setCanceledOnTouchOutside(true);
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dg.dismiss();
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int radioButtonID;
+                View radioButton;
+                int idx = -1;
+
+                if (repeat) {
+                    radioButtonID = radioGroup.getCheckedRadioButtonId();
+                    radioButton = radioGroup.findViewById(radioButtonID);
+                    idx = radioGroup.indexOfChild(radioButton);
+                }
+
+                ActivityServer activity = new ActivityServer();
+                activity.setId(idx);
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                activity.setVisibility(Constants.FLAG);
+                deleteFlagActReminder(getActivity().getId(), activity);
+
+                dg.dismiss();
+            }
+        });
+
+        dg.show();
+    }
+
+    private void createDialogPrivacy() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_plans_visibility, null);
+
+        Dialog dialog = new Dialog(this, R.style.NewDialog);
+
+        dialog.setContentView(customView);
+        dialog.setCanceledOnTouchOutside(true);
+
+        RelativeLayout optionBox1 = (RelativeLayout) customView.findViewById(R.id.optionBox1);
+        RelativeLayout optionBox2 = (RelativeLayout) customView.findViewById(R.id.optionBox2);
+        RelativeLayout optionBox3 = (RelativeLayout) customView.findViewById(R.id.optionBox3);
+        ImageView checkBoxActivated1 = (ImageView) customView.findViewById(R.id.checkBoxActivated1);
+        ImageView checkBoxActivated2 = (ImageView) customView.findViewById(R.id.checkBoxActivated2);
+        ImageView checkBoxActivated3 = (ImageView) customView.findViewById(R.id.checkBoxActivated3);
+
+        int color_selected = this.getResources().getColor(R.color.select);
+        int color_transparent = this.getResources().getColor(R.color.transparent);
+
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        ActivityServer privacyUpdate = new ActivityServer();
+        privacyUpdate.setCreator(email);
+        privacyUpdate.setId(getActivity().getId());
+
+        switch (selected) {
+            case 1:
+                //optionBox1.setBackgroundColor(color_transparent);
+                //optionBox2.setBackgroundColor(color_selected);
+                //optionBox3.setBackgroundColor(color_transparent);
+                checkBoxActivated1.setVisibility(View.GONE);
+                checkBoxActivated2.setVisibility(View.VISIBLE);
+                checkBoxActivated3.setVisibility(View.GONE);
+                break;
+            case 2:
+                //optionBox1.setBackgroundColor(color_transparent);
+                //optionBox2.setBackgroundColor(color_transparent);
+                //optionBox3.setBackgroundColor(color_selected);
+                checkBoxActivated1.setVisibility(View.GONE);
+                checkBoxActivated2.setVisibility(View.GONE);
+                checkBoxActivated3.setVisibility(View.VISIBLE);
+                break;
+            default:
+                //optionBox1.setBackgroundColor(color_selected);
+                //optionBox2.setBackgroundColor(color_transparent);
+                //optionBox3.setBackgroundColor(color_transparent);
+                checkBoxActivated1.setVisibility(View.VISIBLE);
+                checkBoxActivated2.setVisibility(View.GONE);
+                checkBoxActivated3.setVisibility(View.GONE);
+                break;
+        }
+
+        optionBox1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //optionBox1.setBackgroundColor(color_selected);
+                //optionBox2.setBackgroundColor(color_transparent);
+                //optionBox3.setBackgroundColor(color_transparent);
+                checkBoxActivated1.setVisibility(View.VISIBLE);
+                checkBoxActivated2.setVisibility(View.GONE);
+                checkBoxActivated3.setVisibility(View.GONE);
+                privacyIcon.setImageResource(R.drawable.ic_public);
+                privacyText.setText(getResources().getString(R.string.visibility_public));
+                selected = 0;
+
+                privacyUpdate.setVisibility(selected);
+
+                setPrivacyActivity(privacyUpdate);
+
+                dialog.dismiss();
+            }
+        });
+
+        optionBox2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //optionBox1.setBackgroundColor(color_transparent);
+                //optionBox2.setBackgroundColor(color_selected);
+                //optionBox3.setBackgroundColor(color_transparent);
+                checkBoxActivated1.setVisibility(View.GONE);
+                checkBoxActivated2.setVisibility(View.VISIBLE);
+                checkBoxActivated3.setVisibility(View.GONE);
+                privacyIcon.setImageResource(R.drawable.ic_people_two);
+                privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
+                selected = 1;
+
+                privacyUpdate.setVisibility(selected);
+
+                setPrivacyActivity(privacyUpdate);
+
+                dialog.dismiss();
+            }
+        });
+
+
+        optionBox3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //optionBox1.setBackgroundColor(color_transparent);
+                //optionBox2.setBackgroundColor(color_transparent);
+                //optionBox3.setBackgroundColor(color_selected);
+                checkBoxActivated1.setVisibility(View.GONE);
+                checkBoxActivated2.setVisibility(View.GONE);
+                checkBoxActivated3.setVisibility(View.VISIBLE);
+                privacyIcon.setImageResource(R.drawable.ic_lock);
+                privacyText.setText(getResources().getString(R.string.visibility_private));
+                selected = 2;
+
+                privacyUpdate.setVisibility(selected);
+
+                setPrivacyActivity(privacyUpdate);
+
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
+    }
+
+    private void setPrivacyActivity(ActivityServer activityServer) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().setPrivacyAct(activityServer)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponsePrivacy, this::handleError));
+    }
+
+    private void handleResponsePrivacy(Response response) {
+        setProgress(false);
+    }
+
+
+    private void updateInviteRequest(InviteRequest inviteRequest) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleActivity, this::handleError));
+    }
+
+    public void addGuestToActivity(ActivityServer activityServer) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().addNewGuest(activityServer)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleActivity, this::handleError));
+    }
+
+    private void handleActivity(Response response) {
+        //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
+        //INVITED_SUCCESSFULLY
+        ActivityServer activityServer = new ActivityServer();
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        activityServer.setId(0);
+        activityServer.setCreator(email);
+
+        setActivityInformation(getActivity().getId(), activityServer);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.unsubscribe();
+    }
+
+}

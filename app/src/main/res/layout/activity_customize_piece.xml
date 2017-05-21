@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_dialog_card">
+
+    <TextView
+        android:id="@+id/textIcon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/upperLayout"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:text="@string/personalize"
+        android:textColor="@color/grey_500"
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <View
+        android:id="@+id/horizontalLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/horizontal_line_height"
+        android:layout_below="@+id/textIcon"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="5dp"
+        android:background="@color/horizontal_line" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/horizontalLine"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@id/upperLayout"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerIcons"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+
+    <include
+        layout="@layout/btn_clean_apply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <RelativeLayout
+        android:id="@+id/upperLayout"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <com.christophesmet.android.views.colorpicker.ColorPickerView
+            android:id="@+id/colorpicker"
+            android:layout_width="wrap_content"
+            android:layout_height="280dp"
+            android:layout_centerHorizontal="true"
+            app:radiusOffset="28dp"
+            app:thumbDrawable="@drawable/ic_color_palette_handle"
+            app:wheelDrawable="@drawable/ic_color_palette" />
+
+        <RelativeLayout
+            android:id="@+id/pieceBox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/cubeUpperBoxIcon"
+                android:layout_width="100dp"
+                android:layout_height="19dp"
+                android:layout_centerHorizontal="true"
+                android:src="@drawable/ic_cube_upper_box"
+                android:tint="@color/deep_purple_400_light" />
+
+            <RelativeLayout
+                android:id="@+id/cubeLowerBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cubeUpperBoxIcon"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:id="@+id/cubeLowerBoxIcon"
+                    android:layout_width="100dp"
+                    android:layout_height="81dp"
+                    android:src="@drawable/ic_cube_lower_box"
+                    android:tint="@color/deep_purple_400" />
+
+                <ImageView
+                    android:id="@+id/pieceIcon"
+                    android:layout_width="75dp"
+                    android:layout_height="75dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_add_cube"
+                    android:tint="@color/white" />
+            </RelativeLayout>
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/closeButton"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="30dp"
+            android:clickable="true"
+            android:padding="2dp"
+            android:rotation="45"
+            android:src="@drawable/ic_add"
+            android:tint="@color/grey_400" />
+    </RelativeLayout>
+
+</RelativeLayout>

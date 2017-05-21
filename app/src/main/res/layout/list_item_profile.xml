@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="70dp"
+    android:layout_height="wrap_content"
+    android:layout_marginRight="5dp">
+
+    <RelativeLayout
+        android:id="@+id/profilePhotoBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp">
+
+        <ImageView
+            android:id="@+id/profilePhoto"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:src="@drawable/ic_profile_photo_empty"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/profileName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profilePhotoBox"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:ellipsize="end"
+        android:gravity="center_horizontal"
+        android:lines="2"
+        android:text="Profile Name"
+        android:textColor="@color/grey_600"
+        android:textSize="14sp" />
+
+    <ImageView
+        android:id="@+id/deleteButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_card_delete"
+        android:padding="2dp"
+        android:rotation="45"
+        android:src="@drawable/ic_add"
+        android:tint="@color/deep_purple_400"
+        android:visibility="visible" />
+
+    <ImageView
+        android:id="@+id/checkButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_profile_check"
+        android:padding="4dp"
+        android:src="@drawable/ic_feed_check"
+        android:tint="@color/white"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/creatorButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_profile_creator"
+        android:gravity="center"
+        android:text="C"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/adminButton"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignParentRight="true"
+        android:background="@drawable/btn_profile_admin"
+        android:gravity="center"
+        android:text="A"
+        android:textColor="@color/deep_purple_400"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        android:visibility="gone" />
+
+</RelativeLayout>

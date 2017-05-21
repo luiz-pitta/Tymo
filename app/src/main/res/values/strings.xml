@@ -1,0 +1,509 @@
+<resources>
+    <!-- App Name -->
+    <string name="app_name">Tymo</string>
+
+    <!-- Facebook App ID -->
+    <string name="facebook_app_id">1167785553307401</string>
+
+    <!-- Array Week Days -->
+    <string-array name="array_week_days_first_letter">
+        <item>S</item>
+        <item>T</item>
+        <item>Q</item>
+        <item>Q</item>
+        <item>S</item>
+        <item>S</item>
+        <item>D</item>
+    </string-array>
+
+    <!-- Array Months Short -->
+    <string-array name="array_months_short">
+        <item>Jan</item>
+        <item>Fev</item>
+        <item>Mar</item>
+        <item>Abr</item>
+        <item>Mai</item>
+        <item>Jun</item>
+        <item>Jul</item>
+        <item>Ago</item>
+        <item>Set</item>
+        <item>Out</item>
+        <item>Nov</item>
+        <item>Dez</item>
+    </string-array>
+
+    <!-- Array Others -->
+    <string-array name="array_who_can_invite">
+        <item>Somente administradores</item>
+        <item>Somente convidados</item>
+        <item>Qualquer um pode entrar</item>
+    </string-array>
+
+    <string-array name="array_privacy">
+        <item>Qualquer um (Pública)</item>
+        <item>Somente meus contatos (Privada)</item>
+    </string-array>
+
+    <string-array name="array_repeat_type">
+        <item>Não se repete</item>
+        <item>Diariamente</item>
+        <item>Semanalmente</item>
+        <item>Mensalmente</item>
+    </string-array>
+
+    <string-array name="array_contact_delete">
+        <item>Excluir contato</item>
+    </string-array>
+
+    <string-array name="array_pending_request_accept_ignore">
+        <item>Aceitar</item>
+        <item>Ignorar</item>
+    </string-array>
+
+    <string-array name="array_who_will_be_signalized">
+        <item>Todos os meus contatos</item>
+        <item>Somente contatos selecionados</item>
+    </string-array>
+
+    <!-- Days Of Week -->
+    <string name="sunday">Domingo</string>
+    <string name="monday">Segunda</string>
+    <string name="tuesday">Terça</string>
+    <string name="wednesday">Quarta</string>
+    <string name="thursday">Quinta</string>
+    <string name="friday">Sexta</string>
+    <string name="saturday">Sábado</string>
+
+    <!-- Months -->
+    <string name="january">Janeiro</string>
+    <string name="february">Fevereiro</string>
+    <string name="march">Março</string>
+    <string name="april">Abril</string>
+    <string name="may">Maio</string>
+    <string name="june">Junho</string>
+    <string name="july">Julho</string>
+    <string name="august">Agosto</string>
+    <string name="september">Setembro</string>
+    <string name="october">Outubro</string>
+    <string name="november">Novembro</string>
+    <string name="december">Dezembro</string>
+
+    <!-- Date Formats -->
+    <string name="date_format_1">%1$s %2$d</string>
+    <string name="date_format_2">%1$s/%2$s - %3$s/%4$s</string>
+    <string name="date_format_3">%1$s, %2$s/%3$s/%4$d</string>
+    <string name="date_format_4">%1$s, %2$s/%3$s/%4$d às %5$s:%6$s</string>
+    <string name="date_format_5">%1$s, %2$s/%3$s/%4$d às %5$s:%6$s - %7$s:%8$s</string>
+    <string name="date_format_6">%1$s, %2$s/%3$s/%4$d às %5$s:%6$s até\n%7$s, %8$s/%9$s/%10$d às %11$s:%12$s</string>
+    <string name="date_format_7">%1$s, %2$s/%3$s às %4$s:%5$s</string>
+    <string name="date_format_8">%1$s, %2$s/%3$s às %4$s:%5$s - %6$s:%7$s</string>
+    <string name="date_format_9">%1$s, %2$s/%3$s às %4$s:%5$s até\n%6$s, %7$s/%8$s às %9$s:%10$s</string>
+    <string name="date_format_10">%1$s de %2$s de %3$s</string>
+    <string name="date_format_11">às %1$s:%2$s</string>
+    <string name="date_format_12">às %1$s:%2$s - %3$s:%4$s</string>
+
+    <!-- Server Messages -->
+    <string name="server_message_activity_deleted_successfully">Atividade removida com sucesso</string>
+    <string name="server_message_activity_registered_successfully">Atividade registrada com sucesso</string>
+    <string name="server_message_activity_updated_successfully">Atividade atualizada com sucesso</string>
+    <string name="server_message_already_exists_a_request_to_add">Já existe um pedido de amizade</string>
+    <string name="server_message_check_mail_for_instructions">Verificar e-mail para instruções</string>
+    <string name="server_message_contact_deleted">Contato excluído com sucesso</string>
+    <string name="server_message_does_not_exist_app_info">Não existem App Info :(</string>
+    <string name="server_message_does_not_exist_background">Não existem Backgrounds :(</string>
+    <string name="server_message_does_not_exist_icon">Não existem Ícones :(</string>
+    <string name="server_message_does_not_exist_interest">Não existem Interesses :(</string>
+    <string name="server_message_does_not_exist_tag">Não existem Tags :(</string>
+    <string name="server_message_flag_registered_successfully">Sinalizador registrado com sucesso</string>
+    <string name="server_message_flag_updated_successfully">Sinalizador atualizado com sucesso</string>
+    <string name="server_message_internal_server_error">Falha no servidor</string>
+    <string name="server_message_invalid_request">Solicitação inválida</string>
+    <string name="server_message_invalid_token">Token inválido</string>
+    <string name="server_message_invited_successfully">Convite enviado com sucesso</string>
+    <string name="server_message_no_guest">Sem convidados :(</string>
+    <string name="server_message_no_tag">Sem tags :(</string>
+    <string name="server_message_password_updated_successfully">Senha alterada com sucesso</string>
+    <string name="server_message_register">Registrar</string>
+    <string name="server_message_relationship_updated_successfully">Relação atualizada com sucesso</string>
+    <string name="server_message_reminder_registered_successfully">Lembrete registrado com sucesso</string>
+    <string name="server_message_reminder_updated_successfully">Lembrete atualizado com sucesso</string>
+    <string name="server_message_request_to_add_accepted">Pedido de amizade aceito com sucesso</string>
+    <string name="server_message_successfully">Bem sucedido</string>
+    <string name="server_message_try_again">Tente novamente</string>
+    <string name="server_message_user_already_registered">Usuário já cadastrado</string>
+    <string name="server_message_user_registered_successfully">Usuário cadastrado com sucesso</string>
+    <string name="server_message_user_without_contacts">Usuário sem contatos :(</string>
+    <string name="server_message_user_without_past_commitments">Usuário sem atividades passadas :(</string>
+    <string name="server_message_user_not_registered">Usuário não cadastrado</string>
+    <string name="server_message_without_notification">Sem notificação</string>
+    <string name="server_message_worked">Funcionou</string>
+    <string name="server_message_unknown">Mensagem desconhecida do servidor</string>
+
+    <!-- Others Strings -->
+    <string name="about">Sobre</string>
+    <string name="about_years">%1$d anos</string>
+    <string name="accept_invite">Convite encaixado</string>
+    <string name="account">Conta</string>
+    <string name="activity">Atividade</string>
+    <string name="add">Adicionar</string>
+    <string name="administrator">Administrador</string>
+    <string name="administrator_toast">Novo Administrador: %1$s</string>
+    <string name="advance">Avançar</string>
+    <string name="all_commitments_already_finished">Todos os seus compromissos já terminaram</string>
+    <string name="allow_notifications">Permitir Notificações</string>
+    <string name="already_happened">Já passou</string>
+    <string name="apply">Aplicar</string>
+    <string name="back">Voltar</string>
+    <string name="birth_date">Data de nascimento</string>
+    <string name="birthday_person">Aniversariantes</string>
+    <string name="birthday_person_card_text">Comemore esta data especial :)</string>
+    <string name="block_user">Bloquear usuário</string>
+    <string name="blocked_user_list">Lista de usuários bloqueados</string>
+    <string name="blocked_users">Usuários bloqueados</string>
+    <string name="cancel">Cancelar</string>
+    <string name="clean">Limpar</string>
+    <string name="cleanAll">Limpar tudo</string>
+    <string name="close">Fechar</string>
+    <string name="commitments">Compromissos</string>
+    <string name="commitments_of_the_day">Compromissos do dia!</string>
+    <string name="compare">Comparar</string>
+    <string name="confirm">Confirmar</string>
+    <string name="connect_with_facebook">Conectar com o Facebook</string>
+    <string name="contact_add_confirmation_question">Você tem certeza que deseja adicionar %1$s à sua lista de contatos?</string>
+    <string name="contact_block_confirmation_question">Você tem certeza que deseja bloquear %1$s?</string>
+    <string name="contact_delete_confirmation_question">Você tem certeza que deseja excluir %1$s?</string>
+    <string name="contact_deleted">Contato excluído</string>
+    <string name="contact_disfavorited">%1$s desfavoritado</string>
+    <string name="contact_favorited">%1$s favoritado</string>
+    <string name="contact_ignore_confirmation_question">Você tem certeza que deseja ignorar o pedido de %1$s para te adicionar?</string>
+    <string name="contact_unblock_confirmation_question">Você tem certeza que deseja desbloquear %1$s?</string>
+    <string name="contact_us">Contate-nos</string>
+    <string name="contacts">Contatos</string>
+    <string name="contacts_of">Contatos de %1$s</string>
+    <string name="contacts_qty">%1$d contatos</string>
+    <string name="contacts_qty_one">1 contato</string>
+    <string name="create_activity">Criar atividade</string>
+    <string name="create_activity_recover_with_repeat_text">Atividade resgatada possui repetições. Deseja criar com as repetições da original?</string>
+    <string name="create_flag">Criar sinalizador</string>
+    <string name="create_reminder">Criar lembrete</string>
+    <string name="created_by">Criado por %1$s</string>
+    <string name="created_by_me">Criado por mim</string>
+    <string name="creator">Criador</string>
+    <string name="date">Data</string>
+    <string name="date_and_hour">Data e hora</string>
+    <string name="date_hint">Data</string>
+    <string name="day">Dia</string>
+    <string name="delete">Excluir</string>
+    <string name="delete_account">Excluir Conta</string>
+    <string name="delete_account_text">Você tem certeza que deseja excluir sua conta?\n\nATENÇÃO! Essa ação não pode ser desfeita.</string>
+    <string name="description">Descrição</string>
+    <string name="description_hint">Descrição (opcional)</string>
+    <string name="deselectAll">Desmarcar todos</string>
+    <string name="dialog_card_free_time_text_1">Crie nesse intervalo de tempo:</string>
+    <string name="dialog_delete_plans_all">Todas as repetições</string>
+    <string name="dialog_delete_plans_only_this">Somente esse</string>
+    <string name="dialog_delete_plans_text">Esse compromisso se repete</string>
+    <string name="dialog_delete_plans_text2">O que você deseja remover da sua agenda?</string>
+    <string name="dialog_delete_plans_title">Tem certeza que deseja remover esse compromisso da sua agenda?</string>
+    <string name="dialog_edit_commitment_all">Todas futuras</string>
+    <string name="dialog_edit_email_text">Digite o novo email abaixo</string>
+    <string name="dialog_edit_email_title">Atualizar email</string>
+    <string name="dialog_edit_reminder_text">Selecione abaixo qual deseja alterar</string>
+    <string name="dialog_edit_reminder_title">Compromisso com repetições!</string>
+    <string name="dialog_naming_activity_local_text">Caso queira customizar o nome digite abaixo</string>
+    <string name="dialog_naming_activity_local_title">Nome do local</string>
+    <string name="distance_km">%1$d km de você -</string>
+    <string name="distance_meters">%1$d metros de você -</string>
+    <string name="edit_activity">Editar atividade</string>
+    <string name="edit_flag">Editar sinalizador</string>
+    <string name="edit_profile">Editar perfil</string>
+    <string name="edit_reminder">Editar lembrete</string>
+    <string name="email">Email</string>
+    <string name="email_type_again">Erro na validação do email, digite novamente!</string>
+    <string name="empty_blocked_users">Não há usuários bloqueados</string>
+    <string name="empty_commitments">Sem compromissos</string>
+    <string name="empty_feed_text_1">Sem novidades...</string>
+    <string name="empty_feed_text_2">Seja o primeiro a criar atividades e sinalizadores!</string>
+    <string name="empty_free_time">Ocupado o dia inteiro!</string>
+    <string name="empty_list_contacts_text_1">Você não possui contatos</string>
+    <string name="empty_list_contacts_text_1_friend">%1$s não possui contatos</string>
+    <string name="empty_list_contacts_text_2">Acesse a tela de busca e adicione pessoas à sua rede</string>
+    <string name="empty_list_invitations">Não há convites para você no momento</string>
+    <string name="empty_list_pending_requests">Não há solicitações para adicionarem você no momento</string>
+    <string name="empty_list_search">Nenhum item encontrado</string>
+    <string name="empty_list_search_first">Digite algo na barra de busca</string>
+    <string name="empty_timer">Você não tem compromissos (atividades, lembretes e sinalizadores) registrados para hoje</string>
+    <string name="end">Término</string>
+    <string name="enter_new_password">Digite a nova senha.</string>
+    <string name="error">Erro</string>
+    <string name="error_act_max_lenght_days">A atividade não pode ter mais de 15 dias de duração</string>
+    <string name="error_act_max_lenght_days_daily">Para repetir diariamente a atividade não pode passar de 1 dia de duração</string>
+    <string name="error_act_max_lenght_days_monthly">Para repetir mensalmente a atividade não pode passar de 30 dias de duração</string>
+    <string name="error_act_max_lenght_days_weekly">Para repetir semanalmente a atividade não pode passar de 7 dias de duração</string>
+    <string name="error_birth_date_required">Preencha a data de nascimento corretamente</string>
+    <string name="error_compare_selected_required">Deve ter ao menos uma pessoa selecionada</string>
+    <string name="error_date_required">A data e a hora são obrigatórias</string>
+    <string name="error_email_required">Preencha o email corretamente</string>
+    <string name="error_field_invalid">Campo obrigatório inválido</string>
+    <string name="error_gender_required">Selecione um gênero</string>
+    <string name="error_login_email_required">Email inválido ou não cadastrado</string>
+    <string name="error_login_email_check">Verifique seu email para mais instruções</string>
+    <string name="error_login_password_required">Senha inválida</string>
+    <string name="error_name_required">Preencha o nome completo corretamente</string>
+    <string name="error_password_minimun">A senha deve ter no mínimo 8 caracteres</string>
+    <string name="error_password_required">Preencha a senha corretamente</string>
+    <string name="error_preferences_already_selected">Você só selecionou %1$d</string>
+    <string name="error_preferences_already_selected_one">Você só selecionou 1</string>
+    <string name="error_preferences_none_selected">Você ainda não selecionou nenhum interesse</string>
+    <string name="error_preferences_required">Selecione no mínimo 5 interesses</string>
+    <string name="error_repetitions_required">É necessário dizer quantas vezes se repete</string>
+    <string name="error_repetitions_required_2">O número de repetições deve ser maior que 0 e não pode passar de 30</string>
+    <string name="error_tag_required">Selecione ao menos uma TAG</string>
+    <string name="error_title_required">O título é obrigatório</string>
+    <string name="error_unknown">Erro desconhecido!</string>
+    <string name="facebook_about_text">Os dados abaixo foram importados do Facebook e não podem ser alterados. Eles são sincronizados automaticamente.</string>
+    <string name="facebook_messenger">Facebook Messenger</string>
+    <string name="facebook_show_messenger">Mostrar Messenger</string>
+    <string name="feed_visibility_1">(aparecerá somente no FEED dos convidados)</string>
+    <string name="feed_visibility_2">(aparecerá no FEED de todos os usuários do Tymo)</string>
+    <string name="female">Feminino</string>
+    <string name="fill_fields_correctly">Preencha os campos obrigatórios corretamente!</string>
+    <string name="filter">Filtro</string>
+    <string name="filter_and_sort">Filtro e Ordenação</string>
+    <string name="filter_by">Filtrar por</string>
+    <string name="filter_proximity_enable">Ative a sua localização em Configurações para poder usar esse filtro</string>
+    <string name="finish_register">Finalizar Cadastro</string>
+    <string name="fit">Encaixar</string>
+    <string name="fit_already">Já Encaixou</string>
+    <string name="flag">Sinalizador</string>
+    <string name="flag_available">Sinalizador: ESTOU LIVRE!</string>
+    <string name="flag_available_hint">Insira um título</string>
+    <string name="flag_available_title">Estou\nlivre</string>
+    <string name="flag_unavailable_hint">Insira um título</string>
+    <string name="flag_unavailable_title">Estou\nocupado</string>
+    <string name="flag_unavailable_title_dialog">Estou ocupado!</string>
+    <string name="forgot_login_data">Esqueceu seus dados de login?</string>
+    <string name="forgot_login_data_procedure">Insira o email correspondente a sua conta no Tymo. Em seguida, lhe enviaremos uma mensagem de recuperação de senha.</string>
+    <string name="forgot_password">Esqueceu sua senha?</string>
+    <string name="free_time">Tempo Livre</string>
+    <string name="friend_in_common_many">%1$d amigos em comum</string>
+    <string name="friend_in_common_one">1 amigo em comum</string>
+    <string name="friends">Amigos</string>
+    <string name="from">De</string>
+    <string name="full_name">Nome Completo</string>
+    <string name="gender">Gênero</string>
+    <string name="gps_enable_text">Seu GPS está desativado e o Tymo o usa o para determinar a distância das atividades de você. Deseja habilitá-lo?</string>
+    <string name="guests">Convidados</string>
+    <string name="happening_now">Acontecendo agora</string>
+    <string name="help">Ajuda</string>
+    <string name="holidays_and_celebrations">Feriados e Datas Comemorativas</string>
+    <string name="hour">Hora</string>
+    <string name="ignore">Ignorar</string>
+    <string name="import_from_facebook">Importar do Facebook</string>
+    <string name="import_from_google_agenda">Importar do Google Agenda</string>
+    <string name="import_google_calendar_permission">Você precisa dessa permissão para importar do Google Agenda</string>
+    <string name="infos_to_contact">Informações para contato</string>
+    <string name="interests">Interesses</string>
+    <string name="invitation_activity_fit">Encaixado na sua agenda!</string>
+    <string name="invitation_activity_ignored">Ignorado!</string>
+    <string name="invitation_activity_swiped">Você já encaixou!</string>
+    <string name="invitation_request_accepted">%1$s aceitou sua solicitação</string>
+    <string name="invitations">Convites</string>
+    <string name="invite_accept_more_one_person">e outras %1$d pessoas aceitaram seu convite</string>
+    <string name="invite_accept_one_person">e outra %1$d pessoa aceitaram seu convite</string>
+    <string name="invite_accept_zero_people">aceitou seu convite</string>
+    <string name="invited_by">Convidado por %1$s</string>
+    <string name="is_happening">Está acontecendo</string>
+    <string name="loading">Carregando...</string>
+    <string name="local">Local</string>
+    <string name="local_hint">Insira um local (opcional)</string>
+    <string name="location">Localização</string>
+    <string name="location_permission">Precisa da sua localização para essa funcionalidade!</string>
+    <string name="location_where_lives">Local onde mora</string>
+    <string name="login">Entrar</string>
+    <string name="login_slideshow_1">Encontre e encaixe diferentes atividades na sua agenda.</string>
+    <string name="login_slideshow_2">Tenha o controle do seu tempo. Visualize seus compromissos e tempo livre.</string>
+    <string name="login_slideshow_3">Conecte-se com seus amigos e outras pessoas da rede e...</string>
+    <string name="login_slideshow_4">...concilie seus horários! Descubra o tempo ideal para realizarem algo.</string>
+    <string name="logout_app">Sair do Tymo</string>
+    <string name="logout_confirmation_query">Você tem certeza que deseja sair da sua conta?</string>
+    <string name="make_admin">Tornar Administrador</string>
+    <string name="male">Masculino</string>
+    <string name="map">Mapa</string>
+    <string name="modify_profile_photo">Alterar foto do perfil</string>
+    <string name="month">Mês</string>
+    <string name="my_commitments">Meus Compromissos</string>
+    <string name="my_contacts">Meus contatos</string>
+    <string name="my_contacts_action_block">Bloquear %1$s</string>
+    <string name="my_contacts_action_delete">Excluir %1$s</string>
+    <string name="my_contacts_action_unblock">Desbloquear %1$s</string>
+    <string name="my_contacts_action_view">Ver contatos de %1$s</string>
+    <string name="my_contacts_count">(%1$d)</string>
+    <string name="my_reminder">Meu lembrete</string>
+    <string name="n_commitments">%1$d compromissos</string>
+    <string name="name">Nome</string>
+    <string name="network_error">Erro na rede! Tente Novamente</string>
+    <string name="next_commitments_activities">atividades</string>
+    <string name="next_commitments_activity">atividade</string>
+    <string name="next_commitments_flag">sinalizador</string>
+    <string name="next_commitments_flags">sinalizadores</string>
+    <string name="next_commitments_reminder">lembrete</string>
+    <string name="next_commitments_reminders">lembretes</string>
+    <string name="no">Não</string>
+    <string name="notifications">Notificações</string>
+    <string name="ok">OK</string>
+    <string name="open">Abrir</string>
+    <string name="order_by">Ordenar por</string>
+    <string name="password">Senha</string>
+    <string name="password_actual">Senha atual</string>
+    <string name="password_new">Nova senha</string>
+    <string name="password_new_again">Digite novamente a nova senha</string>
+    <string name="password_new_wrong">As senhas não estão iguais. Digite a nova senha novamente!</string>
+    <string name="password_reset">Redefinição de senha</string>
+    <string name="password_reset_done">Redefinição de senha feita com sucesso!</string>
+    <string name="passwords_differents">O campo está diferente da nova senha</string>
+    <string name="pending_requests">Solicitações pendentes</string>
+    <string name="people">Pessoas</string>
+    <string name="people_selected">Pessoas selecionadas</string>
+    <string name="personalize">Personalize</string>
+    <string name="photo">Foto</string>
+    <string name="popularity">Popularidade</string>
+    <string name="preferences">Preferências</string>
+    <string name="preferences_text_1">Ninguém entende melhor o que você quer do que você mesmo</string>
+    <string name="preferences_text_2">Ajude-nos a exibir o que você deseja.</string>
+    <string name="preferences_text_3">(escolha suas preferências)</string>
+    <string name="privacy">Privacidade</string>
+    <string name="privacy_always_flag_signalized">Somente Sinalizados</string>
+    <string name="privacy_always_friends">Somente Amigos</string>
+    <string name="privacy_always_privated">Privada</string>
+    <string name="privacy_always_public">Pública</string>
+    <string name="privacy_policy">Políticas de Privacidade</string>
+    <string name="privacy_text_1">Sua segurança é nossa prioridade</string>
+    <string name="privacy_text_2">Determine o nível de visibilidade do seu perfil. Quem poderá ver a sua agenda?</string>
+    <string name="privated">Privado</string>
+    <string name="private_account">Essa conta é privada.\nAdicione aos seus contatos para ver o conteúdo desse perfil.</string>
+    <string name="proximity">Proximidade</string>
+    <string name="push_notification_1_text_1">%1$s agora é seu contato.</string>
+    <string name="push_notification_1_text_2">Agora você tem %1$d novos contatos</string>
+    <string name="push_notification_1_title">Solicitação aceita</string>
+    <string name="push_notification_2_text_1">%1$s pediu para fazer parte da sua rede de contatos</string>
+    <string name="push_notification_2_text_2">%1$d pessoas pediram para fazer parte da sua rede de contatos</string>
+    <string name="push_notification_2_title">Solicitações pendentes</string>
+    <string name="push_notification_3_title">Você recebeu um novo convite</string>
+    <string name="push_notification_4_title">Você recebeu %1$d novos convites</string>
+    <string name="push_notification_5_text_1">%1$s aceitou o convite</string>
+    <string name="push_notification_5_text_2">%1$d pessoas aceitaram o convite</string>
+    <string name="push_notification_5_text_3">%1$s cancelou a ATIVIDADE</string>
+    <string name="push_notification_5_text_4">%1$s cancelou o SINALIZADOR</string>
+    <string name="refuse_invite">Convite ignorado</string>
+    <string name="register">Cadastro</string>
+    <string name="register_account_facebook_failed">Conta cadastrada no Tymo não vinculada com o Facebook!</string>
+    <string name="register_minimum_age">Esse aplicativo só é permitido para maiores de 13 anos</string>
+    <string name="register_steps">(passo %1$d de %2$d)</string>
+    <string name="reminder">Lembrete</string>
+    <string name="remove">Remover</string>
+    <string name="repeat_dayly">diariamente</string>
+    <string name="repeat_how_many_times">Repetir quantas vezes? (máx. = 30)</string>
+    <string name="repeat_monthly">mensalmente</string>
+    <string name="repeat_not">Não se repete</string>
+    <string name="repeat_text">Repete %1$s até %2$s</string>
+    <string name="repeat_text_imported_google_calendar">Atividade importada sem as repetições, edite para criá-las!</string>
+    <string name="repeat_weekly">semanalmente</string>
+    <string name="request_sent">Solicitação enviada</string>
+    <string name="request_to_add_accepted">%1$s agora é seu contato</string>
+    <string name="request_to_add_ignore">Solicitação ignorada</string>
+    <string name="save_updates">Salvar alterações</string>
+    <string name="schedule">Horário</string>
+    <string name="search_hint">Pesquisar...</string>
+    <string name="selected">Selecionados</string>
+    <string name="send">Enviar</string>
+    <string name="sending_request">Enviando solicitação</string>
+    <string name="settings">Configurações</string>
+    <string name="settings_import_facebook_success">Importado do Facebook com sucesso!</string>
+    <string name="settings_import_facebook_tag">Facebook</string>
+    <string name="settings_import_google_calendar_text">Você deseja importar as suas atividades?</string>
+    <string name="settings_import_google_calendar_title">Google Agenda</string>
+    <string name="settings_import_google_no_activities">Você não possui nenhuma atividade para importar!</string>
+    <string name="settings_import_google_success">Importado do Google Agenda com sucesso!</string>
+    <string name="settings_import_google_tag">Google Agenda</string>
+    <string name="show_activity_404">Atividade não encontrada!</string>
+    <string name="show_guests_fit">Encaixaram (%1$d)</string>
+    <string name="show_guests_invited">Convidados (%1$d)</string>
+    <string name="show_less">Ver menos</string>
+    <string name="show_location">Mostrar Localização</string>
+    <string name="show_more">Ver mais</string>
+    <string name="signalized">Sinalizados</string>
+    <string name="signin">Cadastre-se</string>
+    <string name="site">Site</string>
+    <string name="skip">Pular</string>
+    <string name="start">Início</string>
+    <string name="starts_at">Inicia às %1$s:%2$s</string>
+    <string name="starts_at_plural">Iniciam às %1$s:%2$s</string>
+    <string name="surname">Sobrenome</string>
+    <string name="tags_hint">Escolha no mínimo uma TAG</string>
+    <string name="time_hint">Horário</string>
+    <string name="title">Título</string>
+    <string name="title_hint">Insira um título</string>
+    <string name="to">Até</string>
+    <string name="today">Hoje</string>
+    <string name="tomorrow">Amanhã</string>
+    <string name="try_again">Tente Novamente</string>
+    <string name="tutorial">Tutorial</string>
+    <string name="tutorial_1_text_1">Atividade</string>
+    <string name="tutorial_1_text_2">Monte desde pequenos momentos à grandes eventos.</string>
+    <string name="tutorial_1_text_3">Lembrete</string>
+    <string name="tutorial_1_text_4">Sem esquecimento! Registre qualquer informação rapidamente.</string>
+    <string name="tutorial_1_text_5">Sinalizador</string>
+    <string name="tutorial_1_text_6">Informe de forma direta e simples se você está OCUPADO ou LIVRE pra fazer algo.</string>
+    <string name="tutorial_1_title">Crie</string>
+    <string name="tutorial_2_text_1">Encontre e capture atividades públicas e da sua rede de amigos</string>
+    <string name="tutorial_2_text_2">deslize para esquerda para ignorar uma atividade</string>
+    <string name="tutorial_2_text_3">deslize para direita para encaixar uma atividade nos seus planos</string>
+    <string name="tutorial_2_title">Feed</string>
+    <string name="tutorial_3_text_1">Filtre quais atividades irão aparecer no seu FEED por interesse, localidade, hora, etc.</string>
+    <string name="tutorial_3_title">Filtro</string>
+    <string name="tutorial_4_text_1">Este é o espaço para você guardar suas atividades, lembretes e sinalizar se está livre ou ocupado.</string>
+    <string name="tutorial_4_text_2">Encontre espaços de tempo livre e visualize compromissos em comum com seus amigos.</string>
+    <string name="tutorial_4_title">Planos</string>
+    <string name="tutorial_welcome_text_1">Vamos começar</string>
+    <string name="tutorial_welcome_text_2">Esse guia rápido lhe deixara por dentro do mundo Tymo!</string>
+    <string name="tutorial_welcome_text_3">#EncaixeNovosMomentos</string>
+    <string name="unable_to_find_application">Não foi possível achar um aplicativo de Mapas</string>
+    <string name="undo">Desfazer</string>
+    <string name="unfit">Desencaixar</string>
+    <string name="unhide">Reexibir</string>
+    <string name="update">Alterar</string>
+    <string name="updating">Atualizando...</string>
+    <string name="use_terms">Termos de Uso</string>
+    <string name="user_blocked">Usuário bloqueado</string>
+    <string name="user_unblocked">Usuário desbloqueado</string>
+    <string name="users_blocked">Usuários bloqueados</string>
+    <string name="version_name">Versão %1$s</string>
+    <string name="visibility_only_my_contacts">Somente Meus Contatos</string>
+    <string name="visibility_only_my_contacts_2">Somente seus contatos poderão ver na sua agenda (os demais verão um sinalizador de OCUPADO)</string>
+    <string name="visibility_private">Privada</string>
+    <string name="visibility_private_2">Somente você e os convidados poderão ver na sua agenda (os demais verão um sinalizador de OCUPADO)</string>
+    <string name="visibility_public">Pública</string>
+    <string name="visibility_public_2">Todos os usuários do app poderão ver na sua agenda</string>
+    <string name="visibility_text">Escolha o nível de visibilidade da atividade na sua agenda:</string>
+    <string name="waiting">Aguardando</string>
+    <string name="waiting_your_answer">Aguardando sua resposta</string>
+    <string name="week_days">Dias da semana</string>
+    <string name="what_is_going_on">O que está rolando?</string>
+    <string name="what_is_it">O que é?</string>
+    <string name="whatsapp_group_link_hint">Link do grupo no WhatsApp (opcional)</string>
+    <string name="where_and_when">Onde e quando?</string>
+    <string name="where_studied">Onde estudou</string>
+    <string name="where_works">Onde trabalha</string>
+    <string name="who_can_invite">Quem pode convidar?</string>
+    <string name="who_goes">Quem vai?</string>
+    <string name="who_will_be_signalized">Quem será sinalizado?</string>
+    <string name="will_happen">Vai acontecer</string>
+    <string name="year">Ano</string>
+    <string name="yes">Sim</string>
+    <string name="yesterday">Ontem</string>
+    <string name="zoom">Zoom</string>
+    <string name="empty_contacts_friend_text_1">Esse usuário ainda não possui contatos</string>
+    <string name="empty_contacts_friend_text_2">Seja o primeiro dessa lista e o adicione</string>
+
+</resources>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/AndroidImageSlider/AndroidImageSlider.iml" filepath="$PROJECT_DIR$/AndroidImageSlider/AndroidImageSlider.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ExpandableLayout/ExpandableLayout.iml" filepath="$PROJECT_DIR$/ExpandableLayout/ExpandableLayout.iml" />
+      <module fileurl="file://$PROJECT_DIR$/FragmentNavigator/FragmentNavigator.iml" filepath="$PROJECT_DIR$/FragmentNavigator/FragmentNavigator.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MaterialDateRangePicker/MaterialDateRangePicker.iml" filepath="$PROJECT_DIR$/MaterialDateRangePicker/MaterialDateRangePicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MaterialDateTimePicker/MaterialDateTimePicker.iml" filepath="$PROJECT_DIR$/MaterialDateTimePicker/MaterialDateTimePicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MaterialSearchView/MaterialSearchView.iml" filepath="$PROJECT_DIR$/MaterialSearchView/MaterialSearchView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/MaterialSpinner/MaterialSpinner.iml" filepath="$PROJECT_DIR$/MaterialSpinner/MaterialSpinner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/ReadMoreTextView/ReadMoreTextView.iml" filepath="$PROJECT_DIR$/ReadMoreTextView/ReadMoreTextView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/RecyclerViewPager/RecyclerViewPager.iml" filepath="$PROJECT_DIR$/RecyclerViewPager/RecyclerViewPager.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SwipeAwayDialog/SwipeAwayDialog.iml" filepath="$PROJECT_DIR$/SwipeAwayDialog/SwipeAwayDialog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/TagView/TagView.iml" filepath="$PROJECT_DIR$/TagView/TagView.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Tymo.iml" filepath="$PROJECT_DIR$/Tymo.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/backboard/backboard.iml" filepath="$PROJECT_DIR$/backboard/backboard.iml" />
+      <module fileurl="file://$PROJECT_DIR$/circular-music-progressbar/circular-music-progressbar.iml" filepath="$PROJECT_DIR$/circular-music-progressbar/circular-music-progressbar.iml" />
+      <module fileurl="file://$PROJECT_DIR$/colorpicker/colorpicker.iml" filepath="$PROJECT_DIR$/colorpicker/colorpicker.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cropper/cropper.iml" filepath="$PROJECT_DIR$/cropper/cropper.iml" />
+      <module fileurl="file://$PROJECT_DIR$/easyrecyclerview/easyrecyclerview.iml" filepath="$PROJECT_DIR$/easyrecyclerview/easyrecyclerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/library.iml" filepath="$PROJECT_DIR$/library/library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/material-intro-screen/material-intro-screen.iml" filepath="$PROJECT_DIR$/material-intro-screen/material-intro-screen.iml" />
+      <module fileurl="file://$PROJECT_DIR$/library/multichoicerecyclerview/multichoicerecyclerview.iml" filepath="$PROJECT_DIR$/library/multichoicerecyclerview/multichoicerecyclerview.iml" />
+      <module fileurl="file://$PROJECT_DIR$/revealator/revealator.iml" filepath="$PROJECT_DIR$/revealator/revealator.iml" />
+    </modules>
+  </component>
+</project>

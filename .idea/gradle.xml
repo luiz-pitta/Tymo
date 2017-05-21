@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="GradleSettings">
+    <option name="linkedExternalProjectsSettings">
+      <GradleProjectSettings>
+        <option name="distributionType" value="LOCAL" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="gradleHome" value="C:\Program Files\Android\Android Studio\gradle\gradle-2.14.1" />
+        <option name="modules">
+          <set>
+            <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/AndroidImageSlider" />
+            <option value="$PROJECT_DIR$/ExpandableLayout" />
+            <option value="$PROJECT_DIR$/FragmentNavigator" />
+            <option value="$PROJECT_DIR$/MaterialDateRangePicker" />
+            <option value="$PROJECT_DIR$/MaterialDateTimePicker" />
+            <option value="$PROJECT_DIR$/MaterialSearchView" />
+            <option value="$PROJECT_DIR$/MaterialSpinner" />
+            <option value="$PROJECT_DIR$/ReadMoreTextView" />
+            <option value="$PROJECT_DIR$/RecyclerViewPager" />
+            <option value="$PROJECT_DIR$/SwipeAwayDialog" />
+            <option value="$PROJECT_DIR$/TagView" />
+            <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/backboard" />
+            <option value="$PROJECT_DIR$/circular-music-progressbar" />
+            <option value="$PROJECT_DIR$/colorpicker" />
+            <option value="$PROJECT_DIR$/cropper" />
+            <option value="$PROJECT_DIR$/easyrecyclerview" />
+            <option value="$PROJECT_DIR$/library" />
+            <option value="$PROJECT_DIR$/library/multichoicerecyclerview" />
+            <option value="$PROJECT_DIR$/material-intro-screen" />
+            <option value="$PROJECT_DIR$/revealator" />
+          </set>
+        </option>
+        <option name="resolveModulePerSourceSet" value="false" />
+      </GradleProjectSettings>
+    </option>
+  </component>
+</project>

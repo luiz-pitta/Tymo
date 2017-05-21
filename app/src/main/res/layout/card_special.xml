@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/card"
+    android:layout_width="50dp"
+    android:layout_height="90dp"
+    android:layout_marginRight="10dp">
+
+    <LinearLayout
+        android:id="@+id/iconBox"
+        android:layout_width="50dp"
+        android:layout_height="70dp"
+        android:layout_centerVertical="true"
+        android:layout_gravity="bottom"
+        android:background="@color/grey_200"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/ic_balloons"
+            android:tint="@color/deep_purple_400" />
+
+    </LinearLayout>
+
+</RelativeLayout>

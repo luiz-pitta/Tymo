@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "549674085088",
+    "firebase_url": "https://tymo-edb9f.firebaseio.com",
+    "project_id": "tymo-edb9f",
+    "storage_bucket": "tymo-edb9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:549674085088:android:6c5294fa92d74c90",
+        "android_client_info": {
+          "package_name": "io.development.tymo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "549674085088-41sdbthgbgisa427qkkf3ti5kaj3n35b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD2S8mTxAuoAgO5J3uMRvMwvZkSMnTSTmU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/checkBoxActivated"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/btn_check_activated"
+        android:padding="2dp"
+        android:src="@drawable/ic_check"
+        android:tint="@color/white"
+        android:visibility="gone"/>
+
+    <View
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:background="@drawable/btn_check_deactivated" />
+
+</RelativeLayout>

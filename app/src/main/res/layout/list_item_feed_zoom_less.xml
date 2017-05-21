@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipe_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="15dp">
+
+    <RelativeLayout
+        android:id="@+id/rowActivity"
+        android:layout_width="match_parent"
+        android:layout_height="150dp">
+
+        <ImageView
+            android:id="@+id/triangle"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_toRightOf="@+id/pieceBox"
+            android:rotation="270"
+            android:src="@drawable/bg_feed_shape_triangle" />
+
+        <RelativeLayout
+            android:id="@+id/infoBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_toRightOf="@+id/triangle"
+            android:background="@drawable/bg_feed_info_box"
+            android:gravity="center_vertical"
+            android:minHeight="50dp"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:text="Title Title Title Title Title Title Title Title Title Title Title Title Title Title"
+                android:textColor="@color/grey_900"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/title"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:gravity="clip_horizontal"
+                android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
+                android:textColor="@color/grey_800"
+                android:textSize="14sp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/pieceBox"
+            android:layout_width="120dp"
+            android:layout_height="100dp"
+            android:layout_gravity="left"
+            android:layout_marginLeft="12.5dp"
+            android:layout_marginTop="25dp">
+
+            <ImageView
+                android:id="@+id/flagIcon"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_centerInParent="true"
+                android:src="@drawable/ic_feed_flag_available"
+                android:visibility="gone" />
+
+            <ImageView
+                android:id="@+id/cubeUpperBoxIcon"
+                android:layout_width="80dp"
+                android:layout_height="15dp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="20dp"
+                android:antialias="true"
+                android:src="@drawable/ic_cube_upper_box"
+                android:tileMode="disabled"
+                android:tint="@color/deep_purple_400_light" />
+
+            <RelativeLayout
+                android:id="@+id/cubeLowerBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/cubeUpperBoxIcon"
+                android:layout_centerHorizontal="true">
+
+                <ImageView
+                    android:id="@+id/cubeLowerBoxIcon"
+                    android:layout_width="80dp"
+                    android:layout_height="65dp"
+                    android:antialias="true"
+                    android:src="@drawable/ic_cube_lower_box"
+                    android:tileMode="disabled"
+                    android:tint="@color/deep_purple_400" />
+
+                <ImageView
+                    android:id="@+id/pieceIcon"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_person" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/photoCreatorBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true">
+
+                <ImageView
+                    android:id="@+id/photoCreator"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/ic_profile_photo_empty" />
+
+                <View
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/bg_shape_oval_white_corners" />
+
+                <RelativeLayout
+                    android:id="@+id/photoCreatorRingBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true">
+
+                    <View
+                        android:id="@+id/photoCreatorRing"
+                        android:layout_width="54dp"
+                        android:layout_height="54dp"
+                        android:layout_centerInParent="true"
+                        android:background="@drawable/bg_shape_ring_favorite_zoom_less" />
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

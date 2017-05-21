@@ -1,2 +1,2 @@
 # Tymo
-Tymo App
+Tymo app repository

@@ -1,0 +1,20 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Horizontal Line -->
+    <dimen name="horizontal_line_height">1dp</dimen>
+
+    <!-- Divider -->
+    <dimen name="divider_padding">7dp</dimen>
+
+    <!-- Action Bar -->
+    <dimen name="action_bar_height">50dp</dimen>
+
+    <!-- Confirmation Bar -->
+    <dimen name="confirmation_bar_height">50dp</dimen>
+
+    <!-- Button Bar -->
+    <dimen name="button_bar_height">50dp</dimen>
+
+    <!-- Floating Action Button (Add Button) -->
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="design_fab_image_size" tools:override="true">36dp</dimen>
+</resources>

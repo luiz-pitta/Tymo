@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white">
+
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionBar"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/orderByText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/order_by"
+                android:textColor="@color/grey_600"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/orderByBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/proximityBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/proximityIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_location"
+                            android:tint="@color/grey_400" />
+
+                        <View
+                            android:id="@+id/proximityCorners"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="@drawable/bg_shape_oval_grey_400_corners" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/proximityText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/proximity"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey_400"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/popularityBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/popularityIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_people_three"
+                            android:tint="@color/grey_400" />
+
+                        <View
+                            android:id="@+id/popularityCorners"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="@drawable/bg_shape_oval_grey_400_corners" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/popularityText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/popularity"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey_400"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/dateHourBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    android:paddingLeft="5dp"
+                    android:paddingRight="5dp">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal">
+
+                        <ImageView
+                            android:id="@+id/dateHourIcon"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_centerInParent="true"
+                            android:src="@drawable/ic_calendar_clock"
+                            android:tint="@color/grey_400" />
+
+                        <View
+                            android:id="@+id/dateHourCorners"
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:background="@drawable/bg_shape_oval_grey_400_corners" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        android:id="@+id/dateHourText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="10dp"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/date_and_hour"
+                        android:textAllCaps="true"
+                        android:textColor="@color/grey_400"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/filterByText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="30dp"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/filter_by"
+                android:textColor="@color/grey_600"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/horizontal_line_height"
+                android:background="@color/horizontal_line" />
+
+            <include layout="@layout/frangment_filter_interests" />
+
+            <View
+                android:id="@+id/topHorizontalLineInterests"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/horizontal_line_height"
+                android:background="@color/horizontal_line"
+                android:visibility="gone" />
+
+            <include layout="@layout/frangment_filter_friends" />
+
+            <View
+                android:id="@+id/topHorizontalLineFriends"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/horizontal_line_height"
+                android:background="@color/horizontal_line"
+                android:visibility="gone" />
+
+            <include layout="@layout/frangment_filter_local" />
+
+            <View
+                android:id="@+id/topHorizontalLineLocal"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/horizontal_line_height"
+                android:background="@color/horizontal_line"
+                android:visibility="gone" />
+
+            <include layout="@layout/frangment_filter_date" />
+
+            <View
+                android:id="@+id/topHorizontalLineDate"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/horizontal_line_height"
+                android:background="@color/horizontal_line"
+                android:visibility="gone" />
+
+            <include layout="@layout/frangment_filter_schedule" />
+
+            <View
+                android:id="@+id/topHorizontalLineSchedule"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/horizontal_line_height"
+                android:background="@color/horizontal_line"
+                android:visibility="gone" />
+
+            <include layout="@layout/frangment_filter_week_days" />
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <include
+        layout="@layout/btn_clean_apply"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+</RelativeLayout>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+
+    <LinearLayout
+        android:id="@+id/dateBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/actionBar"
+        android:background="@color/grey_100"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/dateMonthYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="Date"
+            android:textStyle="bold"
+            android:textColor="@color/grey_500"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/searchSelection"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/dateBox"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <SearchView
+            android:id="@+id/searchSelectionView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:queryBackground="@color/transparent"
+            android:background="@drawable/bg_search"
+            android:queryHint="@string/search_hint"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/horizontalBottomLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/horizontal_line_height"
+        android:layout_below="@+id/searchSelection"
+        android:background="@color/horizontal_line" />
+
+    <LinearLayout
+        android:id="@+id/contactsQtyBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horizontalBottomLine"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/contactsQty"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:textColor="@color/grey_500"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/horizontalBottomLine2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/horizontal_line_height"
+        android:layout_below="@+id/contactsQtyBox"
+        android:background="@color/horizontal_line" />
+
+    <com.jude.easyrecyclerview.EasyRecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/horizontalBottomLine2"
+        android:layout_gravity="center"
+        android:fillViewport="true"
+        app:layout_empty="@layout/empty_timer"
+        app:layout_progress="@layout/progress_loading_list"
+        app:scrollbars="none" />
+
+</RelativeLayout>

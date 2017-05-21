@@ -1,0 +1,67 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/actionBar"
+        layout="@layout/action_bar" />
+
+    <RelativeLayout
+        android:id="@+id/searchSelection"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:layout_below="@id/dateBox"
+        android:background="@color/white"
+        android:padding="10dp">
+
+        <SearchView
+            android:id="@+id/searchSelectionView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:queryBackground="@color/transparent"
+            android:background="@drawable/bg_search"
+            android:queryHint="@string/search_hint"/>
+    </RelativeLayout>
+
+    <View
+        android:id="@+id/horizontalBottomLine"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/horizontal_line_height"
+        android:background="@color/horizontal_line" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <android.support.design.widget.TabLayout
+            android:id="@+id/tabs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabGravity="fill"
+            app:tabIndicatorHeight="3.5dp"
+            app:tabMode="fixed"
+            app:tabSelectedTextColor="@color/deep_purple_400"
+            app:tabTextAppearance="@style/MineCustomTabText" />
+
+        <View
+            android:id="@+id/horizontalBottomLine2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_gravity="bottom"
+            android:background="@color/horizontal_line" />
+    </FrameLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+</LinearLayout>
