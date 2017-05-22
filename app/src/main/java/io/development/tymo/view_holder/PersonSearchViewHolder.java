@@ -597,7 +597,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
     }
 
     private void handleError(Throwable error) {
-        setProgressFriendRequest(false);
+        //setProgressFriendRequest(false);
         actionIcon.setOnClickListener(this);
         Toast.makeText(mContext, mContext.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
         /*LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

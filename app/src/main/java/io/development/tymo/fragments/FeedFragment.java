@@ -100,7 +100,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
     private TextView filterText, zoomText;
 
-    //private View filterNotificationView;
     private FragmentNavigator mNavigator;
     private ImageView filter, detail;
     private LinearLayout feedIgnoreButton, feedCheckButton, buttonsBar;
@@ -180,7 +179,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         backgroundCloud1 = (ImageView) view.findViewById(R.id.backgroundCloud1);
         backgroundCloud2 = (ImageView) view.findViewById(R.id.backgroundCloud2);
         buttonsBar = (LinearLayout) view.findViewById(R.id.buttonsBar);
-        //filterNotificationView = view.findViewById(R.id.filterNotificationView);
 
         filter.setOnClickListener(this);
         detail.setOnClickListener(this);
@@ -205,7 +203,11 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                isTimeToChangeBackground();
+                                currentTime = Calendar.getInstance();
+                                currentSecond = currentTime.get(Calendar.SECOND);
+                                currentMinute = currentTime.get(Calendar.MINUTE);
+                                currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                                setBackgroundFeed();
                             }
                         });
                     }
@@ -273,14 +275,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         // [END set_current_screen]
     }
 
-    private void isTimeToChangeBackground() {
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundFeed();
-    }
-
     private void getBgFeed() {
         mSubscriptions.add(NetworkUtil.getRetrofit().getBgFeed()
                 .observeOn(AndroidSchedulers.mainThread())
@@ -323,27 +317,45 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             if (period == 3) {
                 buttonsBar.setBackgroundResource(R.drawable.bg_feed_bottom_bar_morning);
                 filterText.setTextColor(getResources().getColor(R.color.deep_purple_400));
-                filter.setColorFilter(getResources().getColor(R.color.deep_purple_400));
-                filter.setBackgroundResource(R.drawable.btn_feed_filter_morning);
                 zoomText.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 detail.setColorFilter(getResources().getColor(R.color.deep_purple_400));
                 detail.setBackgroundResource(R.drawable.btn_feed_filter_morning);
             } else if (period == 2 || period == 4) {
                 buttonsBar.setBackgroundResource(R.drawable.bg_feed_bottom_bar_sunset);
                 filterText.setTextColor(getResources().getColor(R.color.white));
-                filter.setColorFilter(getResources().getColor(R.color.white));
-                filter.setBackgroundResource(R.drawable.btn_feed_filter_sunset);
                 zoomText.setTextColor(getResources().getColor(R.color.white));
                 detail.setColorFilter(getResources().getColor(R.color.white));
                 detail.setBackgroundResource(R.drawable.btn_feed_filter_sunset);
             } else {
                 buttonsBar.setBackgroundResource(R.drawable.bg_feed_bottom_bar_night);
                 filterText.setTextColor(getResources().getColor(R.color.white));
-                filter.setColorFilter(getResources().getColor(R.color.white));
-                filter.setBackgroundResource(R.drawable.btn_feed_filter_night);
                 zoomText.setTextColor(getResources().getColor(R.color.white));
                 detail.setColorFilter(getResources().getColor(R.color.white));
                 detail.setBackgroundResource(R.drawable.btn_feed_filter_night);
+            }
+
+            if(filterServer != null && filterServer.isFilterFilled()) {
+                if (period == 3) {
+                    filter.setColorFilter(getResources().getColor(R.color.white));
+                    filter.setBackgroundResource(R.drawable.btn_feed_filter_morning_activated);
+                } else if (period == 2 || period == 4) {
+                    filter.setColorFilter(getResources().getColor(R.color.white));
+                    filter.setBackgroundResource(R.drawable.btn_feed_filter_sunset_activated);
+                } else {
+                    filter.setColorFilter(getResources().getColor(R.color.white));
+                    filter.setBackgroundResource(R.drawable.btn_feed_filter_night_activated);
+                }
+            }else {
+                if (period == 3) {
+                    filter.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                    filter.setBackgroundResource(R.drawable.btn_feed_filter_morning);
+                } else if (period == 2 || period == 4) {
+                    filter.setColorFilter(getResources().getColor(R.color.white));
+                    filter.setBackgroundResource(R.drawable.btn_feed_filter_sunset);
+                } else {
+                    filter.setColorFilter(getResources().getColor(R.color.white));
+                    filter.setBackgroundResource(R.drawable.btn_feed_filter_night);
+                }
             }
 
             Glide.clear(backgroundFeed);
@@ -428,7 +440,11 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     }
 
     public void updateLayout() {
-        isTimeToChangeBackground();
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundFeed();
 
         ((MainActivity) getActivity()).updateProfileMainInformation();
 
@@ -899,7 +915,11 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        isTimeToChangeBackground();
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundFeed();
 
         if (mSharedPreferences != null) {
             boolean location = mSharedPreferences.getBoolean(Constants.LOCATION, false);

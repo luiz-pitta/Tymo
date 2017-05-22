@@ -83,7 +83,7 @@ public class ActivitySearchViewHolder extends BaseViewHolder<ActivitySearch> imp
     public void onClick(View view) {
         if(view == itemBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBox"+ getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

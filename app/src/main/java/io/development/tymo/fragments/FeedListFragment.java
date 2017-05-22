@@ -309,7 +309,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 if (direction == ItemTouchHelper.LEFT){
 
-                    mp = MediaPlayer.create(getActivity(), R.raw.swipe);
+                    mp = MediaPlayer.create(getActivity(), R.raw.ignore_cube);
                     mp.start();
 
                     snackbar =  Snackbar.make(recyclerView,getResources().getString(R.string.invitation_activity_ignored), Snackbar.LENGTH_LONG)
@@ -344,7 +344,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 } else if (direction == ItemTouchHelper.RIGHT){
 
-                    mp = MediaPlayer.create(getActivity(), R.raw.swipe);
+                    mp = MediaPlayer.create(getActivity(), R.raw.fit_cube);
                     mp.start();
 
                     int participates = 0;

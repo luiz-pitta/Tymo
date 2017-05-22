@@ -289,7 +289,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 refreshLayout();
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
@@ -942,7 +942,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         if (view == compareButton) {
             if (gestureDetector.onTouchEvent(event)) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "compareButton");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "compareButton" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -984,7 +984,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mDateBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mDateBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -997,7 +997,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             freeTimeButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "freeTimeButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "freeTimeButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1009,7 +1009,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             freeTimeButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "commitmentsButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "commitmentsButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1034,7 +1034,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             TymoApplication.getInstance().setDate(date);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "previousWeek");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "previousWeek" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1060,7 +1060,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             TymoApplication.getInstance().setDate(date);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "nextWeek");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "nextWeek" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

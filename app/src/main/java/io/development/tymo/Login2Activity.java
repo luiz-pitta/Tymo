@@ -219,16 +219,16 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                     progressBox.setVisibility(View.GONE);
                 }
                 else {
-                    progressBox.setVisibility(View.GONE);
+                    //progressBox.setVisibility(View.GONE);
                     showSnackBarMessage(getServerMessage(this, ServerMessage.getServerMessage(this, response.getMessage())));
                 }
 
             } catch (IOException e) {
-                progressBox.setVisibility(View.GONE);
+                //progressBox.setVisibility(View.GONE);
                 e.printStackTrace();
             }
         } else {
-            progressBox.setVisibility(View.GONE);
+            //progressBox.setVisibility(View.GONE);
             showSnackBarMessage(getResources().getString(R.string.network_error));
         }
     }

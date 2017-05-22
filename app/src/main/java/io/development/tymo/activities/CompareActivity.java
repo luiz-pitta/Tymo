@@ -589,7 +589,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 

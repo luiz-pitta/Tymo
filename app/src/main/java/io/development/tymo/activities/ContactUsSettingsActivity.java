@@ -132,7 +132,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }

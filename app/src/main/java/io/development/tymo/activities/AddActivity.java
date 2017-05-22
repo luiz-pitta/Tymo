@@ -1442,7 +1442,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
@@ -1569,11 +1569,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
             @Override
             public void onColorSelected(int color) {
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "onColorSelected");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 if (color == ContextCompat.getColor(AddActivity.this, R.color.red_A700)) {
                     mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.red_A700));

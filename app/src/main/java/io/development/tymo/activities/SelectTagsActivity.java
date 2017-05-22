@@ -145,7 +145,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -220,7 +220,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
@@ -228,7 +228,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
     public void onClick(View view) {
         if(view == applyButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "applyButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "applyButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -238,7 +238,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
             finish();
         }else if(view == cleanButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             finish();

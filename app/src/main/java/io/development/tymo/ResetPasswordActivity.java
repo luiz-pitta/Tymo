@@ -77,7 +77,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
     }
 
@@ -95,7 +95,7 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
             passwordResetInit(email, mUser);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendButton"+ getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         }

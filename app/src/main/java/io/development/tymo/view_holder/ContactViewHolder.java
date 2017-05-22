@@ -144,7 +144,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         if (v == moreVerticalIcon) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon"+ getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -178,7 +178,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
             builder.show();
         } else if (v == actionIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon"+ getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -239,18 +239,18 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
                 Bundle bundle = new Bundle();
 
                 if (item == 1) {
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "BLOCK");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "BLOCK"+ getClass().getSimpleName());
                     deleteBlock = Constants.BLOCK;
                     user.setPrivacy(Constants.BLOCK);
                     sendBlockRequest(email_friend, user);
                 }
                 else if(item == 2) {
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "DELETE");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "DELETE"+ getClass().getSimpleName());
                     deleteBlock = Constants.DELETE;
                     sendDeleteRequest(email_friend, user);
                 }
                 else{
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "UNBLOCK");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "UNBLOCK"+ getClass().getSimpleName());
                     deleteBlock = Constants.UNBLOCK;
                     user.setPrivacy(Constants.UNBLOCK);
                     sendUnBlockRequest(email_friend, user);
@@ -358,7 +358,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 

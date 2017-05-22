@@ -283,7 +283,11 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                isTimeToChangeBackground();
+                                currentTime = Calendar.getInstance();
+                                currentSecond = currentTime.get(Calendar.SECOND);
+                                currentMinute = currentTime.get(Calendar.MINUTE);
+                                currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                                setBackgroundProfile();
                             }
                         });
                     }
@@ -353,14 +357,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         }
     }
 
-    private void isTimeToChangeBackground() {
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
-    }
-
     private boolean isTimeInBetween(String now, String timeStart, String timeEnd) {
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
 
@@ -400,7 +396,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems"+ getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -476,7 +472,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     private void setProgressFriendRequest(boolean progress) {
         if(progress){
             progressIcon.setVisibility(View.VISIBLE);
-            progressText.setVisibility(View.VISIBLE);
+            progressText.setVisibility(View.GONE);
             friendshipRequestsIcon.setVisibility(View.GONE);
             friendshipRequestsText.setVisibility(View.GONE);
         }else {
@@ -885,8 +881,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
-        setProgressFriendRequest(false);
+        //setProgress(false);
+        //setProgressFriendRequest(false);
         friendshipRequestsBox.setOnClickListener(this);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
@@ -1176,7 +1172,11 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     public void onResume() {
         super.onResume();
 
-        isTimeToChangeBackground();
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundProfile();
 
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
 
@@ -1184,7 +1184,11 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     public void updatePlansFriend(int year, int monthOfYear, int dayOfMonth, boolean progress){
-        isTimeToChangeBackground();
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundProfile();
 
         listPlans.clear();
 

@@ -244,7 +244,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
     public void onClick(View view) {
         if (view == moreVerticalIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -299,7 +299,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             builder.show();
         } else if (view == actionIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -342,7 +342,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             }
         } else if (view == itemBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -401,7 +401,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
                 sendUnBlockRequest(email_friend, user);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendUnBlockRequest");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendUnBlockRequest"+ getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -551,7 +551,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
                 }
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updateFriendRequest");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updateFriendRequest"+ getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -669,7 +669,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
     }
 
     private void handleError(Throwable error) {
-        setProgressFriendRequest(false);
+        //setProgressFriendRequest(false);
         actionIcon.setOnClickListener(this);
         Toast.makeText(mContext, mContext.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
         /*LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);

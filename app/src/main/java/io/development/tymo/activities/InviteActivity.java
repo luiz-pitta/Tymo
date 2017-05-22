@@ -380,7 +380,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 adapter.clear();
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "onRefresh");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "onRefresh" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -410,7 +410,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v){
         if(v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

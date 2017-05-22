@@ -199,8 +199,8 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleError(Throwable error) {
-        AddActivity addActivity = (AddActivity)getActivity();
-        addActivity.setProgress(false);
+        //AddActivity addActivity = (AddActivity)getActivity();
+        //addActivity.setProgress(false);
         Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 

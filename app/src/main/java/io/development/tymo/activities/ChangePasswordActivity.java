@@ -95,7 +95,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     }
 
     private void handleError(Throwable error) {
-        progressBox.setVisibility(View.GONE);
+        //progressBox.setVisibility(View.GONE);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
@@ -108,14 +108,14 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     public void onClick(View view) {
         if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
         else if(view == updatingButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updatingButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updatingButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             User user =  new User();
@@ -161,14 +161,14 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
         }else if(view == cancelButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             finish();
         }
         else if(view == forgot) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "forgot");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "forgot" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(ChangePasswordActivity.this, ForgotLoginActivity.class));

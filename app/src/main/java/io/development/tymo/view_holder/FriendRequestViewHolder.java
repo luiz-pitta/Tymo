@@ -172,7 +172,7 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 

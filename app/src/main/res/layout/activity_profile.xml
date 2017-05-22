@@ -149,7 +149,6 @@
                             android:layout_height="50dp"
                             android:layout_gravity="center"
                             android:src="@drawable/ic_alarm"
-                            android:tint="@color/white"
                             android:visibility="gone" />
 
                         <TextView
@@ -277,7 +276,7 @@
                             android:layout_marginTop="5dp"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:lines="1"
+                            android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:text="@string/pending_requests"
@@ -338,7 +337,7 @@
                             android:layout_marginTop="5dp"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:lines="1"
+                            android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:text="@string/invitations"
@@ -356,7 +355,7 @@
                     android:layout_weight="1"
                     android:background="@color/grey_300">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/myContactsBox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
@@ -366,48 +365,56 @@
                         android:layout_marginTop="1dp"
                         android:layout_weight="1"
                         android:background="@drawable/box_profile_settings"
-                        android:clickable="true"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:clickable="true">
 
-                        <ImageView
-                            android:id="@+id/myContactsIcon"
-                            android:layout_width="40dp"
-                            android:layout_height="40dp"
-                            android:layout_centerInParent="true"
-                            android:src="@drawable/ic_people_two"
-                            android:tint="@color/deep_purple_400" />
-
-                        <TextView
-                            android:id="@+id/myContactsText"
+                        <LinearLayout
+                            android:id="@+id/myContactsIconTextBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:ellipsize="end"
+                            android:layout_centerInParent="true"
                             android:gravity="center"
-                            android:lines="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
-                            android:text="@string/my_contacts"
-                            android:textColor="@color/deep_purple_400"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:id="@+id/myContactsIcon"
+                                android:layout_width="40dp"
+                                android:layout_height="40dp"
+                                android:layout_centerInParent="true"
+                                android:src="@drawable/ic_people_two"
+                                android:tint="@color/deep_purple_400" />
+
+                            <TextView
+                                android:id="@+id/myContactsText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="5dp"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:maxLines="2"
+                                android:paddingLeft="10dp"
+                                android:paddingRight="10dp"
+                                android:text="@string/my_contacts"
+                                android:textColor="@color/deep_purple_400"
+                                android:textSize="14sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
 
                         <TextView
                             android:id="@+id/numberContacts"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_below="@id/myContactsIconTextBox"
                             android:ellipsize="end"
                             android:gravity="center"
                             android:lines="1"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/my_contacts_count"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/settingsBox"
@@ -438,7 +445,7 @@
                             android:layout_marginTop="5dp"
                             android:ellipsize="end"
                             android:gravity="center"
-                            android:lines="1"
+                            android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
                             android:text="@string/settings"

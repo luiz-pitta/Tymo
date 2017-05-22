@@ -263,7 +263,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -857,7 +857,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
@@ -900,7 +900,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
         if(type == CREATE_EDIT_FLAG && !edit) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "type");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "type" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -935,7 +935,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if(v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -943,7 +943,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v == confirmationButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -954,7 +954,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v == icon2){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -964,7 +964,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         }else if(v == checkButtonBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -982,7 +982,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             updateInviteRequest(inviteRequest);
         }else if(v == deleteButtonBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1082,7 +1082,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 activity.setId(idx);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

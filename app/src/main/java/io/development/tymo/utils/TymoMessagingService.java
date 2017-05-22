@@ -251,7 +251,6 @@ public class TymoMessagingService extends FirebaseMessagingService {
         } else {
             mBuilder.setContentText(getString(R.string.push_notification_1_text_2, qty));
             bigTextStyle.bigText(getString(R.string.push_notification_1_text_2, qty));
-            mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         }
 
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
@@ -289,7 +288,6 @@ public class TymoMessagingService extends FirebaseMessagingService {
         } else {
             mBuilder.setContentText(getString(R.string.push_notification_2_text_2, qty));
             bigTextStyle.bigText(getString(R.string.push_notification_2_text_2, qty));
-            mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         }
 
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));

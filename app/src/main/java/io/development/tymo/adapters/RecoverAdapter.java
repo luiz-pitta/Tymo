@@ -96,7 +96,7 @@ public class RecoverAdapter extends RecyclerView.Adapter<RecoverAdapter.SimpleVi
             ImageView mPiece[] = {pieceIcon, pieceIcon2, pieceIcon3, pieceIcon4, pieceIcon5};
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "recoverCube");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "recoverCube" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

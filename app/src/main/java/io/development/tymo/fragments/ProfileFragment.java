@@ -26,6 +26,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -80,7 +81,8 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
-    private LinearLayout settingsBox, pendingRequestsBox, invitationsBox, contactsBox, timerBox;
+    private LinearLayout settingsBox, pendingRequestsBox, invitationsBox, timerBox;
+    private RelativeLayout contactsBox;
     private ImageView profilePhoto, timerIcon;
     private ImageView editIcon;
     private CircularMusicProgressBar progressBar;
@@ -142,7 +144,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         progressBar = (CircularMusicProgressBar) view.findViewById(R.id.clockAlarm);
         settingsBox = (LinearLayout) view.findViewById(R.id.settingsBox);
-        contactsBox = (LinearLayout) view.findViewById(R.id.myContactsBox);
+        contactsBox = (RelativeLayout) view.findViewById(R.id.myContactsBox);
         pendingRequestsBox = (LinearLayout) view.findViewById(R.id.pendingRequestsBox);
         invitationsBox = (LinearLayout) view.findViewById(R.id.invitationsBox);
         timerBox = (LinearLayout) view.findViewById(R.id.timerBox);
@@ -196,7 +198,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                isTimeToChangeBackground();
+                                currentTime = Calendar.getInstance();
+                                currentSecond = currentTime.get(Calendar.SECOND);
+                                currentMinute = currentTime.get(Calendar.MINUTE);
+                                currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+                                setBackgroundProfile();
                             }
                         });
                     }
@@ -228,7 +234,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                     intent.putExtra("user_about", new UserWrapper(user));
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "user_about");
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "user_about" + getClass().getSimpleName());
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -265,14 +271,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         getProfileMainInformation(query);
         setProgress(true);
 
-    }
-
-    private void isTimeToChangeBackground() {
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
     }
 
     private void setBackgroundProfile() {
@@ -367,7 +365,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 updateLayout();
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
@@ -387,11 +385,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
 
-        isTimeToChangeBackground();
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundProfile();
     }
 
     public void updateLayout() {
-        isTimeToChangeBackground();
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundProfile();
 
         ((MainActivity) getActivity()).updateProfileMainInformation();
 
@@ -1084,6 +1090,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 commitmentTitle.setLines(1);
                 timer.setVisibility(View.GONE);
                 timerIcon.setVisibility(View.VISIBLE);
+                timerIcon.setImageResource(R.drawable.ic_add_cube);
+                timerIcon.setColorFilter(getResources().getColor(R.color.white));
                 progressBar.setValue(0);
             } else if (count_will_happen > 0) {
                 if (count_will_happen_at_same_time > 1) {
@@ -1106,6 +1114,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 commitmentTitle.setLines(2);
                 timer.setVisibility(View.GONE);
                 timerIcon.setVisibility(View.VISIBLE);
+                timerIcon.setImageResource(R.drawable.ic_alarm);
+                timerIcon.setColorFilter(getResources().getColor(R.color.white));
                 progressBar.setValue(0);
             }
         } else {
@@ -1114,6 +1124,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             commitmentTitle.setText(getActivity().getResources().getString(R.string.empty_commitments));
             timer.setVisibility(View.GONE);
             timerIcon.setVisibility(View.VISIBLE);
+            timerIcon.setImageResource(R.drawable.ic_alarm);
+            timerIcon.setColorFilter(getResources().getColor(R.color.white));
             progressBar.setValue(0);
         }
         settingsBox.setClickable(true);
@@ -1154,7 +1166,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         noInternet = true;
         mSwipeRefreshLayout.setRefreshing(false);
         Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
@@ -1178,14 +1190,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             intent.putExtra("email_contacts", user.getEmail());
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactsBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactsBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(intent);
         } else if (v == timerBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timerBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timerBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(getActivity(), NextCommitmentsActivity.class));
@@ -1194,7 +1206,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             intent.putExtra("user_about", new UserWrapper(user));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "settingsBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "settingsBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1204,20 +1216,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             intent.putExtra("user_about", new UserWrapper(user));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profilePhoto");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profilePhoto" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(intent);
         } else if (v == pendingRequestsBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "pendingRequestsBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "pendingRequestsBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(getActivity(), FriendRequestActivity.class));
         } else if (v == invitationsBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "invitationsBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "invitationsBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(getActivity(), InviteActivity.class));

@@ -216,7 +216,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        progressBox.setVisibility(View.GONE);
+        //progressBox.setVisibility(View.GONE);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
@@ -224,7 +224,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     public void onClick(View view) {
         if(view == advanceButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "advanceButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "advanceButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -251,7 +251,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
             }
         }else if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

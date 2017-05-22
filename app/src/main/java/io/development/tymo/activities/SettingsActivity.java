@@ -414,7 +414,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
@@ -448,14 +448,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
         else if(view == profileAboutBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profileAboutBox");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profileAboutBox" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -465,7 +465,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == account){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "account");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "account" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -475,7 +475,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == importFromFacebook){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromFacebook");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromFacebook" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -483,7 +483,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == importFromGoogleAgenda){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromGoogleAgenda");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromGoogleAgenda" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -491,7 +491,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == privacy){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacy");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacy" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -499,7 +499,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == preferences){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "preferences");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "preferences" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -507,7 +507,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == blockedUserList){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "blockedUserList");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "blockedUserList" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -515,7 +515,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == logout) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "logout");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "logout" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -523,7 +523,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == contactUs){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactUs");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactUs" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -533,7 +533,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == tutorial){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "tutorial");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "tutorial" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -543,7 +543,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == useTerms){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "useTerms");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "useTerms" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -559,7 +559,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == privacyPolicy){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyPolicy");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyPolicy" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

@@ -175,7 +175,7 @@
     <string name="contact_deleted">Contato excluído</string>
     <string name="contact_disfavorited">%1$s desfavoritado</string>
     <string name="contact_favorited">%1$s favoritado</string>
-    <string name="contact_ignore_confirmation_question">Você tem certeza que deseja ignorar o pedido de %1$s para te adicionar?</string>
+    <string name="contact_ignore_confirmation_question">%1$s quer participar da sua rede de contatos. Você tem certeza que deseja ignorar esse pedido?</string>
     <string name="contact_unblock_confirmation_question">Você tem certeza que deseja desbloquear %1$s?</string>
     <string name="contact_us">Contate-nos</string>
     <string name="contacts">Contatos</string>
@@ -264,8 +264,8 @@
     <string name="facebook_about_text">Os dados abaixo foram importados do Facebook e não podem ser alterados. Eles são sincronizados automaticamente.</string>
     <string name="facebook_messenger">Facebook Messenger</string>
     <string name="facebook_show_messenger">Mostrar Messenger</string>
-    <string name="feed_visibility_1">(aparecerá somente no FEED dos convidados)</string>
-    <string name="feed_visibility_2">(aparecerá no FEED de todos os usuários do Tymo)</string>
+    <string name="feed_visibility_1">(é exibido somente no FEED dos convidados)</string>
+    <string name="feed_visibility_2">(é exibido no FEED de todos os usuários do Tymo)</string>
     <string name="female">Feminino</string>
     <string name="fill_fields_correctly">Preencha os campos obrigatórios corretamente!</string>
     <string name="filter">Filtro</string>
@@ -342,7 +342,7 @@
     <string name="my_reminder">Meu lembrete</string>
     <string name="n_commitments">%1$d compromissos</string>
     <string name="name">Nome</string>
-    <string name="network_error">Erro na rede! Tente Novamente</string>
+    <string name="network_error">Falha na conexão! Tente Novamente</string>
     <string name="next_commitments_activities">atividades</string>
     <string name="next_commitments_activity">atividade</string>
     <string name="next_commitments_flag">sinalizador</string>

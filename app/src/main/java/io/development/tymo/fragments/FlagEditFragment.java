@@ -149,7 +149,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 repeat_type = position;
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 if(position != 0)
@@ -166,7 +166,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 send_toAll = position;
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendPicker");
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendPicker" + getClass().getSimpleName());
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 if(position != 0) {
@@ -464,7 +464,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -483,7 +483,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -502,7 +502,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -524,7 +524,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -541,7 +541,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             ArrayList<String> list = new ArrayList<>();
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -624,7 +624,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     intent.putExtra("is_flag", true);
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user");
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + getClass().getSimpleName());
                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

@@ -146,7 +146,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleError(Throwable error) {
-        findViewById(R.id.include).setVisibility(View.GONE);
+        //findViewById(R.id.include).setVisibility(View.GONE);
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 

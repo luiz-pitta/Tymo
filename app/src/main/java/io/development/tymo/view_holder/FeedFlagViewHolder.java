@@ -59,7 +59,7 @@ public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> {
         this.context = context;
 
         animation = new TranslateAnimation(0.0f, 0.0f,-Utilities.convertDpToPixel(2, context), Utilities.convertDpToPixel(2, context));
-        animation.setDuration(1700);
+        animation.setDuration(1200);
         animation.setRepeatCount(Animation.INFINITE);
         animation.setRepeatMode(Animation.REVERSE);
 

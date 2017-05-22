@@ -242,7 +242,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "closeButton");
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "closeButton" + getClass().getSimpleName());
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -271,7 +271,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actButton");
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actButton" + getClass().getSimpleName());
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -299,7 +299,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagButton");
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagButton" + getClass().getSimpleName());
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -327,7 +327,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderButton");
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderButton" + getClass().getSimpleName());
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -355,7 +355,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "fab");
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "fab" + getClass().getSimpleName());
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -382,7 +382,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         updateProfileMainInformation();
         if(v == icon1) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon1");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon1" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -399,7 +399,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v == icon2) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -419,7 +419,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v == icon3) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon3");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon3" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -433,7 +433,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v == icon4){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon4");
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon4" + getClass().getSimpleName());
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

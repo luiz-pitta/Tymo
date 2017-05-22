@@ -1191,6 +1191,12 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         filterServer.setMonthEnd(month_end+1);
         filterServer.setYearEnd(year_end);
         //Schedule
+        //if(minutes_start == -1) {
+        //    minutes_start = 0;
+        //    hour_start = 0;
+        //    minutes_end = 23;
+        //    hour_end = 59;
+        //}
         filterServer.setMinuteStart(minutes_start);
         filterServer.setHourStart(hour_start);
         filterServer.setMinuteEnd(minutes_end);

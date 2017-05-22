@@ -76,7 +76,7 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
         rotation = new RotateAnimation(-3, 3,
                 Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
                 0.5f);
-        rotation.setDuration(1500);
+        rotation.setDuration(1200);
         rotation.setRepeatCount(Animation.INFINITE);
         rotation.setRepeatMode(Animation.REVERSE);
     }

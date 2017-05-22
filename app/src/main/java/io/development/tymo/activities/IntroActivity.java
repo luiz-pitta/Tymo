@@ -2,6 +2,7 @@ package io.development.tymo.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.FloatRange;
 import android.support.annotation.Nullable;
@@ -39,6 +40,9 @@ public class IntroActivity extends MaterialIntroActivity {
         if(!settings && intro) {
             startActivity(new Intent(this, MainActivity.class));
             finish();
+        }else {
+            MediaPlayer mp = MediaPlayer.create(this, R.raw.welcome_tutorial);
+            mp.start();
         }
 
         SharedPreferences.Editor editor = mSharedPreferences.edit();
@@ -80,6 +84,9 @@ public class IntroActivity extends MaterialIntroActivity {
 
     @Override
     public void onBackPressed() {
-        moveTaskToBack(true);
+        if(!settings)
+            moveTaskToBack(true);
+        else
+            finish();
     }
 }
