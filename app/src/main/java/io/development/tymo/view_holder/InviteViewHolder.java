@@ -114,8 +114,8 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
     public void onClick(View v){
         if(v == mainBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mainBox");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mainBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent;
@@ -130,8 +130,8 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
             context.startActivity(intent);
         }else {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "inviteRequest");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "inviteRequest" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             InviteRequest inviteRequest = new InviteRequest();

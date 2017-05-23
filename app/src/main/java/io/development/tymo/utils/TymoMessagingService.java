@@ -40,11 +40,11 @@ public class TymoMessagingService extends FirebaseMessagingService {
         FirebaseAnalytics mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, type);
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, type + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-        boolean notification = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, false);
+        boolean notification = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, true);
 
         if(notification) {
             if (type.matches("engagement")) {

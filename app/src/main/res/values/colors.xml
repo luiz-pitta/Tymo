@@ -338,6 +338,7 @@
     <color name="deep_purple_200_opacity_90">#E6B39DDB</color>
     <color name="deep_purple_300_opacity_90">#E69575CD</color>
     <color name="deep_purple_400_opacity_90">#E67E57C2</color>
+    <color name="grey_500_opacity_60">#999E9E9E</color>
 
     <!-- Facebook Colors -->
     <color name="facebook_dark_blue">#3b5998</color>

@@ -45,6 +45,8 @@ public class FlagServer implements Serializable {
     private int hour_end_card;
 
     private long date_time_creation;
+    private long date_time_start;
+    private long date_time_end;
 
     private int repeat_type;
     private int repeat_qty;
@@ -54,6 +56,8 @@ public class FlagServer implements Serializable {
     private List<Integer> day_list_end = new ArrayList<>();
     private List<Integer> month_list_end = new ArrayList<>();
     private List<Integer> year_list_end = new ArrayList<>();
+    private List<Long> date_time_list_start = new ArrayList<>();
+    private List<Long> date_time_list_end = new ArrayList<>();
 
     private Boolean toAll;
     private List<String> guest = new ArrayList();
@@ -81,6 +85,8 @@ public class FlagServer implements Serializable {
         this.count_guest = flagServer.getCountGuest();
 
         this.date_time_creation = flagServer.getDateTimeCreation();
+        this.date_time_start = flagServer.getDateTimeStart();
+        this.date_time_end = flagServer.getDateTimeEnd();
         this.day_start = flagServer.getDayStart();
         this.month_start = flagServer.getMonthStart();
         this.year_start = flagServer.getYearStart();
@@ -252,6 +258,22 @@ public class FlagServer implements Serializable {
         this.date_time_creation = date_time_creation;
     }
 
+    public void setDateTimeStart(long date_time_start) {
+        this.date_time_start = date_time_start;
+    }
+
+    public void setDateTimeEnd(long date_time_end) {
+        this.date_time_end = date_time_end;
+    }
+
+    public long getDateTimeStart() {
+        return date_time_start;
+    }
+
+    public long getDateTimeEnd() {
+        return date_time_end;
+    }
+
     public void setCreator(String creator) {
         this.creator = creator;
     }
@@ -338,6 +360,14 @@ public class FlagServer implements Serializable {
 
     public void setToAll(Boolean toAll) {
         this.toAll = toAll;
+    }
+
+    public void setDateTimeListStart(List<Long> list) {
+        this.date_time_list_start.addAll(list);
+    }
+
+    public void setDateTimeListEnd(List<Long> list) {
+        this.date_time_list_end.addAll(list);
     }
 
     public void setDayListStart(List<Integer> list) {

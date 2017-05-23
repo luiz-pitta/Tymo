@@ -20,8 +20,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
-import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
-import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.cunoraz.tagview.OnTagDeleteListener;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
@@ -36,6 +34,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -45,6 +45,7 @@ import java.util.List;
 
 import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.adapters.SelectionWeekDaysAdapter;
+import io.development.tymo.fragments.ReminderEditFragment;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
 import io.development.tymo.model_server.User;
@@ -57,7 +58,7 @@ import io.development.tymo.R;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 public class FilterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
-        View.OnClickListener,TimePickerDialog.OnTimeSetListener {
+        View.OnClickListener, TimePickerDialog.OnTimeSetListener {
 
     private UpdateButtonController controller;
     private FilterWrapper filterWrapper;
@@ -220,7 +221,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         setFilterExpandableLayout();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     @Override
@@ -234,20 +235,14 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     }
 
     @Override
-    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int second) {
         String hourString = String.format("%02d", hourOfDay);
         String minuteString = String.format("%02d", minute);
-        String hourStringEnd = String.format("%02d", hourOfDayEnd);
-        String minuteStringEnd = String.format("%02d", minuteEnd);
-        String time = hourString+":"+minuteString;
-        String time2 = hourStringEnd+":"+minuteStringEnd;
+        String time = hourString + ":" + minuteString;
 
         minutes_start = minute;
         hour_start = hourOfDay;
-        minutes_end = minuteEnd;
-        hour_end = hourOfDayEnd;
         timeStart.setText(time);
-        timeEnd.setText(time2);
 
         filterIconSchedule.setVisibility(View.VISIBLE);
         cleanSchedule.setVisibility(View.VISIBLE);
@@ -511,7 +506,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         if(filterWrapper != null){
             FilterServer filterServer = filterWrapper.getFilterServer();
 
-            if((filterServer.getYearEnd() - filterServer.getYearStart()) != 30) {
+            if(filterServer.getDayStart() != -1) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(filterServer.getYearStart(),filterServer.getMonthStart()-1,filterServer.getDayStart());
                 String d= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -523,10 +518,10 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 String date2 = d2+"/"+m2+"/"+filterServer.getYearEnd();
 
                 day_start = filterServer.getDayStart();
-                month_start = filterServer.getMonthStart();
+                month_start = filterServer.getMonthStart()-1;
                 year_start = filterServer.getYearStart();
                 day_end = filterServer.getDayEnd();
-                month_end = filterServer.getMonthEnd();
+                month_end = filterServer.getMonthEnd()-1;
                 year_end = filterServer.getYearEnd();
                 dateStart.setText(date);
                 dateEnd.setText(date2);
@@ -637,8 +632,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 ImageView delete = (ImageView) view.findViewById(R.id.deleteButton);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "listPersonDeleteButton");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "listPersonDeleteButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 if(delete != null && delete.getVisibility() == View.VISIBLE && isPointInsideView(e.getX(), e.getY(), view)) {
@@ -788,8 +783,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         if((v == mapText || v == locationText) && !locationNotWorking) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mapText");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mapText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if(lat != -500) {
@@ -808,8 +803,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         }
         else if((v == proximityText || v == proximityButton) ){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "proximityText");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "proximityText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if(location)
@@ -818,35 +813,35 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 Toast.makeText(this, getResources().getString(R.string.filter_proximity_enable), Toast.LENGTH_LONG).show();
         }else if(v == popularText || v == popularButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "popularText");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "popularText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             controller.updateAll(1, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
         }else if(v == dateTimeText || v == dateTimeButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateTimeText");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateTimeText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             controller.updateAll(2, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
         }else if(v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
         else if(v == itemBoxInterests) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxInterests");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxInterests" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             expandableLayoutInterests.toggle();
         }
         else if(v == itemBoxFriends) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxFriends");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxFriends" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             ArrayList<User> list = new ArrayList<>();
@@ -862,32 +857,32 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         }
         else if(v == itemBoxLocation) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxLocation");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxLocation" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             expandableLayoutLocation.toggle();
         }
         else if(v == itemBoxDate) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxDate");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxDate" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             expandableLayoutDate.toggle();
         }
         else if(v == itemBoxSchedule) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxSchedule");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxSchedule" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             expandableLayoutSchedule.toggle();
         }
         else if(v == itemBoxWeekDays) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxWeekDays");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "itemBoxWeekDays" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             expandableLayoutWeekDays.toggle();
@@ -895,46 +890,26 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         else if(v == timeStart){
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart"+"=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Calendar now = Calendar.getInstance();
+            if (hour_start != -1)
+                now.set(year_start, month_start, day_start, hour_start, minutes_start);
             TimePickerDialog tpd = TimePickerDialog.newInstance(
-                    FilterActivity.this,
+                    this,
                     now.get(Calendar.HOUR_OF_DAY),
                     now.get(Calendar.MINUTE),
                     true
             );
 
-            tpd.setAccentColor(ContextCompat.getColor(FilterActivity.this,R.color.deep_purple_400), ContextCompat.getColor(FilterActivity.this,R.color.grey_100));
-            tpd.setStartTitle(getResources().getString(R.string.start));
-            tpd.setEndTitle(getResources().getString(R.string.end));
-            tpd.setCurrentTab(0);
-            tpd.show(getFragmentManager(), "Timepickerdialog");
-        }else if(v == timeEnd){
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            Calendar now = Calendar.getInstance();
-            TimePickerDialog tpd = TimePickerDialog.newInstance(
-                    FilterActivity.this,
-                    now.get(Calendar.HOUR_OF_DAY),
-                    now.get(Calendar.MINUTE),
-                    true
-            );
-
-            tpd.setAccentColor(ContextCompat.getColor(FilterActivity.this,R.color.deep_purple_400), ContextCompat.getColor(FilterActivity.this,R.color.grey_100));
-            tpd.setStartTitle(getResources().getString(R.string.start));
-            tpd.setEndTitle(getResources().getString(R.string.end));
-            tpd.setCurrentTab(1);
+            tpd.setAccentColor(ContextCompat.getColor(this, R.color.deep_purple_400));
             tpd.show(getFragmentManager(), "Timepickerdialog");
         }else if(v == dateStart){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Calendar now = Calendar.getInstance();
@@ -945,6 +920,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(now);
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
@@ -955,8 +931,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Calendar now = Calendar.getInstance();
@@ -967,6 +943,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(now);
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
@@ -977,8 +954,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == addPersonButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             int i;
@@ -992,8 +969,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             startActivityForResult(intent, 133);
         }else if(v == addTagBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             int i;
@@ -1007,8 +984,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             startActivityForResult(intent, 135);
         }else if(v == cleanButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Interest
@@ -1055,8 +1032,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         }else if(v == applyButton){
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "applyButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "applyButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -1071,8 +1048,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
         }else if(v == cleanInterests){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanInterests");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanInterests" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Interest
@@ -1081,8 +1058,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             cleanInterests.setVisibility(View.INVISIBLE);
         }else if(v == cleanFriends){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanFriends");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanFriends" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Friends
@@ -1092,8 +1069,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             cleanFriends.setVisibility(View.INVISIBLE);
         }else if(v == cleanLocation){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanLocation");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanLocation" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Location
@@ -1104,8 +1081,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             cleanLocation.setVisibility(View.INVISIBLE);
         }else if(v == cleanDate){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanDate");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanDate" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Date
@@ -1121,8 +1098,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             year_end = -1;
         }else if(v == cleanSchedule){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanSchedule");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanSchedule" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Schedule
@@ -1136,8 +1113,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             hour_end = -1;
         }else if(v == cleanWeekDays){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanWeekDays");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanWeekDays" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //WeekDays
@@ -1173,34 +1150,29 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         filterServer.setLocation(locationText.getText().toString());
         //Date
         if(day_start == -1) {
-            Calendar c = Calendar.getInstance();
-            day_start = c.get(Calendar.DAY_OF_MONTH);
-            month_start = c.get(Calendar.MONTH);
-            year_start = c.get(Calendar.YEAR);
-
-            c.add(Calendar.YEAR, 30);
-
-            day_end = c.get(Calendar.DAY_OF_MONTH);
-            month_end = c.get(Calendar.MONTH);
-            year_end = c.get(Calendar.YEAR);
+            filterServer.setMonthStart(month_start);
+            filterServer.setMonthEnd(month_end);
+        }else {
+            filterServer.setMonthStart(month_start+1);
+            filterServer.setMonthEnd(month_end+1);
         }
         filterServer.setDayStart(day_start);
-        filterServer.setMonthStart(month_start+1);
         filterServer.setYearStart(year_start);
         filterServer.setDayEnd(day_end);
-        filterServer.setMonthEnd(month_end+1);
         filterServer.setYearEnd(year_end);
+
         //Schedule
-        //if(minutes_start == -1) {
-        //    minutes_start = 0;
-        //    hour_start = 0;
-        //    minutes_end = 23;
-        //    hour_end = 59;
-        //}
+            //if(minutes_start == -1) {
+            //    minutes_start = 0;
+            //    hour_start = 0;
+            //    minutes_end = 23;
+            //    hour_end = 59;
+            //}
+            //filterServer.setMinuteEnd(minutes_end);
+            //filterServer.setHourEnd(hour_end);
         filterServer.setMinuteStart(minutes_start);
         filterServer.setHourStart(hour_start);
-        filterServer.setMinuteEnd(minutes_end);
-        filterServer.setHourEnd(hour_end);
+
         //WeekDays
         if(multichoiceRecyclerviewWeekDays.getSelectedItemList().size() > 0)
             filterServer.addWeekDays(multichoiceRecyclerviewWeekDays.getSelectedItemList());
@@ -1209,6 +1181,9 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         filterServer.setProximity(list.get(0));
         filterServer.setPopularity(list.get(1));
         filterServer.setDateHour(list.get(2));
+
+        filterServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+
         FilterWrapper filterWrapper = new FilterWrapper(filterServer);
 
         Intent intent = new Intent();

@@ -192,7 +192,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         getContactUs();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     private void getImportedGoogle(String email) {
@@ -382,6 +382,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     activityServer.setHourEnd(hour1);
                 }
 
+                activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+                Calendar calendar2 = Calendar.getInstance();
+                calendar2.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+                activityServer.setDateTimeStart(calendar2.getTimeInMillis());
+
+                calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
+                activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
+
                 list_activities_to_import.add(activityServer);
             }
             if(list_activities_to_import.size() > 0)
@@ -448,15 +457,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
         else if(view == profileAboutBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profileAboutBox" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profileAboutBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent = new Intent(this, AboutActivity.class);
@@ -465,8 +474,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == account){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "account" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "account" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent = new Intent(this, AccountActivity.class);
@@ -475,56 +484,56 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == importFromFacebook){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromFacebook" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromFacebook" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogFacebookImport();
         }
         else if(view == importFromGoogleAgenda){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromGoogleAgenda" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "importFromGoogleAgenda" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogGoogleImport();
         }
         else if(view == privacy){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacy" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacy" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(new Intent(SettingsActivity.this, PrivacyActivity.class));
         }
         else if(view == preferences){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "preferences" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "preferences" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(new Intent(SettingsActivity.this, PreferencesActivity.class));
         }
         else if(view == blockedUserList){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "blockedUserList" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "blockedUserList" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(new Intent(SettingsActivity.this, BlockedUsersActivity.class));
         }
         else if(view == logout) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "logout" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "logout" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogLogout();
         }
         else if(view == contactUs){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactUs" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactUs" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent = new Intent(SettingsActivity.this, ContactUsSettingsActivity.class);
@@ -533,8 +542,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == tutorial){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "tutorial" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "tutorial" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent = new Intent(SettingsActivity.this, IntroActivity.class);
@@ -543,8 +552,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == useTerms){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "useTerms" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "useTerms" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(urlStringTermsUse));
@@ -559,8 +568,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
         else if(view == privacyPolicy){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyPolicy" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyPolicy" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent=new Intent(Intent.ACTION_VIEW,Uri.parse(urlStringPolicyPrivacy));
@@ -845,6 +854,15 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             activityServer.setWhatsappGroupLink("");
 
             activityServer.addTags(getResources().getString(R.string.settings_import_facebook_tag));
+
+            activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+            activityServer.setDateTimeStart(calendar2.getTimeInMillis());
+
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
+            activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
 
             activityServer.setCreator(creator);
         }

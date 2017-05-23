@@ -9,7 +9,34 @@ public class DateTymo {
     private int hour;
     private int minute_end;
     private int hour_end;
+    private long date_time_now;
+    private long date_time;
+    private long date_time_end;
     private String id_device;
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
+    }
+
+    public void setDateTime(long date_time) {
+        this.date_time = date_time;
+    }
+
+    public void setDateTimeEnd(long date_time_end) {
+        this.date_time_end = date_time_end;
+    }
+
+    public long getDateTime() {
+        return date_time;
+    }
+
+    public long getDateTimeEnd() {
+        return date_time_end;
+    }
 
     public void setIdDevice(String id_device) {
         this.id_device = id_device;

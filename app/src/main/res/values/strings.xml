@@ -290,6 +290,7 @@
     <string name="friend_in_common_one">1 amigo em comum</string>
     <string name="friends">Amigos</string>
     <string name="from">De</string>
+    <string name="from_as">Só começa a partir de:</string>
     <string name="full_name">Nome Completo</string>
     <string name="gender">Gênero</string>
     <string name="gps_enable_text">Seu GPS está desativado e o Tymo o usa o para determinar a distância das atividades de você. Deseja habilitá-lo?</string>
@@ -331,6 +332,7 @@
     <string name="male">Masculino</string>
     <string name="map">Mapa</string>
     <string name="modify_profile_photo">Alterar foto do perfil</string>
+    <string name="modify_profile_photo_error">Erro ao alterar foto do perfil</string>
     <string name="month">Mês</string>
     <string name="my_commitments">Meus Compromissos</string>
     <string name="my_contacts">Meus contatos</string>
@@ -342,7 +344,7 @@
     <string name="my_reminder">Meu lembrete</string>
     <string name="n_commitments">%1$d compromissos</string>
     <string name="name">Nome</string>
-    <string name="network_error">Falha na conexão! Tente Novamente</string>
+    <string name="network_error">Sem conexão com a Internet</string>
     <string name="next_commitments_activities">atividades</string>
     <string name="next_commitments_activity">atividade</string>
     <string name="next_commitments_flag">sinalizador</string>

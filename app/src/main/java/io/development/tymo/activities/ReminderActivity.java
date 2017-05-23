@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -164,7 +165,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         deleteIcon.setOnClickListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void setProgress(boolean progress) {
@@ -198,16 +199,16 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
         }
         else if (v == confirmationButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if (!edit)
@@ -228,8 +229,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             }
         } else if (v == icon2) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent myIntent = new Intent(ReminderActivity.this, ReminderActivity.class);
@@ -238,8 +239,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             finish();
         } else if (v == deleteIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteIcon");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogRemove(getReminder().getRepeatType() > 0);
@@ -298,8 +299,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 int idx = -1;
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteReminder");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteReminder" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 if (repeat) {
@@ -365,6 +366,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             List<Integer> day_list_start = new ArrayList<>();
             List<Integer> month_list_start = new ArrayList<>();
             List<Integer> year_list_start = new ArrayList<>();
+            List<Long> date_time_list_start = new ArrayList<>();
 
             if (repeat_type > 0) {
                 int repeat_adder = getRepeatAdder(repeat_type);
@@ -375,12 +377,14 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 cal.clear(Calendar.SECOND);
                 cal.clear(Calendar.MILLISECOND);
 
-                cal.set(date.get(2), date.get(1), date.get(0));
+                cal.set(date.get(2), date.get(1), date.get(0), date.get(4), date.get(3));
 
                 for (int i = 0; i < repeat_qty; i++) {
                     day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
                     month_list_start.add(cal.get(Calendar.MONTH) + 1);
                     year_list_start.add(cal.get(Calendar.YEAR));
+
+                    date_time_list_start.add(cal.getTimeInMillis());
 
                     if (repeat_type == Constants.MONTHLY)
                         cal.add(Calendar.MONTH, 1);
@@ -407,11 +411,19 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             reminderServer.setMinuteStart(date.get(3));
             reminderServer.setHourStart(date.get(4));
 
+            reminderServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart(), reminderServer.getHourStart(), reminderServer.getMinuteStart());
+            reminderServer.setDateTimeStart(calendar.getTimeInMillis());
+
             reminderServer.setRepeatType(repeat.get(0));
             reminderServer.setRepeatQty(repeat.get(1));
             reminderServer.setDayListStart(day_list_start);
             reminderServer.setMonthListStart(month_list_start);
             reminderServer.setYearListStart(year_list_start);
+
+            reminderServer.setDateTimeListStart(date_time_list_start);
 
             registerProcess(reminderServer);
 
@@ -512,6 +524,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             List<Integer> day_list_start = new ArrayList<>();
             List<Integer> month_list_start = new ArrayList<>();
             List<Integer> year_list_start = new ArrayList<>();
+            List<Long> date_time_list_start = new ArrayList<>();
 
             if (repeat_type > 0) {
                 int repeat_adder = getRepeatAdder(repeat_type);
@@ -522,7 +535,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 cal.clear(Calendar.SECOND);
                 cal.clear(Calendar.MILLISECOND);
 
-                cal.set(date.get(2), date.get(1), date.get(0));
+                cal.set(date.get(2), date.get(1), date.get(0), date.get(4), date.get(3));
 
                 if (!repeat_single_changed)
                     repeat_left = getFutureActivities(date);
@@ -533,6 +546,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                     day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
                     month_list_start.add(cal.get(Calendar.MONTH) + 1);
                     year_list_start.add(cal.get(Calendar.YEAR));
+
+                    date_time_list_start.add(cal.getTimeInMillis());
 
                     if (repeat_type == Constants.MONTHLY)
                         cal.add(Calendar.MONTH, 1);
@@ -555,9 +570,17 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             activityServer.setMinuteStart(date.get(3));
             activityServer.setHourStart(date.get(4));
 
+            activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+            activityServer.setDateTimeStart(calendar.getTimeInMillis());
+
             activityServer.setDayListStart(day_list_start);
             activityServer.setMonthListStart(month_list_start);
             activityServer.setYearListStart(year_list_start);
+
+            activityServer.setDateTimeListStart(date_time_list_start);
 
             if (repeat_type > 0) {
                 if (sameDay(y, m, d, getReminder().getYearStart(), getReminder().getMonthStart(), getReminder().getDayStart())) // So editar os dados
@@ -724,8 +747,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 edit_reminder(idx == 1);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.dialog_edit_reminder_title));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.dialog_edit_reminder_title) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 dg.dismiss();

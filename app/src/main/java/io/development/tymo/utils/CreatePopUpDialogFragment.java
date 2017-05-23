@@ -347,8 +347,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         if (type == Constants.FLAG) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagRemove");
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
@@ -366,8 +366,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             }
                         } else if (type == Constants.ACT) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove");
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
@@ -386,8 +386,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             }
                         } else if (type == Constants.REMINDER) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderRemove");
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             activity.setVisibility(Constants.REMINDER);
@@ -506,8 +506,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 context.startActivity(myIntent);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen");
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                 dialog.dismiss();
@@ -574,8 +574,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 context.startActivity(myIntent);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen");
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                 dialog.dismiss();
@@ -678,8 +678,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 context.startActivity(myIntent);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actOpen");
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                 dialog.dismiss();
@@ -811,8 +811,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_free");
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_free" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
@@ -836,8 +836,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             intent.putExtra("reminder_free_time", new ReminderWrapper(reminderServerFreeTime));
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminder_free_time");
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminder_free_time" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
@@ -874,8 +874,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             }
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_free");
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_free" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);

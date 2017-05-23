@@ -267,11 +267,12 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         dateTymo.setYear(year);
         dateTymo.setMinute(minute);
         dateTymo.setHour(hour);
+        dateTymo.setDateTimeNow(c.getTimeInMillis());
 
         retrieveFeedActivities(email, dateTymo);
 
         // [START set_current_screen]
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), getClass().getSimpleName(), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
         // [END set_current_screen]
     }
 
@@ -406,11 +407,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                         }
                     });
 
-
-            FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
-            if (feedListFragment != null) {
-                feedListFragment.setProgress(false);
-            }
         }
     }
 
@@ -463,6 +459,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         dateTymo.setYear(year);
         dateTymo.setMinute(minute);
         dateTymo.setHour(hour);
+        dateTymo.setDateTimeNow(c.getTimeInMillis());
 
         retrieveFeedActivities(email, dateTymo);
     }
@@ -487,6 +484,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         dateTymo.setYear(year);
         dateTymo.setMinute(minute);
         dateTymo.setHour(hour);
+        dateTymo.setDateTimeNow(c.getTimeInMillis());
 
         getBgFeed();
 
@@ -534,6 +532,10 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             filter.setBackgroundResource(R.drawable.btn_feed_filter_night);
         }
 
+        FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+        if (feedListFragment != null)
+            feedListFragment.setProgress(true);
+
         dateTymo.setIdDevice(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
         mSubscriptions.add(NetworkUtil.getRetrofit().getFeedActivities(email, dateTymo)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -559,7 +561,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
         FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
         feedListFragment.setAdapterItens(listFeed);
-        feedListFragment.setProgress(true);
+        feedListFragment.setProgress(false);
 
         FeedCardFragment feedCardFragment = (FeedCardFragment) mNavigator.getFragment(1);
         if (feedCardFragment != null) {
@@ -648,10 +650,23 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
         FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
         feedListFragment.setAdapterItens(listFeed);
+        feedListFragment.setProgress(false);
 
         FeedCardFragment feedCardFragment = (FeedCardFragment) mNavigator.getFragment(1);
-        if (feedCardFragment != null)
+        if (feedCardFragment != null) {
+
             feedCardFragment.setAdapterItens(listFeed);
+
+            if (listFeed.size() == 0 || mNavigator.getCurrentPosition() == 0) {
+                feedIgnoreButton.setVisibility(View.INVISIBLE);
+                feedCheckButton.setVisibility(View.INVISIBLE);
+            } else {
+                feedIgnoreButton.setVisibility(View.VISIBLE);
+                feedCheckButton.setVisibility(View.VISIBLE);
+            }
+        }
+
+        setBackgroundFeed();
     }
 
     @Override
@@ -672,8 +687,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         if (listFeed.size() == 0) {
             FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
             feedListFragment.setAdapterItens(listFeed);
-        }
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        }else
+            Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
 
     private void initAnimation() {
@@ -691,8 +706,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                     // [START image_view_event]
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButtonImage");
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButtonImage" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                     // [END image_view_event]
                                 }
@@ -720,8 +735,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                     // [START image_view_event]
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonImage");
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonImage" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                     // [END image_view_event]
                                 }
@@ -748,12 +763,12 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                     // [START image_view_event]
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "filter");
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "filter" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                     // [END image_view_event]
 
-                                    if (filterServer != null)
+                                    if (filterServer != null && filterServer.isFilterFilled())
                                         intent.putExtra("filter_load", new FilterWrapper(filterServer));
 
                                     startActivityForResult(intent, Constants.FILTER_RESULT);
@@ -796,8 +811,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                         // [START image_view_event]
                                         Bundle bundle = new Bundle();
-                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_less");
-                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_less" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                         // [END image_view_event]
 
@@ -816,8 +831,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                         // [START image_view_event]
                                         Bundle bundle = new Bundle();
-                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_more");
-                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_more" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                         // [END image_view_event]
 

@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -254,7 +255,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mBackButton.setOnClickListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void refreshItems() {
@@ -263,8 +264,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + getClass().getSimpleName());
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 mSwipeRefreshLayout.setRefreshing(false);
@@ -612,6 +613,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             List<Integer> day_list_end = new ArrayList<>();
             List<Integer> month_list_end = new ArrayList<>();
             List<Integer> year_list_end = new ArrayList<>();
+            List<Long> date_time_list_start = new ArrayList<>();
+            List<Long> date_time_list_end = new ArrayList<>();
 
             if(repeat_type > 0){
                 int repeat_adder = getRepeatAdder(repeat_type);
@@ -628,8 +631,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 cal2.clear(Calendar.SECOND);
                 cal2.clear(Calendar.MILLISECOND);
 
-                cal.set(date.get(2), date.get(1), date.get(0));
-                cal2.set(date.get(5), date.get(4), date.get(3));
+                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
+                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
 
                 for(int i=0;i<repeat_qty;i++){
                     day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
@@ -638,6 +641,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                     day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
                     month_list_end.add(cal2.get(Calendar.MONTH)+1);
                     year_list_end.add(cal2.get(Calendar.YEAR));
+
+                    date_time_list_start.add(cal.getTimeInMillis());
+                    date_time_list_end.add(cal2.getTimeInMillis());
 
                     if(repeat_type == Constants.MONTHLY) {
                         cal.add(Calendar.MONTH, 1);
@@ -673,6 +679,15 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             flagServer.setMinuteEnd(date.get(8));
             flagServer.setHourEnd(date.get(9));
 
+            flagServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart(), flagServer.getHourStart(), flagServer.getMinuteStart());
+            flagServer.setDateTimeStart(calendar.getTimeInMillis());
+
+            calendar.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd(), flagServer.getHourEnd(), flagServer.getMinuteEnd());
+            flagServer.setDateTimeEnd(calendar.getTimeInMillis());
+
             flagServer.setRepeatType(repeat.get(0));
             flagServer.setRepeatQty(repeat.get(1));
             flagServer.setDayListStart(day_list_start);
@@ -681,6 +696,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             flagServer.setDayListEnd(day_list_end);
             flagServer.setMonthListEnd(month_list_end);
             flagServer.setYearListEnd(year_list_end);
+
+            flagServer.setDateTimeListStart(date_time_list_start);
+            flagServer.setDateTimeListEnd(date_time_list_end);
 
             flagServer.setType(free);
             if(free)
@@ -770,6 +788,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             List<Integer> day_list_end = new ArrayList<>();
             List<Integer> month_list_end = new ArrayList<>();
             List<Integer> year_list_end = new ArrayList<>();
+            List<Long> date_time_list_start = new ArrayList<>();
+            List<Long> date_time_list_end = new ArrayList<>();
 
             activityServer.setRepeatType(repeat_type);
 
@@ -788,8 +808,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 cal2.clear(Calendar.SECOND);
                 cal2.clear(Calendar.MILLISECOND);
 
-                cal.set(date.get(2), date.get(1), date.get(0));
-                cal2.set(date.get(5), date.get(4), date.get(3));
+                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
+                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
 
                 repeat_left = repeat_single.get(1);
 
@@ -800,6 +820,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                     day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
                     month_list_end.add(cal2.get(Calendar.MONTH)+1);
                     year_list_end.add(cal2.get(Calendar.YEAR));
+
+                    date_time_list_start.add(cal.getTimeInMillis());
+                    date_time_list_end.add(cal2.getTimeInMillis());
 
                     if(repeat_type == Constants.MONTHLY) {
                         cal.add(Calendar.MONTH, 1);
@@ -822,12 +845,24 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 activityServer.setMinuteEnd(date.get(8));
                 activityServer.setHourEnd(date.get(9));
 
+                activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+                activityServer.setDateTimeStart(calendar.getTimeInMillis());
+
+                calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
+                activityServer.setDateTimeEnd(calendar.getTimeInMillis());
+
                 activityServer.setDayListStart(day_list_start);
                 activityServer.setMonthListStart(month_list_start);
                 activityServer.setYearListStart(year_list_start);
                 activityServer.setDayListEnd(day_list_end);
                 activityServer.setMonthListEnd(month_list_end);
                 activityServer.setYearListEnd(year_list_end);
+
+                activityServer.setDateTimeListStart(date_time_list_start);
+                activityServer.setDateTimeListEnd(date_time_list_end);
 
                 activityServer.setRepeatQty(repeat_left);
             }
@@ -900,8 +935,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v){
         if(type == CREATE_EDIT_FLAG && !edit) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "type" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "type" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             LinearLayout linearLayout = (LinearLayout) mNavigator.getCurrentFragment().getView();
@@ -935,16 +970,16 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if(v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
         }
         else if(v == confirmationButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if(!edit)
@@ -954,8 +989,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if(v == icon2){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent myIntent = new Intent(FlagActivity.this, FlagActivity.class);
@@ -964,8 +999,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         }else if(v == checkButtonBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             InviteRequest inviteRequest = new InviteRequest();
@@ -982,8 +1017,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             updateInviteRequest(inviteRequest);
         }else if(v == deleteButtonBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox" + getClass().getSimpleName());
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if (checkIfCreator(creator_flag.getEmail())) {
@@ -1082,8 +1117,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 activity.setId(idx);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + getClass().getSimpleName());
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 activity.setVisibility(Constants.FLAG);

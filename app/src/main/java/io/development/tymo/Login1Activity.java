@@ -90,10 +90,6 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
         initSharedPreferences();
 
-        String log = mSharedPreferences.getString(Constants.EMAIL, "");
-        if(validateEmail(log))
-            startActivity(new Intent(Login1Activity.this, MainActivity.class));
-
         text = (TextView) findViewById(R.id.text);
         loginButton = (TextView) findViewById(R.id.loginButton);
         mDemoSlider = (SliderLayout)findViewById(R.id.slider);
@@ -102,8 +98,6 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
         loginButton.setOnClickListener(this);
         facebookLoginButton.setOnClickListener(this);
-
-        mSubscriptions = new CompositeSubscription();
 
         list1.add(R.drawable.bg_slideshow_1);
         list1.add(R.drawable.bg_slideshow_2);
@@ -117,15 +111,21 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             mDemoSlider.addSlider(defaultSliderView);
         }
 
-        getLoginDetails();
+        String log = mSharedPreferences.getString(Constants.EMAIL, "");
+        if(validateEmail(log))
+            startActivity(new Intent(Login1Activity.this, MainActivity.class));
+        else {
+            mSubscriptions = new CompositeSubscription();
+            getLoginDetails();
 
-        initSharedPreferences();
-        initDemoSlider();
+            initSharedPreferences();
+            initDemoSlider();
 
-        FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
+            FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
 
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        }
     }
 
     private void initDemoSlider(){
@@ -339,8 +339,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if(view == loginButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "loginButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "loginButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(Login1Activity.this, Login2Activity.class));
         }
@@ -351,8 +351,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_birthday", "user_events"));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "facebookLoginButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "facebookLoginButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         }
 
@@ -391,7 +391,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        if(mSubscriptions != null)
+            mSubscriptions.unsubscribe();
     }
 }
 

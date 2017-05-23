@@ -30,6 +30,7 @@ public class FilterServer implements Serializable {
     private int hour_start;
     private int minute_end;
     private int hour_end;
+    private long date_time_now;
 
     private ArrayList<String> tags = new ArrayList<>();
     private ArrayList<String> friends = new ArrayList<>();
@@ -48,6 +49,14 @@ public class FilterServer implements Serializable {
         this.query = this.query.concat("(?i).*");
         this.query = this.query.concat(query);
         this.query = this.query.concat(".*");
+    }
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
     }
 
     public String getQuery() {

@@ -74,12 +74,10 @@ public class AlgorithmFeedSearch {
             creation_time = activityServer.getDateTimeCreation();
             created_for_how_long = nowTime - creation_time;
 
-            calendar.set(start_year, start_month - 1, start_day, start_hour, start_minute);
-            start_date_time = calendar.getTimeInMillis();
+            start_date_time = activityServer.getDateTimeStart();
             time_left_to_start = start_date_time - nowTime;
 
-            calendar.set(end_year, end_month - 1, end_day, end_hour, end_minute);
-            end_date_time = calendar.getTimeInMillis();
+            end_date_time = activityServer.getDateTimeEnd();
             time_left_to_end = end_date_time - nowTime;
 
             if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !(activityServer.getLat() == -500 || (activityServer.getLat() == 0 && activityServer.getLng() == 0))) {
@@ -114,12 +112,10 @@ public class AlgorithmFeedSearch {
             creation_time = flagServer.getDateTimeCreation();
             created_for_how_long = nowTime - creation_time;
 
-            calendar.set(start_year, start_month - 1, start_day, start_hour, start_minute);
-            start_date_time = calendar.getTimeInMillis();
+            start_date_time = flagServer.getDateTimeStart();
             time_left_to_start = start_date_time - nowTime;
 
-            calendar.set(end_year, end_month - 1, end_day, end_hour, end_minute);
-            end_date_time = calendar.getTimeInMillis();
+            end_date_time = flagServer.getDateTimeEnd();
             time_left_to_end = end_date_time - nowTime;
         }
         else if (c1 instanceof ReminderServer || c1 instanceof ReminderSearch) {
@@ -142,12 +138,10 @@ public class AlgorithmFeedSearch {
             creation_time = reminderServer.getDateTimeCreation();
             created_for_how_long = nowTime - creation_time;
 
-            calendar.set(start_year, start_month - 1, start_day, start_hour, start_minute);
-            start_date_time = calendar.getTimeInMillis();
+            start_date_time = reminderServer.getDateTimeStart();
             time_left_to_start = start_date_time - nowTime;
 
-            calendar.set(end_year, end_month - 1, end_day, end_hour, end_minute);
-            end_date_time = calendar.getTimeInMillis();
+            end_date_time = reminderServer.getDateTimeStart();
             time_left_to_end = end_date_time - nowTime;
         }
 
@@ -178,12 +172,10 @@ public class AlgorithmFeedSearch {
             creation_time2 = activityServer.getDateTimeCreation();
             created_for_how_long2 = nowTime - creation_time2;
 
-            calendar.set(start_year2, start_month2 - 1, start_day2, start_hour2, start_minute2);
-            start_date_time2 = calendar.getTimeInMillis();
+            start_date_time2 = activityServer.getDateTimeStart();
             time_left_to_start2 = start_date_time2 - nowTime;
 
-            calendar.set(end_year2, end_month2 - 1, end_day2, end_hour2, end_minute2);
-            end_date_time2 = calendar.getTimeInMillis();
+            end_date_time2 = activityServer.getDateTimeEnd();
             time_left_to_end2 = end_date_time2 - nowTime;
 
             if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !(activityServer.getLat() == -500 || (activityServer.getLat() == 0 && activityServer.getLng() == 0))) {
@@ -218,12 +210,10 @@ public class AlgorithmFeedSearch {
             creation_time2 = flagServer.getDateTimeCreation();
             created_for_how_long2 = nowTime - creation_time2;
 
-            calendar.set(start_year2, start_month2 - 1, start_day2, start_hour2, start_minute2);
-            start_date_time2 = calendar.getTimeInMillis();
+            start_date_time2 = flagServer.getDateTimeStart();
             time_left_to_start2 = start_date_time2 - nowTime;
 
-            calendar.set(end_year2, end_month2 - 1, end_day2, end_hour2, end_minute2);
-            end_date_time2 = calendar.getTimeInMillis();
+            end_date_time2 = flagServer.getDateTimeEnd();
             time_left_to_end2 = end_date_time2 - nowTime;
         }
         else if (c2 instanceof ReminderServer || c2 instanceof ReminderSearch) {
@@ -246,12 +236,10 @@ public class AlgorithmFeedSearch {
             creation_time2 = reminderServer.getDateTimeCreation();
             created_for_how_long2 = nowTime - creation_time2;
 
-            calendar.set(start_year2, start_month2 - 1, start_day2, start_hour2, start_minute2);
-            start_date_time2 = calendar.getTimeInMillis();
+            start_date_time2 = reminderServer.getDateTimeStart();
             time_left_to_start2 = start_date_time2 - nowTime;
 
-            calendar.set(end_year2, end_month2 - 1, end_day2, end_hour2, end_minute2);
-            end_date_time2 = calendar.getTimeInMillis();
+            end_date_time2 = reminderServer.getDateTimeStart();
             time_left_to_end2 = end_date_time2 - nowTime;
         }
 

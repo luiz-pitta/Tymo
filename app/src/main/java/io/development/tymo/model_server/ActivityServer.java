@@ -25,6 +25,8 @@ public class ActivityServer implements Serializable {
     private int participates;
 
     private long date_time_creation;
+    private long date_time_start;
+    private long date_time_end;
 
     private String title;
     private String description;
@@ -55,6 +57,8 @@ public class ActivityServer implements Serializable {
     private List<Integer> day_list_end = new ArrayList<>();
     private List<Integer> month_list_end = new ArrayList<>();
     private List<Integer> year_list_end = new ArrayList<>();
+    private List<Long> date_time_list_start = new ArrayList<>();
+    private List<Long> date_time_list_end = new ArrayList<>();
 
     private int cube_color;
     private int cube_color_upper;
@@ -87,6 +91,8 @@ public class ActivityServer implements Serializable {
 
         this.invitation_type = activityServer.getInvitationType();
         this.date_time_creation = activityServer.getDateTimeCreation();
+        this.date_time_start = activityServer.getDateTimeStart();
+        this.date_time_end = activityServer.getDateTimeEnd();
         this.day_start = activityServer.getDayStart();
         this.month_start = activityServer.getMonthStart();
         this.year_start = activityServer.getYearStart();
@@ -189,6 +195,22 @@ public class ActivityServer implements Serializable {
 
     public void setDateTimeCreation(long date_time_creation) {
         this.date_time_creation = date_time_creation;
+    }
+
+    public void setDateTimeStart(long date_time_start) {
+        this.date_time_start = date_time_start;
+    }
+
+    public void setDateTimeEnd(long date_time_end) {
+        this.date_time_end = date_time_end;
+    }
+
+    public long getDateTimeStart() {
+        return date_time_start;
+    }
+
+    public long getDateTimeEnd() {
+        return date_time_end;
     }
 
     public void setCountMyContacts(int count_my_contacts) {
@@ -497,6 +519,14 @@ public class ActivityServer implements Serializable {
 
     public void setYearListEnd(List<Integer> list) {
         this.year_list_end.addAll(list);
+    }
+
+    public void setDateTimeListStart(List<Long> list) {
+        this.date_time_list_start.addAll(list);
+    }
+
+    public void setDateTimeListEnd(List<Long> list) {
+        this.date_time_list_end.addAll(list);
     }
 
     @Override

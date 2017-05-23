@@ -43,33 +43,32 @@ public class IntroActivity extends MaterialIntroActivity {
         }else {
             MediaPlayer mp = MediaPlayer.create(this, R.raw.welcome_tutorial);
             mp.start();
+
+            SharedPreferences.Editor editor = mSharedPreferences.edit();
+            editor.putBoolean(Constants.INTRO,true);
+            editor.apply();
+
+            getBackButtonTranslationWrapper()
+                    .setEnterTranslation(new IViewTranslation() {
+                        @Override
+                        public void translate(View view, @FloatRange(from = 0, to = 1.0) float percentage) {
+                            view.setAlpha(percentage);
+                        }
+                    });
+
+            addSlide(new CustomSlideWelcome());
+
+            addSlide(new CustomSlide());
+
+            addSlide(new CustomSlide2());
+
+            addSlide(new CustomSlide3());
+
+            addSlide(new CustomSlide4());
+
+            mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+            mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
         }
-
-        SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(Constants.INTRO,true);
-        editor.apply();
-
-        getBackButtonTranslationWrapper()
-                .setEnterTranslation(new IViewTranslation() {
-                    @Override
-                    public void translate(View view, @FloatRange(from = 0, to = 1.0) float percentage) {
-                        view.setAlpha(percentage);
-                    }
-                });
-
-        addSlide(new CustomSlideWelcome());
-
-        addSlide(new CustomSlide());
-
-        addSlide(new CustomSlide2());
-
-        addSlide(new CustomSlide3());
-
-        addSlide(new CustomSlide4());
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, getClass().getSimpleName(), null /* class override */);
-
     }
 
     @Override

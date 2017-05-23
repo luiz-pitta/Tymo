@@ -20,19 +20,29 @@ public class ReminderServer implements Serializable {
     private int hour_start;
 
     private long date_time_creation;
+    private long date_time_start;
 
     private int repeat_type;
     private int repeat_qty;
     private List<Integer> day_list_start = new ArrayList<>();
     private List<Integer> month_list_start = new ArrayList<>();
     private List<Integer> year_list_start = new ArrayList<>();
+    private List<Long> date_time_list_start = new ArrayList<>();
 
     public void setDateTimeCreation(long date_time_creation) {
         this.date_time_creation = date_time_creation;
     }
 
+    public void setDateTimeStart(long date_time_start) {
+        this.date_time_start = date_time_start;
+    }
+
     public long getDateTimeCreation() {
         return date_time_creation;
+    }
+
+    public long getDateTimeStart() {
+        return date_time_start;
     }
 
     public int getStatus() {
@@ -117,6 +127,10 @@ public class ReminderServer implements Serializable {
 
     public void setYearListStart(List<Integer> list) {
         this.year_list_start.addAll(list);
+    }
+
+    public void setDateTimeListStart(List<Long> list) {
+        this.date_time_list_start.addAll(list);
     }
 
     public int getRepeatType() {

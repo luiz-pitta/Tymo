@@ -37,7 +37,7 @@ public class MonthYearPickerDialog extends DialogFragment {
         Calendar cal = Calendar.getInstance();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), getClass().getSimpleName(), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
         customView = inflater.inflate(R.layout.dialog_month_picker, null);
         final NumberPicker monthPicker = (NumberPicker) customView.findViewById(R.id.picker_month);
@@ -63,8 +63,8 @@ public class MonthYearPickerDialog extends DialogFragment {
             public void onClick(View v) {
                 MonthYearPickerDialog.this.getDialog().cancel();
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancel");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancel" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             }
@@ -75,8 +75,8 @@ public class MonthYearPickerDialog extends DialogFragment {
             public void onClick(View v) {
                 listener.onDateSet(null, yearPicker.getValue(), monthPicker.getValue(), 0);
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirm");
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, getClass().getSimpleName());
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirm" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 dialog.dismiss();
             }

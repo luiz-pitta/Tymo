@@ -53,14 +53,14 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="10dp"
-                            android:text="@string/from"
+                            android:text="@string/from_as"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp"
                             android:textStyle="normal" />
 
                         <TextView
                             android:id="@+id/timeStart"
-                            android:layout_width="match_parent"
+                            android:layout_width="150dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
                             android:background="@drawable/bg_act_edit_box"
@@ -84,7 +84,8 @@
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:visibility="gone">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -156,11 +157,11 @@
 
         <TextView
             android:id="@+id/cleanSchedule"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/expandMoreIconSchedule"
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/expandMoreIconSchedule"
             android:gravity="center"
             android:text="@string/clean"
             android:textAllCaps="true"
