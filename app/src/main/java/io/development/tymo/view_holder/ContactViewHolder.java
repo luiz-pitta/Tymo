@@ -129,9 +129,8 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
         if (blocked){
             actionIcon.setVisibility(View.GONE);
-        }
-
-        if(!myContacts){
+            moreVerticalIcon.setVisibility(View.VISIBLE);
+        }else if(!myContacts){
             text2.setVisibility(View.GONE);
             actionIcon.setVisibility(View.GONE);
             moreVerticalIcon.setVisibility(View.GONE);
@@ -279,10 +278,12 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
     public void setProgress(boolean progress) {
         if (progress) {
-            actionIcon.setVisibility(View.GONE);
+            if (!blocked)
+                actionIcon.setVisibility(View.GONE);
             progressIcon.setVisibility(View.VISIBLE);
         } else {
-            actionIcon.setVisibility(View.VISIBLE);
+            if (!blocked)
+                actionIcon.setVisibility(View.VISIBLE);
             progressIcon.setVisibility(View.GONE);
         }
     }
