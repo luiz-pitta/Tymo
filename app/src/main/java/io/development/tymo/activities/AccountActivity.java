@@ -37,6 +37,7 @@ import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.ServerMessage;
 import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
@@ -146,8 +147,22 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void handleError(Throwable error) {
-        //findViewById(R.id.include).setVisibility(View.GONE);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        if (error instanceof HttpException) {
+            Gson gson = new GsonBuilder().create();
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                findViewById(R.id.include).setVisibility(View.GONE);
+                Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

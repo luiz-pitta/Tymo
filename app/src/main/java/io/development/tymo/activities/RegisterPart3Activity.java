@@ -24,8 +24,11 @@ import com.cloudinary.android.Utils;
 import com.cloudinary.utils.ObjectUtils;
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceRecyclerView;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -42,7 +45,9 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.ServerMessage;
 import io.development.tymo.utils.Utilities;
+import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -216,8 +221,22 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        //progressBox.setVisibility(View.GONE);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        if (error instanceof HttpException) {
+            Gson gson = new GsonBuilder().create();
+            try {
+
+                String errorBody = ((HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                progressBox.setVisibility(View.GONE);
+                Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();
+
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
