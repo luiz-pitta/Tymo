@@ -225,7 +225,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                     progressBox.setVisibility(View.GONE);
                 }
                 else {
-                    //progressBox.setVisibility(View.GONE);
+                    progressBox.setVisibility(View.GONE);
                     Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();
                 }
 
