@@ -3,10 +3,10 @@ package io.development.tymo.utils;
 public class Constants {
 
     /* BETA TESTE */
-    //public static final String BASE_URL = "https://floating-plateau-35187.herokuapp.com/api/v1/";
+    public static final String BASE_URL = "https://floating-plateau-35187.herokuapp.com/api/v1/";
 
     /* PRODUÇÃO */
-    public static final String BASE_URL = "https://server.tymo.me/api/v1/";
+    //public static final String BASE_URL = "https://server.tymo.me/api/v1/";
 
     public static final String IC_ADD_CUBE_URL = "http://res.cloudinary.com/hzkeshb5l/image/upload/v1495322251/activity_icons/ic_add_cube_mfrzul.png";
     public static final String EMAIL = "email";
