@@ -124,7 +124,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-            mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+            mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
         }
     }
 
@@ -339,8 +339,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View view) {
         if(view == loginButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "loginButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "loginButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(Login1Activity.this, Login2Activity.class));
         }
@@ -351,8 +351,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_birthday", "user_events"));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "facebookLoginButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "facebookLoginButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         }
 

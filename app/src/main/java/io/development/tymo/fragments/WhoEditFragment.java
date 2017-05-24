@@ -117,8 +117,8 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
                     feedVisibility.setText(R.string.feed_visibility_1);
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "visibilityCalendarPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "visibilityCalendarPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         });
@@ -148,8 +148,8 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
                     AddActivity addActivity = (AddActivity) getActivity();
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                     Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
@@ -167,7 +167,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     private void getUser(String email) {
@@ -220,8 +220,8 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("erase_from_list", true);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivityForResult(intent, ADD_GUEST);

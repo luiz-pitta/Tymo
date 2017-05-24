@@ -85,7 +85,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     @Override
@@ -107,8 +107,8 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 getContactUs();
             }
@@ -143,15 +143,15 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
     public void onClick(View view) {
         if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
         else if(view == emailBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "emailBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "emailBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.fromParts(
@@ -162,8 +162,8 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
         }
         else if(view == siteBox){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "siteBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "siteBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             String urlString = "http://www.tymo.me/";

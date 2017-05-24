@@ -92,8 +92,8 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHo
                     CreatePopUpDialogFragment createPopUpDialogFragment = new CreatePopUpDialogFragment();
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "card" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "card" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 

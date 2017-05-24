@@ -93,7 +93,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
         getBlockedUsers(email);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     private void sendBlockPeopleRequest(String email, User user) {
@@ -136,15 +136,15 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
         else if(view == addBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivityForResult(new Intent(this, SelectPeopleActivity.class), 133);
         }

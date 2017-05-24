@@ -113,7 +113,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         tabLayout.setupWithViewPager(viewPager);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
 
         doSearch(".");
     }
@@ -544,8 +544,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     public void doSearch(String mQuery){
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "search" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "search" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment)adapter.getItem(MY_PLANS);
@@ -574,8 +574,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     public void doSearchFilter(FilterServer filterServer){
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "searchFilter" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "searchFilter" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         filter = filterServer;

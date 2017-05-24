@@ -272,7 +272,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         retrieveFeedActivities(email, dateTymo);
 
         // [START set_current_screen]
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
         // [END set_current_screen]
     }
 
@@ -706,8 +706,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                     // [START image_view_event]
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButtonImage" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButtonImage" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                     // [END image_view_event]
                                 }
@@ -735,8 +735,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                     // [START image_view_event]
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonImage" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonImage" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                     // [END image_view_event]
                                 }
@@ -763,8 +763,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                     // [START image_view_event]
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "filter" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "filter" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                     // [END image_view_event]
 
@@ -811,8 +811,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                         // [START image_view_event]
                                         Bundle bundle = new Bundle();
-                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_less" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_less" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                         // [END image_view_event]
 
@@ -831,8 +831,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                                         // [START image_view_event]
                                         Bundle bundle = new Bundle();
-                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_more" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_more" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                                         // [END image_view_event]
 

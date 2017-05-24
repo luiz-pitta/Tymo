@@ -63,7 +63,7 @@ public class SearchMyCommitmentFragment extends Fragment {
         adapter.clear();
         adapter.addAll(listCommit);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
         mRecyclerView.showProgress();
     }
 

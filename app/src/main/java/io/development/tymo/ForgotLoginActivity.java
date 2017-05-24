@@ -25,6 +25,8 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+import static io.development.tymo.utils.Validation.validateEmail;
+
 
 public class ForgotLoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,7 +62,7 @@ public class ForgotLoginActivity extends AppCompatActivity implements View.OnCli
         mSubscriptions = new CompositeSubscription();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     public void setProgress(boolean progress) {
@@ -81,7 +83,7 @@ public class ForgotLoginActivity extends AppCompatActivity implements View.OnCli
     private void handleResponse(Response response) {
         setProgress(false);
         Toast.makeText(this, getResources().getString(R.string.error_login_email_check), Toast.LENGTH_LONG).show();
-        startActivity(new Intent(ForgotLoginActivity.this, Login1Activity.class));
+        startActivity(new Intent(ForgotLoginActivity.this, ResetPasswordActivity.class));
         finish();
     }
 
@@ -94,11 +96,8 @@ public class ForgotLoginActivity extends AppCompatActivity implements View.OnCli
                 Response response = gson.fromJson(errorBody,Response.class);
                 setProgress(false);
                 Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();
-
-
             } catch (IOException e) {
                 setProgress(false);
-                e.printStackTrace();
             }
         } else {
             setProgress(false);
@@ -115,8 +114,8 @@ public class ForgotLoginActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View view) {
         if(view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
@@ -125,11 +124,15 @@ public class ForgotLoginActivity extends AppCompatActivity implements View.OnCli
             editor.commit();
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            passwordResetInit(email.getText().toString());
+            if(validateEmail(email.getText().toString()))
+                passwordResetInit(email.getText().toString());
+            else
+                Toast.makeText(this, getResources().getString(R.string.error_email_required), Toast.LENGTH_LONG).show();
+
         }
     }
 

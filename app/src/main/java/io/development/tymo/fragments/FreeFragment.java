@@ -94,7 +94,7 @@ public class FreeFragment extends Fragment {
         weekAdapter.addAll(list);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     public void showProgressFree(){

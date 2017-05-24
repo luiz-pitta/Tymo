@@ -79,7 +79,7 @@ public class InvitedPeopleFragment extends Fragment {
         adapter.clear();
         adapter.addAll(listPeople);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
 
     }
 

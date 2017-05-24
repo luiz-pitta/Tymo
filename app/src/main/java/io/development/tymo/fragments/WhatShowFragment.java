@@ -68,7 +68,7 @@ public class WhatShowFragment extends Fragment {
         whatsAppGroupLinkBox = (LinearLayout) view.findViewById(R.id.whatsAppGroupLinkBox);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     @Override

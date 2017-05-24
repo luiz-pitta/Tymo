@@ -83,7 +83,7 @@ public class CompareTotalFragment extends Fragment{
             adapter.notifyItemInserted(i);
         }
 
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
     }
 
     public void setDataAdapter(List<CompareModel> list){
