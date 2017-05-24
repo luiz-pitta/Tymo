@@ -1093,7 +1093,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 timerIcon.setVisibility(View.VISIBLE);
                 timerIcon.setImageResource(R.drawable.ic_add_cube);
                 timerIcon.setColorFilter(getResources().getColor(R.color.white));
-                progressBar.setValue(0);
+                progressBar.setValue(35.0f);
             } else if (count_will_happen > 0) {
                 if (count_will_happen_at_same_time > 1) {
                     commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));

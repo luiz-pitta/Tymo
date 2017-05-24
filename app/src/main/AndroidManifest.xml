@@ -40,10 +40,10 @@
             android:value="@string/facebook_app_id"/>
 
         <!-- BETA TESTE -->
-        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://392512249626575:883M2n_JJty1Fcx7kVYg6qvCoyw@hvfrjtvkm"/>
+        <!-- <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://392512249626575:883M2n_JJty1Fcx7kVYg6qvCoyw@hvfrjtvkm"/> -->
 
         <!-- PRODUÇÃO -->
-        <!-- <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://381773179253939:z4lejziSvxEMuWx9tux3RVzd1JU@hzkeshb5l"/> -->
+        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://381773179253939:z4lejziSvxEMuWx9tux3RVzd1JU@hzkeshb5l"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
