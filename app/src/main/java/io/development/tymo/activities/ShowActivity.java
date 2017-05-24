@@ -161,6 +161,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(225);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

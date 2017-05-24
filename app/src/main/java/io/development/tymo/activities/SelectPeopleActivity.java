@@ -104,6 +104,8 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         cleanButton = (TextView) findViewById(R.id.cleanButton);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(275);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

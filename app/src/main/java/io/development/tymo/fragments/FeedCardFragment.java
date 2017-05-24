@@ -112,6 +112,8 @@ public class FeedCardFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         feed_empty_view = (LinearLayout) view.findViewById(R.id.feed_empty_view);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(275);
+
         mSubscriptions = new CompositeSubscription();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 

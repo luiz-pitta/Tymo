@@ -182,6 +182,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         invitationsBox.setOnClickListener(this);
         profilePhoto.setOnClickListener(this);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(225);
+
         getBgProfile();
 
         threadSleepTime = 1000;
@@ -401,7 +403,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         ((MainActivity) getActivity()).updateProfileMainInformation();
 
-        settingsBox.setClickable(false);
         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 

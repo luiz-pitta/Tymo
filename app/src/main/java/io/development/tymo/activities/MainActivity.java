@@ -387,13 +387,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             controller.updateAll(FEED, 0, R.color.deep_purple_400, 0);
+            FeedFragment feedFragment = (FeedFragment)mNavigator.getFragment(FEED);
 
-            if(mNavigator.getCurrentPosition() == FEED) {
-                FeedFragment feedFragment = (FeedFragment)mNavigator.getFragment(FEED);
-
+            if(mNavigator.getCurrentPosition() == FEED)
                 feedFragment.getRecyclerView().getRecyclerView().smoothScrollToPosition(0);
-                feedFragment.updateLayout();
-            }
 
             setCurrentTab(FEED);
         }
@@ -412,7 +409,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
 
-            if (plansFragment!=null)
+            if (plansFragment!=null && mNavigator.getCurrentPosition() != PLANS)
                 plansFragment.updateLayout(day, month, year);
 
             setCurrentTab(PLANS);

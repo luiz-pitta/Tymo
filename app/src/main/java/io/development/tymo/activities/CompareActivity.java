@@ -118,6 +118,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         deselectAll = (TextView) findViewById(R.id.deselectAll);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(250);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

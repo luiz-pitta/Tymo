@@ -152,6 +152,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         nextWeek = (ImageView) view.findViewById(R.id.nextWeek);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(350);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {

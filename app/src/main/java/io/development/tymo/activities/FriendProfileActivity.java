@@ -163,6 +163,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         dateCompareBox = (RelativeLayout) findViewById(R.id.dateCompareBox);
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(275);
+
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
