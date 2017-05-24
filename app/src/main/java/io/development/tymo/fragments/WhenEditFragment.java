@@ -543,13 +543,13 @@ public class WhenEditFragment extends Fragment implements
             String time2 = hourStringEnd+":"+minuteStringEnd;
 
             day_start = activityServer.getDayStart();
-            month_start = activityServer.getMonthStart()-1;
+            month_start = activityServer.getMonthStart() - 1;
             year_start = activityServer.getYearStart();
             minutes_start = activityServer.getMinuteStart();
             hour_start = activityServer.getHourStart();
 
             day_end = activityServer.getDayEnd();
-            month_end = activityServer.getMonthEnd()-1;
+            month_end = activityServer.getMonthEnd() - 1;
             year_end = activityServer.getYearEnd();
             minutes_end = activityServer.getMinuteEnd();
             hour_end = activityServer.getHourEnd();

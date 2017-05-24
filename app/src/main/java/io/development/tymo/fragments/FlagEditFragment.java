@@ -468,6 +468,9 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
+            if(hour_start != -1)
+                tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
+
             tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             tpd.setStartTitle(getResources().getString(R.string.start));
             tpd.setEndTitle(getResources().getString(R.string.end));
@@ -481,6 +484,9 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     now.get(Calendar.MINUTE),
                     true
             );
+
+            if(hour_start != -1)
+                tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -589,10 +595,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         hour_end = flagServer.getHourEnd();
 
         day_start = flagServer.getDayStart();
-        month_start = flagServer.getMonthStart();
+        month_start = flagServer.getMonthStart() - 1;
         year_start = flagServer.getYearStart();
         day_end = flagServer.getDayEnd();
-        month_end = flagServer.getMonthEnd();
+        month_end = flagServer.getMonthEnd() - 1;
         year_end = flagServer.getYearEnd();
 
         dateStart.setText(date);

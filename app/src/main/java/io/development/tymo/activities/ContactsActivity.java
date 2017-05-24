@@ -181,6 +181,25 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 List<User> filteredModelList = filter(listContact, query);
                 adapter.clear();
                 adapter.addAll(filteredModelList);
+
+                m_contacts_qty = adapter.getCount();
+
+                if(m_contacts_qty == 0){
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+                    findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
+                    recyclerView.showEmpty();
+                }
+                else if(m_contacts_qty == 1){
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.contactsQtyBox).setVisibility(View.VISIBLE);
+                    contactsQty.setText(R.string.contacts_qty_one);
+                }
+                else{
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.contactsQtyBox).setVisibility(View.VISIBLE);
+                    contactsQty.setText(getResources().getString(R.string.contacts_qty, m_contacts_qty));
+                }
+
                 recyclerView.scrollToPosition(0);
             }
         });
@@ -349,25 +368,27 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void refreshLayout() {
 
-        listContact = new ArrayList<>();
-        listContactQuery = new ArrayList<>();
+        listContact.clear();
+        listContactQuery.clear();
         listContact.addAll(adapter.getAllData());
         listContactQuery.addAll(adapter.getAllData());
-        adapter.clear();
-        adapter.addAll(adapter.getAllData());
 
         m_contacts_qty = adapter.getCount();
 
         if(m_contacts_qty == 0){
+            recyclerView.setEmptyView(null);
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
+            findViewById(R.id.searchSelection).setVisibility(View.GONE);
+            recyclerView.showEmpty();
         }
         else if(m_contacts_qty == 1){
             contactsQty.setText(R.string.contacts_qty_one);
         }
         else{
             contactsQty.setText(getResources().getString(R.string.contacts_qty, m_contacts_qty));
-        };
+        }
     }
 
 }
