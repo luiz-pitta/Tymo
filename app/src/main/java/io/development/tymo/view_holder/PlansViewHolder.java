@@ -102,7 +102,6 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 CreatePopUpDialogFragment createPopUpDialogFragment;
 
                 String type =  obj.toString().substring(33,obj.toString().length()-8);
-                String test =  getClass().getName().substring(20,getClass().getName().length() - 1);
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "CreatePopUpDialogFragment" + type + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));

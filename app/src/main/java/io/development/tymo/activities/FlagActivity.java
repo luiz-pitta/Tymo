@@ -883,12 +883,15 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponse(Response response) {
         setProgress(false);
 
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("d",d);
         intent.putExtra("m",m);
         intent.putExtra("y",y);
         setResult(RESULT_OK, intent);
-        finish();
+        if(user_friend == null)
+            finish();
+        else
+            startActivity(intent);
 
     }
 

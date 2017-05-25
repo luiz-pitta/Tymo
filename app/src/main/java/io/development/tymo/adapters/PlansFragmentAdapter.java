@@ -11,10 +11,8 @@ import io.development.tymo.fragments.FeedFragment;
 public class PlansFragmentAdapter implements FragmentNavigatorAdapter {
 
     private static final String TABS[] = {"comit", "free"};
-    private int screen;
 
-    public PlansFragmentAdapter(int screen){
-        this.screen = screen;
+    public PlansFragmentAdapter(){
     }
 
     @Override
@@ -22,10 +20,10 @@ public class PlansFragmentAdapter implements FragmentNavigatorAdapter {
         Fragment mFragment = null;
         switch (position){
             case 0:
-                mFragment = CommitmentFragment.newInstance(screen);
+                mFragment = CommitmentFragment.newInstance();
                 break;
             case 1:
-                mFragment = FreeFragment.newInstance(screen);
+                mFragment = FreeFragment.newInstance();
                 break;
         }
         return mFragment;

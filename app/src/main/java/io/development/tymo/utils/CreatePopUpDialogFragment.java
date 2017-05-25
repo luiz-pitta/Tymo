@@ -816,6 +816,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
+
+                            dialog.dismiss();
                         }
                     });
 
@@ -841,6 +843,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
+
+                            dialog.dismiss();
                         }
                     });
 
@@ -879,6 +883,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
+
+                            dialog.dismiss();
                         }
                     });
 

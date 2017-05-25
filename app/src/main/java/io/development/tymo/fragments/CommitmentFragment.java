@@ -30,13 +30,12 @@ public class CommitmentFragment extends Fragment{
 
     private EasyRecyclerView recyclerView;
     private PlansAdapter weekAdapter;
-    private static int screen;
+    private int screen;
     private FirebaseAnalytics mFirebaseAnalytics;
     private CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback;
 
-    public static Fragment newInstance(int s) {
+    public static Fragment newInstance() {
         CommitmentFragment fragment = new CommitmentFragment();
-        screen = s;
         return fragment;
     }
 
@@ -68,10 +67,14 @@ public class CommitmentFragment extends Fragment{
 
         PlansFragment fragment = (PlansFragment)getActivity().getFragmentManager().findFragmentByTag("Plans_main");
 
-        if(fragment == null)
+        if(fragment == null) {
+            screen = Utilities.TYPE_FRIEND;
             recyclerView.setEmptyView(R.layout.empty_plans_private);
-        else
+        }
+        else {
+            screen = Utilities.TYPE_PLANS;
             recyclerView.setEmptyView(R.layout.empty_timer);
+        }
 
         recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -79,7 +82,7 @@ public class CommitmentFragment extends Fragment{
         if(screen == Utilities.TYPE_FRIEND)
             callback = (FriendProfileActivity)getActivity();
         else
-            callback = (PlansFragment)getActivity().getFragmentManager().findFragmentByTag("Plans_main");
+            callback = fragment;
 
         weekAdapter = new PlansAdapter(view.getContext(), screen, callback, null, false);
 

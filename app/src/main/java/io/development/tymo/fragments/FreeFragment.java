@@ -32,17 +32,20 @@ public class FreeFragment extends Fragment {
     private PlansAdapter weekAdapter;
     private EasyRecyclerView recyclerView;
     private List<WeekModel> data = new ArrayList<>();
-    private static int screen;
+    private int screen;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    public static Fragment newInstance(int s) {
+    public static Fragment newInstance() {
         FreeFragment fragment = new FreeFragment();
-        screen = s;
         return fragment;
     }
 
     public FreeFragment() {
         // Required empty public constructor
+    }
+
+    public void setScreen(int screen){
+        this.screen = screen;
     }
 
     @Override
@@ -75,11 +78,13 @@ public class FreeFragment extends Fragment {
         if(fragment == null) {
             FriendProfileActivity parent = (FriendProfileActivity)getActivity();
             list = parent.getListPlans();
+            screen = Utilities.TYPE_FRIEND;
             weekAdapter = new PlansAdapter(view.getContext(), screen, (FriendProfileActivity)getActivity(), parent.getUserFriend(), true);
             recyclerView.setEmptyView(R.layout.empty_plans_private);
         }
         else {
             list = fragment.getListPlans();
+            screen = Utilities.TYPE_PLANS;
             weekAdapter = new PlansAdapter(view.getContext(), screen, fragment, null, true);
             recyclerView.setEmptyView(R.layout.empty_timer);
         }

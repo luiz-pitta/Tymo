@@ -611,8 +611,35 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             controller.updateAll(mNavigator.getCurrentPosition(),0,R.color.deep_purple_400, 0);
             setCurrentTab(mNavigator.getCurrentPosition());
+
+
+            int d = getIntent().getIntExtra("d",0);
+            int m = getIntent().getIntExtra("m",0);
+            int y = getIntent().getIntExtra("y",0);
+
+            if(d > 0 && m > 0 && y > 0) {
+                ArrayList<Integer> list = new ArrayList<>();
+                list.add(d);
+                list.add(m);
+                list.add(y);
+
+                TymoApplication.getInstance().setDate(list);
+                TymoApplication.getInstance().setCreatedActivity(true);
+
+                refresh = false;
+
+                if (plansFragment != null)
+                    plansFragment.updateLayout(d, m, y);
+
+                controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
+                setCurrentTab(PLANS);
+            }
         }
     }
 
-
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+    }
 }

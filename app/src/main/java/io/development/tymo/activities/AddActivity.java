@@ -886,6 +886,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     activityServer.addAdms(list_guest.get(i).getEmail());
             }
 
+            if(list_guest.size() == 0 && user_friend != null)
+                activityServer.addGuest(user_friend.getEmail());
+
             activityServer.setCreator(creator);
 
             registerProcess(activityServer);
@@ -1489,12 +1492,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private void handleResponse(Response response) {
         setProgress(false);
 
-        Intent intent = new Intent();
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("d", d);
         intent.putExtra("m", m);
         intent.putExtra("y", y);
         setResult(RESULT_OK, intent);
-        finish();
+        if(user_friend == null)
+            finish();
+        else
+            startActivity(intent);
 
     }
 

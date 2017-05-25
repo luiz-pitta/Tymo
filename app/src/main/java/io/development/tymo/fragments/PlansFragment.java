@@ -126,9 +126,9 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         dateFormat = new DateFormat(getActivity());
 
         if (Build.VERSION.SDK_INT >= 17)
-            mNavigator = new FragmentNavigator(getChildFragmentManager(), new PlansFragmentAdapter(Utilities.TYPE_PLANS), R.id.container);
+            mNavigator = new FragmentNavigator(getChildFragmentManager(), new PlansFragmentAdapter(), R.id.container);
         else
-            mNavigator = new FragmentNavigator(getFragmentManager(), new PlansFragmentAdapter(Utilities.TYPE_PLANS), R.id.container);
+            mNavigator = new FragmentNavigator(getFragmentManager(), new PlansFragmentAdapter(), R.id.container);
 
         mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
         mNavigator.onCreate(savedInstanceState);

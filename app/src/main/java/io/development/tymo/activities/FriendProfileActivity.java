@@ -191,7 +191,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         previousWeek.setOnClickListener(this);
         nextWeek.setOnClickListener(this);
 
-        mNavigator = new FragmentNavigator(getFragmentManager(), new PlansFragmentAdapter(Utilities.TYPE_FRIEND), R.id.container);
+        mNavigator = new FragmentNavigator(getFragmentManager(), new PlansFragmentAdapter(), R.id.container);
         mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
         mNavigator.onCreate(savedInstanceState);
 
