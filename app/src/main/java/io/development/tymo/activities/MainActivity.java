@@ -617,7 +617,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int m = getIntent().getIntExtra("m",0);
             int y = getIntent().getIntExtra("y",0);
 
-            if(d > 0 && m > 0 && y > 0) {
+            if(d > 0 && m > -1 && y > 0) {
                 ArrayList<Integer> list = new ArrayList<>();
                 list.add(d);
                 list.add(m);
