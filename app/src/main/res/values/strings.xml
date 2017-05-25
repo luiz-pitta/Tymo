@@ -137,7 +137,7 @@
     <string name="server_message_user_not_registered">Usuário não cadastrado</string>
     <string name="server_message_without_notification">Sem notificação</string>
     <string name="server_message_worked">Funcionou</string>
-    <string name="server_message_unknown">Mensagem desconhecida do servidor</string>
+    <string name="server_failure">Falha no servidor</string>
 
     <!-- Others Strings -->
     <string name="about">Sobre</string>

@@ -78,7 +78,7 @@ public class ServerMessage {
             case "USER_NOT_FOUND":
                 return context.getResources().getString(R.string.server_message_user_not_registered);
             default:
-                return context.getResources().getString(R.string.server_message_unknown);
+                return context.getResources().getString(R.string.server_failure);
         }
     }
 }
