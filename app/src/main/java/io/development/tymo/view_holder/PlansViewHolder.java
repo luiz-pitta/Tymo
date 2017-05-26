@@ -50,8 +50,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class PlansViewHolder extends BaseViewHolder<WeekModel> {
-    private static Context context;
-    private static int screen;
+    private Context context;
+    private int screen;
     private TextView dayNumber, dayText, dayMonth;
     private EasyRecyclerView mRecyclerView;
     private PlansCardsAdapter adapter;
@@ -63,7 +63,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private boolean free;
 
 
-    public PlansViewHolder(ViewGroup parent, final Context context, int screen, CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback, User usr, boolean free) {
+    public PlansViewHolder(ViewGroup parent, Context context, int screen, CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback, User usr, boolean free) {
         super(parent, R.layout.list_item_plans);
 
         dayNumber = $(R.id.dayNumber);
@@ -150,6 +150,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         dayText.setText(week.getM_day_text());
         dayMonth.setText(week.getM_month_text());
         adapter.clear();
+
         if(!free)
             adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
         else
@@ -161,7 +162,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
             dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
     }
 
-    public static List<Object> setPlansItemData(List<Object> objectList, boolean paint) {
+    private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {
         List<Object> list = new ArrayList<>();
 
         for(int i = 0; i < objectList.size(); i++){
@@ -173,25 +174,16 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String hour_end = String.format("%02d", activityServer.getHourEndCard());
                 String minute_end = String.format("%02d", activityServer.getMinuteEndCard());
                 String time;
-                boolean act_as_red_flag = false;
 
-                if(activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard()){
+                if(activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
                     time = hour_start+":"+minute_start+"\n"+"-";
-                }
-                else{
+                else
                     time = hour_start+":"+minute_start+"\n"+hour_end+":"+minute_end;
-                }
 
-                if(screen == Utilities.TYPE_FRIEND && activityServer.getParticipates() == 0){
-                    if(activityServer.getKnowCreator() == 0 && activityServer.getVisibility() > 0) //não é meu contato e visibilidade é somente amigos ou privada
-                        act_as_red_flag = true;
-                    else if(activityServer.getVisibility() == 2 && activityServer.getKnowCreator() > 0) // é meu contato e visibilidade é privada
-                        act_as_red_flag = true;
-                }
+                if( (screen == Utilities.TYPE_FRIEND && activityServer.getParticipates() == 0) &&
+                    ( (activityServer.getKnowCreator() == 0 && activityServer.getVisibility() > 0) ||
+                      (activityServer.getVisibility() == 2 && activityServer.getKnowCreator() > 0) ) ){
 
-                if(!act_as_red_flag)
-                    list.add(new ActivityCard(time, activityServer.getCubeIcon(), activityServer.getCubeColor(), activityServer.getCubeColorUpper(), activityServer, act_as_red_flag));
-                else {
                     FlagServer flagServer = new FlagServer();
                     flagServer.setType(false);
                     flagServer.setTitle(context.getResources().getString(R.string.flag_unavailable_title_dialog));
@@ -205,8 +197,9 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     flagServer.setHourStart(activityServer.getHourStart());
                     flagServer.setMinuteEnd(activityServer.getMinuteEnd());
                     flagServer.setHourEnd(activityServer.getHourEnd());
-                    list.add(new Flag(time, R.drawable.ic_flag, false, flagServer, paint, act_as_red_flag));
-                }
+                    list.add(new Flag(time, R.drawable.ic_flag, false, flagServer, paint, true));
+                }else
+                    list.add(new ActivityCard(time, activityServer.getCubeIcon(), activityServer.getCubeColor(), activityServer.getCubeColorUpper(), activityServer, false));
 
             }else if(object instanceof FlagServer){
                 FlagServer flagServer = (FlagServer) object;
@@ -215,23 +208,14 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String hour_end = String.format("%02d", flagServer.getHourEndCard());
                 String minute_end = String.format("%02d", flagServer.getMinuteEndCard());
                 String time;
-                boolean act_as_red_flag = false;
 
-                if(flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard()){
+                if(flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
                     time = hour_start+":"+minute_start+"\n"+"-";
-                }
-                else{
+                else
                     time = hour_start+":"+minute_start+"\n"+hour_end+":"+minute_end;
-                }
 
-                if(screen == Utilities.TYPE_FRIEND){
-                    if(flagServer.getType() && flagServer.getParticipates() == 0)
-                        act_as_red_flag = true;
-                }
 
-                if(!act_as_red_flag)
-                    list.add(new Flag(time,R.drawable.ic_flag, flagServer.getType(), flagServer, paint, act_as_red_flag));
-                else {
+                if(screen == Utilities.TYPE_FRIEND && flagServer.getType() && flagServer.getParticipates() == 0){
                     FlagServer flag = new FlagServer();
                     flag.setType(false);
                     flag.setTitle(context.getResources().getString(R.string.flag_unavailable_title));
@@ -245,8 +229,9 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     flag.setHourStart(flagServer.getHourStart());
                     flag.setMinuteEnd(flagServer.getMinuteEnd());
                     flag.setHourEnd(flagServer.getHourEnd());
-                    list.add(new Flag(time, R.drawable.ic_flag, false, flag, paint, act_as_red_flag));
-                }
+                    list.add(new Flag(time, R.drawable.ic_flag, false, flag, paint, true));
+                }else
+                    list.add(new Flag(time,R.drawable.ic_flag, flagServer.getType(), flagServer, paint, false));
 
             }else if(object instanceof ReminderServer){
                 ReminderServer reminderServer = (ReminderServer) object;

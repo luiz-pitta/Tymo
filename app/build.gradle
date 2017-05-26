@@ -13,8 +13,8 @@ android {
         applicationId "io.development.tymo"
         minSdkVersion 15
         targetSdkVersion 25
-        versionCode 15
-        versionName "Último teste beta 2"
+        versionCode 16
+        versionName "Último teste beta 3"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
 
