@@ -139,6 +139,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         editor.putString(Constants.USER_NAME, "");
         editor.putBoolean(Constants.LOCATION, false);
         editor.putBoolean(Constants.NOTIFICATION, false);
+        editor.putBoolean(Constants.INTRO, false);
         editor.apply();
 
         Intent intent = new Intent(getApplicationContext(), Login1Activity.class);

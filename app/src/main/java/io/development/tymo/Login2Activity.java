@@ -181,6 +181,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 editor.putString(Constants.USER_NAME, "");
                 editor.putBoolean(Constants.LOCATION, false);
                 editor.putBoolean(Constants.NOTIFICATION, false);
+                editor.putBoolean(Constants.INTRO, false);
                 editor.apply();
                 Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_SHORT).show();
             }
