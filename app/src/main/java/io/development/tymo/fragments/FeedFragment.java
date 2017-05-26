@@ -937,7 +937,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         setBackgroundFeed();
 
         if (mSharedPreferences != null) {
-            boolean location = mSharedPreferences.getBoolean(Constants.LOCATION, false);
+            boolean location = mSharedPreferences.getBoolean(Constants.LOCATION, true);
 
             if (location && googleApiClient == null)
                 googleApiClient = new GoogleApiClient.Builder(getActivity(), this, this).addApi(LocationServices.API).build();

@@ -315,7 +315,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
 
             if (!feedCubeModel.getLocation().matches("")) {
                 SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                boolean location = mSharedPreferences.getBoolean(Constants.LOCATION, false);
+                boolean location = mSharedPreferences.getBoolean(Constants.LOCATION, true);
 
                 if (location) {
                     LocationManager manager = (LocationManager) mContext.getSystemService(Context.LOCATION_SERVICE);

@@ -107,6 +107,9 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         if (favorite > 0) {
             actionIcon.setImageResource(R.drawable.ic_star_activated);
             actionIcon.setColorFilter(ContextCompat.getColor(context, R.color.yellow_700));
+        }else {
+            actionIcon.setImageResource(R.drawable.ic_star_deactivated);
+            actionIcon.setColorFilter(ContextCompat.getColor(context, R.color.grey_600));
         }
 
         if (!contact.getPhoto().matches("")) {

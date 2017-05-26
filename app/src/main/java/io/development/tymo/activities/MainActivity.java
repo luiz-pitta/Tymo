@@ -205,7 +205,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().getPendingSolicitaion(query)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseMain,this::handleError));
+                .subscribe(this::handleResponseMain,this::handleError2));
     }
 
     private void handleResponseMain(Response response) {
@@ -230,6 +230,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleError(Throwable error) {
         Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }
+
+    private void handleError2(Throwable error) {}
 
     private void initAnimation() {
         new Actor.Builder(SpringSystem.create(), closeButton)
