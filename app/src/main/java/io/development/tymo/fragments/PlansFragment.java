@@ -457,7 +457,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             for (j = 0; j < response.getMyCommitAct().size(); j++) {
                 ActivityServer activity = response.getMyCommitAct().get(j);
                 ActivityServer activityServer = new ActivityServer(activity);
-                if (Utilities.isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day, month)) {
+                if (Utilities.isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
                     boolean start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
                     boolean finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
                     if (!start && finish) {
@@ -488,7 +488,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             for (j = 0; j < response.getMyCommitFlag().size(); j++) {
                 FlagServer flag = response.getMyCommitFlag().get(j);
                 FlagServer flagServer = new FlagServer(flag);
-                if (Utilities.isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day, month)) {
+                if (Utilities.isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
                     boolean start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
                     boolean finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
                     if (!start && finish) {

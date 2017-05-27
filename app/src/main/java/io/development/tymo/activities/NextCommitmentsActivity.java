@@ -156,44 +156,61 @@ public class NextCommitmentsActivity extends AppCompatActivity implements View.O
                 .subscribe(this::handleResponse, this::handleError));
     }
 
+    private boolean isActivityHappening(ActivityServer activityServer){
+        boolean start = false;
+        boolean finish = false;
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if(Utilities.isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
+            start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
+            finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
+        }
+
+        boolean isStartInPast = calendar.getTimeInMillis() >= activityServer.getDateTimeStart();
+        boolean isFinishInFuture = calendar.getTimeInMillis() <= activityServer.getDateTimeEnd();
+
+        return (isStartInPast && isFinishInFuture) || start || finish;
+    }
+
+    private boolean isFlagHappening(FlagServer flagServer){
+        boolean start = false;
+        boolean finish = false;
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if(Utilities.isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
+            start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
+            finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
+        }
+
+        boolean isStartInPast = calendar.getTimeInMillis() >= flagServer.getDateTimeStart();
+        boolean isFinishInFuture = calendar.getTimeInMillis() <= flagServer.getDateTimeEnd();
+
+        return (isStartInPast && isFinishInFuture) || start || finish;
+    }
+
     private void handleResponse(Response response) {
 
         List<Object> list = new ArrayList<>();
         List<NotificationModel> listNotification = new ArrayList<>();
-        int act = 0;
-        int reminder = 0;
-        int flag = 0;
-
-        String act_name = "";
-        String reminder_name = "";
-        String flag_name = "";
 
         if (response.getMyCommitAct() != null) {
-            list.addAll(response.getMyCommitAct());
-            act = response.getMyCommitAct().size();
-
-            if (act > 1)
-                act_name = getResources().getString(R.string.next_commitments_activities);
-            else
-                act_name = getResources().getString(R.string.next_commitments_activity);
+            ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
+            for(int i=0;i<activityServers.size();i++){
+                if(isActivityHappening(activityServers.get(i)))
+                    list.add(activityServers.get(i));
+            }
         }
         if (response.getMyCommitFlag() != null) {
-            list.addAll(response.getMyCommitFlag());
-            flag = response.getMyCommitFlag().size();
-
-            if (flag > 1)
-                flag_name = getResources().getString(R.string.next_commitments_flags);
-            else
-                flag_name = getResources().getString(R.string.next_commitments_flag);
+            ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
+            for(int i=0;i<flagServers.size();i++){
+                if(isFlagHappening(flagServers.get(i)))
+                    list.add(flagServers.get(i));
+            }
         }
         if (response.getMyCommitReminder() != null) {
             list.addAll(response.getMyCommitReminder());
-            reminder = response.getMyCommitReminder().size();
-
-            if (reminder > 1)
-                reminder_name = getResources().getString(R.string.next_commitments_reminders);
-            else
-                reminder_name = getResources().getString(R.string.next_commitments_reminder);
         }
 
         Collections.sort(list, new Comparator<Object>() {

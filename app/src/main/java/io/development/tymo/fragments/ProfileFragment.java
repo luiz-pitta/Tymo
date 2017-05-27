@@ -69,6 +69,7 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.Utilities;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -430,6 +431,40 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .subscribe(this::handleResponse, this::handleError));
     }
 
+    private boolean isActivityHappening(ActivityServer activityServer){
+        boolean start = false;
+        boolean finish = false;
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if(Utilities.isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
+            start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
+            finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
+        }
+
+        boolean isStartInPast = calendar.getTimeInMillis() >= activityServer.getDateTimeStart();
+        boolean isFinishInFuture = calendar.getTimeInMillis() <= activityServer.getDateTimeEnd();
+
+        return (isStartInPast && isFinishInFuture) || start || finish;
+    }
+
+    private boolean isFlagHappening(FlagServer flagServer){
+        boolean start = false;
+        boolean finish = false;
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_MONTH);
+
+        if(Utilities.isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
+            start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
+            finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
+        }
+
+        boolean isStartInPast = calendar.getTimeInMillis() >= flagServer.getDateTimeStart();
+        boolean isFinishInFuture = calendar.getTimeInMillis() <= flagServer.getDateTimeEnd();
+
+        return (isStartInPast && isFinishInFuture) || start || finish;
+    }
+
 
     private void handleResponse(Response response) {
 
@@ -488,12 +523,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         } else
             profilePhoto.setImageResource(R.drawable.ic_profile_photo_empty);
 
-        if (response.getMyCommitAct() != null)
-            list.addAll(response.getMyCommitAct());
-        if (response.getMyCommitFlag() != null)
-            list.addAll(response.getMyCommitFlag());
-        if (response.getMyCommitReminder() != null)
+        if (response.getMyCommitAct() != null) {
+            ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
+            for(int i=0;i<activityServers.size();i++){
+                if(isActivityHappening(activityServers.get(i)))
+                    list.add(activityServers.get(i));
+            }
+        }
+        if (response.getMyCommitFlag() != null) {
+            ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
+            for(int i=0;i<flagServers.size();i++){
+                if(isFlagHappening(flagServers.get(i)))
+                    list.add(flagServers.get(i));
+            }
+        }
+        if (response.getMyCommitReminder() != null) {
             list.addAll(response.getMyCommitReminder());
+        }
 
         Collections.sort(list, new Comparator<Object>() {
             @Override
