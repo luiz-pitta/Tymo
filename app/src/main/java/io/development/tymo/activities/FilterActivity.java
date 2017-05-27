@@ -40,12 +40,15 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.adapters.SelectionWeekDaysAdapter;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
+import io.development.tymo.model_server.TagServer;
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.utils.Constants;
@@ -698,6 +701,19 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         if(filterWrapper != null){
             FilterServer filterServer = filterWrapper.getFilterServer();
             tagGroup.removeAll();
+
+            Collections.sort(filterServer.getTags(), new Comparator<String>() {
+                @Override
+                public int compare(String c1, String c2) {
+                    if (c1.compareTo(c2) > 0)
+                        return 1;
+                    else if (c1.compareTo(c2) < 0)
+                        return -1;
+                    else
+                        return 0;
+                }
+            });
+
             for (int i=0;i<filterServer.getTags().size();i++){
                 Tag tag;
                 tag = new Tag(filterServer.getTags().get(i));
@@ -752,6 +768,19 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         }else if (requestCode == 135) {
             if(resultCode == RESULT_OK){
                 List<String> listTag = data.getStringArrayListExtra("tags_objs");
+
+                Collections.sort(listTag, new Comparator<String>() {
+                    @Override
+                    public int compare(String c1, String c2) {
+                        if (c1.compareTo(c2) > 0)
+                            return 1;
+                        else if (c1.compareTo(c2) < 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
+                });
+
                 tagGroup.removeAll();
                 for (int i=0;i<listTag.size();i++){
                     Tag tag;

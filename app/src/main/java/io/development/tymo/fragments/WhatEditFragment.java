@@ -24,12 +24,15 @@ import com.cunoraz.tagview.TagView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.SelectTagsActivity;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.TagServer;
+import io.development.tymo.model_server.User;
 import io.development.tymo.utils.Utilities;
 
 import static android.app.Activity.RESULT_OK;
@@ -152,6 +155,18 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
                     tagGroup.addTag(tag);
                 }
 
+                Collections.sort(list, new Comparator<String>() {
+                    @Override
+                    public int compare(String c1, String c2) {
+                        if (c1.compareTo(c2) > 0)
+                            return 1;
+                        else if (c1.compareTo(c2) < 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
+                });
+
                 for (int i=0;i<list.size();i++){
                     Tag tag;
                     tag = new Tag(list.get(i));
@@ -200,6 +215,21 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
     }
 
     private void loadTags(ArrayList<TagServer> tags){
+
+        Collections.sort(tags, new Comparator<TagServer>() {
+            @Override
+            public int compare(TagServer c1, TagServer c2) {
+                String name1 = c1.getTitle();
+                String name2 = c2.getTitle();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
 
         for(int i=0;i<tags.size();i++){
             String text = tags.get(i).getTitle();
