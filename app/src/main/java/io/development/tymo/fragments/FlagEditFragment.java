@@ -25,9 +25,11 @@ import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -515,6 +517,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
+            Calendar week_ago = Calendar.getInstance();
+            week_ago.add(Calendar.DATE, -7);
+            dpd.setMinDate(week_ago);
+
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.start));
             dpd.setEndTitle(getResources().getString(R.string.end));
@@ -536,6 +542,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
+
+            Calendar week_ago = Calendar.getInstance();
+            week_ago.add(Calendar.DATE, -7);
+            dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.start));
@@ -606,6 +616,14 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         timeStart.setText(time);
         timeEnd.setText(time2);
         titleEditText.setText(flagServer.getTitle());
+
+        if (!isFlagInPast(flagServer)) {
+            addPersonButton.setImageResource(R.drawable.btn_add_person);
+            addPersonButton.setOnClickListener(this);
+        } else {
+            addPersonButton.setOnClickListener(null);
+            addPersonButton.setVisibility(View.GONE);
+        }
 
         if(edit) {
             dateStart.setOnClickListener(null);
@@ -689,6 +707,51 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             send_toAll = 1;
             selectionGuestBox.setVisibility(View.VISIBLE);
         }
+    }
+
+    private boolean isFlagInPast(FlagServer flagServer){
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        boolean isHourBefore = isTimeInBefore(hour + ":" + minute, flagServer.getHourEnd() + ":" + flagServer.getMinuteEnd());
+        boolean isDateBefore = isDateInBefore(year, month, day, flagServer.getYearEnd(), flagServer.getMonthEnd(), flagServer.getDayEnd());
+
+        return isHourBefore && isDateBefore;
+    }
+
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
+        if(yearEnd < year)
+            return false;
+        if(year == yearEnd){
+            if(monthOfYearEnd < monthOfYear)
+                return false;
+            else if(monthOfYearEnd == monthOfYear){
+                if(dayOfMonthEnd < dayOfMonth)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isTimeInBefore(String now, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        try {
+            Date date1 = sdf.parse(now);
+            Date date2 = sdf.parse(time);
+
+            return date1.after(date2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override

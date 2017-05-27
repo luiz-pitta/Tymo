@@ -17,7 +17,11 @@ import android.widget.TextView;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.SelectPeopleActivity;
@@ -180,7 +184,7 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
         recyclerView.setAdapter(adapter);
         guestsNumber.setText(String.valueOf(listPerson.size()));
 
-        if(permissionInvite) {
+        if(permissionInvite && !isActivityInPast(activityServer)) {
             addGuestButton.setImageResource(R.drawable.btn_add_person);
             addGuestButton.setOnClickListener(this);
         }
@@ -189,6 +193,51 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
             addGuestButton.setVisibility(View.GONE);
         }
 
+    }
+
+    private boolean isActivityInPast(ActivityServer activityServer){
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        boolean isHourBefore = isTimeInBefore(hour + ":" + minute, activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd());
+        boolean isDateBefore = isDateInBefore(year, month, day, activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd());
+
+        return isHourBefore && isDateBefore;
+    }
+
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
+        if(yearEnd < year)
+            return false;
+        if(year == yearEnd){
+            if(monthOfYearEnd < monthOfYear)
+                return false;
+            else if(monthOfYearEnd == monthOfYear){
+                if(dayOfMonthEnd < dayOfMonth)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isTimeInBefore(String now, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        try {
+            Date date1 = sdf.parse(now);
+            Date date2 = sdf.parse(time);
+
+            return date1.after(date2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override

@@ -18,7 +18,12 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -97,6 +102,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
             @Override
             public void onItemClick(View view, int position, MotionEvent e) {
                 Object obj = adapter.getItem(position);
+                boolean show = true;
 
                 Activity activity = (Activity) context;
                 CreatePopUpDialogFragment createPopUpDialogFragment;
@@ -126,13 +132,22 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     dateTymo.setHourEnd(Integer.valueOf(freeTime.getTime().substring(6, 8)));
                     dateTymo.setMinuteEnd(Integer.valueOf(freeTime.getTime().substring(9, 11)));
 
+                    Calendar now = Calendar.getInstance();
+                    Calendar day_card = Calendar.getInstance();
+                    day_card.set(weekModel.getYear(),weekModel.getMonth()-1, weekModel.getDay());
+
+                    show = isOlderThan7Days(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
+                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+
                     createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
-                            CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
-                            screen, friend);
+                                CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
+                                screen, friend);
                 }
 
-                createPopUpDialogFragment.setCallback(callback);
-                createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                if(show) {
+                    createPopUpDialogFragment.setCallback(callback);
+                    createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                }
 
             }
 
@@ -141,6 +156,13 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
             }
         }));
+    }
+
+    private boolean isOlderThan7Days(int y1, int m1, int d1, int y2, int m2, int d2) {
+        LocalDate start = new LocalDate(y1, m1, d1);
+        LocalDate end = new LocalDate(y2, m2, d2);
+        Period timePeriod = new Period(start, end, PeriodType.days());
+        return timePeriod.getDays() <= 7;
     }
 
 

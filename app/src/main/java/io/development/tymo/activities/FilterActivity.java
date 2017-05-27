@@ -87,10 +87,9 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
     private RelativeLayout itemBoxInterests;
     private TextView cleanInterests;
-    private ImageView filterIconInterests, expandMoreIconInterests, addTagIcon;
+    private ImageView filterIconInterests, expandMoreIconInterests;
     private RelativeLayout addTagBox;
     private ExpandableLinearLayout expandableLayoutInterests;
-    private Tag tag;
     private TagView tagGroup;
     private OnTagDeleteListener mOnTagDeleteListener = new OnTagDeleteListener() {
 
@@ -673,7 +672,6 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandMoreIconInterests = (ImageView) findViewById(R.id.expandMoreIconInterests);
         expandableLayoutInterests = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutInterests);
         tagGroup = (TagView) findViewById(R.id.tag_group);
-        addTagIcon = (ImageView) findViewById(R.id.addTagIcon);
         addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);

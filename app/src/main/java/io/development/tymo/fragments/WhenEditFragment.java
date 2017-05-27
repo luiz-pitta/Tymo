@@ -491,6 +491,10 @@ public class WhenEditFragment extends Fragment implements
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
+            Calendar week_ago = Calendar.getInstance();
+            week_ago.add(Calendar.DATE, -7);
+            dpd.setMinDate(week_ago);
+
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.start));
             dpd.setEndTitle(getResources().getString(R.string.end));
@@ -498,6 +502,7 @@ public class WhenEditFragment extends Fragment implements
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
             Calendar now = Calendar.getInstance();
+
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     WhenEditFragment.this,
                     now.get(Calendar.YEAR),
@@ -512,6 +517,10 @@ public class WhenEditFragment extends Fragment implements
 
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
+
+            Calendar week_ago = Calendar.getInstance();
+            week_ago.add(Calendar.DATE, -7);
+            dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.start));

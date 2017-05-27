@@ -329,14 +329,14 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         guestsNumber.setText(String.valueOf(data.size()));
         addPersonButton.setActivated(true);
 
-        //if(!isActivityInPast(activityServer)) {
-        //    addPersonButton.setImageResource(R.drawable.btn_add_person);
-        //    addPersonButton.setOnClickListener(this);
-        //}
-        //else {
-        //    addPersonButton.setOnClickListener(null);
-        //    addPersonButton.setVisibility(View.GONE);
-        //}
+        if(!isActivityInPast(activityServer)) {
+            addPersonButton.setImageResource(R.drawable.btn_add_person);
+            addPersonButton.setOnClickListener(this);
+        }
+        else {
+            addPersonButton.setOnClickListener(null);
+            addPersonButton.setVisibility(View.GONE);
+        }
     }
 
     private boolean isActivityInPast(ActivityServer activityServer){
@@ -347,13 +347,13 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         int minute = c.get(Calendar.MINUTE);
         int hour = c.get(Calendar.HOUR_OF_DAY);
 
-        boolean h = isTimeInBefore(activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd(), hour + ":" + minute);
+        boolean isHourBefore = isTimeInBefore(hour + ":" + minute, activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd());
+        boolean isDateBefore = isDateInBefore(year, month, day, activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd());
 
-        return validadeDate(year, month, day, activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd()) &&
-                isTimeInBefore(activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd(), hour + ":" + minute);
+        return isHourBefore && isDateBefore;
     }
 
-    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
         if(yearEnd < year)
             return false;
         if(year == yearEnd){
