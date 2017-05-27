@@ -446,7 +446,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // All good!
                 } else {
-                    Toast.makeText(this, getResources().getString(R.string.import_google_calendar_permission), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getResources().getString(R.string.import_google_calendar_permission), Toast.LENGTH_LONG).show();
                 }
 
                 break;

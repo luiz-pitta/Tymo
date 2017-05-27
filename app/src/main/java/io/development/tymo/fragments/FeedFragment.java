@@ -661,7 +661,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // All good!
                 } else {
-                    Toast.makeText(getActivity(), getResources().getString(R.string.location_permission), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), getResources().getString(R.string.location_permission), Toast.LENGTH_LONG).show();
                 }
 
                 break;

@@ -114,6 +114,7 @@
     <string name="server_message_does_not_exist_icon">Não existem Ícones :(</string>
     <string name="server_message_does_not_exist_interest">Não existem Interesses :(</string>
     <string name="server_message_does_not_exist_tag">Não existem Tags :(</string>
+    <string name="server_message_facebook_error">Conta existente cadastrada pelo facebook neste email</string>
     <string name="server_message_flag_registered_successfully">Sinalizador registrado com sucesso</string>
     <string name="server_message_flag_updated_successfully">Sinalizador atualizado com sucesso</string>
     <string name="server_message_internal_server_error">Falha no servidor</string>
@@ -123,6 +124,7 @@
     <string name="server_message_no_guest">Sem convidados :(</string>
     <string name="server_message_no_tag">Sem tags :(</string>
     <string name="server_message_password_updated_successfully">Senha alterada com sucesso</string>
+    <string name="server_message_password_updated_error">Senha incorreta</string>
     <string name="server_message_register">Registrar</string>
     <string name="server_message_relationship_updated_successfully">Relação atualizada com sucesso</string>
     <string name="server_message_reminder_registered_successfully">Lembrete registrado com sucesso</string>

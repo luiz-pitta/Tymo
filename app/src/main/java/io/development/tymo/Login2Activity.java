@@ -183,7 +183,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 editor.putBoolean(Constants.NOTIFICATION, false);
                 editor.putBoolean(Constants.INTRO, false);
                 editor.apply();
-                Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_LONG).show();
             }
         }else{
             editUser.setText(null);
@@ -237,7 +237,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
     private void showSnackBarMessage(String message) {
 
         if (findViewById(android.R.id.content) != null)
-            Snackbar.make(findViewById(android.R.id.content), message,Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), message,Snackbar.LENGTH_LONG).show();
 
     }
 

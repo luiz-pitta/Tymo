@@ -904,7 +904,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if (findViewById(android.R.id.content) != null) {
 
-            Snackbar.make(findViewById(android.R.id.content),message,Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content),message,Snackbar.LENGTH_LONG).show();
         }
     }
 

@@ -198,7 +198,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else
-            Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_LONG).show();
 
         progressBox.setVisibility(View.GONE);
     }
@@ -226,7 +226,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                 }
                 else {
                     progressBox.setVisibility(View.GONE);
-                    Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
                 }
 
             } catch (IOException e) {
@@ -235,7 +235,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             }
         } else {
             //progressBox.setVisibility(View.GONE);
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
         }
     }
 

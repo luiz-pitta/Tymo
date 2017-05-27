@@ -35,8 +35,12 @@ public class ServerMessage {
                 return context.getResources().getString(R.string.server_message_flag_registered_successfully);
             case "FLAG_UPDATED_SUCCESSFULLY":
                 return context.getResources().getString(R.string.server_message_flag_updated_successfully);
+            case "FROM_FACEBOOK":
+                return context.getResources().getString(R.string.server_message_facebook_error);
             case "INTERNAL_SERVER_ERROR":
                 return context.getResources().getString(R.string.server_message_internal_server_error);
+            case "INVALID_PASSWORD":
+                return context.getResources().getString(R.string.server_message_password_updated_error);
             case "INVALID_REQUEST":
                 return context.getResources().getString(R.string.server_message_invalid_request);
             case "INVALID_TOKEN":

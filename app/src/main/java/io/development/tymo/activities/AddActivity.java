@@ -1525,7 +1525,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         if (findViewById(android.R.id.content) != null) {
 
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_SHORT).show();
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
         }
     }
 

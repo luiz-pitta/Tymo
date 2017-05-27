@@ -94,13 +94,13 @@ public class ResetPasswordActivity extends AppCompatActivity implements View.OnC
                 String errorBody = ((HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
                 setProgress(false);
-                Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
             } catch (IOException e) {
                 setProgress(false);
             }
         } else {
             setProgress(false);
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
         }
     }
 
