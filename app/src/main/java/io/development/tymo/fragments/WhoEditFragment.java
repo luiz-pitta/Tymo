@@ -348,9 +348,9 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         int hour = c.get(Calendar.HOUR_OF_DAY);
 
         boolean isHourBefore = isTimeInBefore(hour + ":" + minute, activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd());
-        boolean isDateBefore = isDateInBefore(year, month, day, activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd());
+        boolean isDateBefore = isDateInBefore(activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd(), year, month, day);
 
-        return isHourBefore && isDateBefore;
+        return (isHourBefore && isDateBefore) || isDateBefore;
     }
 
     private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){

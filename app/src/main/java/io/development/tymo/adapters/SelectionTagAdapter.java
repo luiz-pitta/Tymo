@@ -17,9 +17,6 @@ import io.development.tymo.models.PersonModel;
 import io.development.tymo.view_holder.SelectionDialogViewHolder;
 import io.development.tymo.view_holder.SelectionTagViewHolder;
 
-/**
- * Created by davidecirillo on 13/03/16.
- */
 public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHolder> {
 
     private List<String> tagList;
@@ -48,7 +45,7 @@ public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHold
      * Override this method to implement a custom active/deactive state
      */
     @Override
-    protected void setActive(View view, boolean state, int position) {
+    public void setActive(View view, boolean state) {
 
         ImageView checkBoxActivated  = (ImageView) view.findViewById(R.id.checkBoxActivated);
         RelativeLayout tagBox  = (RelativeLayout) view.findViewById(R.id.tagBox);
@@ -64,17 +61,7 @@ public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHold
         }
     }
 
-    @Override
-    protected View.OnClickListener defaultItemViewClickListener(SelectionTagViewHolder holder, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
-
-    public void clearData() {
+    private void clearData() {
         int size = tagList.size();
         if (size > 0) {
             for (int i = 0; i < size; i++) {

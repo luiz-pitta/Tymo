@@ -217,9 +217,9 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         int hour = c.get(Calendar.HOUR_OF_DAY);
 
         boolean isHourBefore = isTimeInBefore(hour + ":" + minute, flagServer.getHourEnd() + ":" + flagServer.getMinuteEnd());
-        boolean isDateBefore = isDateInBefore(year, month, day, flagServer.getYearEnd(), flagServer.getMonthEnd(), flagServer.getDayEnd());
+        boolean isDateBefore = isDateInBefore(flagServer.getYearEnd(), flagServer.getMonthEnd(), flagServer.getDayEnd(), year, month, day);
 
-        return isHourBefore && isDateBefore;
+        return (isHourBefore && isDateBefore) || isDateBefore;
     }
 
     private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){

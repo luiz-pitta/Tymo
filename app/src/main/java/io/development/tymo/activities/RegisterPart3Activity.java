@@ -10,6 +10,8 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -22,7 +24,6 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.android.Utils;
 import com.cloudinary.utils.ObjectUtils;
-import com.davidecirillo.multichoicerecyclerview.MultiChoiceRecyclerView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -58,7 +59,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     private TextView m_title, m_title2, advanceButton;
     private LinearLayout progressBox;
 
-    private MultiChoiceRecyclerView mMultiChoiceRecyclerView;
+    private RecyclerView mMultiChoiceRecyclerView;
     private List<String> interestList;
     private int privacy;
     private UserWrapper wrap;
@@ -107,8 +108,8 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
         mSubscriptions = new CompositeSubscription();
 
-        mMultiChoiceRecyclerView = (MultiChoiceRecyclerView) findViewById(R.id.recyclerSelectView);
-
+        mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
+        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.deep_purple_200), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(false);
 
@@ -183,11 +184,10 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
             interestList.add(interests.get(i).getTitle());
         }
 
-        mMultiChoiceRecyclerView.setRecyclerColumnNumber(1);
 
         selectionInterestAdapter = new SelectionInterestAdapter(interestList, this, true) ;
         mMultiChoiceRecyclerView.setAdapter(selectionInterestAdapter);
-        mMultiChoiceRecyclerView.setSingleClickMode(true);
+        selectionInterestAdapter.setSingleClickMode(true);
 
         progressBox.setVisibility(View.GONE);
     }
@@ -249,7 +249,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
             progressBox.setVisibility(View.VISIBLE);
             User user = wrap.getUser();
-            Collection<Integer> collection = mMultiChoiceRecyclerView.getSelectedItemList();
+            Collection<Integer> collection = selectionInterestAdapter.getSelectedItemList();
             ArrayList<String> list = new ArrayList<>();
             Iterator it = collection.iterator();
             while (it.hasNext()) {

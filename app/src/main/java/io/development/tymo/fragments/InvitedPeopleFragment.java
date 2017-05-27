@@ -92,9 +92,13 @@ public class InvitedPeopleFragment extends Fragment {
         }
     }
 
-    public void showProgress(){
-        if(mRecyclerView!=null)
-            mRecyclerView.showProgress();
+    public void showProgress(boolean search){
+        if(mRecyclerView!=null) {
+            if(!search)
+                mRecyclerView.showProgress();
+            else if(adapter.getCount() > 60)
+                mRecyclerView.showProgress();
+        }
     }
 
     @Override

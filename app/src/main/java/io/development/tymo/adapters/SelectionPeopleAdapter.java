@@ -77,7 +77,7 @@ public class SelectionPeopleAdapter extends MultiChoiceAdapter<SelectionDialogVi
      * Override this method to implement a custom active/deactive state
      */
     @Override
-    protected void setActive(View view, boolean state, int position) {
+    public void setActive(View view, boolean state) {
 
         ImageView checkBoxActivated  = (ImageView) view.findViewById(R.id.checkBoxActivated);
         RelativeLayout peopleBox  = (RelativeLayout) view.findViewById(R.id.peopleBox);
@@ -93,17 +93,7 @@ public class SelectionPeopleAdapter extends MultiChoiceAdapter<SelectionDialogVi
         }
     }
 
-    @Override
-    protected View.OnClickListener defaultItemViewClickListener(SelectionDialogViewHolder holder, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
-
-    public void clearData() {
+    private void clearData() {
         int size = personList.size();
         if (size > 0) {
             for (int i = 0; i < size; i++) {

@@ -7,47 +7,38 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.davidecirillo.multichoicerecyclerview.MultiChoiceRecyclerView;
-import com.davidecirillo.multichoicerecyclerview.listeners.MultiChoiceSelectionListener;
+import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.SelectionPeopleAdapter;
-import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-import static android.view.View.GONE;
 
-//TODO mudar para pegar o email de intent e não do shared preferences
 public class SelectPeopleActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView applyButton, cleanButton;
-    private MultiChoiceRecyclerView mMultiChoiceRecyclerView;
+    private RecyclerView mMultiChoiceRecyclerView;
     private ArrayList<User> personQueryList, personList, personListSelected;
     private SearchView searchView;
     private SelectionPeopleAdapter selectionPeopleAdapter;
@@ -65,30 +56,10 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
 
         @Override
         public boolean onQueryTextChange(String query) {
-            setProgress(true);
+            if(selectionPeopleAdapter.getItemCount() > 50)
+                setProgress(true);
             executeFilter(query);
             return true;
-        }
-    };
-    private MultiChoiceSelectionListener mMultiChoiceSelectionListener = new MultiChoiceSelectionListener() {
-        @Override
-        public void OnItemSelected(final int selectedPosition, int itemSelectedCount, int allItemCount) {
-            personListSelected.add(personQueryList.get(selectedPosition));
-        }
-
-        @Override
-        public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
-            personListSelected.remove(getPositionSelected(personQueryList.get(deselectedPosition).getEmail()));
-        }
-
-        @Override
-        public void OnSelectAll(int itemSelectedCount, int allItemCount) {
-
-        }
-
-        @Override
-        public void OnDeselectAll(int itemSelectedCount, int allItemCount) {
-
         }
     };
 
@@ -125,8 +96,9 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         //search bar end
 
-        mMultiChoiceRecyclerView = (MultiChoiceRecyclerView) findViewById(R.id.recyclerSelectView);
+        mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
         mMultiChoiceRecyclerView.setNestedScrollingEnabled(false);
+        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -169,7 +141,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             public void run() {
                 List<User> filteredModelList = filter(personList, query);
                 selectionPeopleAdapter.swap(filteredModelList);
-                mMultiChoiceRecyclerView.deselectAll();
+                selectionPeopleAdapter.deselectAll();
                 setSelectionQuery();
                 mMultiChoiceRecyclerView.scrollToPosition(0);
                 setProgress(false);
@@ -221,15 +193,33 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        mMultiChoiceRecyclerView.setRecyclerColumnNumber(1);
-
         personList = new ArrayList<>();
         personList.addAll(personQueryList);
         selectionPeopleAdapter = new SelectionPeopleAdapter(personQueryList, getApplication()) ;
         mMultiChoiceRecyclerView.setAdapter(selectionPeopleAdapter);
-        mMultiChoiceRecyclerView.setSingleClickMode(true);
+        selectionPeopleAdapter.setSingleClickMode(true);
 
-        mMultiChoiceRecyclerView.setMultiChoiceSelectionListener(mMultiChoiceSelectionListener);
+        selectionPeopleAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
+            @Override
+            public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
+                personListSelected.add(personQueryList.get(selectedPosition));
+            }
+
+            @Override
+            public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
+                personListSelected.remove(getPositionSelected(personQueryList.get(deselectedPosition).getEmail()));
+            }
+
+            @Override
+            public void OnSelectAll(int itemSelectedCount, int allItemCount) {
+
+            }
+
+            @Override
+            public void OnDeselectAll(int itemSelectedCount, int allItemCount) {
+
+            }
+        });
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
 
@@ -241,7 +231,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             {
                 User personModel = personList.get(i);
                 if (stock_list.contains(personModel.getEmail())) {
-                    mMultiChoiceRecyclerView.select(i);
+                    selectionPeopleAdapter.select(i);
                     personListSelected.add(personModel);
                 }
             }
@@ -301,7 +291,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         for(i=0;i<personQueryList.size();i++){
             pos = getPositionSelected(personQueryList.get(i).getEmail());
             if(pos >= 0)
-                mMultiChoiceRecyclerView.select(i);
+                selectionPeopleAdapter.select(i);
 
         }
 

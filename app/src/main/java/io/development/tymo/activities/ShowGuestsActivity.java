@@ -59,8 +59,8 @@ public class ShowGuestsActivity extends AppCompatActivity {
             InvitedPeopleFragment invitedPeopleFragment = (InvitedPeopleFragment) adapter.getItem(0);
             FitPeopleFragment fitPeopleFragment = (FitPeopleFragment) adapter.getItem(1);
 
-            invitedPeopleFragment.showProgress();
-            fitPeopleFragment.showProgress();
+            invitedPeopleFragment.showProgress(true);
+            fitPeopleFragment.showProgress(true);
 
             executeFilter(query);
             return true;

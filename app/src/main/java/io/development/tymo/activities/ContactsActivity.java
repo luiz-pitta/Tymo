@@ -68,7 +68,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         public boolean onQueryTextChange(String query) {
-            recyclerView.showProgress();
+            if(adapter.getCount() > 60)
+                recyclerView.showProgress();
             executeFilter(query);
             return true;
         }

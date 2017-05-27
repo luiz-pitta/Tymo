@@ -23,8 +23,7 @@ import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.cunoraz.tagview.OnTagDeleteListener;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
-import com.davidecirillo.multichoicerecyclerview.MultiChoiceRecyclerView;
-import com.davidecirillo.multichoicerecyclerview.listeners.MultiChoiceSelectionListener;
+import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.Utils;
@@ -45,7 +44,6 @@ import java.util.List;
 
 import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.adapters.SelectionWeekDaysAdapter;
-import io.development.tymo.fragments.ReminderEditFragment;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
 import io.development.tymo.model_server.User;
@@ -144,7 +142,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private TextView cleanWeekDays;
     private ImageView filterIconWeekDays, expandMoreIconWeekDays;
     private ExpandableLinearLayout expandableLayoutWeekDays;
-    private MultiChoiceRecyclerView multichoiceRecyclerviewWeekDays;
+    private RecyclerView multichoiceRecyclerviewWeekDays;
     private SelectionWeekDaysAdapter selectionWeekDaysAdapter;
 
     private ImageView mBackButton;
@@ -345,7 +343,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         filterIconWeekDays = (ImageView) findViewById(R.id.filterIconWeekDays);
         expandMoreIconWeekDays = (ImageView) findViewById(R.id.expandMoreIconWeekDays);
         expandableLayoutWeekDays = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutWeekDays);
-        multichoiceRecyclerviewWeekDays = (MultiChoiceRecyclerView) findViewById(R.id.multichoiceRecyclerviewWeekDays);
+        multichoiceRecyclerviewWeekDays = (RecyclerView) findViewById(R.id.multichoiceRecyclerviewWeekDays);
 
         filterIconWeekDays.setVisibility(View.INVISIBLE);
         cleanWeekDays.setVisibility(View.INVISIBLE);
@@ -366,13 +364,12 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         itemBoxWeekDays.setOnClickListener(this);
         cleanWeekDays.setOnClickListener(this);
 
-        multichoiceRecyclerviewWeekDays.setRecyclerRowNumber(1);
-
         selectionWeekDaysAdapter = new SelectionWeekDaysAdapter(getDaysWeek(), this) ;
         multichoiceRecyclerviewWeekDays.setAdapter(selectionWeekDaysAdapter);
-        multichoiceRecyclerviewWeekDays.setSingleClickMode(true);
+        multichoiceRecyclerviewWeekDays.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        selectionWeekDaysAdapter.setSingleClickMode(true);
 
-        multichoiceRecyclerviewWeekDays.setMultiChoiceSelectionListener(new MultiChoiceSelectionListener() {
+        selectionWeekDaysAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
                 filterIconWeekDays.setVisibility(View.VISIBLE);
@@ -381,7 +378,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
             @Override
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
-                if(multichoiceRecyclerviewWeekDays.getSelectedItemList().size() == 0){
+                if(selectionWeekDaysAdapter.getSelectedItemList().size() == 0){
                     filterIconWeekDays.setVisibility(View.INVISIBLE);
                     cleanWeekDays.setVisibility(View.INVISIBLE);
                 }
@@ -401,7 +398,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         if(filterWrapper != null){
             FilterServer filterServer = filterWrapper.getFilterServer();
             for(int i = 0; i < filterServer.getWeekDays().size(); i++) {
-                multichoiceRecyclerviewWeekDays.select(filterServer.getWeekDays().get(i));
+                selectionWeekDaysAdapter.select(filterServer.getWeekDays().get(i));
 
             }
 
@@ -1024,7 +1021,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //WeekDays
             filterIconWeekDays.setVisibility(View.INVISIBLE);
             cleanWeekDays.setVisibility(View.INVISIBLE);
-            multichoiceRecyclerviewWeekDays.deselectAll();
+            selectionWeekDaysAdapter.deselectAll();
             //buttons
             controller.unselectAll();
         }else if(v == applyButton){
@@ -1118,7 +1115,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //WeekDays
             filterIconWeekDays.setVisibility(View.INVISIBLE);
             cleanWeekDays.setVisibility(View.INVISIBLE);
-            multichoiceRecyclerviewWeekDays.deselectAll();
+            selectionWeekDaysAdapter.deselectAll();
         }
     }
 
@@ -1160,20 +1157,12 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         filterServer.setYearEnd(year_end);
 
         //Schedule
-            //if(minutes_start == -1) {
-            //    minutes_start = 0;
-            //    hour_start = 0;
-            //    minutes_end = 23;
-            //    hour_end = 59;
-            //}
-            //filterServer.setMinuteEnd(minutes_end);
-            //filterServer.setHourEnd(hour_end);
         filterServer.setMinuteStart(minutes_start);
         filterServer.setHourStart(hour_start);
 
         //WeekDays
-        if(multichoiceRecyclerviewWeekDays.getSelectedItemList().size() > 0)
-            filterServer.addWeekDays(multichoiceRecyclerviewWeekDays.getSelectedItemList());
+        if(selectionWeekDaysAdapter.getSelectedItemList().size() > 0)
+            filterServer.addWeekDays(selectionWeekDaysAdapter.getSelectedItemList());
         //buttons
         List<Boolean> list = controller.getSelected();
         filterServer.setProximity(list.get(0));

@@ -7,6 +7,8 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,8 +16,7 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.davidecirillo.multichoicerecyclerview.MultiChoiceRecyclerView;
-import com.davidecirillo.multichoicerecyclerview.listeners.MultiChoiceSelectionListener;
+import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -44,7 +45,7 @@ import static android.view.View.GONE;
 public class SelectTagsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private TextView applyButton, cleanButton;
-    private MultiChoiceRecyclerView mMultiChoiceRecyclerView;
+    private RecyclerView mMultiChoiceRecyclerView;
     private ArrayList<String> tagQueryList, tagList, tagListSelected;
     private SearchView searchView;
     private SelectionTagAdapter selectionTagAdapter;
@@ -54,27 +55,6 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private MultiChoiceSelectionListener mMultiChoiceSelectionListener = new MultiChoiceSelectionListener() {
-        @Override
-        public void OnItemSelected(final int selectedPosition, int itemSelectedCount, int allItemCount) {
-            tagListSelected.add(tagQueryList.get(selectedPosition));
-        }
-
-        @Override
-        public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
-            tagListSelected.remove(getPositionSelected(tagQueryList.get(deselectedPosition)));
-        }
-
-        @Override
-        public void OnSelectAll(int itemSelectedCount, int allItemCount) {
-
-        }
-
-        @Override
-        public void OnDeselectAll(int itemSelectedCount, int allItemCount) {
-
-        }
-    };
     private SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
         @Override
         public boolean onQueryTextSubmit(String query) {
@@ -83,7 +63,8 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         public boolean onQueryTextChange(String query) {
-            setProgress(true);
+            if(selectionTagAdapter.getItemCount() > 60)
+                setProgress(true);
             executeFilter(query);
             return true;
         }
@@ -126,8 +107,8 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         //search bar end
 
-        mMultiChoiceRecyclerView = (MultiChoiceRecyclerView) findViewById(R.id.recyclerSelectView);
-
+        mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
+        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         mMultiChoiceRecyclerView.setNestedScrollingEnabled(false);
 
         setUpMultiChoiceRecyclerView();
@@ -165,7 +146,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
             public void run() {
                 List<String> filteredModelList = filter(tagList, query);
                 selectionTagAdapter.swap(filteredModelList);
-                mMultiChoiceRecyclerView.deselectAll();
+                selectionTagAdapter.deselectAll();
                 mMultiChoiceRecyclerView.scrollToPosition(0);
                 setSelectionQuery();
                 setProgress(false);
@@ -197,15 +178,33 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
             tagQueryList.add(tags.get(i).getTitle());
         }
 
-        mMultiChoiceRecyclerView.setRecyclerColumnNumber(1);
-
         tagList = new ArrayList<>();
         tagList.addAll(tagQueryList);
         selectionTagAdapter = new SelectionTagAdapter(tagQueryList, this) ;
         mMultiChoiceRecyclerView.setAdapter(selectionTagAdapter);
-        mMultiChoiceRecyclerView.setSingleClickMode(true);
+        selectionTagAdapter.setSingleClickMode(true);
 
-        mMultiChoiceRecyclerView.setMultiChoiceSelectionListener(mMultiChoiceSelectionListener);
+        selectionTagAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
+            @Override
+            public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
+                tagListSelected.add(tagQueryList.get(selectedPosition));
+            }
+
+            @Override
+            public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
+                tagListSelected.remove(getPositionSelected(tagQueryList.get(deselectedPosition)));
+            }
+
+            @Override
+            public void OnSelectAll(int itemSelectedCount, int allItemCount) {
+
+            }
+
+            @Override
+            public void OnDeselectAll(int itemSelectedCount, int allItemCount) {
+
+            }
+        });
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
 
@@ -214,7 +213,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         List<String> stock_list = getIntent().getStringArrayListExtra("tags_list");
         for(i = 0; i < tagList.size() && stock_list.size() > 0; i++){
             if(stock_list.contains(tagList.get(i))) {
-                mMultiChoiceRecyclerView.select(i);
+                selectionTagAdapter.select(i);
                 tagListSelected.add(tagList.get(i));
             }
         }
@@ -271,7 +270,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         for(i=0;i<tagQueryList.size();i++){
             pos = getPositionSelected(tagQueryList.get(i));
             if(pos >= 0)
-                mMultiChoiceRecyclerView.select(i);
+                selectionTagAdapter.select(i);
 
         }
 

@@ -70,6 +70,7 @@ import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
@@ -522,6 +523,12 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     }
 
     private void handleResponse(Response response) {
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        User usr = response.getUser();
+        editor.putBoolean(Constants.LOCATION, usr.isLocationGps());
+        editor.putBoolean(Constants.NOTIFICATION, usr.isNotifications());
+        editor.apply();
+
         ArrayList<ActivityServer> whats_going_act = response.getWhatsGoingAct();
         ArrayList<FlagServer> whats_going_flagServer = response.getWhatsGoingFlag();
 
@@ -839,12 +846,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         }
     }
 
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
     public int getCurrentPosition() {
         return currentPosition;
     }
@@ -965,7 +966,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
                 locationRequest = LocationRequest.create();
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                locationRequest.setInterval(5000); //TODO mudar no app final
+                locationRequest.setInterval(1000*60*5);
                 LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
             }
         }

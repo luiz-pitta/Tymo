@@ -45,7 +45,7 @@ public class SelectionWeekDaysAdapter extends MultiChoiceAdapter<SelectionWeekDa
      * Override this method to implement a custom active/deactive state
      */
     @Override
-    protected void setActive(View view, boolean state, int position) {
+    public void setActive(View view, boolean state){
 
         TextView textViewActivated  = (TextView) view.findViewById(R.id.day);
 
@@ -59,27 +59,6 @@ public class SelectionWeekDaysAdapter extends MultiChoiceAdapter<SelectionWeekDa
                 textViewActivated.setTextColor(ContextCompat.getColor(context, R.color.deep_purple_400));
             }
 
-        }
-    }
-
-    @Override
-    protected View.OnClickListener defaultItemViewClickListener(SelectionWeekDaysViewHolder holder, final int position) {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        };
-    }
-
-    public void clearData() {
-        int size = dayList.size();
-        if (size > 0) {
-            for (int i = 0; i < size; i++) {
-                dayList.remove(0);
-            }
-
-            notifyItemRangeRemoved(0, size);
         }
     }
 
