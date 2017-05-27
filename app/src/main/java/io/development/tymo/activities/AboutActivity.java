@@ -365,7 +365,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    class UploadCloudinary extends AsyncTask<User, Void, User> {
+    private class UploadCloudinary extends AsyncTask<User, Void, User> {
 
         protected User doInBackground(User... users) {
             User mUser = users[0];

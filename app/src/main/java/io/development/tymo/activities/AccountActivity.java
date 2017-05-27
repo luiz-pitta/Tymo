@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -22,12 +23,17 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
+import com.cloudinary.android.Utils;
+import com.cloudinary.utils.ObjectUtils;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.Map;
 
 import io.development.tymo.Login1Activity;
 import io.development.tymo.R;
@@ -55,7 +61,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private CompositeSubscription mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    private Cloudinary cloudinary;
+    private UploadCloudinary uploadCloudinary;
+
     private User user;
+    private String oldUrl = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +73,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_settings_account);
 
         mSubscriptions = new CompositeSubscription();
+        cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(this));
+        uploadCloudinary = new UploadCloudinary();
 
         UserWrapper userWrapper = (UserWrapper)getIntent().getSerializableExtra("user_about");
         user = userWrapper.getUser();
@@ -93,6 +105,12 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
             passwordBox.setVisibility(View.GONE);
             emailBox.setOnClickListener(null);
             passwordBox.setOnClickListener(null);
+        }else {
+            if(!user.getPhoto().matches("")) {
+                String[] split = user.getPhoto().split("/");
+                oldUrl = split[split.length - 1];
+                oldUrl = oldUrl.substring(0, oldUrl.length() - 4);
+            }
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -301,7 +319,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                deleteUserAccount(email);
+                if(user.getFromFacebook())
+                    deleteUserAccount(email);
+                else
+                    uploadCloudinary.execute(user);
+
 
                 dialog.dismiss();
 
@@ -310,6 +332,26 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         });
 
         return dialog;
+    }
+
+    private class UploadCloudinary extends AsyncTask<User, Void, User> {
+
+        protected User doInBackground(User... users) {
+            try {
+                if(oldUrl.length() < 26 && !oldUrl.matches(""))
+                    cloudinary.uploader().destroy(oldUrl, ObjectUtils.asMap("invalidate", true));
+
+            } catch (Exception e) {
+                Toast.makeText(AccountActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            }
+            return null;
+        }
+
+        protected void onPostExecute(User user) {
+            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String eml = mSharedPreferences.getString(Constants.EMAIL, "");
+            deleteUserAccount(eml);
+        }
     }
 
     @Override

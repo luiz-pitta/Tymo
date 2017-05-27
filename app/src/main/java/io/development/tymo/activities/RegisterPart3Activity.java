@@ -302,7 +302,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         super.onSaveInstanceState(outState);
     }
 
-    class UploadCloudinary extends AsyncTask<User, Void, User> {
+    private class UploadCloudinary extends AsyncTask<User, Void, User> {
 
         private Exception exception;
 
