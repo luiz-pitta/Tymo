@@ -229,7 +229,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
 
     private void perform(Action action, int position, boolean withCallback, boolean withVibration) {
         if (withVibration) {
-            performVibrate();
+            //performVibrate();
         }
 
         if (action == Action.SELECT) {
@@ -240,11 +240,9 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
 
         int selectedListSize = getSelectedItemListInternal().size();
 
-        updateToolbarIfNeeded(selectedListSize);
-
+        //updateToolbarIfNeeded(selectedListSize);
         updateMultiChoiceMode(selectedListSize);
-
-        processNotifyDataSetChanged();
+        processNotifyItemChanged(position);
 
         if (mListener != null && withCallback) {
             if (action == Action.SELECT) {
@@ -261,6 +259,12 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         }
     }
 
+    private void processNotifyItemChanged(int position) {
+        if (mRecyclerView != null) {
+            notifyItemChanged(position);
+        }
+    }
+
     private void updateToolbarIfNeeded(int selectedListSize) {
         if ((mIsInMultiChoiceMode || mIsInSingleClickMode || selectedListSize > 0) && mMultiChoiceToolbarHelper != null) {
             mMultiChoiceToolbarHelper.updateToolbar(selectedListSize);
@@ -271,12 +275,12 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         boolean somethingSelected = selectedListSize > 0;
         if (mIsInMultiChoiceMode != somethingSelected) {
             mIsInMultiChoiceMode = somethingSelected;
-            processNotifyDataSetChanged();
+            //processNotifyDataSetChanged();
         }
     }
 
     private void performAll(Action action) {
-        performVibrate();
+        //performVibrate();
 
         int selectedItems;
         State state;
@@ -292,7 +296,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
             mItemList.put(i, state);
         }
 
-        updateToolbarIfNeeded(selectedItems);
+        //updateToolbarIfNeeded(selectedItems);
         updateMultiChoiceMode(selectedItems);
 
         processNotifyDataSetChanged();

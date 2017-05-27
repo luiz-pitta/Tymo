@@ -187,12 +187,15 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         selectionTagAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
-                tagListSelected.add(tagQueryList.get(selectedPosition));
+                if(!tagListSelected.contains(tagQueryList.get(selectedPosition)))
+                    tagListSelected.add(tagQueryList.get(selectedPosition));
             }
 
             @Override
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
-                tagListSelected.remove(getPositionSelected(tagQueryList.get(deselectedPosition)));
+                int position = getPositionSelected(tagQueryList.get(deselectedPosition));
+                if(position >= 0)
+                    tagListSelected.remove(getPositionSelected(tagQueryList.get(deselectedPosition)));
             }
 
             @Override
@@ -212,12 +215,21 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         List<String> stock_list = getIntent().getStringArrayListExtra("tags_list");
         for(i = 0; i < tagList.size() && stock_list.size() > 0; i++){
-            if(stock_list.contains(tagList.get(i))) {
+            if(stock_list.contains(tagList.get(i)))
                 selectionTagAdapter.select(i);
-                tagListSelected.add(tagList.get(i));
-            }
+
         }
-        setProgress(false);
+
+        if(selectionTagAdapter.getItemCount() > 60) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setProgress(false);
+                }
+            }, 1500);
+        }else
+            setProgress(false);
     }
 
     private void handleError(Throwable error) {

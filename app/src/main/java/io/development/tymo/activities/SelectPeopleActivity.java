@@ -202,12 +202,16 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         selectionPeopleAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
-                personListSelected.add(personQueryList.get(selectedPosition));
+                int position = getPositionSelected(personQueryList.get(selectedPosition).getEmail());
+                if(position == -1)
+                    personListSelected.add(personQueryList.get(selectedPosition));
             }
 
             @Override
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
-                personListSelected.remove(getPositionSelected(personQueryList.get(deselectedPosition).getEmail()));
+                int position = getPositionSelected(personQueryList.get(deselectedPosition).getEmail());
+                if(position >= 0)
+                    personListSelected.remove(position);
             }
 
             @Override
@@ -225,17 +229,25 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
 
         mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
 
-
-        if(stock_list != null)
-            for (i = 0; i < personList.size() && stock_list.size() > 0; i++)
-            {
+        if(stock_list != null) {
+            for (i = 0; i < personList.size() && stock_list.size() > 0; i++) {
                 User personModel = personList.get(i);
-                if (stock_list.contains(personModel.getEmail())) {
+                if (stock_list.contains(personModel.getEmail()))
                     selectionPeopleAdapter.select(i);
-                    personListSelected.add(personModel);
-                }
+
             }
-        setProgress(false);
+        }
+
+        if(selectionPeopleAdapter.getItemCount() > 60) {
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    setProgress(false);
+                }
+            }, 1500);
+        }else
+            setProgress(false);
     }
 
     private void handleError(Throwable error) {

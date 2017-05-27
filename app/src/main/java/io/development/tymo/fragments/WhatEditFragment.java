@@ -161,6 +161,8 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
                     tagGroup.addTag(tag);
                 }
 
+
+
             }
         }
     }

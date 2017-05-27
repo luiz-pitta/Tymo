@@ -261,9 +261,9 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
                             User usr = list.get(i);
                             usr.setDelete(false);
                         }
-                        adapter.swap(list);
-                        guestsNumber.setText(String.valueOf(list.size()));
                     }
+                    adapter.swap(list);
+                    guestsNumber.setText(String.valueOf(list.size()));
                 }else {
                     AddActivity addActivity = (AddActivity) getActivity();
                     ActivityServer activityServer = new ActivityServer();
