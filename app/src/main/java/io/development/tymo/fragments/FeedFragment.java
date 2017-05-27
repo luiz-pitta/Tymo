@@ -915,12 +915,9 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
         setBackgroundFeed();
 
-        if (mSharedPreferences != null) {
-            boolean location = mSharedPreferences.getBoolean(Constants.LOCATION, true);
+        if(googleApiClient == null)
+            googleApiClient = new GoogleApiClient.Builder(getActivity(), this, this).addApi(LocationServices.API).build();
 
-            if (location && googleApiClient == null)
-                googleApiClient = new GoogleApiClient.Builder(getActivity(), this, this).addApi(LocationServices.API).build();
-        }
 
     }
 
