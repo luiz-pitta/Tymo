@@ -221,11 +221,11 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        if (error instanceof HttpException) {
+        if (error instanceof retrofit2.HttpException) {
             Gson gson = new GsonBuilder().create();
             try {
 
-                String errorBody = ((HttpException) error).response().errorBody().string();
+                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
                 progressBox.setVisibility(View.GONE);
                 Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_SHORT).show();

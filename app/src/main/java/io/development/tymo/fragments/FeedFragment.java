@@ -96,7 +96,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private int period = 3;
 
     private Calendar currentTime;
-    private int threadSleepTime;
+    private int threadSleepTime = 1000;
 
     private TextView filterText, zoomText;
 
@@ -185,11 +185,38 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         feedIgnoreButton.setVisibility(View.INVISIBLE);
         feedCheckButton.setVisibility(View.INVISIBLE);
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
+        ValueAnimator animator = ValueAnimator.ofFloat(0.0f, -1.0f);
+        animator.setRepeatCount(ValueAnimator.INFINITE);
+        animator.setInterpolator(new LinearInterpolator());
+        animator.setDuration(20000);
+        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator animation) {
+                float progress = (float) animation.getAnimatedValue();
+                float height = backgroundCloud1.getHeight();
+                float setTranslationY = height * progress;
+                backgroundCloud1.setTranslationY(setTranslationY);
+                backgroundCloud2.setTranslationY(setTranslationY + height);
+            }
+        });
+        animator.start();
 
-        getBgFeed();
+        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f, -Utilities.convertDpToPixel(600, view.getContext()), Utilities.convertDpToPixel(600, view.getContext()));
+        animation.setDuration(3000);
+        animation.setRepeatCount(Animation.INFINITE);
+        animation.setRepeatMode(Animation.RELATIVE_TO_SELF);
+        animation.setFillEnabled(true);
+        animation.setFillAfter(true);
 
-        threadSleepTime = 1000;
+        initAnimation();
+
+        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    PERMISSION_ACCESS_COARSE_LOCATION);
+        }
+
+        setFeed();
 
         t = new Thread() {
 
@@ -218,62 +245,11 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
         t.start();
 
-        ValueAnimator animator = ValueAnimator.ofFloat(0.0f, -1.0f);
-        animator.setRepeatCount(ValueAnimator.INFINITE);
-        animator.setInterpolator(new LinearInterpolator());
-        animator.setDuration(20000);
-        animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator animation) {
-                float progress = (float) animation.getAnimatedValue();
-                float height = backgroundCloud1.getHeight();
-                float setTranslationY = height * progress;
-                backgroundCloud1.setTranslationY(setTranslationY);
-                backgroundCloud2.setTranslationY(setTranslationY + height);
-            }
-        });
-        animator.start();
-
-        TranslateAnimation animation = new TranslateAnimation(0.0f, 0.0f, -Utilities.convertDpToPixel(600, view.getContext()), Utilities.convertDpToPixel(600, view.getContext()));
-        animation.setDuration(3000);
-        animation.setRepeatCount(Animation.INFINITE);
-        animation.setRepeatMode(Animation.RELATIVE_TO_SELF);
-        animation.setFillEnabled(true);
-        animation.setFillAfter(true);
-
-        setCurrentTab(mNavigator.getCurrentPosition());
-
-        initAnimation();
-
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    PERMISSION_ACCESS_COARSE_LOCATION);
-        }
-
-
-        String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH) + 1;
-        int year = c.get(Calendar.YEAR);
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-
-        DateTymo dateTymo = new DateTymo();
-        dateTymo.setDay(day);
-        dateTymo.setMonth(month);
-        dateTymo.setYear(year);
-        dateTymo.setMinute(minute);
-        dateTymo.setHour(hour);
-        dateTymo.setDateTimeNow(c.getTimeInMillis());
-
-        retrieveFeedActivities(email, dateTymo);
-
         // [START set_current_screen]
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
         // [END set_current_screen]
+
+        setCurrentTab(mNavigator.getCurrentPosition());
     }
 
     private void getBgFeed() {
@@ -442,7 +418,9 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
         setBackgroundFeed();
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
+        FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+        if (feedListFragment != null)
+            feedListFragment.setProgress(true);
 
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -884,7 +862,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             if(filterServer.isFilterFilled())
                 retrieveFeedFilter(filterServer);
             else
-                setFeed();
+                updateLayout();
         }
     }
 
@@ -892,7 +870,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         if(filterServer != null && filterServer.isFilterFilled())
             retrieveFeedFilter(filterServer);
         else
-            setFeed();
+            updateLayout();
 
         if (mNavigator.getCurrentPosition() == 1) {
             detail.setImageResource(R.drawable.ic_zoom_more);

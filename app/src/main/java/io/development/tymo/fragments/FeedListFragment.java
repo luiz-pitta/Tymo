@@ -117,8 +117,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
-
         mSubscriptions = new CompositeSubscription();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 

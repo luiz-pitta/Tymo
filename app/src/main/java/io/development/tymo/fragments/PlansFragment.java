@@ -121,8 +121,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
-
         dateFormat = new DateFormat(getActivity());
 
         if (Build.VERSION.SDK_INT >= 17)

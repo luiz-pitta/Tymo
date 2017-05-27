@@ -2,13 +2,16 @@ package io.development.tymo.activities;
 
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -92,6 +95,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private CompositeSubscription mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateSearch();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,6 +189,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         updateProfileMainInformation();
+
+        LocalBroadcastManager.getInstance(this).registerReceiver(
+                mMessageReceiver, new IntentFilter("search_update"));
     }
 
     public void updateProfileMainInformation(){
@@ -523,7 +536,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             filterServer.setQuery(searchView.getQuery());
 
-            ((SearchFragment)mNavigator.getFragment(3)).doSearchFilter(filterServer);
+            SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
+
+            searchFragment.doSearchFilter(filterServer);
         }
 
         super.onActivityResult(requestCode, resultCode, data);
@@ -584,6 +599,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
+    public void updateSearch(){
+        SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
+        String query = searchView.getQuery();
+        if(query.matches(""))
+            query = ".";
+        if(searchFragment != null)
+            searchFragment.doSearch(query);
+    }
+
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
@@ -591,6 +615,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if(mNavigator != null) {
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
             ProfileFragment profileFragment = (ProfileFragment) mNavigator.getFragment(ABOUT);
+            FeedFragment feedFragment = (FeedFragment) mNavigator.getFragment(FEED);
+            SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
+
             if(plansFragment != null && refresh){
                 int d, m, y;
                 ArrayList<Integer> date = TymoApplication.getInstance().getDate();
@@ -611,9 +638,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if(profileFragment != null)
                 profileFragment.updateLayout();
 
+            if(feedFragment != null)
+                feedFragment.updateLayout();
+
+            if(searchFragment != null)
+                updateSearch();
+
             controller.updateAll(mNavigator.getCurrentPosition(),0,R.color.deep_purple_400, 0);
             setCurrentTab(mNavigator.getCurrentPosition());
-
 
             int d = getIntent().getIntExtra("d",0);
             int m = getIntent().getIntExtra("m",0);

@@ -136,8 +136,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
-
         mSubscriptions = new CompositeSubscription();
 
         dateFormat = new DateFormat(getActivity());

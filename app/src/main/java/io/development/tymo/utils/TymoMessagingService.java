@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.View;
 
@@ -45,6 +46,9 @@ public class TymoMessagingService extends FirebaseMessagingService {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         boolean notification = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, true);
+
+        if (type.matches("peopleAccept"))
+            updateSearchMessageToActivity();
 
         if(notification) {
             if (type.matches("engagement")) {
@@ -183,6 +187,11 @@ public class TymoMessagingService extends FirebaseMessagingService {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(Constants.INVITE_ACCEPT, mBuilder.build());
+    }
+
+    private void updateSearchMessageToActivity() {
+        Intent intent = new Intent("search_update");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     public void sendNotificationEngagement(String title, String text) {

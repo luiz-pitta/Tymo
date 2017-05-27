@@ -106,8 +106,6 @@ public class FeedCardFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
-
         mRecyclerView = (RecyclerViewPager) view.findViewById(R.id.viewpager);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         feed_empty_view = (LinearLayout) view.findViewById(R.id.feed_empty_view);

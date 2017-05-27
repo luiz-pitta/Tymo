@@ -99,8 +99,6 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
-
         mSubscriptions = new CompositeSubscription();
 
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);

@@ -234,7 +234,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         editor.putString(Constants.USER_NAME, "");
         editor.putBoolean(Constants.LOCATION, false);
         editor.putBoolean(Constants.NOTIFICATION, false);
-        editor.putBoolean(Constants.INTRO, false);
         editor.apply();
 
         FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
