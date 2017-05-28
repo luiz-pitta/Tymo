@@ -48,7 +48,6 @@ import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.adapters.SelectionWeekDaysAdapter;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
-import io.development.tymo.model_server.TagServer;
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.utils.Constants;

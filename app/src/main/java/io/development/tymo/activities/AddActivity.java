@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -13,7 +12,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -60,7 +58,6 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.SecureStringPropertyConverter;
-import io.development.tymo.utils.ServerMessage;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
 import rx.android.schedulers.AndroidSchedulers;
@@ -134,7 +131,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private TextView requiredText;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private static SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
+    private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

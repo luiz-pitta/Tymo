@@ -1,14 +1,10 @@
 package io.development.tymo.utils;
 
 import android.content.Context;
-import android.graphics.Rect;
-import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
-import android.view.ViewGroup;
 
 public class RecyclerItemClickListener implements RecyclerView.OnItemTouchListener {
     private OnItemClickListener mListener;

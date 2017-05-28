@@ -1,8 +1,6 @@
 package io.development.tymo.view_holder;
 
 import android.content.Context;
-import android.graphics.Typeface;
-import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -17,7 +15,6 @@ import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.models.NotificationModel;
-import io.development.tymo.utils.Utilities;
 
 
 public class NotificationViewHolder extends BaseViewHolder<NotificationModel> {

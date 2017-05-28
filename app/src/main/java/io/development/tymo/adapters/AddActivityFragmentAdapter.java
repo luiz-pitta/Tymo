@@ -4,7 +4,6 @@ import android.app.Fragment;
 
 import com.aspsine.fragmentnavigator.FragmentNavigatorAdapter;
 
-import io.development.tymo.fragments.FeedFragment;
 import io.development.tymo.fragments.WhatEditFragment;
 import io.development.tymo.fragments.WhenEditFragment;
 import io.development.tymo.fragments.WhoEditFragment;

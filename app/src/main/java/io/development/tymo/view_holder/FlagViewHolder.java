@@ -1,19 +1,17 @@
 package io.development.tymo.view_holder;
 
-        import android.content.Context;
-        import android.os.Build;
-        import android.support.v4.content.ContextCompat;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.ImageView;
-        import android.widget.LinearLayout;
-        import android.widget.TextView;
+import android.content.Context;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-        import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
-        import butterknife.BindView;
-        import io.development.tymo.R;
-        import io.development.tymo.models.cards.Flag;
+import io.development.tymo.R;
+import io.development.tymo.models.cards.Flag;
 
 
 public class FlagViewHolder extends BaseViewHolder<Flag> {

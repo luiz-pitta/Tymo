@@ -1,8 +1,5 @@
 package io.development.tymo.model_server;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class FreeTimeServer {
 
     private int minute_start;

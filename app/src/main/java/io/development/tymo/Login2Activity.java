@@ -46,7 +46,6 @@ import rx.subscriptions.CompositeSubscription;
 
 import static io.development.tymo.utils.Validation.validateEmail;
 import static io.development.tymo.utils.Validation.validateFields;
-import static io.development.tymo.utils.ServerMessage.getServerMessage;
 
 public class Login2Activity extends AppCompatActivity implements View.OnClickListener {
 

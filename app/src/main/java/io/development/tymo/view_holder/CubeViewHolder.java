@@ -19,9 +19,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
-import java.util.Calendar;
-import java.util.Date;
-
 import io.development.tymo.R;
 import io.development.tymo.adapters.ActivityAdapter;
 import io.development.tymo.model_server.ActivityServer;

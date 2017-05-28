@@ -15,29 +15,22 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.FriendResquestAdapter;
-import io.development.tymo.model_server.DateTymo;
-import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.FriendRequestModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;

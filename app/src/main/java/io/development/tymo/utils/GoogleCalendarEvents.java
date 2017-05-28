@@ -10,13 +10,8 @@ import android.support.annotation.Nullable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
-
-/**
- * Created by luizg on 16/03/2017.
- */
 
 public class GoogleCalendarEvents {
 

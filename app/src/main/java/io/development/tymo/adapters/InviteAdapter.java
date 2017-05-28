@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
-import io.development.tymo.models.FriendRequestModel;
 import io.development.tymo.models.InviteModel;
-import io.development.tymo.view_holder.FriendRequestViewHolder;
 import io.development.tymo.view_holder.InviteViewHolder;
 
 

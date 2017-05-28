@@ -1,9 +1,7 @@
 package io.development.tymo.fragments;
 
 
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,10 +22,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import io.development.tymo.activities.MainActivity;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
-import io.development.tymo.TymoApplication;
 import io.development.tymo.adapters.ViewPagerAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FilterServer;

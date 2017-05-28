@@ -1,7 +1,5 @@
 package io.development.tymo.model_server;
 
-import android.graphics.drawable.Icon;
-
 import java.util.ArrayList;
 
 public class Response {

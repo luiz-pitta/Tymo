@@ -1,7 +1,6 @@
 package io.development.tymo.activities;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -18,24 +17,16 @@ import android.widget.Toast;
 
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.SelectionTagAdapter;
-import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.TagServer;
 import io.development.tymo.network.NetworkUtil;
-import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;

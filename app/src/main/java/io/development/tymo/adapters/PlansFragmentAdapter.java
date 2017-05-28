@@ -6,7 +6,6 @@ import com.aspsine.fragmentnavigator.FragmentNavigatorAdapter;
 
 import io.development.tymo.fragments.CommitmentFragment;
 import io.development.tymo.fragments.FreeFragment;
-import io.development.tymo.fragments.FeedFragment;
 
 public class PlansFragmentAdapter implements FragmentNavigatorAdapter {
 

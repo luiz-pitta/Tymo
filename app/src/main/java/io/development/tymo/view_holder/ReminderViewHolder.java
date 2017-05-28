@@ -1,16 +1,16 @@
 package io.development.tymo.view_holder;
 
-        import android.content.Context;
-        import android.support.v4.content.ContextCompat;
-        import android.view.View;
-        import android.view.ViewGroup;
-        import android.widget.LinearLayout;
-        import android.widget.TextView;
+import android.content.Context;
+import android.support.v4.content.ContextCompat;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
-        import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
-        import io.development.tymo.R;
-        import io.development.tymo.models.cards.Reminder;
+import io.development.tymo.R;
+import io.development.tymo.models.cards.Reminder;
 
 
 public class ReminderViewHolder extends BaseViewHolder<Reminder> {

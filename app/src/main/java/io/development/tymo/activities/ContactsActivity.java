@@ -17,13 +17,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,10 +30,8 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.Utilities;
 import io.development.tymo.view_holder.ContactViewHolder;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;

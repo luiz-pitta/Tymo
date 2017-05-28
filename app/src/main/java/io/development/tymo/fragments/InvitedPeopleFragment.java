@@ -18,7 +18,6 @@ import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.ShowGuestsActivity;
-import io.development.tymo.adapters.SearchMultipleAdapter;
 import io.development.tymo.adapters.ShowGuestsAdapter;
 import io.development.tymo.model_server.User;
 import io.development.tymo.utils.Utilities;

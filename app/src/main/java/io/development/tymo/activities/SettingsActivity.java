@@ -45,8 +45,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Date;
 
 import io.development.tymo.BuildConfig;
@@ -59,15 +57,12 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
-import io.development.tymo.models.FriendRequestModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-
-import static io.development.tymo.utils.Validation.validateEmail;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 

@@ -7,11 +7,7 @@ import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
 import io.development.tymo.model_server.User;
-import io.development.tymo.models.ContactModel;
-import io.development.tymo.models.InviteModel;
 import io.development.tymo.view_holder.ContactViewHolder;
-import io.development.tymo.view_holder.InviteViewHolder;
-import io.development.tymo.view_holder.PersonSearchViewHolder;
 
 
 public class ContactsAdapter extends RecyclerArrayAdapter<User> {

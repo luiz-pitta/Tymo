@@ -1,7 +1,6 @@
 package io.development.tymo.utils;
 
 import android.content.Context;
-import android.util.Log;
 
 import java.util.Calendar;
 

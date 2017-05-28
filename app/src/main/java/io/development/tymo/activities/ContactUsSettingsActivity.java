@@ -19,11 +19,8 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import java.util.ArrayList;
 
 import io.development.tymo.R;
-import io.development.tymo.fragments.FeedFragment;
 import io.development.tymo.model_server.AppInfoServer;
 import io.development.tymo.model_server.AppInfoWrapper;
-import io.development.tymo.model_server.Response;
-import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

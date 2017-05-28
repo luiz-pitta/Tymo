@@ -11,7 +11,6 @@ import java.security.InvalidParameterException;
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.search.ActivitySearch;
 import io.development.tymo.models.search.FlagSearch;
-import io.development.tymo.models.search.PersonSearch;
 import io.development.tymo.models.search.ReminderSearch;
 import io.development.tymo.view_holder.ActivitySearchViewHolder;
 import io.development.tymo.view_holder.FlagSearchViewHolder;

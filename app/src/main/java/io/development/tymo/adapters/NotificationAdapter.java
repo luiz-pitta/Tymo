@@ -6,9 +6,7 @@ import android.view.ViewGroup;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
-import io.development.tymo.models.InviteModel;
 import io.development.tymo.models.NotificationModel;
-import io.development.tymo.view_holder.InviteViewHolder;
 import io.development.tymo.view_holder.NotificationViewHolder;
 
 

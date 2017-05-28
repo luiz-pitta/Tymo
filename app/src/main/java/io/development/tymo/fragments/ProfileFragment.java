@@ -16,7 +16,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -39,7 +38,6 @@ import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

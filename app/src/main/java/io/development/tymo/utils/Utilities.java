@@ -1,11 +1,8 @@
 package io.development.tymo.utils;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -22,9 +19,6 @@ import java.util.List;
 
 import io.development.tymo.R;
 
-/**
- * Created by Guilherme on 11/08/2016.
- */
 public class Utilities {
 
     public static final String PREFS_NAME = "AOP_PREFS";

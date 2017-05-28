@@ -1,57 +1,25 @@
 package io.development.tymo.activities;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.TranslateAnimation;
 import android.widget.DatePicker;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.lsjwzh.widget.recyclerviewpager.LoopRecyclerViewPagerAdapter;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
-import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPagerAdapter;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import io.development.tymo.R;
 import io.development.tymo.adapters.RecoverAdapter;
 import io.development.tymo.model_server.ActivityServer;
-import io.development.tymo.model_server.ActivityWrapper;
 import io.development.tymo.model_server.DateTymo;
-import io.development.tymo.model_server.Response;
-import io.development.tymo.models.CubeModel;
-import io.development.tymo.network.NetworkUtil;
-import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.MonthYearPickerDialog;
-import io.development.tymo.utils.Utilities;
-import retrofit2.adapter.rxjava.HttpException;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 public class RecoverActivity extends AppCompatActivity implements android.app.DatePickerDialog.OnDateSetListener, View.OnClickListener, RecoverAdapter.RefreshLayoutAdapterCallback {

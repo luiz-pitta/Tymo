@@ -2,7 +2,6 @@ package io.development.tymo.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -27,15 +26,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.TymoApplication;
-import io.development.tymo.activities.AddActivity;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.DateTymo;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.FreeTimeServer;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.models.CompareModel;
-import io.development.tymo.models.WeekModel;
 import io.development.tymo.models.cards.ActivityCard;
 import io.development.tymo.models.cards.Flag;
 import io.development.tymo.models.cards.FreeTime;

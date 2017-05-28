@@ -4,7 +4,6 @@ package io.development.tymo.fragments;
 import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -30,7 +29,6 @@ import java.util.List;
 import io.development.tymo.R;
 import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.model_server.ReminderServer;
-import io.development.tymo.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.

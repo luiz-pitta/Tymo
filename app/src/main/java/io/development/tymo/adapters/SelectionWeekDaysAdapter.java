@@ -5,8 +5,6 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
@@ -14,7 +12,6 @@ import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.view_holder.SelectionTagViewHolder;
 import io.development.tymo.view_holder.SelectionWeekDaysViewHolder;
 
 public class SelectionWeekDaysAdapter extends MultiChoiceAdapter<SelectionWeekDaysViewHolder> {

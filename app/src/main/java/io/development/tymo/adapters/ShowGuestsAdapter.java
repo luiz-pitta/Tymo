@@ -6,16 +6,7 @@ import android.view.ViewGroup;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
-import java.security.InvalidParameterException;
-
 import io.development.tymo.model_server.User;
-import io.development.tymo.models.search.ActivitySearch;
-import io.development.tymo.models.search.FlagSearch;
-import io.development.tymo.models.search.ReminderSearch;
-import io.development.tymo.view_holder.ActivitySearchViewHolder;
-import io.development.tymo.view_holder.FlagSearchViewHolder;
-import io.development.tymo.view_holder.PersonSearchViewHolder;
-import io.development.tymo.view_holder.ReminderSearchViewHolder;
 import io.development.tymo.view_holder.ShowGuestViewHolder;
 
 

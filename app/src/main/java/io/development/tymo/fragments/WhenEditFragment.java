@@ -20,8 +20,6 @@ import android.widget.Toast;
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
@@ -37,7 +35,6 @@ import java.util.List;
 import io.development.tymo.R;
 import io.development.tymo.activities.AddActivity;
 import io.development.tymo.model_server.ActivityServer;
-import io.development.tymo.utils.Constants;
 
 /**
  * A simple {@link Fragment} subclass.

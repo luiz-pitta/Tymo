@@ -46,7 +46,6 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
-import io.development.tymo.utils.ServerMessage;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;

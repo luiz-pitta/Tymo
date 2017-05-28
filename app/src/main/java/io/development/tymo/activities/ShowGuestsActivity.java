@@ -16,7 +16,6 @@ import android.widget.Toast;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.ViewPagerAdapter;

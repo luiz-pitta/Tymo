@@ -16,11 +16,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
-
-import java.io.IOException;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.FlagActivity;
@@ -35,8 +31,6 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.models.InviteModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.ServerMessage;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;

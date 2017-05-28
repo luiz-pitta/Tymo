@@ -4,10 +4,8 @@ import android.app.Fragment;
 
 import com.aspsine.fragmentnavigator.FragmentNavigatorAdapter;
 
-import io.development.tymo.fragments.CommitmentFragment;
 import io.development.tymo.fragments.FeedCardFragment;
 import io.development.tymo.fragments.FeedListFragment;
-import io.development.tymo.fragments.FreeFragment;
 
 
 public class FeedFragmentAdapter implements FragmentNavigatorAdapter {

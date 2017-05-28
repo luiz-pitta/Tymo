@@ -1,22 +1,16 @@
 package io.development.tymo.fragments;
 
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
-import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.cunoraz.tagview.OnTagDeleteListener;
 import com.cunoraz.tagview.Tag;
@@ -32,7 +26,6 @@ import io.development.tymo.R;
 import io.development.tymo.activities.SelectTagsActivity;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.TagServer;
-import io.development.tymo.model_server.User;
 import io.development.tymo.utils.Utilities;
 
 import static android.app.Activity.RESULT_OK;

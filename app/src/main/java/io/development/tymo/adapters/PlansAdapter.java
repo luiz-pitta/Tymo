@@ -1,6 +1,5 @@
 package io.development.tymo.adapters;
 
-import android.app.FragmentManager;
 import android.content.Context;
 import android.view.ViewGroup;
 
@@ -8,10 +7,8 @@ import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
 import io.development.tymo.model_server.User;
-import io.development.tymo.models.ContactModel;
 import io.development.tymo.models.WeekModel;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
-import io.development.tymo.view_holder.ContactViewHolder;
 import io.development.tymo.view_holder.PlansViewHolder;
 
 

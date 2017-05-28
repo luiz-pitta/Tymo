@@ -13,8 +13,6 @@ import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.models.PersonModel;
-import io.development.tymo.view_holder.SelectionDialogViewHolder;
 import io.development.tymo.view_holder.SelectionTagViewHolder;
 
 public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHolder> {

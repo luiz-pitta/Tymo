@@ -36,7 +36,7 @@ public class WhatShowFragment extends Fragment {
     private TextView tittleText, url, descriptionTextShort;
     private ReadMoreTextView descriptionText;
     private LinearLayout whatsAppGroupLinkBox;
-    private static SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
+    private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static Fragment newInstance(String text) {

@@ -1,6 +1,5 @@
 package io.development.tymo.activities;
 
-import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -15,14 +14,10 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
@@ -48,7 +43,6 @@ import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.Response;
-import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;

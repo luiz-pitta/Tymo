@@ -19,7 +19,6 @@ import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.model_server.User;
-import io.development.tymo.models.PersonModel;
 
 public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHolder> {
 

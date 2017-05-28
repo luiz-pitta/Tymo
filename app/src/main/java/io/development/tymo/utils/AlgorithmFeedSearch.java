@@ -5,7 +5,6 @@ import android.location.LocationManager;
 
 import java.util.Calendar;
 
-import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;

@@ -68,7 +68,6 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.models.WeekModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.ServerMessage;
 import io.development.tymo.utils.Utilities;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;

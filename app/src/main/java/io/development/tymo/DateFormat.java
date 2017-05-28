@@ -2,9 +2,7 @@ package io.development.tymo;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Objects;
 
 /**
  * Created by Tadeu Kwiatkowski on 17/04/2017.

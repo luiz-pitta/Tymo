@@ -1,14 +1,9 @@
 package io.development.tymo.fragments;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Vibrator;
@@ -24,20 +19,11 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationListener;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,7 +32,6 @@ import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.MainActivity;
 import io.development.tymo.activities.ShowActivity;
 import io.development.tymo.adapters.FeedZoomMoreAdapter;
-import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
 import io.development.tymo.model_server.FlagServer;
@@ -56,15 +41,11 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
-import io.development.tymo.utils.ServerMessage;
-import io.development.tymo.utils.Utilities;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static android.content.Context.MODE_PRIVATE;
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_SETTLING;
 
 /**
  * A simple {@link Fragment} subclass.

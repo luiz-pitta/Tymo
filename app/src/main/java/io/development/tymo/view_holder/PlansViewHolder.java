@@ -1,10 +1,7 @@
 package io.development.tymo.view_holder;
 
 import android.app.Activity;
-import android.app.FragmentManager;
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,8 +24,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.TymoApplication;
-import io.development.tymo.activities.AddActivity;
 import io.development.tymo.adapters.PlansAdapter;
 import io.development.tymo.adapters.PlansCardsAdapter;
 import io.development.tymo.model_server.ActivityServer;
@@ -50,8 +45,6 @@ import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
-
-import static android.content.Context.MODE_PRIVATE;
 
 
 public class PlansViewHolder extends BaseViewHolder<WeekModel> {

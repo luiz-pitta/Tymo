@@ -2,31 +2,15 @@ package io.development.tymo.utils;
 
 import org.jasypt.util.text.BasicTextEncryptor;
 
-/**
- * <p>A custom <code>AttributeConverter</code> demonstrating integration with the Jasypt 
- * security library. This is a trivial sample whereas real life usage can be as complex as your 
- * application requires.
- * </p>
- * <p>
- * Annotate your domain entities with @Convert(SecureStringPropertyConverter.class) to seamlessly 
- * provide transparent encryption.
- * </p>
- * 
- * 
- * @author eric <at> miletwentyfour.com
- */
 public class SecureStringPropertyConverter {
 
-	public static final String ENCRYPTED_TOKEN_START = "ENC(";
-	public static final String ENCRYPTED_TOKEN_END = ")";
+	private static final String ENCRYPTED_TOKEN_START = "ENC(";
+	private static final String ENCRYPTED_TOKEN_END = ")";
 	
 	private BasicTextEncryptor textEncryptor = new BasicTextEncryptor();
 	
 	public SecureStringPropertyConverter() {
-
-		//TODO get password from server
-		textEncryptor.setPassword("my-password-change-me");
-
+		textEncryptor.setPassword("Tymo@S.AA.S@omyT");
 	}
 	
 	/**
@@ -71,7 +55,7 @@ public class SecureStringPropertyConverter {
 	 * @param value
 	 * @return True if the value is determined to be encrypted, otherwise false.
 	 */
-	protected boolean isEncrypted(String value) {
+	private boolean isEncrypted(String value) {
 		
 		boolean result = false;
 		

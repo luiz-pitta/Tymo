@@ -2,7 +2,6 @@ package io.development.tymo.adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -11,16 +10,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.cunoraz.tagview.Tag;
-import com.cunoraz.tagview.TagView;
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.development.tymo.R;

@@ -14,7 +14,6 @@ import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.view_holder.SelectionInterestViewHolder;
-import io.development.tymo.view_holder.SelectionTagViewHolder;
 
 
 public class SelectionInterestAdapter extends MultiChoiceAdapter<SelectionInterestViewHolder> {

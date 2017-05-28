@@ -2,8 +2,6 @@ package io.development.tymo.model_server;
 
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 public class UserPushNotification implements Serializable {
     private static final long serialVersionUID = 37L;
