@@ -184,8 +184,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         updateProfileMainInformation();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(
-                mMessageReceiver, new IntentFilter("search_update"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("search_update"));
     }
 
     public void updateProfileMainInformation(){
@@ -388,7 +387,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        updateProfileMainInformation();
         if(v == icon1) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon1" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
@@ -419,7 +417,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
 
             if (plansFragment!=null && mNavigator.getCurrentPosition() != PLANS)
-                plansFragment.updateLayout(day, month, year);
+                plansFragment.updateLayout(day, month, year, false);
 
             setCurrentTab(PLANS);
         }
@@ -520,7 +518,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             refresh = false;
 
             if (plansFragment!=null)
-                plansFragment.updateLayout(d,m,y);
+                plansFragment.updateLayout(d,m,y, true);
         }
 
         if(resultCode == RESULT_OK && requestCode == Constants.FILTER_RESULT){
@@ -613,7 +611,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             FeedFragment feedFragment = (FeedFragment) mNavigator.getFragment(FEED);
             SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
 
-            if(plansFragment != null && refresh){
+            if(plansFragment != null && refresh && mNavigator.getCurrentPosition() == PLANS){
                 int d, m, y;
                 ArrayList<Integer> date = TymoApplication.getInstance().getDate();
                 if(date == null) {
@@ -626,17 +624,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     m = date.get(1)-1;
                     y = date.get(2);
                 }
-                plansFragment.updateLayout(d,m,y);
+                plansFragment.updateLayout(d,m,y, false);
             }else
                 refresh = true;
 
-            if(profileFragment != null)
+            if(profileFragment != null && mNavigator.getCurrentPosition() == ABOUT)
                 profileFragment.updateLayout();
 
-            if(feedFragment != null)
+            if(feedFragment != null && mNavigator.getCurrentPosition() == FEED)
                 feedFragment.setFeedRefresh();
 
-            if(searchFragment != null)
+            if(searchFragment != null && mNavigator.getCurrentPosition() == SEARCH)
                 updateSearch();
 
             controller.updateAll(mNavigator.getCurrentPosition(),0,R.color.deep_purple_400, 0);
@@ -658,7 +656,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 refresh = false;
 
                 if (plansFragment != null)
-                    plansFragment.updateLayout(d, m, y);
+                    plansFragment.updateLayout(d, m, y, true);
 
                 controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
                 setCurrentTab(PLANS);

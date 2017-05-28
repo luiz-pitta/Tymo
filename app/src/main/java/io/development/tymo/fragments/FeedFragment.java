@@ -3,7 +3,10 @@ package io.development.tymo.fragments;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,6 +21,7 @@ import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,6 +62,7 @@ import java.util.List;
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
 import io.development.tymo.activities.FilterActivity;
+import io.development.tymo.activities.MainActivity;
 import io.development.tymo.adapters.FeedFragmentAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.BgFeedServer;
@@ -115,6 +120,13 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private boolean activatedCheck = true;
+
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateLayout();
+        }
+    };
 
     public static Fragment newInstance(String text) {
         FeedFragment fragment = new FeedFragment();
@@ -218,6 +230,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         // [END set_current_screen]
 
         setCurrentTab(mNavigator.getCurrentPosition());
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("feed_update"));
     }
 
     private void getBgFeed() {
@@ -835,6 +849,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     }
 
     public void setFeedRefresh(){
+        ((MainActivity) getActivity()).updateProfileMainInformation();
+
         if(filterServer != null && filterServer.isFilterFilled())
             retrieveFeedFilter(filterServer);
         else

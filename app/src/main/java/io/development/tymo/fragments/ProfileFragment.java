@@ -362,8 +362,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void updateLayout() {
         isTimeToChangeBackground();
 
-        ((MainActivity) getActivity()).updateProfileMainInformation();
-
         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
