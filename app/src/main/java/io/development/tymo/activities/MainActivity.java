@@ -462,7 +462,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mNavigator.onSaveInstanceState(outState);
+        if(mNavigator!=null)
+            mNavigator.onSaveInstanceState(outState);
         outState.putBoolean(ADD_VIEW_IS_VISIBLE, addView.getVisibility() == View.VISIBLE);
     }
 

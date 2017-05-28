@@ -611,7 +611,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mNavigator.onSaveInstanceState(outState);
+        if(mNavigator!=null)
+            mNavigator.onSaveInstanceState(outState);
     }
 
 

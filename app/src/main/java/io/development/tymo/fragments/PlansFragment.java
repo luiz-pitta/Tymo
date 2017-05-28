@@ -822,7 +822,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mNavigator.onSaveInstanceState(outState);
+        if(mNavigator!=null)
+            mNavigator.onSaveInstanceState(outState);
     }
 
     private void setCurrentTab(int position) {
