@@ -63,7 +63,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(selectionTagAdapter.getItemCount() > 60)
+            if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60)
                 setProgress(true);
             executeFilter(query);
             return true;
@@ -302,5 +302,10 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.unsubscribe();
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
     }
 }

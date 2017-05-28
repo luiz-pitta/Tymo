@@ -97,7 +97,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private int period = 3;
 
     private Calendar currentTime;
-    private int threadSleepTime = 1000;
 
     private TextView filterText, zoomText;
 
@@ -120,7 +119,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private boolean activatedCheck = true;
-    private Thread t;
 
     public static Fragment newInstance(String text) {
         FeedFragment fragment = new FeedFragment();
@@ -219,33 +217,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
         setFeed();
 
-        t = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(threadSleepTime);
-                        if (getActivity() == null)
-                            return;
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                currentTime = Calendar.getInstance();
-                                currentSecond = currentTime.get(Calendar.SECOND);
-                                currentMinute = currentTime.get(Calendar.MINUTE);
-                                currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                                setBackgroundFeed();
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };
-
-        t.start();
-
         // [START set_current_screen]
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
         // [END set_current_screen]
@@ -277,14 +248,9 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             timeEnd = String.format("%02d", bgFeed.get(i).getHourEnd()) + ":" + String.format("%02d", bgFeed.get(i).getMinuteEnd());
 
             if (isTimeInBetween(currentTime, timeStart, timeEnd)) {
-
-                threadSleepTime = (bgFeed.get(i).getHourEnd() * 60 * 60 * 1000 + bgFeed.get(i).getMinuteEnd() * 60 * 1000)
-                        - (currentHour * 60 * 60 * 1000 + currentMinute * 60 * 1000 + currentSecond * 1000);
-
                 period = bgFeed.get(i).getPeriod();
                 urlBg = bgFeed.get(i).getUrlBg();
                 urlCloud = bgFeed.get(i).getUrlBg2();
-
             }
         }
 
@@ -412,12 +378,16 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         return this.period;
     }
 
-    public void updateLayout() {
+    private void isTimeToChangeBackground(){
         currentTime = Calendar.getInstance();
         currentSecond = currentTime.get(Calendar.SECOND);
         currentMinute = currentTime.get(Calendar.MINUTE);
         currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
         setBackgroundFeed();
+    }
+
+    public void updateLayout() {
+        isTimeToChangeBackground();
 
         FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
         if (feedListFragment != null)
@@ -562,7 +532,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             }
         }
 
-        setBackgroundFeed();
+        isTimeToChangeBackground();
     }
 
     public void setAdapterItensCard(List<Object> list) {
@@ -651,7 +621,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             }
         }
 
-        setBackgroundFeed();
+        isTimeToChangeBackground();
     }
 
     @Override
@@ -909,16 +879,10 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     public void onResume() {
         super.onResume();
 
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundFeed();
+        isTimeToChangeBackground();
 
         if(googleApiClient == null)
             googleApiClient = new GoogleApiClient.Builder(getActivity(), this, this).addApi(LocationServices.API).build();
-
-
     }
 
     @Override
@@ -995,6 +959,5 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             mSubscriptions.unsubscribe();
 
         Glide.get(getActivity()).clearMemory();
-        t.interrupt();
     }
 }

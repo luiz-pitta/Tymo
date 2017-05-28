@@ -248,10 +248,14 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     public void setProgress(boolean progress) {
         if(recyclerView != null) {
-            if (progress)
+            if (progress) {
                 recyclerView.showProgress();
-            else
+                setEmptyLayout(false);
+            }
+            else {
                 recyclerView.showRecycler();
+                setEmptyLayout(adapter.getCount() == 0);
+            }
         }
     }
 

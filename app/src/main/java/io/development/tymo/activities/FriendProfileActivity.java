@@ -88,7 +88,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     private DateFormat dateFormat;
 
     private Calendar currentTime;
-    private int threadSleepTime;
     private static int currentSecond, currentMinute, currentHour;
     private ArrayList<BgProfileServer> bgProfile = new ArrayList<>();
     private ImageView backgroundProfile;
@@ -110,7 +109,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
     private String email_friend;
     private User user;
-    private Thread t;
 
     private GestureDetector gestureDetector;
 
@@ -271,35 +269,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         getBgProfile();
 
-        threadSleepTime = 1000;
-
-        t = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(threadSleepTime);
-                        if(this == null)
-                            return;
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                currentTime = Calendar.getInstance();
-                                currentSecond = currentTime.get(Calendar.SECOND);
-                                currentMinute = currentTime.get(Calendar.MINUTE);
-                                currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                                setBackgroundProfile();
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };
-
-        t.start();
-
         setPlans(plans, true);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -317,13 +286,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             timeEnd = String.format("%02d", bgProfile.get(i).getHourEnd()) + ":" + String.format("%02d", bgProfile.get(i).getMinuteEnd());
 
             if (isTimeInBetween(currentTime, timeStart, timeEnd)) {
-
-                threadSleepTime = (bgProfile.get(i).getHourEnd() * 60 * 60 * 1000 + bgProfile.get(i).getMinuteEnd() * 60 * 1000)
-                        - (currentHour * 60 * 60 * 1000 + currentMinute * 60 * 1000 + currentSecond * 1000);
-
                 period = bgProfile.get(i).getPeriod();
                 urlBg = bgProfile.get(i).getUrlBg();
-
             }
         }
 
@@ -374,6 +338,14 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         }
 
         return false;
+    }
+
+    private void isTimeToChangeBackground(){
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundProfile();
     }
 
     private void getBgProfile() {
@@ -534,7 +506,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     private void handleResponse(Response response) {
 
         user = response.getUser();
-        boolean prived = false;
+        boolean prived;
 
         profileName.setText(user.getName());
 
@@ -546,6 +518,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         icon2.setVisibility(View.INVISIBLE);
         icon2.setOnClickListener(this);
+
+        isTimeToChangeBackground();
 
         if(user.getCountKnows() > 0){
             if (user.getFromFacebook() && user.isFacebookMessengerEnable()){
@@ -1174,11 +1148,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     public void onResume() {
         super.onResume();
 
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
+        isTimeToChangeBackground();
 
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog");
 
@@ -1186,11 +1156,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     public void updatePlansFriend(int year, int monthOfYear, int dayOfMonth, boolean progress){
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
+        isTimeToChangeBackground();
 
         listPlans.clear();
 
@@ -1288,7 +1254,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         super.onDestroy();
         mSubscriptions.unsubscribe();
         Glide.get(this).clearMemory();
-        t.interrupt();
     }
 
     @Override

@@ -94,10 +94,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private User user;
 
     private boolean commitments = false;
-    private Thread t;
 
     private Calendar currentTime;
-    private int threadSleepTime;
     private static int currentSecond, currentMinute, currentHour;
     private ArrayList<BgProfileServer> bgProfile = new ArrayList<>();
 
@@ -185,35 +183,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         getBgProfile();
 
-        threadSleepTime = 1000;
-
-        t = new Thread() {
-
-            @Override
-            public void run() {
-                try {
-                    while (!isInterrupted()) {
-                        Thread.sleep(threadSleepTime);
-                        if (getActivity() == null)
-                            return;
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                currentTime = Calendar.getInstance();
-                                currentSecond = currentTime.get(Calendar.SECOND);
-                                currentMinute = currentTime.get(Calendar.MINUTE);
-                                currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-                                setBackgroundProfile();
-                            }
-                        });
-                    }
-                } catch (InterruptedException e) {
-                }
-            }
-        };
-
-        t.start();
-
         Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_rotation);
 
         progressBar.setValue(0);
@@ -271,7 +240,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         getProfileMainInformation(query);
         setProgress(true);
+    }
 
+    private void isTimeToChangeBackground(){
+        currentTime = Calendar.getInstance();
+        currentSecond = currentTime.get(Calendar.SECOND);
+        currentMinute = currentTime.get(Calendar.MINUTE);
+        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
+        setBackgroundProfile();
     }
 
     private void setBackgroundProfile() {
@@ -285,13 +261,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             timeEnd = String.format("%02d", bgProfile.get(i).getHourEnd()) + ":" + String.format("%02d", bgProfile.get(i).getMinuteEnd());
 
             if (isTimeInBetween(currentTime, timeStart, timeEnd)) {
-
-                threadSleepTime = (bgProfile.get(i).getHourEnd() * 60 * 60 * 1000 + bgProfile.get(i).getMinuteEnd() * 60 * 1000)
-                        - (currentHour * 60 * 60 * 1000 + currentMinute * 60 * 1000 + currentSecond * 1000);
-
                 period = bgProfile.get(i).getPeriod();
                 urlBg = bgProfile.get(i).getUrlBg();
-
             }
         }
 
@@ -386,19 +357,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
 
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
+        isTimeToChangeBackground();
     }
 
     public void updateLayout() {
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
+        isTimeToChangeBackground();
 
         ((MainActivity) getActivity()).updateProfileMainInformation();
 
@@ -476,6 +439,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         int startsAtMinute = 0;
         String title_is_happening = "";
         String title_will_happen = "";
+
+        isTimeToChangeBackground();
 
         noInternet = false;
 
@@ -1296,6 +1261,5 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             mSubscriptions.unsubscribe();
 
         Glide.get(getActivity()).clearMemory();
-        t.interrupt();
     }
 }
