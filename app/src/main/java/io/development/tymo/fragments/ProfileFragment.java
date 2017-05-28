@@ -323,6 +323,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private void handleResponseBgProfile(ArrayList<BgProfileServer> bgProfile) {
         this.bgProfile = new ArrayList<>();
         this.bgProfile.addAll(bgProfile);
+        isTimeToChangeBackground();
     }
 
     private void handleErrorBgProfile(Throwable error) {

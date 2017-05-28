@@ -358,6 +358,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     private void handleResponseBgProfile(ArrayList<BgProfileServer> bgProfile) {
         this.bgProfile = new ArrayList<>();
         this.bgProfile.addAll(bgProfile);
+        isTimeToChangeBackground();
     }
 
     private void handleErrorBgProfile(Throwable error) {

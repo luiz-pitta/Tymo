@@ -234,6 +234,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private void handleResponse(ArrayList<BgFeedServer> bgFeed) {
         this.bgFeed = new ArrayList<>();
         this.bgFeed.addAll(bgFeed);
+        isTimeToChangeBackground();
     }
 
     private void setBackgroundFeed() {
