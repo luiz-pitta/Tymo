@@ -621,8 +621,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }else
                 refresh = true;
 
-            if(profileFragment != null && mNavigator.getCurrentPosition() == ABOUT)
+            if(profileFragment != null && mNavigator.getCurrentPosition() == ABOUT) {
                 profileFragment.updateLayout();
+                updateProfileMainInformation();
+            }
 
             if(feedFragment != null && mNavigator.getCurrentPosition() == FEED)
                 feedFragment.setFeedRefresh();
