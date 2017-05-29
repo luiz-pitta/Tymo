@@ -90,10 +90,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private CompositeSubscription mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+    private BroadcastReceiver mMessageReceiverSearch = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             updateSearch();
+        }
+    };
+
+    private BroadcastReceiver mMessageReceiverFeed = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            updateFeed();
         }
     };
 
@@ -184,7 +191,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         updateProfileMainInformation();
 
-        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver, new IntentFilter("search_update"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverSearch, new IntentFilter("search_update"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverFeed, new IntentFilter("feed_update"));
     }
 
     public void updateProfileMainInformation(){
@@ -594,6 +602,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             query = ".";
         if(searchFragment != null)
             searchFragment.doSearch(query);
+    }
+
+    public void updateFeed(){
+        FeedFragment feedFragment = (FeedFragment) mNavigator.getFragment(FEED);
+        if(feedFragment != null)
+            feedFragment.setFeedRefresh();
     }
 
     @Override

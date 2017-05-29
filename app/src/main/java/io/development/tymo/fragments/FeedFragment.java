@@ -121,13 +121,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
     private boolean activatedCheck = true;
 
-    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            updateLayout();
-        }
-    };
-
     public static Fragment newInstance(String text) {
         FeedFragment fragment = new FeedFragment();
         return fragment;
@@ -230,8 +223,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         // [END set_current_screen]
 
         setCurrentTab(mNavigator.getCurrentPosition());
-
-        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver, new IntentFilter("feed_update"));
     }
 
     private void getBgFeed() {
