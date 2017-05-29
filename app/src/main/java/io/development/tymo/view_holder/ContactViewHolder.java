@@ -367,7 +367,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
     public interface RefreshLayoutPlansCallback {
 
-        public void refreshLayout();
+        void refreshLayout();
     }
 
 }

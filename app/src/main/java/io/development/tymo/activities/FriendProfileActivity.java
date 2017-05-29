@@ -1258,7 +1258,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     @Override
-    public void refreshLayout() {
+    public void refreshLayout(boolean showRefresh) {
         updatePlansFriend(year_start, month_start - 1, day_start, false);
     }
 }

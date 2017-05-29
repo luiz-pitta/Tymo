@@ -286,7 +286,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             @Override
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
-                refreshLayout();
+                refreshLayout(true);
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
@@ -1084,7 +1084,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     }
 
     @Override
-    public void refreshLayout() {
-        updateLayout(day_start, month_start - 1, year_start, true);
+    public void refreshLayout(boolean showRefresh) {
+        updateLayout(day_start, month_start - 1, year_start, showRefresh);
     }
 }

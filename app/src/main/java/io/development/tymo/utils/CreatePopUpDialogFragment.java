@@ -191,7 +191,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 //ACTIVITY_DELETED_SUCCESSFULLY, RELATIONSHIP_UPDATED_SUCCESSFULLY e WITHOUT_NOTIFICATION
 
                 if (callback != null) {
-                    callback.refreshLayout();
+                    callback.refreshLayout(true);
                     updateFeedMessageToActivity(mContext);
                 }
             }
@@ -926,7 +926,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
     public interface RefreshLayoutPlansCallback {
 
-        void refreshLayout();
+        void refreshLayout(boolean showRefresh);
     }
 
     private static void updateFeedMessageToActivity(Context context) {

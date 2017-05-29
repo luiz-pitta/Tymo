@@ -978,7 +978,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     }
 
     @Override
-    public void refreshLayout() {
+    public void refreshLayout(boolean showRefresh) {
         updateLayout(day_start, month_start - 1,year_start);
     }
 

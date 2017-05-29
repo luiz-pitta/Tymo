@@ -615,16 +615,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int d, m, y;
                 ArrayList<Integer> date = TymoApplication.getInstance().getDate();
                 if(date == null) {
-                    Calendar cal = Calendar.getInstance();
-                    d = cal.get(Calendar.DAY_OF_MONTH);
-                    m = cal.get(Calendar.MONTH);
-                    y = cal.get(Calendar.YEAR);
+                    plansFragment.refreshLayout(false);
                 }else {
                     d = date.get(0);
                     m = date.get(1)-1;
                     y = date.get(2);
+                    plansFragment.updateLayout(d,m,y, true);
                 }
-                plansFragment.updateLayout(d,m,y, false);
+
             }else
                 refresh = true;
 
