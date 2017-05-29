@@ -272,9 +272,9 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         ArrayList<Integer> list = TymoApplication.getInstance().getDate();
         if(list == null && !TymoApplication.getInstance().isCreatedActivity())
-            setPlans(plans);
+            setPlans(plans, true);
         else {
-            updateLayout(list.get(0), list.get(1)-1, list.get(2));
+            updateLayout(list.get(0), list.get(1)-1, list.get(2), true);
             TymoApplication.getInstance().setDate(null);
             TymoApplication.getInstance().setCreatedActivity(false);
         }
@@ -298,8 +298,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         // Load complete
     }
 
-    public void updateLayout(int dayOfMonth, int monthOfYear, int year) {
-        ((MainActivity) getActivity()).updateProfileMainInformation();
+    public void updateLayout(int dayOfMonth, int monthOfYear, int year, boolean showRefresh) {
 
         listPlans.clear();
         list_holiday.clear();
@@ -391,7 +390,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(),time1,time2);
         }
 
-        setPlans(plans);
+        setPlans(plans, showRefresh);
     }
 
     @Override
@@ -408,14 +407,14 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         }
     }
 
-    private void setPlans(Plans plans) {
+    private void setPlans(Plans plans, boolean showRefresh) {
 
         CommitmentFragment commitmentFragment = (CommitmentFragment) mNavigator.getFragment(0);
-        if (commitmentFragment != null)
+        if (commitmentFragment != null && showRefresh)
             commitmentFragment.showProgressCommitment();
 
         FreeFragment freeFragment = (FreeFragment) mNavigator.getFragment(1);
-        if (freeFragment != null)
+        if (freeFragment != null && showRefresh)
             freeFragment.showProgressFree();
 
         plans.setIdDevice(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
@@ -822,7 +821,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mNavigator.onSaveInstanceState(outState);
+        if(mNavigator!=null)
+            mNavigator.onSaveInstanceState(outState);
     }
 
     private void setCurrentTab(int position) {
@@ -934,7 +934,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(),time1,time2);
         }
 
-        setPlans(plans);
+        setPlans(plans, true);
     }
 
     @Override
@@ -1038,7 +1038,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            updateLayout(day_start, month_start - 1, year_start);
+            updateLayout(day_start, month_start - 1, year_start, true);
 
         } else if (view == nextWeek) {
             Calendar cal = Calendar.getInstance();
@@ -1064,7 +1064,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            updateLayout(day_start, month_start - 1, year_start);
+            updateLayout(day_start, month_start - 1, year_start, true);
         }
     }
 
@@ -1085,6 +1085,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     @Override
     public void refreshLayout() {
-        updateLayout(day_start, month_start - 1, year_start);
+        updateLayout(day_start, month_start - 1, year_start, true);
     }
 }

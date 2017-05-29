@@ -249,7 +249,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        mNavigator.onSaveInstanceState(outState);
+        if(mNavigator!=null)
+            mNavigator.onSaveInstanceState(outState);
     }
 
     public void setProgress(boolean progress) {

@@ -224,7 +224,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
     @Override
     public void onRefresh() {
-        ((MainActivity) getActivity()).updateProfileMainInformation();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {

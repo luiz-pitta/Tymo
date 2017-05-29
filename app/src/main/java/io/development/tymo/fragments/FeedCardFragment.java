@@ -433,7 +433,6 @@ public class FeedCardFragment extends Fragment {
     }
 
     void refreshItems() {
-        ((MainActivity) getActivity()).updateProfileMainInformation();
         // Load items
         handler.postDelayed(new Runnable() {
             @Override

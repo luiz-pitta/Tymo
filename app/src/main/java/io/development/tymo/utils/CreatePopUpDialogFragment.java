@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.Space;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -189,8 +190,10 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 //Toast.makeText(mContext, ServerMessage.getServerMessage(mContext, response.getMessage()), Toast.LENGTH_LONG).show();
                 //ACTIVITY_DELETED_SUCCESSFULLY, RELATIONSHIP_UPDATED_SUCCESSFULLY e WITHOUT_NOTIFICATION
 
-                if (callback != null)
+                if (callback != null) {
                     callback.refreshLayout();
+                    updateFeedMessageToActivity(mContext);
+                }
             }
 
             private boolean setLayout(ArrayList<User> list, String email, boolean activity) {
@@ -921,19 +924,14 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
         return type.create(getActivity(), this);
     }
 
-    @Override
-    public boolean onSwipedAway(boolean toRight) {
-        return false;
-    }
-
-    @Override
-    public void onDismiss(DialogInterface dialog) {
-        super.onDismiss(dialog);
-    }
-
     public interface RefreshLayoutPlansCallback {
 
-        public void refreshLayout();
+        void refreshLayout();
+    }
+
+    private static void updateFeedMessageToActivity(Context context) {
+        Intent intent = new Intent("feed_update");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 
     public void setCallback(RefreshLayoutPlansCallback cb) {
