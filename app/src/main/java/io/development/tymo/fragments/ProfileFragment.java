@@ -440,6 +440,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         isTimeToChangeBackground();
 
         noInternet = false;
+        commitments = false;
 
         if (response.getNumberContacts() > 0) {
             numberContacts.setText(getResources().getString(R.string.my_contacts_count, response.getNumberContacts()));
