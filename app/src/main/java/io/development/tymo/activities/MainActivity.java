@@ -409,15 +409,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
 
-            Calendar c = Calendar.getInstance();
-            int day = c.get(Calendar.DAY_OF_MONTH);
-            int month = c.get(Calendar.MONTH);
-            int year = c.get(Calendar.YEAR);
-
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
 
             if (plansFragment!=null && mNavigator.getCurrentPosition() != PLANS)
-                plansFragment.updateLayout(day, month, year, false);
+                plansFragment.refreshLayout(false);
 
             setCurrentTab(PLANS);
         }
