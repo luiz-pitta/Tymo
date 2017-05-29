@@ -121,8 +121,8 @@ public class FeedCardFragment extends Fragment {
                     myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_show" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_show" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 }else{
                     activityServer = (ActivityServer) object;
@@ -130,8 +130,8 @@ public class FeedCardFragment extends Fragment {
                     myIntent.putExtra("act_show", new ActivityWrapper(activityServer));
 
                     Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_show" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_show" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 }
 
@@ -219,19 +219,24 @@ public class FeedCardFragment extends Fragment {
 
         mRecyclerView.scrollToPosition(fragment.getCurrentPosition());
 
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void setLatLng(double lat, double lng) {
-        adapter.setLatLng(lat, lng);
+        if (adapter!=null)
+            adapter.setLatLng(lat, lng);
     }
 
     public void setCurrentPosition(int position) {
-        mRecyclerView.scrollToPosition(position);
+        if(mRecyclerView!=null)
+            mRecyclerView.scrollToPosition(position);
     }
 
     public int getCurrentPosition(){
-        return adapter.getCurrentItemId();
+        if(adapter !=null)
+            return adapter.getCurrentItemId();
+        else
+            return 0;
     }
 
     private void updateInviteRequest(InviteRequest inviteRequest) {
@@ -307,8 +312,8 @@ public class FeedCardFragment extends Fragment {
 
                     if (erase) {
                         Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -374,8 +379,8 @@ public class FeedCardFragment extends Fragment {
                     if (erase) {
 
                         Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                         FeedListFragment feedListFragment = (FeedListFragment) getFragmentManager().findFragmentByTag("list");
@@ -442,8 +447,8 @@ public class FeedCardFragment extends Fragment {
                 FeedFragment fragment = (FeedFragment)getActivity().getFragmentManager().findFragmentByTag("Feed_main");
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh_feed" + "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh_feed" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 adapter.setCurrentItemId(0);

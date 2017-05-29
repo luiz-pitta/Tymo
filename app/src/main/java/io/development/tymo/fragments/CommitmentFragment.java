@@ -88,7 +88,7 @@ public class CommitmentFragment extends Fragment{
         recyclerView.setAdapterWithProgress(weekAdapter);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void showProgressCommitment(){

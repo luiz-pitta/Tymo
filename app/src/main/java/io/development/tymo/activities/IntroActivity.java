@@ -67,7 +67,7 @@ public class IntroActivity extends MaterialIntroActivity {
             addSlide(new CustomSlide4());
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-            mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
+            mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
         }
     }
 

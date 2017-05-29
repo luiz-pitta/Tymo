@@ -83,7 +83,7 @@ public class CompareFreeFragment extends Fragment{
 
         adapter.setDateList(activity.getTodayDate());
 
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void setDataAdapter(List<CompareModel> list){

@@ -98,13 +98,14 @@ public class FreeFragment extends Fragment {
         weekAdapter.addAll(list);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void showProgressFree(){
-        weekAdapter.clear();
-        if(recyclerView != null)
+        if(recyclerView != null) {
+            weekAdapter.clear();
             recyclerView.showProgress();
+        }
     }
 
     public void setDataAdapter(List<WeekModel> list){

@@ -145,8 +145,8 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         if (v == moreVerticalIcon) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon"+ "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             CharSequence[] items;
@@ -179,8 +179,8 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
             builder.show();
         } else if (v == actionIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon"+ "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -240,24 +240,24 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
                 Bundle bundle = new Bundle();
 
                 if (item == 1) {
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "BLOCK"+ "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "BLOCK"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                     deleteBlock = Constants.BLOCK;
                     user.setPrivacy(Constants.BLOCK);
                     sendBlockRequest(email_friend, user);
                 }
                 else if(item == 2) {
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "DELETE"+ "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "DELETE"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                     deleteBlock = Constants.DELETE;
                     sendDeleteRequest(email_friend, user);
                 }
                 else{
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "UNBLOCK"+ "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "UNBLOCK"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                     deleteBlock = Constants.UNBLOCK;
                     user.setPrivacy(Constants.UNBLOCK);
                     sendUnBlockRequest(email_friend, user);
                 }
 
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length() - 1));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 dialog.dismiss();
