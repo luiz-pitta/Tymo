@@ -39,10 +39,10 @@
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <!-- BETA TESTE -->
+        <!-- floating-plateau-35187 -->
         <!-- <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://392512249626575:883M2n_JJty1Fcx7kVYg6qvCoyw@hvfrjtvkm"/> -->
 
-        <!-- PRODUÇÃO -->
+        <!-- tymo-server -->
         <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://381773179253939:z4lejziSvxEMuWx9tux3RVzd1JU@hzkeshb5l"/>
 
         <meta-data
