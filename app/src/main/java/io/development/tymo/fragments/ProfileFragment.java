@@ -1030,9 +1030,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     status = 0;
                 }
 
-                String hour = String.format("%02d", start_hour);
-                String minute = String.format("%02d", start_minute);
-
                 reminderServer.setStatus(status);
 
                 if (reminderServer.getStatus() == 1) {
