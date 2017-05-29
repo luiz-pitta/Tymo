@@ -2,6 +2,7 @@ package io.development.tymo.activities;
 
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -416,7 +417,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            onBackPressed();
+            startActivity(new Intent(this, MainActivity.class));
         }
     }
 
