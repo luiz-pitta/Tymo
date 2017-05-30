@@ -114,7 +114,7 @@
     <string name="server_message_does_not_exist_icon">Não existem Ícones :(</string>
     <string name="server_message_does_not_exist_interest">Não existem Interesses :(</string>
     <string name="server_message_does_not_exist_tag">Não existem Tags :(</string>
-    <string name="server_message_facebook_error">Conta existente cadastrada pelo facebook neste email</string>
+    <string name="server_message_facebook_error">Conta existente cadastrada pelo facebook com esse email</string>
     <string name="server_message_flag_registered_successfully">Sinalizador registrado com sucesso</string>
     <string name="server_message_flag_updated_successfully">Sinalizador atualizado com sucesso</string>
     <string name="server_message_internal_server_error">Falha no servidor</string>

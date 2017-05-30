@@ -731,9 +731,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         TextView dateMonthYear = (TextView) customView.findViewById(R.id.dateMonthYear);
 
                         Calendar calendar = Calendar.getInstance();
-                        calendar.set(holiday.getYear(), holiday.getMonth(), holiday.getDay());
+                        calendar.set(holiday.getYear(), holiday.getMonth()-1, holiday.getDay());
                         String day = String.format("%02d", holiday.getDay());
-                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH));
+                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH)+1);
                         String year = String.valueOf(holiday.getYear());
                         dateMonthYear.setText(context.getResources().getString(R.string.date_format_10, day, month, year));
 
@@ -756,9 +756,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         TextView dateMonthYear = (TextView) customView.findViewById(R.id.dateMonthYear);
 
                         Calendar calendar = Calendar.getInstance();
-                        calendar.set(birthday.getYear(), birthday.getMonth(), birthday.getDay());
+                        calendar.set(birthday.getYear(), birthday.getMonth()-1, birthday.getDay());
                         String day = String.format("%02d", birthday.getDay());
-                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH));
+                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH)+1);
                         String year = String.valueOf(birthday.getYear());
                         dateMonthYear.setText(context.getResources().getString(R.string.date_format_10, day, month, year));
                     }
