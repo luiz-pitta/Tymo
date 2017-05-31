@@ -93,8 +93,10 @@ public class CompareTotalFragment extends Fragment{
     }
 
     public void updateDelete(int position){
-        data.remove(position);
-        adapter.notifyItemRemoved(position);
+        if(adapter!=null) {
+            data.remove(position);
+            adapter.notifyItemRemoved(position);
+        }
     }
 
     @Override

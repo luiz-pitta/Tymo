@@ -529,7 +529,7 @@ public class WhenEditFragment extends Fragment implements
     }
 
     public void setLayout(ActivityServer activityServer, boolean edit){
-        if(activityServer != null) {
+        if(activityServer != null && dateStart!=null) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
 

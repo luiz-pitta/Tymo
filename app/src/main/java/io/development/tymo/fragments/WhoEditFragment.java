@@ -301,41 +301,41 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean edit){
-        invite = activityServer.getInvitationType();
+        if(recyclerView!=null) {
+            invite = activityServer.getInvitationType();
 
-        spinner.setSelectedIndex(invite);
+            spinner.setSelectedIndex(invite);
 
-        if (invite == 2){
-            feedVisibility.setText(R.string.feed_visibility_2);
-        }
-        else{
-            feedVisibility.setText(R.string.feed_visibility_1);
-        }
+            if (invite == 2) {
+                feedVisibility.setText(R.string.feed_visibility_2);
+            } else {
+                feedVisibility.setText(R.string.feed_visibility_1);
+            }
 
-        isEdit = edit;
+            isEdit = edit;
 
-        data.clear();
-        listConfirmed.clear();
-        listConfirmed.addAll(confirmed);
+            data.clear();
+            listConfirmed.clear();
+            listConfirmed.addAll(confirmed);
 
-        for(int i = 0; i<users.size();i++){
-            User usr = users.get(i);
-            usr.setDelete(false);
-            data.add(usr);
-        }
+            for (int i = 0; i < users.size(); i++) {
+                User usr = users.get(i);
+                usr.setDelete(false);
+                data.add(usr);
+            }
 
-        adapter = new PersonAdapter(data, getActivity());
-        recyclerView.setAdapter(adapter);
-        guestsNumber.setText(String.valueOf(data.size()));
-        addPersonButton.setActivated(true);
+            adapter = new PersonAdapter(data, getActivity());
+            recyclerView.setAdapter(adapter);
+            guestsNumber.setText(String.valueOf(data.size()));
+            addPersonButton.setActivated(true);
 
-        if(!isActivityInPast(activityServer)) {
-            addPersonButton.setImageResource(R.drawable.btn_add_person);
-            addPersonButton.setOnClickListener(this);
-        }
-        else {
-            addPersonButton.setOnClickListener(null);
-            addPersonButton.setVisibility(View.GONE);
+            if (!isActivityInPast(activityServer)) {
+                addPersonButton.setImageResource(R.drawable.btn_add_person);
+                addPersonButton.setOnClickListener(this);
+            } else {
+                addPersonButton.setOnClickListener(null);
+                addPersonButton.setVisibility(View.GONE);
+            }
         }
     }
 

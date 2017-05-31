@@ -130,81 +130,83 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setLayout(FlagServer flagServer, ArrayList<User> users, ArrayList<User> confirmed, ArrayList<FlagServer> flagServers, boolean permissionToInvite) {
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
-        calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+        if(recyclerView!=null) {
+            Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+            calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
 
-        String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
-        String dayStart = String.format("%02d", flagServer.getDayStart());
-        String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        int yearStart = flagServer.getYearStart();
-        String hourStart = String.format("%02d", flagServer.getHourStart());
-        String minuteStart = String.format("%02d", flagServer.getMinuteStart());
-        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
-        String dayEnd = String.format("%02d", flagServer.getDayEnd());
-        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
-        int yearEnd = flagServer.getYearEnd();
-        String hourEnd = String.format("%02d", flagServer.getHourEnd());
-        String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
+            String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayStart = String.format("%02d", flagServer.getDayStart());
+            String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int yearStart = flagServer.getYearStart();
+            String hourStart = String.format("%02d", flagServer.getHourStart());
+            String minuteStart = String.format("%02d", flagServer.getMinuteStart());
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayEnd = String.format("%02d", flagServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = flagServer.getYearEnd();
+            String hourEnd = String.format("%02d", flagServer.getHourEnd());
+            String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
-        if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-            if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                }
             } else {
-                dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
-            }
-        } else {
-            dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
-        }
-
-        if (permissionToInvite && !isFlagInPast(flagServer)) {
-            addGuestButton.setImageResource(R.drawable.btn_add_person);
-            addGuestButton.setOnClickListener(this);
-        } else {
-            addGuestButton.setOnClickListener(null);
-            addGuestButton.setVisibility(View.GONE);
-        }
-
-        tittleText.setText(flagServer.getTitle());
-
-        if (flagServer.getType()) {
-            listPerson.clear();
-            listConfirmed.clear();
-            listConfirmed.addAll(confirmed);
-
-            for (int i = 0; i < users.size(); i++) {
-                User usr = users.get(i);
-                usr.setDelete(false);
-                listPerson.add(usr);
+                dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
             }
 
-            adapter = new PersonAdapter(listPerson, getActivity());
-            recyclerView.setAdapter(adapter);
-            guestsNumber.setText(String.valueOf(listPerson.size()));
-        } else
-            guestBox.setVisibility(View.GONE);
-
-        if (flagServer.getRepeatType() == 0)
-            repeatBox.setVisibility(View.GONE);
-        else {
-            String repeatly;
-            switch (flagServer.getRepeatType()) {
-                case Constants.DAYLY:
-                    repeatly = getActivity().getString(R.string.repeat_dayly);
-                    break;
-                case Constants.WEEKLY:
-                    repeatly = getActivity().getString(R.string.repeat_weekly);
-                    break;
-                case Constants.MONTHLY:
-                    repeatly = getActivity().getString(R.string.repeat_monthly);
-                    break;
-                default:
-                    repeatly = "";
-                    break;
+            if (permissionToInvite && !isFlagInPast(flagServer)) {
+                addGuestButton.setImageResource(R.drawable.btn_add_person);
+                addGuestButton.setOnClickListener(this);
+            } else {
+                addGuestButton.setOnClickListener(null);
+                addGuestButton.setVisibility(View.GONE);
             }
 
-            repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(flagServers)));
+            tittleText.setText(flagServer.getTitle());
+
+            if (flagServer.getType()) {
+                listPerson.clear();
+                listConfirmed.clear();
+                listConfirmed.addAll(confirmed);
+
+                for (int i = 0; i < users.size(); i++) {
+                    User usr = users.get(i);
+                    usr.setDelete(false);
+                    listPerson.add(usr);
+                }
+
+                adapter = new PersonAdapter(listPerson, getActivity());
+                recyclerView.setAdapter(adapter);
+                guestsNumber.setText(String.valueOf(listPerson.size()));
+            } else
+                guestBox.setVisibility(View.GONE);
+
+            if (flagServer.getRepeatType() == 0)
+                repeatBox.setVisibility(View.GONE);
+            else {
+                String repeatly;
+                switch (flagServer.getRepeatType()) {
+                    case Constants.DAYLY:
+                        repeatly = getActivity().getString(R.string.repeat_dayly);
+                        break;
+                    case Constants.WEEKLY:
+                        repeatly = getActivity().getString(R.string.repeat_weekly);
+                        break;
+                    case Constants.MONTHLY:
+                        repeatly = getActivity().getString(R.string.repeat_monthly);
+                        break;
+                    default:
+                        repeatly = "";
+                        break;
+                }
+
+                repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(flagServers)));
+            }
         }
     }
 

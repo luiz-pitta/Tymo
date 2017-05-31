@@ -195,16 +195,18 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setLayout(ActivityServer activityServer, ArrayList<TagServer> tags){
-        tittleEditText.setText(activityServer.getTitle());
+        if(tittleEditText!=null) {
+            tittleEditText.setText(activityServer.getTitle());
 
-        whatsAppEditText.setText(activityServer.getWhatsappGroupLink());
+            whatsAppEditText.setText(activityServer.getWhatsappGroupLink());
 
-        if(activityServer.getDescription() != null)
-            descriptionEditText.setText(activityServer.getDescription());
-        else
-            descriptionEditText.setText("");
+            if (activityServer.getDescription() != null)
+                descriptionEditText.setText(activityServer.getDescription());
+            else
+                descriptionEditText.setText("");
 
-        loadTags(tags);
+            loadTags(tags);
+        }
     }
 
     private void loadTags(ArrayList<TagServer> tags){

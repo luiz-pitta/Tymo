@@ -69,9 +69,9 @@ public class SearchWhatsFragment extends Fragment {
     }
 
     public void setAdapterItens(List<Object> list){
-        listWhats.clear();
-        listWhats.addAll(list);
         if(adapter != null) {
+            listWhats.clear();
+            listWhats.addAll(list);
             adapter.clear();
             adapter.addAll(listWhats);
         }

@@ -426,6 +426,7 @@
     <string name="settings">Configurações</string>
     <string name="settings_import_facebook_success">Importado do Facebook com sucesso!</string>
     <string name="settings_import_facebook_tag">Facebook</string>
+    <string name="settings_import_facebook_text">Você deseja importar as suas atividades?</string>
     <string name="settings_import_google_calendar_text">Você deseja importar as suas atividades de qual conta?</string>
     <string name="settings_import_google_calendar_title">Google Agenda</string>
     <string name="settings_import_google_no_activities">Você não possui nenhuma atividade para importar!</string>

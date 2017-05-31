@@ -73,9 +73,9 @@ public class SearchMyCommitmentFragment extends Fragment {
     }
 
     public void setAdapterItens(List<Object> list){
-        listCommit.clear();
-        listCommit.addAll(list);
         if(adapter != null) {
+            listCommit.clear();
+            listCommit.addAll(list);
             adapter.clear();
             adapter.addAll(listCommit);
         }

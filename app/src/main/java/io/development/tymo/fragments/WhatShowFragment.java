@@ -79,31 +79,32 @@ public class WhatShowFragment extends Fragment {
     }
 
     public void setLayout(ActivityServer activityServer, ArrayList<TagServer> tags){
-        tittleText.setText(activityServer.getTitle());
+        if(tittleText!=null) {
+            tittleText.setText(activityServer.getTitle());
 
-        if(activityServer.getWhatsappGroupLink() == null || activityServer.getWhatsappGroupLink().matches(""))
-            whatsAppGroupLinkBox.setVisibility(View.GONE);
-        else
-            url.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
-
-        if(activityServer.getDescription() != null && activityServer.getDescription().length() <= 240) {
-            descriptionTextShort.setVisibility(View.VISIBLE);
-            descriptionText.setVisibility(View.GONE);
-
-            if(!activityServer.getDescription().matches(""))
-                descriptionTextShort.setText(activityServer.getDescription());
+            if (activityServer.getWhatsappGroupLink() == null || activityServer.getWhatsappGroupLink().matches(""))
+                whatsAppGroupLinkBox.setVisibility(View.GONE);
             else
-                descriptionTextShort.setVisibility(View.GONE);
-        }
-        else {
-            if(activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
-                String description = activityServer.getDescription() + " " + "\n\n";
-                descriptionText.setText(description);
-            }else
-                descriptionText.setVisibility(View.GONE);
-        }
+                url.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
 
-        loadTags(tags);
+            if (activityServer.getDescription() != null && activityServer.getDescription().length() <= 240) {
+                descriptionTextShort.setVisibility(View.VISIBLE);
+                descriptionText.setVisibility(View.GONE);
+
+                if (!activityServer.getDescription().matches(""))
+                    descriptionTextShort.setText(activityServer.getDescription());
+                else
+                    descriptionTextShort.setVisibility(View.GONE);
+            } else {
+                if (activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
+                    String description = activityServer.getDescription() + " " + "\n\n";
+                    descriptionText.setText(description);
+                } else
+                    descriptionText.setVisibility(View.GONE);
+            }
+
+            loadTags(tags);
+        }
     }
 
     @Override

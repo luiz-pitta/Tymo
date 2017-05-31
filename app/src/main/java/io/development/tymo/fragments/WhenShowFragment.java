@@ -119,62 +119,64 @@ public class WhenShowFragment extends Fragment {
     }
 
     public void setLayout(ActivityServer activityServer, ArrayList<ActivityServer> activityServers){
-        Calendar calendar = Calendar.getInstance();
-        Calendar calendar2 = Calendar.getInstance();
-        calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
-        calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+        if(locationText!=null) {
+            Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
 
-        String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
-        String dayStart = String.format("%02d", activityServer.getDayStart());
-        String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        int yearStart = activityServer.getYearStart();
-        String hourStart = String.format("%02d", activityServer.getHourStart());
-        String minuteStart = String.format("%02d", activityServer.getMinuteStart());
-        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
-        String dayEnd = String.format("%02d", activityServer.getDayEnd());
-        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
-        int yearEnd = activityServer.getYearEnd();
-        String hourEnd = String.format("%02d", activityServer.getHourEnd());
-        String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
+            String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayStart = String.format("%02d", activityServer.getDayStart());
+            String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int yearStart = activityServer.getYearStart();
+            String hourStart = String.format("%02d", activityServer.getHourStart());
+            String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayEnd = String.format("%02d", activityServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = activityServer.getYearEnd();
+            String hourEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
-        if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-            if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                }
             } else {
-                dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
-            }
-        } else {
-            dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
-        }
-
-        if(activityServer.getLocation() == null || activityServer.getLocation().matches(""))
-            locationBox.setVisibility(View.GONE);
-        else
-            locationText.setText(activityServer.getLocation());
-
-        if(activityServer.getRepeatType() == 0)
-            repeatText.setText(getResources().getString(R.string.repeat_not));
-        else {
-            String repeatly;
-            switch (activityServer.getRepeatType()){
-                case Constants.DAYLY:
-                    repeatly = getActivity().getString(R.string.repeat_dayly);
-                    break;
-                case Constants.WEEKLY:
-                    repeatly = getActivity().getString(R.string.repeat_weekly);
-                    break;
-                case Constants.MONTHLY:
-                    repeatly = getActivity().getString(R.string.repeat_monthly);
-                    break;
-                default:
-                    repeatly = "";
-                    break;
+                dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
             }
 
-            if(activityServer.getRepeatType() == 5)
-                repeatText.setText(getActivity().getString(R.string.repeat_text_imported_google_calendar));
+            if (activityServer.getLocation() == null || activityServer.getLocation().matches(""))
+                locationBox.setVisibility(View.GONE);
             else
-                repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
+                locationText.setText(activityServer.getLocation());
+
+            if (activityServer.getRepeatType() == 0)
+                repeatText.setText(getResources().getString(R.string.repeat_not));
+            else {
+                String repeatly;
+                switch (activityServer.getRepeatType()) {
+                    case Constants.DAYLY:
+                        repeatly = getActivity().getString(R.string.repeat_dayly);
+                        break;
+                    case Constants.WEEKLY:
+                        repeatly = getActivity().getString(R.string.repeat_weekly);
+                        break;
+                    case Constants.MONTHLY:
+                        repeatly = getActivity().getString(R.string.repeat_monthly);
+                        break;
+                    default:
+                        repeatly = "";
+                        break;
+                }
+
+                if (activityServer.getRepeatType() == 5)
+                    repeatText.setText(getActivity().getString(R.string.repeat_text_imported_google_calendar));
+                else
+                    repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
+            }
         }
     }
 

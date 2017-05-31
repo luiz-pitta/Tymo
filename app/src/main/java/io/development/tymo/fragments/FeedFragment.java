@@ -96,6 +96,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private ArrayList<BgFeedServer> bgFeed = new ArrayList<>();
 
     private int period = 3;
+    private boolean try_again = true;
 
     private Calendar currentTime;
 
@@ -642,8 +643,13 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
     private void handleError(Throwable error) {
         if (listFeed.size() == 0) {
-            FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
-            feedListFragment.setAdapterItens(listFeed);
+            if(try_again) {
+                try_again = false;
+                setFeedRefresh();
+            }else {
+                FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+                feedListFragment.setAdapterItens(listFeed);
+            }
         }else
             Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
     }

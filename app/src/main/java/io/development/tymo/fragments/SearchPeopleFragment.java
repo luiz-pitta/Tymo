@@ -67,9 +67,9 @@ public class SearchPeopleFragment extends Fragment {
     }
 
     public void setAdapterItens(List<Object> list){
-        listPeople.clear();
-        listPeople.addAll(list);
         if(adapter != null) {
+            listPeople.clear();
+            listPeople.addAll(list);
             adapter.clear();
             adapter.addAll(listPeople);
         }

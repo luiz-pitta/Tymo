@@ -594,7 +594,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         customView.findViewById(R.id.editText).setVisibility(View.GONE);
 
         text1.setText(getResources().getString(R.string.settings_import_facebook_tag));
-        text2.setText(getResources().getString(R.string.settings_import_google_calendar_text));
+        text2.setText(getResources().getString(R.string.settings_import_facebook_text));
         buttonText1.setText(getResources().getString(R.string.no));
         buttonText2.setText(getResources().getString(R.string.yes));
 
@@ -637,8 +637,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         text1.setText(getResources().getString(R.string.settings_import_google_calendar_title));
         text2.setText(getResources().getString(R.string.settings_import_google_calendar_text));
-        buttonText1.setText(getResources().getString(R.string.no));
-        buttonText2.setText(getResources().getString(R.string.yes));
+        buttonText1.setText(getResources().getString(R.string.cancel));
+        buttonText2.setText(getResources().getString(R.string.confirm));
 
         ArrayList<String> list_email = GoogleCalendarEvents.getCalendarTypes(SettingsActivity.this);
 

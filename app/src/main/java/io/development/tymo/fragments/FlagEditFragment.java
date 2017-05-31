@@ -579,93 +579,116 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     }
 
     public void setLayout(FlagServer flagServer, ArrayList<User> users, ArrayList<User> confirmed,  boolean edit, boolean free, boolean friend){
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(flagServer.getYearStart(),flagServer.getMonthStart()-1,flagServer.getDayStart());
+        if(recyclerView!=null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
 
-        isEdit = edit;
+            isEdit = edit;
 
-        String day= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String month= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        calendar.set(flagServer.getYearEnd(),flagServer.getMonthEnd()-1,flagServer.getDayEnd());
-        String day2= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String month2= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String date = day+"/"+month+"/"+flagServer.getYearStart();
-        String date2 = day2+"/"+month2+"/"+flagServer.getYearEnd();
+            String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            calendar.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+            String day2 = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String month2 = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String date = day + "/" + month + "/" + flagServer.getYearStart();
+            String date2 = day2 + "/" + month2 + "/" + flagServer.getYearEnd();
 
-        String hourString = String.format("%02d", flagServer.getHourStart());;
-        String minuteString = String.format("%02d", flagServer.getMinuteStart());;
-        String hourStringEnd = String.format("%02d", flagServer.getHourEnd());;
-        String minuteStringEnd = String.format("%02d", flagServer.getMinuteEnd());;
-        String time = hourString+":"+minuteString;
-        String time2 = hourStringEnd+":"+minuteStringEnd;
+            String hourString = String.format("%02d", flagServer.getHourStart());
+            ;
+            String minuteString = String.format("%02d", flagServer.getMinuteStart());
+            ;
+            String hourStringEnd = String.format("%02d", flagServer.getHourEnd());
+            ;
+            String minuteStringEnd = String.format("%02d", flagServer.getMinuteEnd());
+            ;
+            String time = hourString + ":" + minuteString;
+            String time2 = hourStringEnd + ":" + minuteStringEnd;
 
-        minutes_start = flagServer.getMinuteStart();
-        hour_start = flagServer.getHourStart();
-        minutes_end = flagServer.getMinuteEnd();
-        hour_end = flagServer.getHourEnd();
+            minutes_start = flagServer.getMinuteStart();
+            hour_start = flagServer.getHourStart();
+            minutes_end = flagServer.getMinuteEnd();
+            hour_end = flagServer.getHourEnd();
 
-        day_start = flagServer.getDayStart();
-        month_start = flagServer.getMonthStart() - 1;
-        year_start = flagServer.getYearStart();
-        day_end = flagServer.getDayEnd();
-        month_end = flagServer.getMonthEnd() - 1;
-        year_end = flagServer.getYearEnd();
+            day_start = flagServer.getDayStart();
+            month_start = flagServer.getMonthStart() - 1;
+            year_start = flagServer.getYearStart();
+            day_end = flagServer.getDayEnd();
+            month_end = flagServer.getMonthEnd() - 1;
+            year_end = flagServer.getYearEnd();
 
-        dateStart.setText(date);
-        dateEnd.setText(date2);
-        timeStart.setText(time);
-        timeEnd.setText(time2);
-        titleEditText.setText(flagServer.getTitle());
+            dateStart.setText(date);
+            dateEnd.setText(date2);
+            timeStart.setText(time);
+            timeEnd.setText(time2);
+            titleEditText.setText(flagServer.getTitle());
 
-        if (!isFlagInPast(flagServer)) {
-            addPersonButton.setImageResource(R.drawable.btn_add_person);
-            addPersonButton.setOnClickListener(this);
-        } else {
-            addPersonButton.setOnClickListener(null);
-            addPersonButton.setVisibility(View.GONE);
-        }
+            if (!isFlagInPast(flagServer)) {
+                addPersonButton.setImageResource(R.drawable.btn_add_person);
+                addPersonButton.setOnClickListener(this);
+            } else {
+                addPersonButton.setOnClickListener(null);
+                addPersonButton.setVisibility(View.GONE);
+            }
 
-        if(edit) {
-            dateStart.setOnClickListener(null);
-            dateEnd.setOnClickListener(null);
-            timeStart.setOnClickListener(null);
-            timeEnd.setOnClickListener(null);
+            if (edit) {
+                dateStart.setOnClickListener(null);
+                dateEnd.setOnClickListener(null);
+                timeStart.setOnClickListener(null);
+                timeEnd.setOnClickListener(null);
 
-            repeatBox.setVisibility(View.GONE);
+                repeatBox.setVisibility(View.GONE);
 
-            sendBox.setVisibility(View.GONE);
+                sendBox.setVisibility(View.GONE);
 
-            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position, MotionEvent e) {
-                    FlagActivity flagActivity = (FlagActivity) getActivity();
+                recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position, MotionEvent e) {
+                        FlagActivity flagActivity = (FlagActivity) getActivity();
 
-                    Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
-                    intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
-                    intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
-                    intent.putExtra("is_adm", false);
-                    intent.putExtra("id_act", flagActivity.getFlag().getId());
-                    intent.putExtra("is_flag", true);
+                        Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
+                        intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+                        intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+                        intent.putExtra("is_adm", false);
+                        intent.putExtra("id_act", flagActivity.getFlag().getId());
+                        intent.putExtra("is_flag", true);
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                    startActivityForResult(intent, GUEST_UPDATE);
-                }
+                        startActivityForResult(intent, GUEST_UPDATE);
+                    }
 
-                @Override
-                public void onLongItemClick(View view, int position, MotionEvent e) {
-                }
-            }));
+                    @Override
+                    public void onLongItemClick(View view, int position, MotionEvent e) {
+                    }
+                }));
 
-            if(flagServer.getType()) {
+                if (flagServer.getType()) {
+                    selectionGuestBox.setVisibility(View.VISIBLE);
+
+                    listPerson.clear();
+                    listConfirmed.clear();
+                    listConfirmed.addAll(confirmed);
+
+                    for (int i = 0; i < users.size(); i++) {
+                        User usr = users.get(i);
+                        usr.setDelete(false);
+                        listPerson.add(usr);
+                    }
+
+                    adapter = new PersonAdapter(listPerson, getActivity());
+                    recyclerView.setAdapter(adapter);
+                    guestsNumber.setText(String.valueOf(listPerson.size()));
+                    addPersonButton.setActivated(true);
+                } else
+                    selectionGuestBox.setVisibility(View.GONE);
+
+            } else if (!free) {
+                sendPicker.setSelectedIndex(1);
+                send_toAll = 1;
                 selectionGuestBox.setVisibility(View.VISIBLE);
-
-                listPerson.clear();
-                listConfirmed.clear();
-                listConfirmed.addAll(confirmed);
 
                 for (int i = 0; i < users.size(); i++) {
                     User usr = users.get(i);
@@ -676,36 +699,19 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 adapter = new PersonAdapter(listPerson, getActivity());
                 recyclerView.setAdapter(adapter);
                 guestsNumber.setText(String.valueOf(listPerson.size()));
-                addPersonButton.setActivated(true);
-            }else
-                selectionGuestBox.setVisibility(View.GONE);
 
-        }else if(!free){
-            sendPicker.setSelectedIndex(1);
-            send_toAll = 1;
-            selectionGuestBox.setVisibility(View.VISIBLE);
-
-            for(int i = 0; i<users.size();i++){
-                User usr = users.get(i);
-                usr.setDelete(false);
-                listPerson.add(usr);
+                if (flagServer.getRepeatType() == 0)
+                    spinner.setSelectedIndex(flagServer.getRepeatType());
+                else {
+                    spinner.setSelectedIndex(flagServer.getRepeatType());
+                    repeatEditLayout.setVisibility(View.VISIBLE);
+                    repeatEditText.setText(String.valueOf(flagServer.getRepeatQty()));
+                }
+            } else if (friend) {
+                sendPicker.setSelectedIndex(1);
+                send_toAll = 1;
+                selectionGuestBox.setVisibility(View.VISIBLE);
             }
-
-            adapter = new PersonAdapter(listPerson, getActivity());
-            recyclerView.setAdapter(adapter);
-            guestsNumber.setText(String.valueOf(listPerson.size()));
-
-            if (flagServer.getRepeatType() == 0)
-                spinner.setSelectedIndex(flagServer.getRepeatType());
-            else {
-                spinner.setSelectedIndex(flagServer.getRepeatType());
-                repeatEditLayout.setVisibility(View.VISIBLE);
-                repeatEditText.setText(String.valueOf(flagServer.getRepeatQty()));
-            }
-        }else if(friend){
-            sendPicker.setSelectedIndex(1);
-            send_toAll = 1;
-            selectionGuestBox.setVisibility(View.VISIBLE);
         }
     }
 

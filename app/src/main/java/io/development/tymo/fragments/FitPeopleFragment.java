@@ -83,9 +83,9 @@ public class FitPeopleFragment extends Fragment {
     }
 
     public void setAdapterItens(List<User> list){
-        listPeople.clear();
-        listPeople.addAll(list);
         if(adapter != null) {
+            listPeople.clear();
+            listPeople.addAll(list);
             adapter.clear();
             adapter.addAll(listPeople);
         }

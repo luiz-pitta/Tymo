@@ -159,40 +159,39 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
 
     public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean permissionInvite){
 
-        String[] stringArray = getActivity().getResources().getStringArray(R.array.array_who_can_invite);
+        if(recyclerView!=null) {
+            String[] stringArray = getActivity().getResources().getStringArray(R.array.array_who_can_invite);
 
-        whoCanInvite.setText(stringArray[activityServer.getInvitationType()]);
+            whoCanInvite.setText(stringArray[activityServer.getInvitationType()]);
 
-        if (activityServer.getInvitationType() == 2){
-            feedVisibility.setText(R.string.feed_visibility_2);
+            if (activityServer.getInvitationType() == 2) {
+                feedVisibility.setText(R.string.feed_visibility_2);
+            } else {
+                feedVisibility.setText(R.string.feed_visibility_1);
+            }
+
+            listPerson.clear();
+            listConfirmed.clear();
+            listConfirmed.addAll(confirmed);
+
+            for (int i = 0; i < users.size(); i++) {
+                User usr = users.get(i);
+                usr.setDelete(false);
+                listPerson.add(usr);
+            }
+
+            adapter = new PersonAdapter(listPerson, getActivity());
+            recyclerView.setAdapter(adapter);
+            guestsNumber.setText(String.valueOf(listPerson.size()));
+
+            if (permissionInvite && !isActivityInPast(activityServer)) {
+                addGuestButton.setImageResource(R.drawable.btn_add_person);
+                addGuestButton.setOnClickListener(this);
+            } else {
+                addGuestButton.setOnClickListener(null);
+                addGuestButton.setVisibility(View.GONE);
+            }
         }
-        else{
-            feedVisibility.setText(R.string.feed_visibility_1);
-        }
-
-        listPerson.clear();
-        listConfirmed.clear();
-        listConfirmed.addAll(confirmed);
-
-        for(int i = 0; i<users.size();i++){
-            User usr = users.get(i);
-            usr.setDelete(false);
-            listPerson.add(usr);
-        }
-
-        adapter = new PersonAdapter(listPerson, getActivity());
-        recyclerView.setAdapter(adapter);
-        guestsNumber.setText(String.valueOf(listPerson.size()));
-
-        if(permissionInvite && !isActivityInPast(activityServer)) {
-            addGuestButton.setImageResource(R.drawable.btn_add_person);
-            addGuestButton.setOnClickListener(this);
-        }
-        else {
-            addGuestButton.setOnClickListener(null);
-            addGuestButton.setVisibility(View.GONE);
-        }
-
     }
 
     private boolean isActivityInPast(ActivityServer activityServer){

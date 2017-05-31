@@ -275,9 +275,9 @@ public class ReminderEditFragment extends Fragment implements DatePickerDialog.O
             String date = day + "/" + month + "/" + reminderServer.getYearStart();
 
             String hourString = String.format("%02d", reminderServer.getHourStart());
-            ;
+
             String minuteString = String.format("%02d", reminderServer.getMinuteStart());
-            ;
+
             String time = hourString + ":" + minuteString;
 
             dateStart.setText(date);
