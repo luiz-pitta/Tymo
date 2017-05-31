@@ -250,6 +250,16 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                 // Application code
                                 try {
                                     user = new User();
+                                    try{
+                                        String email = object.getString("email");
+                                        if(!validateEmail(email)){
+                                            Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                            return;
+                                        }
+                                    }catch (Exception  e) {
+                                        Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                        return;
+                                    }
                                     user.setEmail(object.getString("email"));
                                     user.setName(object.getString("name"));
                                     user.setIdFacebook(object.getString("id"));

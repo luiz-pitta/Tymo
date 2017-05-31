@@ -246,6 +246,7 @@
     <string name="error_compare_selected_required">Deve ter ao menos uma pessoa selecionada</string>
     <string name="error_date_required">A data e a hora são obrigatórias</string>
     <string name="error_email_required">Preencha o email corretamente</string>
+    <string name="error_facebook_login">Erro no login! Tente mais tarde</string>
     <string name="error_field_invalid">Campo obrigatório inválido</string>
     <string name="error_gender_required">Selecione um gênero</string>
     <string name="error_login_email_required">Email inválido ou não cadastrado</string>
