@@ -95,6 +95,31 @@
 
             </RadioGroup>
 
+            <RelativeLayout
+                android:id="@+id/emailBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_act_edit_box"
+                android:padding="10dp"
+                android:visibility="gone">
+
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/emailPicker"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:textColor="@color/grey_900"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    app:ms_arrow_tint="@color/grey_900"
+                    app:ms_dropdown_height="wrap_content"
+                    app:ms_dropdown_max_height="120dp"
+                    app:ms_text_color="@color/grey_900" />
+
+            </RelativeLayout>
+
         </LinearLayout>
 
         <View

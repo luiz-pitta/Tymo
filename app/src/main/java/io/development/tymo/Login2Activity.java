@@ -264,10 +264,12 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                                         String email = object.getString("email");
                                         if(!validateEmail(email)){
                                             Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                            progressBox.setVisibility(View.GONE);
                                             return;
                                         }
                                     }catch (Exception  e) {
                                         Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                        progressBox.setVisibility(View.GONE);
                                         return;
                                     }
                                     user.setEmail(object.getString("email"));
@@ -291,27 +293,17 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                                     user.setFromFacebook(true);
                                     user.setPassword(user.getPhoto());
 
-                                    user.setFacebookMessenger("fb-messenger://user/"+user.getIdFacebook());
+                                    user.setFacebookMessenger("");
                                     user.setWhereStudy("");
                                     user.setWhereWork("");
                                     user.setDescription("");
                                     user.setUrl("");
 
                                     loginProcessFacebook(user);
-
-                                    /*Uri uri = Uri.parse("fb-messenger://user/1101801445"); //Facebook Messenger como fazer
-                                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                                    startActivity(intent);
-
-                                    try {
-                                        startActivity(intent);
-                                    }
-                                    catch (android.content.ActivityNotFoundException ex) {
-                                        Toast.makeText(this,"Please Install Facebook Messenger", Toast.LENGTH_LONG).show();
-                                    }*/
                                 }
                                 catch (Exception  e){
-
+                                    Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                    progressBox.setVisibility(View.GONE);
                                 }
                             }
                         });

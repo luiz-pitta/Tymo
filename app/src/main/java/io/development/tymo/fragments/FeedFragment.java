@@ -885,8 +885,10 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
         isTimeToChangeBackground();
 
-        if(googleApiClient == null)
+        if(googleApiClient == null) {
             googleApiClient = new GoogleApiClient.Builder(getActivity(), this, this).addApi(LocationServices.API).build();
+            googleApiClient.connect();
+        }
     }
 
     @Override

@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import static android.content.Context.MODE_PRIVATE;
+import static io.development.tymo.utils.Validation.validateEmail;
 
 public class GoogleCalendarEvents {
 
@@ -45,11 +46,9 @@ public class GoogleCalendarEvents {
     };
 
     @Nullable
-    public static ArrayList<ArrayList<String>>  readCalendarEvent(Context context) {
+    public static ArrayList<ArrayList<String>>  readCalendarEvent(Context context, String email) {
 
         ArrayList<ArrayList<String>> list = new ArrayList<>();
-        SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         ArrayList<String> nameOfEvent = new ArrayList<String>();
         ArrayList<String> startDates = new ArrayList<String>();
@@ -106,6 +105,38 @@ public class GoogleCalendarEvents {
         list.add(startDates);
         list.add(endDates);
         list.add(repeat);
+
+        return list;
+    }
+
+    @Nullable
+    public static ArrayList<String> getCalendarTypes(Context context) {
+
+        ArrayList<String> list = new ArrayList<>();
+
+        Cursor cursor = context.getContentResolver().
+                query(
+                        eventsUri,
+                        EVENTS_COLUMNS,
+                        null,
+                        null,
+                        null
+                );
+
+        try {
+            cursor.moveToFirst();
+
+            for (int i = 0; i < cursor.getCount(); i++) {
+
+                String calender_type = cursor.getString(1);
+                if(!list.contains(calender_type) && validateEmail(calender_type))
+                    list.add(calender_type);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        }catch (NullPointerException e){
+            return null;
+        }
 
         return list;
     }

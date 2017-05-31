@@ -254,10 +254,12 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                         String email = object.getString("email");
                                         if(!validateEmail(email)){
                                             Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                            progressBox.setVisibility(View.GONE);
                                             return;
                                         }
                                     }catch (Exception  e) {
                                         Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                        progressBox.setVisibility(View.GONE);
                                         return;
                                     }
                                     user.setEmail(object.getString("email"));
@@ -281,7 +283,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                     user.setFromFacebook(true);
                                     user.setPassword(user.getPhoto());
 
-                                    user.setFacebookMessenger("fb-messenger://user/"+user.getIdFacebook());
+                                    user.setFacebookMessenger("");
                                     user.setWhereStudy("");
                                     user.setWhereWork("");
                                     user.setDescription("");
@@ -290,7 +292,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                     loginProcessFacebook(user);
                                 }
                                 catch (Exception  e){
-
+                                    Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                    progressBox.setVisibility(View.GONE);
                                 }
                             }
                         });

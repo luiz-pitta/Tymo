@@ -246,7 +246,7 @@
     <string name="error_compare_selected_required">Deve ter ao menos uma pessoa selecionada</string>
     <string name="error_date_required">A data e a hora são obrigatórias</string>
     <string name="error_email_required">Preencha o email corretamente</string>
-    <string name="error_facebook_login">Erro no login! Tente mais tarde</string>
+    <string name="error_facebook_login">Erro no login pelo Facebook! Tente mais tarde ou se cadastre pelo Tymo</string>
     <string name="error_field_invalid">Campo obrigatório inválido</string>
     <string name="error_gender_required">Selecione um gênero</string>
     <string name="error_login_email_required">Email inválido ou não cadastrado</string>
@@ -426,9 +426,10 @@
     <string name="settings">Configurações</string>
     <string name="settings_import_facebook_success">Importado do Facebook com sucesso!</string>
     <string name="settings_import_facebook_tag">Facebook</string>
-    <string name="settings_import_google_calendar_text">Você deseja importar as suas atividades?</string>
+    <string name="settings_import_google_calendar_text">Você deseja importar as suas atividades de qual conta?</string>
     <string name="settings_import_google_calendar_title">Google Agenda</string>
     <string name="settings_import_google_no_activities">Você não possui nenhuma atividade para importar!</string>
+    <string name="settings_import_google_error">Erro ao conectar com o Google Agenda!</string>
     <string name="settings_import_google_success">Importado do Google Agenda com sucesso!</string>
     <string name="settings_import_google_tag">Google Agenda</string>
     <string name="show_activity_404">Atividade não encontrada!</string>

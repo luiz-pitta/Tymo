@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.data.StreamAssetPathFetcher;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.AccessToken;
@@ -34,6 +35,7 @@ import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -77,6 +79,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private Switch notificationsSwitch, locationSwitch;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+    private int email_google_position = 0;
 
     private CompositeSubscription mSubscriptions;
     AppInfoServer appInfoServer = null;
@@ -627,14 +630,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         TextView text2 = (TextView) customView.findViewById(R.id.text2);
         TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
         TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+        MaterialSpinner spinner = (MaterialSpinner) customView.findViewById(R.id.emailPicker);
 
         customView.findViewById(R.id.editText).setVisibility(View.GONE);
+        customView.findViewById(R.id.emailBox).setVisibility(View.VISIBLE);
 
         text1.setText(getResources().getString(R.string.settings_import_google_calendar_title));
         text2.setText(getResources().getString(R.string.settings_import_google_calendar_text));
         buttonText1.setText(getResources().getString(R.string.no));
         buttonText2.setText(getResources().getString(R.string.yes));
 
+        ArrayList<String> list_email = GoogleCalendarEvents.getCalendarTypes(SettingsActivity.this);
 
         Dialog dialog = new Dialog(this, R.style.NewDialog);
 
@@ -659,15 +665,34 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
                         == PackageManager.PERMISSION_GRANTED) {
-                    list_google = GoogleCalendarEvents.readCalendarEvent(SettingsActivity.this);
+                    list_google = GoogleCalendarEvents.readCalendarEvent(SettingsActivity.this, list_email.get(email_google_position));
+                    getImportedGoogle(user.getEmail());
+                }else {
+                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_error), Toast.LENGTH_LONG).show();
+                    setProgress(false);
                 }
 
-                getImportedGoogle(user.getEmail());
                 dialog.dismiss();
             }
         });
 
-        dialog.show();
+        if(list_email != null && list_email.size() > 0) {
+
+            spinner.setItems(list_email);
+            spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+                @Override
+                public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                    email_google_position = position;
+                }
+            });
+
+            dialog.show();
+
+        }else {
+            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_error), Toast.LENGTH_LONG).show();
+            setProgress(false);
+        }
     }
 
     private void createDialogLogout() {
