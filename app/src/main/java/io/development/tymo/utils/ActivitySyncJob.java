@@ -1,45 +1,19 @@
-package io.development.tymo.fragments;
+package io.development.tymo.utils;
 
-
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.view.GestureDetector;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
-import com.bumptech.glide.request.target.SimpleTarget;
+import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
-import com.facebook.rebound.SpringSystem;
-import com.google.firebase.analytics.FirebaseAnalytics;
-import com.tumblr.backboard.Actor;
-import com.tumblr.backboard.imitator.ToggleImitator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,332 +22,65 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.concurrent.CountDownLatch;
 
-import info.abdolahi.CircularMusicProgressBar;
-import io.development.tymo.activities.MainActivity;
-import io.development.tymo.utils.ActivitySyncJob;
-import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
-import io.development.tymo.activities.AboutActivity;
-import io.development.tymo.activities.ContactsActivity;
-import io.development.tymo.activities.FriendRequestActivity;
-import io.development.tymo.activities.InviteActivity;
-import io.development.tymo.activities.NextCommitmentsActivity;
-import io.development.tymo.activities.SettingsActivity;
 import io.development.tymo.model_server.ActivityServer;
-import io.development.tymo.model_server.BgProfileServer;
 import io.development.tymo.model_server.FlagServer;
+import io.development.tymo.model_server.IconServer;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
-import io.development.tymo.model_server.User;
-import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
-import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.Utilities;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 import static android.content.Context.MODE_PRIVATE;
 
+public class ActivitySyncJob extends Job {
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class ProfileFragment extends Fragment implements View.OnClickListener {
-
-    private LinearLayout settingsBox, pendingRequestsBox, invitationsBox, timerBox;
-    private RelativeLayout contactsBox;
-    private ImageView profilePhoto, timerIcon;
-    private ImageView editIcon;
-    private CircularMusicProgressBar progressBar;
-    private Rect rect;
-    private TextView profileName, profileDescription, pendingRequestsQty, invitationsQty;
-    private TextView commitmentStartTime, commitmentTitle, timer, todayDate, numberContacts;
-    private View progressBox;
-    private User user;
-
-    private boolean commitments = false;
-
-    private Calendar currentTime;
-    private static int currentSecond, currentMinute, currentHour;
-    private ArrayList<BgProfileServer> bgProfile = new ArrayList<>();
-
-    private ImageView backgroundProfile;
-
-    private DateFormat dateFormat;
-
-    private boolean noInternet = true;
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-    private Handler handler = new Handler();
+    public static final String TAG = "job_activity_tag";
 
     private CompositeSubscription mSubscriptions;
-    private FirebaseAnalytics mFirebaseAnalytics;
-
-    public static Fragment newInstance(String text) {
-        ProfileFragment fragment = new ProfileFragment();
-        return fragment;
-    }
-
-    public ProfileFragment() {
-    }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.activity_profile, container, false);
-    }
-
-    @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    @NonNull
+    protected Result onRunJob(final Params params) {
 
         mSubscriptions = new CompositeSubscription();
 
-        dateFormat = new DateFormat(getActivity());
+        final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        progressBar = (CircularMusicProgressBar) view.findViewById(R.id.clockAlarm);
-        settingsBox = (LinearLayout) view.findViewById(R.id.settingsBox);
-        contactsBox = (RelativeLayout) view.findViewById(R.id.myContactsBox);
-        pendingRequestsBox = (LinearLayout) view.findViewById(R.id.pendingRequestsBox);
-        invitationsBox = (LinearLayout) view.findViewById(R.id.invitationsBox);
-        timerBox = (LinearLayout) view.findViewById(R.id.timerBox);
-        profilePhoto = (ImageView) view.findViewById(R.id.profilePhoto);
-        timerIcon = (ImageView) view.findViewById(R.id.timerIcon);
-        editIcon = (ImageView) view.findViewById(R.id.editIcon);
-        todayDate = (TextView) view.findViewById(R.id.todayDate);
-        progressBox = view.findViewById(R.id.progressBox);
-
-        backgroundProfile = (ImageView) view.findViewById(R.id.backgroundProfile);
-        profileName = (TextView) view.findViewById(R.id.profileName);
-        profileDescription = (TextView) view.findViewById(R.id.profileDescription);
-        pendingRequestsQty = (TextView) view.findViewById(R.id.pendingRequestsQty);
-        invitationsQty = (TextView) view.findViewById(R.id.invitationsQty);
-        commitmentStartTime = (TextView) view.findViewById(R.id.commitmentStartTime);
-        commitmentTitle = (TextView) view.findViewById(R.id.commitmentTitle);
-        numberContacts = (TextView) view.findViewById(R.id.numberContacts);
-        timer = (TextView) view.findViewById(R.id.timer);
-        mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                // Refresh items
-                refreshItems();
-            }
-        });
-
-        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
-
-        timerBox.setOnClickListener(this);
-        contactsBox.setOnClickListener(this);
-        settingsBox.setOnClickListener(this);
-        pendingRequestsBox.setOnClickListener(this);
-        invitationsBox.setOnClickListener(this);
-        profilePhoto.setOnClickListener(this);
-
-        mSwipeRefreshLayout.setDistanceToTriggerSync(225);
-
-        getBgProfile();
-
-        Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_rotation);
-
-        progressBar.setValue(0);
-        progressBar.startAnimation(rotation);
-        progressBar.bringToFront();
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
-
-        new Actor.Builder(SpringSystem.create(), editIcon)
-                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
-                .onTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_UP:
-                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-                                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                                    intent.putExtra("user_about", new UserWrapper(user));
-
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "user_about" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                                    startActivity(intent);
-                                }
-                                break;
-                            case MotionEvent.ACTION_DOWN:
-                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                                break;
-                        }
-                        return true;
-                    }
-                })
-                .build();
-
-        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH) + 1;
-        int year = c.get(Calendar.YEAR);
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-
-        Query query = new Query();
-        query.setEmail(email);
-        query.setDay(day);
-        query.setMonth(month);
-        query.setYear(year);
-        query.setHourStart(hour);
-        query.setMinuteStart(minute);
-
-        getProfileMainInformation(query);
-        setProgress(true);
-    }
-
-    private void isTimeToChangeBackground(){
-        currentTime = Calendar.getInstance();
-        currentSecond = currentTime.get(Calendar.SECOND);
-        currentMinute = currentTime.get(Calendar.MINUTE);
-        currentHour = currentTime.get(Calendar.HOUR_OF_DAY);
-        setBackgroundProfile();
-    }
-
-    private void setBackgroundProfile() {
-        String timeStart, timeEnd;
-        String currentTime = String.format("%02d", currentHour) + ":" + String.format("%02d", currentMinute);
-        int period = 0;
-        String urlBg = "";
-
-        for (int i = 0; i < bgProfile.size(); i++) {
-            timeStart = String.format("%02d", bgProfile.get(i).getHourStart()) + ":" + String.format("%02d", bgProfile.get(i).getMinuteStart());
-            timeEnd = String.format("%02d", bgProfile.get(i).getHourEnd()) + ":" + String.format("%02d", bgProfile.get(i).getMinuteEnd());
-
-            if (isTimeInBetween(currentTime, timeStart, timeEnd)) {
-                period = bgProfile.get(i).getPeriod();
-                urlBg = bgProfile.get(i).getUrlBg();
-            }
-        }
-
-        if (bgProfile.size() > 0) {
-
-            if (period == 3) {
-                profileName.setTextColor(getResources().getColor(R.color.grey_900));
-                profileDescription.setTextColor(getResources().getColor(R.color.grey_900));
-            } else if (period == 2 || period == 4) {
-                profileName.setTextColor(getResources().getColor(R.color.white));
-                profileDescription.setTextColor(getResources().getColor(R.color.white));
-            } else {
-                profileName.setTextColor(getResources().getColor(R.color.white));
-                profileDescription.setTextColor(getResources().getColor(R.color.white));
-            }
-
-            Glide.clear(backgroundProfile);
-            Glide.with(getActivity())
-                    .load(urlBg)
-                    .asBitmap()
-                    .into(new SimpleTarget<Bitmap>() {
-                        @Override
-                        public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
-                            Drawable drawable = new BitmapDrawable(resource);
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-                                backgroundProfile.setBackground(drawable);
-                            } else
-                                backgroundProfile.setBackgroundDrawable(drawable);
-                        }
-                    });
-        }
-    }
-
-    private boolean isTimeInBetween(String now, String timeStart, String timeEnd) {
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
-
-        try {
-            Date date1 = sdf.parse(now);
-            Date date2 = sdf.parse(timeStart);
-            Date date3 = sdf.parse(timeEnd);
-
-            return date1.after(date2) && date1.before(date3);
-
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-        return false;
-    }
-
-    private void getBgProfile() {
-        mSubscriptions.add(NetworkUtil.getRetrofit().getBgProfile()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseBgProfile, this::handleErrorBgProfile));
-    }
-
-    private void handleResponseBgProfile(ArrayList<BgProfileServer> bgProfile) {
-        this.bgProfile = new ArrayList<>();
-        this.bgProfile.addAll(bgProfile);
-        isTimeToChangeBackground();
-    }
-
-    private void handleErrorBgProfile(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
-    }
-
-    void refreshItems() {
-        // Load items
-        handler.postDelayed(new Runnable() {
+        //Para previnir que o gerenciador de memoria do android mate o job antes de pegar as atividades
+        new Thread() {
             @Override
             public void run() {
-                updateLayout();
+                //getIcons();
 
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                SystemClock.sleep(10_000L);
+                countDownLatch.countDown();
             }
-        }, 500);
+        }.start();
 
-        // Load complete
+        try {
+            countDownLatch.await();
+        } catch (InterruptedException ignored) {
+        }
+
+        return Result.SUCCESS;
     }
 
-    public void setProgress(boolean progress) {
-        if (progress)
-            progressBox.setVisibility(View.VISIBLE);
-        else
-            progressBox.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        isTimeToChangeBackground();
-    }
-
-    public void updateLayout() {
-        isTimeToChangeBackground();
-
-        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+    private void getActivityStartToday(){
+        SharedPreferences mSharedPreferences = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
         int year = c.get(Calendar.YEAR);
-        int minute = c.get(Calendar.MINUTE);
         int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
 
         Query query = new Query();
         query.setEmail(email);
@@ -383,122 +90,36 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         query.setHourStart(hour);
         query.setMinuteStart(minute);
 
-        getProfileMainInformation(query);
+        setNotifications(query);
     }
 
-    private void getProfileMainInformation(Query query) {
-        mSubscriptions.add(NetworkUtil.getRetrofit().getProfileMain(query)
+    private void setNotifications(Query query) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().getActivityStartToday(query)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponseToday, this::handleError));
     }
 
-    private boolean isActivityHappening(ActivityServer activityServer){
-        boolean start = false;
-        boolean finish = false;
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
+    private void handleResponseToday(Response response) {
 
-        if(Utilities.isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
-            start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
-            finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
-        }
-
-        boolean isStartInPast = calendar.getTimeInMillis() >= activityServer.getDateTimeStart();
-        boolean isFinishInFuture = calendar.getTimeInMillis() <= activityServer.getDateTimeEnd();
-
-        return (isStartInPast && isFinishInFuture) || start || finish;
-    }
-
-    private boolean isFlagHappening(FlagServer flagServer){
-        boolean start = false;
-        boolean finish = false;
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-
-        if(Utilities.isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
-            start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
-            finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
-        }
-
-        boolean isStartInPast = calendar.getTimeInMillis() >= flagServer.getDateTimeStart();
-        boolean isFinishInFuture = calendar.getTimeInMillis() <= flagServer.getDateTimeEnd();
-
-        return (isStartInPast && isFinishInFuture) || start || finish;
-    }
-
-    private void handleResponse(Response response) {
-
-        Calendar c = Calendar.getInstance();
         ArrayList<Object> list = new ArrayList<>();
-        user = response.getUser();
-        String time = "";
+        boolean commitments = false;
+
         int startsAtHour = 0;
         int startsAtMinute = 0;
-        String title_is_happening = "";
         String title_will_happen = "";
-
-        isTimeToChangeBackground();
-
-        noInternet = false;
-        commitments = false;
-
-        if (response.getNumberContacts() > 0) {
-            numberContacts.setText(getResources().getString(R.string.my_contacts_count, response.getNumberContacts()));
-            numberContacts.setVisibility(View.VISIBLE);
-        } else
-            numberContacts.setVisibility(View.GONE);
-
-        if (response.getNumberInvitationRequest() > 0) {
-            invitationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));
-            invitationsQty.setVisibility(View.VISIBLE);
-        } else
-            invitationsQty.setVisibility(View.GONE);
-
-        if (response.getNumberFriendRequest() > 0) {
-            pendingRequestsQty.setText(String.valueOf(response.getNumberFriendRequest()));
-            pendingRequestsQty.setVisibility(View.VISIBLE);
-        } else
-            pendingRequestsQty.setVisibility(View.GONE);
-
-        profileName.setText(user.getName());
-
-        if (!user.getDescription().matches("")) {
-            profileDescription.setText(user.getDescription());
-            profileDescription.setVisibility(View.VISIBLE);
-        } else
-            profileDescription.setVisibility(View.GONE);
-
-        if (!user.getPhoto().matches("")) {
-            Glide.clear(profilePhoto);
-            Glide.with(getActivity())
-                    .load(user.getPhoto())
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(new BitmapImageViewTarget(profilePhoto) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            profilePhoto.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-        } else
-            profilePhoto.setImageResource(R.drawable.ic_profile_photo_empty);
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
             for(int i=0;i<activityServers.size();i++){
-                if(isActivityHappening(activityServers.get(i)))
-                    list.add(activityServers.get(i));
+                list.add(activityServers.get(i));
             }
         }
         if (response.getMyCommitFlag() != null) {
             ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
             for(int i=0;i<flagServers.size();i++){
-                if(isFlagHappening(flagServers.get(i)))
-                    list.add(flagServers.get(i));
+                list.add(flagServers.get(i));
             }
         }
         if (response.getMyCommitReminder() != null) {
@@ -821,20 +442,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        int nowHour = c.get(Calendar.HOUR_OF_DAY);
-        int nowMinute = c.get(Calendar.MINUTE);
-
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int year = c.get(Calendar.YEAR);
-
         String startsAtHourText = String.format("%02d", startsAtHour);
         String startsAtMinuteText = String.format("%02d", startsAtMinute);
 
         String hourStartText;
         String minuteStartText;
 
-        int count_already_happened = 0;
-        int count_is_happening = 0;
         int count_will_happen = 0;
 
         int count_will_happen_at_same_time = 1;
@@ -924,11 +537,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                     count_will_happen++;
-                } else if (activityServer.getStatus() == 0) {
-                    count_is_happening++;
-                    title_is_happening = activityServer.getTitle();
-                } else {
-                    count_already_happened++;
                 }
 
             }
@@ -1005,11 +613,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                     count_will_happen++;
-                } else if (flagServer.getStatus() == 0) {
-                    count_is_happening++;
-                    title_is_happening = flagServer.getTitle();
-                } else {
-                    count_already_happened++;
                 }
 
             }
@@ -1052,91 +655,32 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         }
                     }
                     count_will_happen++;
-                } else if (reminderServer.getStatus() == 0) {
-                    count_is_happening++;
-                    title_is_happening = reminderServer.getTitle();
-                } else {
-                    count_already_happened++;
                 }
             }
         }
 
-        int hourMinToStart;
-        float percent;
-        String hourMinText = "h";
-
-        if (startsAtHour - nowHour > 1) {
-            hourMinToStart = startsAtHour - nowHour;
-            percent = 100.0f - ((float) hourMinToStart / 24.0f) * 100.0f;
-        } else {
-            if (startsAtHour == nowHour)
-                hourMinToStart = startsAtMinute - nowMinute;
-            else
-                hourMinToStart = startsAtMinute + (60 - nowMinute);
-
-            hourMinText = "m";
-            percent = 100.0f - ((float) hourMinToStart / 60.0f) * 100.0f;
-        }
-
-        String dayOfWeek = dateFormat.formatDayOfWeek(c.get(Calendar.DAY_OF_WEEK));
-        String dayToday = String.format("%02d", day);
-        String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
-
-        todayDate.setText(getResources().getString(R.string.today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
-
-        if (commitments) {
-            if (count_is_happening > 0) {
-                if (count_is_happening == 1) {
-                    commitmentTitle.setText(title_is_happening);
-                } else {
-                    commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_is_happening));
-                }
-                commitmentStartTime.setVisibility(View.VISIBLE);
-                commitmentStartTime.setText(R.string.happening_now);
-                commitmentTitle.setLines(1);
-                timer.setVisibility(View.GONE);
-                timerIcon.setVisibility(View.VISIBLE);
-                timerIcon.setImageResource(R.drawable.ic_add_cube);
-                timerIcon.setColorFilter(getResources().getColor(R.color.white));
-                progressBar.setValue(35.0f);
-            } else if (count_will_happen > 0) {
-                if (count_will_happen_at_same_time > 1) {
-                    commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
-                    commitmentStartTime.setText(getResources().getString(R.string.starts_at_plural, startsAtHourText, startsAtMinuteText));
-                } else {
-                    commitmentTitle.setText(title_will_happen);
-                    commitmentStartTime.setText(getResources().getString(R.string.starts_at, startsAtHourText, startsAtMinuteText));
-                }
-                commitmentTitle.setLines(1);
-                commitmentStartTime.setVisibility(View.VISIBLE);
-                timer.setVisibility(View.VISIBLE);
-                timer.setText(String.valueOf(hourMinToStart) + hourMinText);
-                timerIcon.setVisibility(View.GONE);
-                progressBar.setValue(percent);
-
+        if (commitments && count_will_happen > 0) {
+            if (count_will_happen_at_same_time > 1) {
+                //commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
+                //commitmentStartTime.setText(getResources().getString(R.string.starts_at_plural, startsAtHourText, startsAtMinuteText));
             } else {
-                commitmentStartTime.setVisibility(View.GONE);
-                commitmentTitle.setText(R.string.all_commitments_already_finished);
-                commitmentTitle.setLines(2);
-                timer.setVisibility(View.GONE);
-                timerIcon.setVisibility(View.VISIBLE);
-                timerIcon.setImageResource(R.drawable.ic_alarm);
-                timerIcon.setColorFilter(getResources().getColor(R.color.white));
-                progressBar.setValue(0);
+                //commitmentTitle.setText(title_will_happen);
+                //commitmentStartTime.setText(getResources().getString(R.string.starts_at, startsAtHourText, startsAtMinuteText));
             }
-        } else {
-            commitmentStartTime.setVisibility(View.GONE);
-            commitmentTitle.setLines(2);
-            commitmentTitle.setText(getActivity().getResources().getString(R.string.empty_commitments));
-            timer.setVisibility(View.GONE);
-            timerIcon.setVisibility(View.VISIBLE);
-            timerIcon.setImageResource(R.drawable.ic_alarm);
-            timerIcon.setColorFilter(getResources().getColor(R.color.white));
-            progressBar.setValue(0);
         }
-        settingsBox.setClickable(true);
-        setProgress(false);
-        mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void handleError(Throwable error) {
+    }
+
+    private void setNextActivityNotification(long time) {
+
+        new JobRequest.Builder(ActivitySyncJob.TAG)
+                .setExact(time)
+                .setPersisted(true)
+                .setUpdateCurrent(true)
+                .build()
+                .schedule();
     }
 
     private boolean isTimeInBefore(String now, String time) {
@@ -1169,93 +713,5 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
 
         return false;
-    }
-
-    private void handleError(Throwable error) {
-        //setProgress(false);
-        noInternet = true;
-        mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
-    }
-
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onClick(View v) {
-        if (v == contactsBox && !noInternet) {
-            Intent intent = new Intent(getActivity(), ContactsActivity.class);
-            intent.putExtra("email_contacts", user.getEmail());
-
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "contactsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            startActivity(intent);
-        } else if (v == timerBox) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timerBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(getActivity(), NextCommitmentsActivity.class));
-        } else if (v == settingsBox && settingsBox.isClickable() && !noInternet) {
-            Intent intent = new Intent(getActivity(), SettingsActivity.class);
-            intent.putExtra("user_about", new UserWrapper(user));
-
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "settingsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            startActivity(intent);
-        } else if (v == profilePhoto && !noInternet) {
-            Intent intent = new Intent(getActivity(), AboutActivity.class);
-            intent.putExtra("user_about", new UserWrapper(user));
-
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profilePhoto" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            startActivity(intent);
-        } else if (v == pendingRequestsBox) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "pendingRequestsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(getActivity(), FriendRequestActivity.class));
-        } else if (v == invitationsBox) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "invitationsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(getActivity(), InviteActivity.class));
-        }
-    }
-
-    private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent event) {
-            return true;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        if (mSubscriptions != null)
-            mSubscriptions.unsubscribe();
-
-        Glide.get(getActivity()).clearMemory();
     }
 }

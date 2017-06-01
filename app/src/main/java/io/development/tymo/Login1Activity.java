@@ -305,12 +305,14 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onCancel() {
-
+                Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                progressBox.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(FacebookException exception) {
-
+                Toast.makeText(Login1Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                progressBox.setVisibility(View.GONE);
             }
         });
     }
@@ -319,9 +321,9 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         callbackManager.onActivityResult(requestCode, resultCode, data);
-        if(resultCode == RESULT_CANCELED){
+        if(resultCode == RESULT_CANCELED)
             progressBox.setVisibility(View.GONE);
-        }
+
     }
 
     @Override

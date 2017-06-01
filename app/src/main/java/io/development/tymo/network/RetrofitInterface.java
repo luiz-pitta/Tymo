@@ -133,6 +133,9 @@ public interface RetrofitInterface {
     @POST("get_activity_day")
     Observable<Response> getActivityDay(@Body Query query);
 
+    @POST("get_activity_start_today")
+    Observable<Response> getActivityStartToday(@Body Query query);
+
     @POST("feed/{email}")
     Observable<Response> getFeedActivities(@Path("email") String email, @Body DateTymo date);
 

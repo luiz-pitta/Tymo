@@ -315,12 +315,14 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onCancel() {
-
+                Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                progressBox.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(FacebookException exception) {
-
+                Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                progressBox.setVisibility(View.GONE);
             }
         });
     }

@@ -4,8 +4,13 @@ import android.content.Context;
 import android.support.multidex.MultiDex;
 import android.support.multidex.MultiDexApplication;
 
+import com.evernote.android.job.JobManager;
+import com.facebook.stetho.Stetho;
+
 import java.io.InputStream;
 import java.util.ArrayList;
+
+import io.development.tymo.utils.ActivityJobCreator;
 
 public class TymoApplication extends MultiDexApplication {
     private static TymoApplication singleton;
@@ -30,6 +35,10 @@ public class TymoApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         singleton = this;
+
+        Stetho.initializeWithDefaults(this);
+
+        JobManager.create(this).addJobCreator(new ActivityJobCreator());
     }
 
     public void setCreatedActivity(boolean created){

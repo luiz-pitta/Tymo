@@ -21,6 +21,9 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -30,8 +33,14 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
@@ -39,12 +48,16 @@ import io.development.tymo.fragments.FeedFragment;
 import io.development.tymo.fragments.PlansFragment;
 import io.development.tymo.fragments.ProfileFragment;
 import io.development.tymo.fragments.SearchFragment;
+import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
+import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.Query;
+import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
+import io.development.tymo.utils.ActivitySyncJob;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
@@ -89,6 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private CompositeSubscription mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private JobManager mJobManager;
 
     private BroadcastReceiver mMessageReceiverSearch = new BroadcastReceiver() {
         @Override
@@ -110,6 +124,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         mSubscriptions = new CompositeSubscription();
+        mJobManager = JobManager.instance();
 
         String token = FirebaseInstanceId.getInstance().getToken();
         if(token != null) {
@@ -168,11 +183,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         flagButton.setOnClickListener(this);
         closeButton.setOnClickListener(this);
 
-        if (savedInstanceState != null && savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE)) {
-            addView.setVisibility(View.VISIBLE);
-            fab.setVisibility(View.INVISIBLE);
-            controller.updateAll(mNavigator.getCurrentPosition(),0,R.color.deep_purple_400, 0);
-            setCurrentTab(mNavigator.getCurrentPosition());
+        if (savedInstanceState != null) {
+            if(mNavigator!=null) {
+                controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
+                setCurrentTab(mNavigator.getCurrentPosition());
+            }
+
+            if(searchView!=null && searchView.isSearchOpen())
+                mainMenu.setVisibility(View.INVISIBLE);
+
+            if(savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE))
+                addView.setVisibility(View.VISIBLE);
         }
 
         searchViewInit();
@@ -193,6 +214,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverSearch, new IntentFilter("search_update"));
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverFeed, new IntentFilter("feed_update"));
+
+        setActivityPeriodicJob();
     }
 
     public void updateProfileMainInformation(){
@@ -469,6 +492,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        if(mNavigator!=null) {
+            controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
+            setCurrentTab(mNavigator.getCurrentPosition());
+        }
+
+        if(searchView!=null && searchView.isSearchOpen())
+            mainMenu.setVisibility(View.INVISIBLE);
+
+        if(savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE))
+            addView.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void onBackPressed() {
         if (searchView.isSearchOpen()) {
             searchView.closeSearch();
@@ -670,6 +708,664 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 setCurrentTab(PLANS);
             }
         }
+    }
+
+    private void setActivityPeriodicJob() {
+        mJobManager.cancelAll();
+        /*if(mJobManager.getAllJobRequests().size() == 0) {
+            getActivityStartToday();
+
+            new JobRequest.Builder(ActivitySyncJob.TAG)
+                    .setPeriodic(TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(2))
+                    .setPersisted(true)
+                    .setRequiredNetworkType(JobRequest.NetworkType.values()[1])
+                    .setRequirementsEnforced(true)
+                    .build()
+                    .schedule();
+        }*/
+
+        //Editor prefsEditor = mPrefs.edit();
+        //Gson gson = new Gson();
+        //String json = gson.toJson(MyObject);
+        //prefsEditor.putString("MyObject", json);
+        //prefsEditor.commit();
+        //Gson gson = new Gson();
+        //String json = mPrefs.getString("MyObject", "");
+        //MyObject obj = gson.fromJson(json, MyObject.class);
+    }
+
+    private void getActivityStartToday(){
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+        int minute = c.get(Calendar.MINUTE);
+
+        Query query = new Query();
+        query.setEmail(email);
+        query.setDay(day);
+        query.setMonth(month);
+        query.setYear(year);
+        query.setHourStart(hour);
+        query.setMinuteStart(minute);
+
+        setNotifications(query);
+    }
+
+    private void setNotifications(Query query) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().getActivityStartToday(query)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseToday, this::handleErrorToday));
+    }
+
+    private void handleResponseToday(Response response) {
+
+        ArrayList<Object> list = new ArrayList<>();
+        boolean commitments = false;
+
+        int startsAtHour = 0;
+        int startsAtMinute = 0;
+        String title_will_happen = "";
+
+        if (response.getMyCommitAct() != null) {
+            ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
+            for(int i=0;i<activityServers.size();i++){
+                list.add(activityServers.get(i));
+            }
+        }
+        if (response.getMyCommitFlag() != null) {
+            ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
+            for(int i=0;i<flagServers.size();i++){
+                list.add(flagServers.get(i));
+            }
+        }
+        if (response.getMyCommitReminder() != null) {
+            list.addAll(response.getMyCommitReminder());
+        }
+
+        Collections.sort(list, new Comparator<Object>() {
+            @Override
+            public int compare(Object c1, Object c2) {
+                ActivityServer activityServer;
+                FlagServer flagServer;
+                ReminderServer reminderServer;
+                int start_hour = 0, start_minute = 0;
+                int start_hour2 = 0, start_minute2 = 0;
+                int end_hour = 0, end_minute = 0;
+                int end_hour2 = 0, end_minute2 = 0;
+                int status = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
+                int status2 = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
+
+                Calendar calendar = Calendar.getInstance();
+                String hourNow = String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
+                String minuteNow = String.format("%02d", calendar.get(Calendar.MINUTE));
+
+                // Activity
+                if (c1 instanceof ActivityServer) {
+                    activityServer = (ActivityServer) c1;
+                    start_hour = activityServer.getHourStart();
+                    start_minute = activityServer.getMinuteStart();
+                    end_hour = activityServer.getHourEnd();
+                    end_minute = activityServer.getMinuteEnd();
+
+                    String hour = String.format("%02d", start_hour);
+                    String minute = String.format("%02d", start_minute);
+                    String hourEnd = String.format("%02d", end_hour);
+                    String minuteEnd = String.format("%02d", end_minute);
+                    Calendar calendarStart = Calendar.getInstance();
+                    Calendar calendarEnd = Calendar.getInstance();
+                    calendarStart.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+                    calendarEnd.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
+                    if (calendarStart.get(Calendar.DATE) != calendarEnd.get(Calendar.DATE)) {
+                        if (calendarStart.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            end_hour = 23;
+                            end_minute = 59;
+                            activityServer.setHourEnd(23);
+                            activityServer.setMinuteEnd(59);
+                        } else if (calendarEnd.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hour = "00";
+                            minute = "00";
+                            start_hour = 0;
+                            start_minute = 0;
+                            activityServer.setHourStart(0);
+                            activityServer.setMinuteStart(0);
+                        } else {
+                            hour = "00";
+                            minute = "00";
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            start_hour = 0;
+                            start_minute = 0;
+                            end_hour = 23;
+                            end_minute = 59;
+                            activityServer.setHourStart(0);
+                            activityServer.setMinuteStart(0);
+                            activityServer.setHourEnd(23);
+                            activityServer.setMinuteEnd(59);
+                        }
+                    }
+
+                    if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
+                        status = 0;
+                    } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
+                        status = 1;
+                    } else {
+                        status = -1;
+                    }
+
+                    activityServer.setStatus(status);
+                }
+                // Flag
+                else if (c1 instanceof FlagServer) {
+                    flagServer = (FlagServer) c1;
+                    start_hour = flagServer.getHourStart();
+                    start_minute = flagServer.getMinuteStart();
+                    end_hour = flagServer.getHourEnd();
+                    end_minute = flagServer.getMinuteEnd();
+
+                    String hour = String.format("%02d", start_hour);
+                    String minute = String.format("%02d", start_minute);
+                    String hourEnd = String.format("%02d", end_hour);
+                    String minuteEnd = String.format("%02d", end_minute);
+                    Calendar calendarStart = Calendar.getInstance();
+                    Calendar calendarEnd = Calendar.getInstance();
+                    calendarStart.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+                    calendarEnd.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
+                    if (calendarStart.get(Calendar.DATE) != calendarEnd.get(Calendar.DATE)) {
+                        if (calendarStart.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            end_hour = 23;
+                            end_minute = 59;
+                            flagServer.setHourEnd(23);
+                            flagServer.setMinuteEnd(59);
+                        } else if (calendarEnd.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hour = "00";
+                            minute = "00";
+                            start_hour = 0;
+                            start_minute = 0;
+                            flagServer.setHourStart(0);
+                            flagServer.setMinuteStart(0);
+                        } else {
+                            hour = "00";
+                            minute = "00";
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            start_hour = 0;
+                            start_minute = 0;
+                            end_hour = 23;
+                            end_minute = 59;
+                            flagServer.setHourStart(0);
+                            flagServer.setMinuteStart(0);
+                            flagServer.setHourEnd(23);
+                            flagServer.setMinuteEnd(59);
+                        }
+                    }
+
+                    if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
+                        status = 0;
+                    } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
+                        status = 1;
+                    } else {
+                        status = -1;
+                    }
+
+                    flagServer.setStatus(status);
+                }
+                // Reminder
+                else if (c1 instanceof ReminderServer) {
+                    reminderServer = (ReminderServer) c1;
+                    start_hour = reminderServer.getHourStart();
+                    start_minute = reminderServer.getMinuteStart();
+
+                    if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
+                        status = -1;
+                    } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
+                        status = 1;
+                    } else {
+                        status = 0;
+                    }
+
+                    String hour = String.format("%02d", start_hour);
+                    String minute = String.format("%02d", start_minute);
+
+                    reminderServer.setStatus(status);
+                }
+
+                // Activity
+                if (c2 instanceof ActivityServer) {
+                    activityServer = (ActivityServer) c2;
+                    start_hour2 = activityServer.getHourStart();
+                    start_minute2 = activityServer.getMinuteStart();
+                    end_hour2 = activityServer.getHourEnd();
+                    end_minute2 = activityServer.getMinuteEnd();
+
+                    String hour = String.format("%02d", start_hour2);
+                    String minute = String.format("%02d", start_minute2);
+                    String hourEnd = String.format("%02d", end_hour2);
+                    String minuteEnd = String.format("%02d", end_minute2);
+                    Calendar calendarStart = Calendar.getInstance();
+                    Calendar calendarEnd = Calendar.getInstance();
+                    calendarStart.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+                    calendarEnd.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
+                    if (calendarStart.get(Calendar.DATE) != calendarEnd.get(Calendar.DATE)) {
+                        if (calendarStart.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            end_hour2 = 23;
+                            end_minute2 = 59;
+                            activityServer.setHourEnd(23);
+                            activityServer.setMinuteEnd(59);
+                        } else if (calendarEnd.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hour = "00";
+                            minute = "00";
+                            start_hour2 = 0;
+                            start_minute2 = 0;
+                            activityServer.setHourStart(0);
+                            activityServer.setMinuteStart(0);
+                        } else {
+                            hour = "00";
+                            minute = "00";
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            start_hour2 = 0;
+                            start_minute2 = 0;
+                            end_hour2 = 23;
+                            end_minute2 = 59;
+                            activityServer.setHourStart(0);
+                            activityServer.setMinuteStart(0);
+                            activityServer.setHourEnd(23);
+                            activityServer.setMinuteEnd(59);
+                        }
+                    }
+
+                    if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
+                        status2 = 0;
+                    } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
+                        status2 = 1;
+                    } else {
+                        status2 = -1;
+                    }
+
+                    activityServer.setStatus(status2);
+                }
+                // Flag
+                else if (c2 instanceof FlagServer) {
+                    flagServer = (FlagServer) c2;
+                    start_hour2 = flagServer.getHourStart();
+                    start_minute2 = flagServer.getMinuteStart();
+                    end_hour2 = flagServer.getHourEnd();
+                    end_minute2 = flagServer.getMinuteEnd();
+
+                    String hour = String.format("%02d", start_hour2);
+                    String minute = String.format("%02d", start_minute2);
+                    String hourEnd = String.format("%02d", end_hour2);
+                    String minuteEnd = String.format("%02d", end_minute2);
+                    Calendar calendarStart = Calendar.getInstance();
+                    Calendar calendarEnd = Calendar.getInstance();
+                    calendarStart.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+                    calendarEnd.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
+                    if (calendarStart.get(Calendar.DATE) != calendarEnd.get(Calendar.DATE)) {
+                        if (calendarStart.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            end_hour2 = 23;
+                            end_minute2 = 59;
+                            flagServer.setHourEnd(23);
+                            flagServer.setMinuteEnd(59);
+                        } else if (calendarEnd.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                            hour = "00";
+                            minute = "00";
+                            start_hour2 = 0;
+                            start_minute2 = 0;
+                            flagServer.setHourStart(0);
+                            flagServer.setMinuteStart(0);
+                        } else {
+                            hour = "00";
+                            minute = "00";
+                            hourEnd = "23";
+                            minuteEnd = "59";
+                            start_hour2 = 0;
+                            start_minute2 = 0;
+                            end_hour2 = 23;
+                            end_minute2 = 59;
+                            flagServer.setHourStart(0);
+                            flagServer.setMinuteStart(0);
+                            flagServer.setHourEnd(23);
+                            flagServer.setMinuteEnd(59);
+                        }
+                    }
+
+                    if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
+                        status2 = 0;
+                    } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
+                        status2 = 1;
+                    } else {
+                        status2 = -1;
+                    }
+
+                    flagServer.setStatus(status2);
+                }
+                // Reminder
+                else if (c2 instanceof ReminderServer) {
+                    reminderServer = (ReminderServer) c2;
+                    start_hour2 = reminderServer.getHourStart();
+                    start_minute2 = reminderServer.getMinuteStart();
+
+                    if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour2 + ":" + start_minute2)) {
+                        status2 = -1;
+                    } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour2 + ":" + start_minute2)) {
+                        status2 = 1;
+                    } else {
+                        status2 = 0;
+                    }
+
+                    String hour = String.format("%02d", start_hour2);
+                    String minute = String.format("%02d", start_minute2);
+
+                    reminderServer.setStatus(status2);
+
+                }
+
+                if (status < status2)
+                    return -1;
+                else if (status > status2)
+                    return 1;
+                else if (start_hour < start_hour2)
+                    return -1;
+                else if (start_hour > start_hour2)
+                    return 1;
+                else if (start_minute < start_minute2)
+                    return -1;
+                else if (start_minute > start_minute2)
+                    return 1;
+                else if (end_hour < end_hour2)
+                    return -1;
+                else if (end_hour > end_hour2)
+                    return 1;
+                else if (end_minute < end_minute2)
+                    return -1;
+                else if (end_minute > end_minute2)
+                    return 1;
+                else
+                    return 0;
+
+            }
+        });
+
+        String startsAtHourText = String.format("%02d", startsAtHour);
+        String startsAtMinuteText = String.format("%02d", startsAtMinute);
+
+        String hourStartText;
+        String minuteStartText;
+
+        int count_will_happen = 0;
+
+        int count_will_happen_at_same_time = 1;
+
+        Calendar calendar = Calendar.getInstance();
+        String hourNow = String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
+        String minuteNow = String.format("%02d", calendar.get(Calendar.MINUTE));
+
+        for (int i = 0; i < list.size(); i++) {
+
+            commitments = true;
+
+            int start_hour = 0, start_minute = 0;
+            int end_hour = 0, end_minute = 0;
+            int status = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
+
+            // Activity
+            if (list.get(i) instanceof ActivityServer) {
+                ActivityServer activityServer = (ActivityServer) list.get(i);
+
+                hourStartText = String.format("%02d", activityServer.getHourStart());
+                minuteStartText = String.format("%02d", activityServer.getMinuteStart());
+
+                start_hour = activityServer.getHourStart();
+                start_minute = activityServer.getMinuteStart();
+                end_hour = activityServer.getHourEnd();
+                end_minute = activityServer.getMinuteEnd();
+
+                String hour = String.format("%02d", start_hour);
+                String minute = String.format("%02d", start_minute);
+                String hourEnd = String.format("%02d", end_hour);
+                String minuteEnd = String.format("%02d", end_minute);
+                Calendar calendarStart = Calendar.getInstance();
+                Calendar calendarEnd = Calendar.getInstance();
+                calendarStart.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+                calendarEnd.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
+                if (calendarStart.get(Calendar.DATE) != calendarEnd.get(Calendar.DATE)) {
+                    if (calendarStart.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                        hourEnd = "23";
+                        minuteEnd = "59";
+                        activityServer.setHourEnd(23);
+                        activityServer.setMinuteEnd(59);
+                    } else if (calendarEnd.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                        hour = "00";
+                        minute = "00";
+                        activityServer.setHourStart(0);
+                        activityServer.setMinuteStart(0);
+                    } else {
+                        hour = "00";
+                        minute = "00";
+                        hourEnd = "23";
+                        minuteEnd = "59";
+                        activityServer.setHourStart(0);
+                        activityServer.setMinuteStart(0);
+                        activityServer.setHourEnd(23);
+                        activityServer.setMinuteEnd(59);
+                    }
+                }
+
+                if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
+                    status = 0;
+                } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
+                    status = 1;
+                } else {
+                    status = -1;
+                }
+
+                activityServer.setStatus(status);
+
+                if (activityServer.getStatus() == 1) {
+                    if (count_will_happen == 0) {
+                        startsAtHour = activityServer.getHourStart();
+                        startsAtMinute = activityServer.getMinuteStart();
+                        startsAtHourText = String.format("%02d", startsAtHour);
+                        startsAtMinuteText = String.format("%02d", startsAtMinute);
+                        title_will_happen = activityServer.getTitle();
+                    } else {
+                        if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
+                            startsAtHour = activityServer.getHourStart();
+                            startsAtMinute = activityServer.getMinuteStart();
+                            startsAtHourText = String.format("%02d", startsAtHour);
+                            startsAtMinuteText = String.format("%02d", startsAtMinute);
+                            title_will_happen = activityServer.getTitle();
+                        } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
+                            count_will_happen_at_same_time++;
+                        }
+                    }
+                    count_will_happen++;
+                }
+
+            }
+            // Flag
+            else if (list.get(i) instanceof FlagServer) {
+                FlagServer flagServer = (FlagServer) list.get(i);
+
+                hourStartText = String.format("%02d", flagServer.getHourStart());
+                minuteStartText = String.format("%02d", flagServer.getMinuteStart());
+
+                start_hour = flagServer.getHourStart();
+                start_minute = flagServer.getMinuteStart();
+                end_hour = flagServer.getHourEnd();
+                end_minute = flagServer.getMinuteEnd();
+
+                String hour = String.format("%02d", start_hour);
+                String minute = String.format("%02d", start_minute);
+                String hourEnd = String.format("%02d", end_hour);
+                String minuteEnd = String.format("%02d", end_minute);
+                Calendar calendarStart = Calendar.getInstance();
+                Calendar calendarEnd = Calendar.getInstance();
+                calendarStart.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+                calendarEnd.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
+                if (calendarStart.get(Calendar.DATE) != calendarEnd.get(Calendar.DATE)) {
+                    if (calendarStart.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                        hourEnd = "23";
+                        minuteEnd = "59";
+                        flagServer.setHourEnd(23);
+                        flagServer.setMinuteEnd(59);
+                    } else if (calendarEnd.get(Calendar.DATE) == calendar.get(Calendar.DATE)) {
+                        hour = "00";
+                        minute = "00";
+                        flagServer.setHourStart(0);
+                        flagServer.setMinuteStart(0);
+                    } else {
+                        hour = "00";
+                        minute = "00";
+                        hourEnd = "23";
+                        minuteEnd = "59";
+                        flagServer.setHourStart(0);
+                        flagServer.setMinuteStart(0);
+                        flagServer.setHourEnd(23);
+                        flagServer.setMinuteEnd(59);
+                    }
+                }
+
+                if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
+                    status = 0;
+                } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
+                    status = 1;
+                } else {
+                    status = -1;
+                }
+
+                flagServer.setStatus(status);
+
+                if (flagServer.getStatus() == 1) {
+                    if (count_will_happen == 0) {
+                        startsAtHour = flagServer.getHourStart();
+                        startsAtMinute = flagServer.getMinuteStart();
+                        startsAtHourText = String.format("%02d", startsAtHour);
+                        startsAtMinuteText = String.format("%02d", startsAtMinute);
+                        title_will_happen = flagServer.getTitle();
+                    } else {
+                        if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
+                            startsAtHour = flagServer.getHourStart();
+                            startsAtMinute = flagServer.getMinuteStart();
+                            startsAtHourText = String.format("%02d", startsAtHour);
+                            startsAtMinuteText = String.format("%02d", startsAtMinute);
+                            title_will_happen = flagServer.getTitle();
+                        } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
+                            count_will_happen_at_same_time++;
+                        }
+                    }
+                    count_will_happen++;
+                }
+
+            }
+            // Reminder
+            else if (list.get(i) instanceof ReminderServer) {
+                ReminderServer reminderServer = (ReminderServer) list.get(i);
+
+                hourStartText = String.format("%02d", reminderServer.getHourStart());
+                minuteStartText = String.format("%02d", reminderServer.getMinuteStart());
+
+                start_hour = reminderServer.getHourStart();
+                start_minute = reminderServer.getMinuteStart();
+
+                if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
+                    status = -1;
+                } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
+                    status = 1;
+                } else {
+                    status = 0;
+                }
+
+                reminderServer.setStatus(status);
+
+                if (reminderServer.getStatus() == 1) {
+                    if (count_will_happen == 0) {
+                        startsAtHour = reminderServer.getHourStart();
+                        startsAtMinute = reminderServer.getMinuteStart();
+                        startsAtHourText = String.format("%02d", startsAtHour);
+                        startsAtMinuteText = String.format("%02d", startsAtMinute);
+                        title_will_happen = reminderServer.getTitle();
+                    } else {
+                        if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
+                            startsAtHour = reminderServer.getHourStart();
+                            startsAtMinute = reminderServer.getMinuteStart();
+                            startsAtHourText = String.format("%02d", startsAtHour);
+                            startsAtMinuteText = String.format("%02d", startsAtMinute);
+                            title_will_happen = reminderServer.getTitle();
+                        } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
+                            count_will_happen_at_same_time++;
+                        }
+                    }
+                    count_will_happen++;
+                }
+            }
+        }
+
+        if (commitments && count_will_happen > 0) {
+            if (count_will_happen_at_same_time > 1) {
+                //commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
+                //commitmentStartTime.setText(getResources().getString(R.string.starts_at_plural, startsAtHourText, startsAtMinuteText));
+            } else {
+                //commitmentTitle.setText(title_will_happen);
+                //commitmentStartTime.setText(getResources().getString(R.string.starts_at, startsAtHourText, startsAtMinuteText));
+            }
+        }
+    }
+
+    private void handleErrorToday(Throwable error) {
+    }
+
+    private boolean isTimeInBefore(String now, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        try {
+            Date date1 = sdf.parse(now);
+            Date date2 = sdf.parse(time);
+
+            return date1.after(date2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private boolean isTimeInAfter(String now, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        try {
+            Date date1 = sdf.parse(now);
+            Date date2 = sdf.parse(time);
+
+            return date1.before(date2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
     }
 
     @Override
