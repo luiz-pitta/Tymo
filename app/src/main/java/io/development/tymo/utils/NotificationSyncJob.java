@@ -66,11 +66,15 @@ public class NotificationSyncJob extends Job {
     }
 
     private int isNotificationEnable(ArrayList<ActivityOfDay> list_json, int position){
+        boolean notification = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, true);
         boolean notification1 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_ACT, true);
         boolean notification2 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_FLAG, true);
         boolean notification3 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_REMINDER, true);
 
         int qty = list_json.get(position).getCommitmentSameHour();
+
+        if(!notification)
+            return 0;
 
         if(notification1 && notification2 && notification3)
             return qty;

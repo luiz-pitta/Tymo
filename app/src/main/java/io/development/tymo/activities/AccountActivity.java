@@ -146,6 +146,10 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         editor.putString(Constants.USER_NAME, "");
         editor.putBoolean(Constants.LOCATION, false);
         editor.putBoolean(Constants.NOTIFICATION, false);
+        editor.putBoolean(Constants.NOTIFICATION_ACT, false);
+        editor.putBoolean(Constants.NOTIFICATION_FLAG, false);
+        editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
+        editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
         editor.putBoolean(Constants.INTRO, false);
         editor.apply();
 

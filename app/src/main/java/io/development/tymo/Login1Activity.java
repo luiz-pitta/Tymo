@@ -179,6 +179,10 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             editor.putString(Constants.USER_NAME, usr.getName());
             editor.putBoolean(Constants.LOCATION, usr.isLocationGps());
             editor.putBoolean(Constants.NOTIFICATION, usr.isNotifications());
+            editor.putBoolean(Constants.NOTIFICATION_ACT, usr.isNotificationActivity());
+            editor.putBoolean(Constants.NOTIFICATION_FLAG, usr.isNotificationFlag());
+            editor.putBoolean(Constants.NOTIFICATION_REMINDER, usr.isNotificationReminder());
+            editor.putBoolean(Constants.NOTIFICATION_PUSH, usr.isNotificationPush());
             editor.apply();
 
             if(token != null){

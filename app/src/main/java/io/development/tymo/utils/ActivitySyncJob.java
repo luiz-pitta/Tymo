@@ -60,7 +60,7 @@ public class ActivitySyncJob extends Job {
         new Thread() {
             @Override
             public void run() {
-                //getIcons();
+                getActivityStartToday();
 
                 SystemClock.sleep(10_000L);
                 countDownLatch.countDown();

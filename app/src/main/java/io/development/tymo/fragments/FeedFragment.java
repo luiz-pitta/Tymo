@@ -500,6 +500,10 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         User usr = response.getUser();
         editor.putBoolean(Constants.LOCATION, usr.isLocationGps());
         editor.putBoolean(Constants.NOTIFICATION, usr.isNotifications());
+        editor.putBoolean(Constants.NOTIFICATION_ACT, usr.isNotificationActivity());
+        editor.putBoolean(Constants.NOTIFICATION_FLAG, usr.isNotificationFlag());
+        editor.putBoolean(Constants.NOTIFICATION_REMINDER, usr.isNotificationReminder());
+        editor.putBoolean(Constants.NOTIFICATION_PUSH, usr.isNotificationPush());
         editor.apply();
 
         ArrayList<ActivityServer> whats_going_act = response.getWhatsGoingAct();

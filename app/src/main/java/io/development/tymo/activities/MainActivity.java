@@ -737,7 +737,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             getActivityStartToday();
 
             new JobRequest.Builder(ActivitySyncJob.TAG)
-                    .setPeriodic(TimeUnit.HOURS.toMillis(12), TimeUnit.HOURS.toMillis(2))
+                    .setPeriodic(TimeUnit.HOURS.toMillis(8), TimeUnit.HOURS.toMillis(1))
                     .setPersisted(true)
                     .setRequiredNetworkType(JobRequest.NetworkType.values()[1])
                     .setRequirementsEnforced(true)
