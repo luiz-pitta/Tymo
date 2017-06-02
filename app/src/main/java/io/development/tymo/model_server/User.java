@@ -20,6 +20,10 @@ public class User implements Serializable {
     private String id_facebook;
     private boolean from_facebook;
     private boolean facebook_messenger_enable;
+    private boolean notification_activity;
+    private boolean notification_flag;
+    private boolean notification_reminder;
+    private boolean notification_push;
     private boolean notifications;
     private boolean location_gps;
     private String email;
@@ -229,12 +233,44 @@ public class User implements Serializable {
         return notifications;
     }
 
+    public boolean isNotificationActivity() {
+        return notification_activity;
+    }
+
+    public boolean isNotificationFlag() {
+        return notification_flag;
+    }
+
+    public boolean isNotificationReminder() {
+        return notification_reminder;
+    }
+
+    public boolean isNotificationPush() {
+        return notification_push;
+    }
+
     public boolean isLocationGps() {
         return location_gps;
     }
 
     public void setNotifications(boolean notifications) {
         this.notifications = notifications;
+    }
+
+    public void setNotificationFlag(boolean notification_flag) {
+        this.notification_flag = notification_flag;
+    }
+
+    public void setNotificationActivity(boolean notification_activity) {
+        this.notification_activity = notification_activity;
+    }
+
+    public void setNotificationReminder(boolean notification_reminder) {
+        this.notification_reminder = notification_reminder;
+    }
+
+    public void setNotificationPush(boolean notification_push) {
+        this.notification_push = notification_push;
     }
 
     public void setLocationGps(boolean location_gps) {

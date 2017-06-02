@@ -18,6 +18,7 @@ public class ActivityOfDay {
         this.minute_start = minute_start;
         this.hour_start = hour_start;
         this.type = type;
+        this.commitment_same_hour = 1;
     }
 
 
@@ -25,11 +26,11 @@ public class ActivityOfDay {
         return title;
     }
 
-    public int getDay() {
+    public int getMinuteStart() {
         return minute_start;
     }
 
-    public int getMonth() {
+    public int getHourStart() {
         return hour_start;
     }
 

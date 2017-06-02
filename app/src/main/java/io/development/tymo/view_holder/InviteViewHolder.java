@@ -157,6 +157,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
         setProgress(false);
         InviteAdapter inviteAdapter = getOwnerAdapter();
         inviteAdapter.getItem(getAdapterPosition()).setInviteAccepted(true);
+        inviteAdapter.notifyItemChanged(getAdapterPosition());
         acceptButton.setVisibility(View.GONE);
         ignoreButton.setVisibility(View.GONE);
         text4.setVisibility(View.VISIBLE);
@@ -243,6 +244,11 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
             itemIcon.setImageResource(R.drawable.ic_flag_available);
             text1.setTextColor(ContextCompat.getColor(context, R.color.flag_available));
             type = Constants.FLAG;
+        }
+
+        if(text4.getVisibility() == View.VISIBLE) {
+            acceptButton.setVisibility(View.GONE);
+            ignoreButton.setVisibility(View.GONE);
         }
     }
 

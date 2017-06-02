@@ -10,6 +10,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.SearchView;
@@ -87,6 +88,11 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         recyclerView = (EasyRecyclerView) findViewById(R.id.recycler_view);
         searchView = (SearchView) findViewById(R.id.searchSelectionView);
 
+        findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
+        findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+        findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
+        findViewById(R.id.searchSelection).setVisibility(View.GONE);
+
         mBackButton.setOnClickListener(this);
         searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(mOnQueryTextListener);
@@ -138,13 +144,23 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
             public void onItemClick(View v, int position) {
                 SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                 String my_email = mSharedPreferences.getString(Constants.EMAIL, "");
+                User user1 = adapter.getItem(position);
 
-                if (!adapter.getItem(position).getEmail().matches(my_email)) {
+                if (!user1.getEmail().matches(my_email) && user1.getIBlocked() == 0) {
                     Intent intent = new Intent(ContactsActivity.this, FriendProfileActivity.class);
                     intent.putExtra("friend_email", adapter.getItem(position).getEmail());
                     intent.putExtra("name", adapter.getItem(position).getName());
                     startActivity(intent);
                 }
+            }
+        });
+
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if(adapter.getCount() == 0)
+                    recyclerView.showEmpty();
             }
         });
 

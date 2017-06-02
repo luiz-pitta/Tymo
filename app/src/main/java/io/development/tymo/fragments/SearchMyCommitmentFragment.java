@@ -78,6 +78,7 @@ public class SearchMyCommitmentFragment extends Fragment {
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(listCommit);
+            mRecyclerView.showRecycler();
         }
     }
 
@@ -87,6 +88,7 @@ public class SearchMyCommitmentFragment extends Fragment {
         if (isVisibleToUser && adapter != null) {
             adapter.clear();
             adapter.addAll(listCommit);
+            mRecyclerView.showRecycler();
         }
     }
 }

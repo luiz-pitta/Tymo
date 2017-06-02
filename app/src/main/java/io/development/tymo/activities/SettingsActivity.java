@@ -59,6 +59,7 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
+import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
@@ -72,8 +73,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private TextView m_title, fullName;
     private TextView versionName;
 
+    private final int USER_UPDATE = 37;
+
     private LinearLayout account, importFromFacebook, importFromGoogleAgenda;
-    private LinearLayout privacy, blockedUserList, tutorial, logout, preferences;
+    private LinearLayout privacy, blockedUserList, tutorial, logout, preferences, notifications;
     private LinearLayout contactUs, useTerms, privacyPolicy;
     private LinearLayout profileAboutBox;
     private Switch notificationsSwitch, locationSwitch;
@@ -123,6 +126,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         tutorial = (LinearLayout) findViewById(R.id.tutorial);
         logout = (LinearLayout) findViewById(R.id.logout);
         preferences = (LinearLayout) findViewById(R.id.preferences);
+        notifications = (LinearLayout) findViewById(R.id.notifications);
 
         mBackButton.setOnClickListener(this);
 
@@ -138,6 +142,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         profileAboutBox.setOnClickListener(this);
         tutorial.setOnClickListener(this);
         preferences.setOnClickListener(this);
+        notifications.setOnClickListener(this);
 
         versionName.setText(getResources().getString(R.string.version_name,BuildConfig.VERSION_NAME));
 
@@ -512,6 +517,17 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             startActivity(new Intent(SettingsActivity.this, PreferencesActivity.class));
         }
+        else if(view == notifications){
+            Intent intent = new Intent(this, NotificationsActivity.class);
+            intent.putExtra("user_about", new UserWrapper(user));
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "notifications" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            startActivityForResult(intent, USER_UPDATE);
+        }
         else if(view == blockedUserList){
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "blockedUserList" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -578,6 +594,23 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             } catch (ActivityNotFoundException ex) {
                 intent.setPackage(null);
                 startActivity(intent);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(resultCode == RESULT_OK) {
+            if (requestCode == USER_UPDATE) {
+                boolean notification1 = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_ACT, true);
+                boolean notification2 = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_FLAG, true);
+                boolean notification3 = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_REMINDER, true);
+                boolean notification4 = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_PUSH, true);
+                user.setNotificationActivity(notification1);
+                user.setNotificationFlag(notification2);
+                user.setNotificationReminder(notification3);
+                user.setNotificationPush(notification4);
             }
         }
     }

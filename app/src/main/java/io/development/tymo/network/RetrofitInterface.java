@@ -157,6 +157,9 @@ public interface RetrofitInterface {
     @POST("set_notification/")
     Observable<User> setNotificationUser(@Body User user);
 
+    @POST("update_notification/")
+    Observable<User> updateNotificationUser(@Body User user);
+
     @GET("tags")
     Observable<ArrayList<TagServer>> getTags();
 

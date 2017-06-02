@@ -16,6 +16,9 @@ import android.widget.Toast;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -23,11 +26,15 @@ import java.util.concurrent.CountDownLatch;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.MainActivity;
+import io.development.tymo.activities.NextCommitmentsActivity;
+import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.IconServer;
 import io.development.tymo.network.NetworkUtil;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * @author rwondratschek
@@ -38,29 +45,67 @@ public class NotificationSyncJob extends Job {
 
     @Override
     @NonNull
-    protected Result onRunJob(final Params params) {
+    protected Result onRunJob(Params params) {
 
-        sendNotificationNextActivity("","");
+        PersistableBundleCompat extras = params.getExtras();
+
+        Gson gson = new Gson();
+        ArrayList<ActivityOfDay> list_json;
+        String json = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString("ListActDay", "");
+        if(!json.matches("")) {
+            list_json = gson.fromJson(json, new TypeToken<ArrayList<ActivityOfDay>>(){}.getType());
+            int position = extras.getInt("position_act", 0);
+            int qty = isNotificationEnable(list_json, position);
+
+            if(qty > 0)
+                sendNotificationNextActivity(qty);
+        }
 
         return Result.SUCCESS;
+
     }
 
-    public void sendNotificationNextActivity(String title, String text) {
-        PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), MainActivity.class), 0);
+    private int isNotificationEnable(ArrayList<ActivityOfDay> list_json, int position){
+        boolean notification1 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_ACT, true);
+        boolean notification2 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_FLAG, true);
+        boolean notification3 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_REMINDER, true);
 
-        if (title.matches("")) {
-            title = getContext().getString(R.string.app_name);
+        int qty = list_json.get(position).getCommitmentSameHour();
+
+        if(notification1 && notification2 && notification3)
+            return qty;
+
+        for(int i=0;i<list_json.size();i++){
+            ActivityOfDay activityOfDay = list_json.get(i);
+            int type = activityOfDay.getType();
+
+            switch (type){
+                case Constants.ACT:
+                    if(!notification1)
+                        qty--;
+                    break;
+                case Constants.FLAG:
+                    if(!notification2)
+                        qty--;
+                    break;
+                case Constants.REMINDER:
+                    if(!notification3)
+                        qty--;
+                    break;
+            }
         }
+
+        return qty;
+    }
+
+    private void sendNotificationNextActivity(int qty) {
+        PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), NextCommitmentsActivity.class), 0);
 
         android.support.v4.app.NotificationCompat.Builder mBuilder =
                 new android.support.v4.app.NotificationCompat.Builder(getContext())
                         .setSmallIcon(R.drawable.ic_add_cube)
-                        .setContentTitle(title)
                         .setContentIntent(pi)
                         .setAutoCancel(true);
-
-
-        mBuilder.setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_launcher));
 
         //Vibration
         mBuilder.setVibrate(new long[]{500, 750});
@@ -69,15 +114,26 @@ public class NotificationSyncJob extends Job {
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 
         android.support.v4.app.NotificationCompat.BigTextStyle bigTextStyle = new android.support.v4.app.NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle(title);
 
-        mBuilder.setContentText(text);
-        bigTextStyle.bigText(text);
+
+        if (qty == 1) {
+            mBuilder.setContentText(getContext().getString(R.string.push_notification_6_text_1));
+            bigTextStyle.bigText(getContext().getString(R.string.push_notification_6_text_1));
+            mBuilder.setContentTitle(getContext().getString(R.string.push_notification_6_title_1));
+            bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_6_title_1));
+        } else {
+            mBuilder.setContentText(getContext().getString(R.string.push_notification_6_text_2, qty));
+            bigTextStyle.bigText(getContext().getString(R.string.push_notification_6_text_2, qty));
+            mBuilder.setContentTitle(getContext().getString(R.string.push_notification_6_title_2));
+            bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_6_title_2));
+        }
+
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_launcher));
 
         mBuilder.setStyle(bigTextStyle);
 
         NotificationManager mNotificationManager = (NotificationManager) getContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        mNotificationManager.notify(Constants.ENGAGEMENT, mBuilder.build());
+        mNotificationManager.notify(Constants.NEXT_COMMITMENT, mBuilder.build());
     }
 }

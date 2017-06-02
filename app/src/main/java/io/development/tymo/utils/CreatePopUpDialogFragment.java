@@ -193,6 +193,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 if (callback != null) {
                     callback.refreshLayout(true);
                     updateFeedMessageToActivity(mContext);
+                    updateNotificationStartToday(mContext);
                 }
             }
 
@@ -929,8 +930,15 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
         void refreshLayout(boolean showRefresh);
     }
 
+
+
     private static void updateFeedMessageToActivity(Context context) {
         Intent intent = new Intent("feed_update");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    private static void updateNotificationStartToday(Context context) {
+        Intent intent = new Intent("notification_update");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

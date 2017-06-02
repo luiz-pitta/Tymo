@@ -246,7 +246,7 @@
     <string name="error_compare_selected_required">Deve ter ao menos uma pessoa selecionada</string>
     <string name="error_date_required">A data e a hora são obrigatórias</string>
     <string name="error_email_required">Preencha o email corretamente</string>
-    <string name="error_facebook_login">Erro no login pelo Facebook! Tente mais tarde ou se cadastre pelo Tymo</string>
+    <string name="error_facebook_login">Erro no login pelo Facebook!</string>
     <string name="error_field_invalid">Campo obrigatório inválido</string>
     <string name="error_gender_required">Selecione um gênero</string>
     <string name="error_login_email_required">Email inválido ou não cadastrado</string>
@@ -356,6 +356,10 @@
     <string name="next_commitments_reminders">lembretes</string>
     <string name="no">Não</string>
     <string name="notifications">Notificações</string>
+    <string name="notifications_commitment">Notificações de Compromisso</string>
+    <string name="notifications_settings">Central de Notificações</string>
+    <string name="notifications_push">Notificações Push</string>
+    <string name="notifications_other">Outras Notificações</string>
     <string name="ok">OK</string>
     <string name="open">Abrir</string>
     <string name="order_by">Ordenar por</string>
@@ -400,6 +404,10 @@
     <string name="push_notification_5_text_2">%1$d pessoas aceitaram o convite</string>
     <string name="push_notification_5_text_3">%1$s cancelou a ATIVIDADE</string>
     <string name="push_notification_5_text_4">%1$s cancelou o SINALIZADOR</string>
+    <string name="push_notification_6_title_1">Compromisso Próximo</string>
+    <string name="push_notification_6_title_2">Compromissos Próximos</string>
+    <string name="push_notification_6_text_1">1 COMPROMISSO vai acontecer dentro de 30 minutos!</string>
+    <string name="push_notification_6_text_2">%1$d COMPROMISSOS vão acontecer dentro de 30 minutos!</string>
     <string name="refuse_invite">Convite ignorado</string>
     <string name="register">Cadastro</string>
     <string name="register_account_facebook_failed">Conta cadastrada no Tymo não vinculada com o Facebook!</string>

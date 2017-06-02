@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -269,6 +270,8 @@ public class FeedCardFragment extends Fragment {
     }
 
     private void handleDeleteIgnoreConfirm(Response response) {
+        Intent intent = new Intent("notification_update");
+        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
         //Toast.makeText(getActivity(), ServerMessage.getServerMessage(getActivity(), response.getMessage()), Toast.LENGTH_LONG).show();
     }
 

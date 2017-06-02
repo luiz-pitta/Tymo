@@ -624,7 +624,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void registerProcess(ReminderServer reminderServer) {
-
+        setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().registerReminder(reminderServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

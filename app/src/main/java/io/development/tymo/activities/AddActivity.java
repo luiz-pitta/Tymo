@@ -30,16 +30,23 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.christophesmet.android.views.colorpicker.ColorPickerView;
 import com.cunoraz.tagview.Tag;
+import com.evernote.android.job.JobManager;
+import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -48,14 +55,19 @@ import io.development.tymo.adapters.CustomizeAddActivityAdapter;
 import io.development.tymo.fragments.WhatEditFragment;
 import io.development.tymo.fragments.WhenEditFragment;
 import io.development.tymo.fragments.WhoEditFragment;
+import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
+import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.IconServer;
+import io.development.tymo.model_server.Query;
+import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.UpdateButtonController;
@@ -1464,7 +1476,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void registerProcess(ActivityServer activityServer) {
-
+        setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().registerActivity(activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -1472,7 +1484,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void editActivity(ActivityServer activityServer) {
-
+        setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().editActivity(getActivity().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -1480,7 +1492,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     private void editActivityRepeatSingle(ActivityServer activityServer) {
-
+        setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().editActivityRepeatSingle(getActivity().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

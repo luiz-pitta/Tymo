@@ -12,6 +12,10 @@ public class Constants {
     public static final String EMAIL = "email";
     public static final String LOCATION = "location";
     public static final String NOTIFICATION = "notification";
+    public static final String NOTIFICATION_ACT = "notification_act";
+    public static final String NOTIFICATION_FLAG = "notification_flag";
+    public static final String NOTIFICATION_REMINDER = "notification_rem";
+    public static final String NOTIFICATION_PUSH = "notification_push";
     public static final String INTRO = "intro";
     public static final String FORGOT_PASS = "forgot_pass";
     public static final String USER_CREDENTIALS = "user_credentials";
@@ -32,6 +36,7 @@ public class Constants {
     public static final int INVITE = 3;
     public static final int INVITE_ACCEPT = 4;
     public static final int CANCEL = 5;
+    public static final int NEXT_COMMITMENT = 6;
 
     public final static int DAYLY = 1, WEEKLY = 2, MONTHLY = 3;
 }

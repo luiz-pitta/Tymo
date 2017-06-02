@@ -250,7 +250,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         date.add(day_start);
         date.add(month_start);
         date.add(year_start);
-        TymoApplication.getInstance().setDate(date);
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
@@ -271,8 +270,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         }
 
         ArrayList<Integer> list = TymoApplication.getInstance().getDate();
-        if(list == null && !TymoApplication.getInstance().isCreatedActivity())
+        if(list == null && !TymoApplication.getInstance().isCreatedActivity()) {
             setPlans(plans, true);
+            TymoApplication.getInstance().setDate(date);
+        }
         else {
             updateLayout(list.get(0), list.get(1)-1, list.get(2), true);
             TymoApplication.getInstance().setDate(null);

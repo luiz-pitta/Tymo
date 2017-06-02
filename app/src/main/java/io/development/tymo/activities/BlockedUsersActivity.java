@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -65,6 +66,14 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
         mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new ContactsAdapter(this, false, true, null);
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if(adapter.getCount() == 0)
+                    mRecyclerView.showEmpty();
+            }
+        });
 
         mRecyclerView.setAdapterWithProgress(adapter);
 

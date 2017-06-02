@@ -1,9 +1,12 @@
 package io.development.tymo;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.EditText;
@@ -240,6 +243,32 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
 
     }
 
+    private void showSnackbarFacebookError(){
+        Snackbar snackbar =  Snackbar.make(findViewById(android.R.id.content),getString(R.string.error_facebook_login), Snackbar.LENGTH_LONG)
+                .setActionTextColor(ContextCompat.getColor(Login2Activity.this, R.color.white))
+                .setAction(getResources().getString(R.string.help), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "error_facebook_login" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tymo.me/termos-de-uso"));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setPackage("com.android.chrome");
+                        try {
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+                            intent.setPackage(null);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
+        snackbar.show();
+    }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -263,12 +292,12 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                                     try{
                                         String email = object.getString("email");
                                         if(!validateEmail(email)){
-                                            Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                            showSnackbarFacebookError();
                                             progressBox.setVisibility(View.GONE);
                                             return;
                                         }
                                     }catch (Exception  e) {
-                                        Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                        showSnackbarFacebookError();
                                         progressBox.setVisibility(View.GONE);
                                         return;
                                     }
@@ -302,7 +331,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                                     loginProcessFacebook(user);
                                 }
                                 catch (Exception  e){
-                                    Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                                    showSnackbarFacebookError();
                                     progressBox.setVisibility(View.GONE);
                                 }
                             }
@@ -315,13 +344,13 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onCancel() {
-                Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                showSnackbarFacebookError();
                 progressBox.setVisibility(View.GONE);
             }
 
             @Override
             public void onError(FacebookException exception) {
-                Toast.makeText(Login2Activity.this, getResources().getString(R.string.error_facebook_login), Toast.LENGTH_LONG).show();
+                showSnackbarFacebookError();
                 progressBox.setVisibility(View.GONE);
             }
         });

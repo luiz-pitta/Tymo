@@ -37,11 +37,12 @@ public class TymoMessagingService extends FirebaseMessagingService {
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         boolean notification = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, true);
+        boolean notification_push = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_PUSH, true);
 
         if (type.matches("peopleAccept"))
             updateSearchMessageToActivity();
 
-        if(notification) {
+        if(notification && notification_push) {
             if (type.matches("engagement")) {
                 if (map.get("activated").matches("true")) {
                     sendNotificationEngagement(map.get("title"), map.get("text"));
@@ -59,6 +60,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
                 } else if (type.matches("inviteAccept")) {
                     sendNotificationInviteAccept(map.get("title"), name, number_solicitation);
                 } else if (type.matches("cancel")) {
+                    updateNotificationStartToday();
                     sendNotificationCancel(map.get("title"), name, number_solicitation);
                 }
             }
@@ -182,6 +184,11 @@ public class TymoMessagingService extends FirebaseMessagingService {
 
     private void updateSearchMessageToActivity() {
         Intent intent = new Intent("search_update");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void updateNotificationStartToday() {
+        Intent intent = new Intent("notification_update");
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 

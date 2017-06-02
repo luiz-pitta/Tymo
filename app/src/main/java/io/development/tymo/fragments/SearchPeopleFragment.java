@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,15 @@ public class SearchPeopleFragment extends Fragment {
 
         adapter = new SearchMultipleAdapter(getActivity());
 
+        adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+            @Override
+            public void onItemRangeRemoved(int positionStart, int itemCount) {
+                super.onItemRangeRemoved(positionStart, itemCount);
+                if(adapter.getCount() == 0)
+                    mRecyclerView.showEmpty();
+            }
+        });
+
         mRecyclerView.setAdapterWithProgress(adapter);
         return view;
     }
@@ -63,7 +73,8 @@ public class SearchPeopleFragment extends Fragment {
         adapter.addAll(listPeople);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
-        mRecyclerView.showProgress();
+        if(listPeople.size() == 0)
+            mRecyclerView.showProgress();
     }
 
     public void setAdapterItens(List<Object> list){
@@ -72,6 +83,7 @@ public class SearchPeopleFragment extends Fragment {
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(listPeople);
+            mRecyclerView.showRecycler();
         }
     }
 
@@ -86,6 +98,7 @@ public class SearchPeopleFragment extends Fragment {
         if (isVisibleToUser && adapter != null) {
             adapter.clear();
             adapter.addAll(listPeople);
+            mRecyclerView.showRecycler();
         }
     }
 

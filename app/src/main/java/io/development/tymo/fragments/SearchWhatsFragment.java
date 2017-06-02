@@ -65,7 +65,8 @@ public class SearchWhatsFragment extends Fragment {
         adapter.addAll(listWhats);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
-        mRecyclerView.showProgress();
+        if(listWhats.size() == 0)
+            mRecyclerView.showProgress();
     }
 
     public void setAdapterItens(List<Object> list){
@@ -74,6 +75,7 @@ public class SearchWhatsFragment extends Fragment {
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(listWhats);
+            mRecyclerView.showRecycler();
         }
     }
 
@@ -88,6 +90,7 @@ public class SearchWhatsFragment extends Fragment {
         if (isVisibleToUser && adapter != null) {
             adapter.clear();
             adapter.addAll(listWhats);
+            mRecyclerView.showRecycler();
         }
     }
 }

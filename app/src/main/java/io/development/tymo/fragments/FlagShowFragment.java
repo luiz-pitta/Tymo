@@ -212,6 +212,7 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
 
     private boolean isFlagInPast(FlagServer flagServer){
         Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -7);
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
         int year = c.get(Calendar.YEAR);
@@ -231,7 +232,7 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
             if(monthOfYearEnd < monthOfYear)
                 return false;
             else if(monthOfYearEnd == monthOfYear){
-                if(dayOfMonthEnd < dayOfMonth)
+                if(dayOfMonthEnd <= dayOfMonth)
                     return false;
             }
         }

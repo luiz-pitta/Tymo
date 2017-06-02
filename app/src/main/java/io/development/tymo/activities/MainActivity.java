@@ -28,11 +28,14 @@ import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaouan.revealator.Revealator;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
+import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -48,6 +51,7 @@ import io.development.tymo.fragments.FeedFragment;
 import io.development.tymo.fragments.PlansFragment;
 import io.development.tymo.fragments.ProfileFragment;
 import io.development.tymo.fragments.SearchFragment;
+import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
@@ -55,10 +59,12 @@ import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.ActivitySyncJob;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
 import io.development.tymo.adapters.MainFragmentAdapter;
@@ -115,6 +121,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         @Override
         public void onReceive(Context context, Intent intent) {
             updateFeed();
+        }
+    };
+
+    private BroadcastReceiver mMessageReceiverNotification = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            getActivityStartToday();
         }
     };
 
@@ -214,6 +227,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverSearch, new IntentFilter("search_update"));
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverFeed, new IntentFilter("feed_update"));
+        LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverNotification, new IntentFilter("notification_update"));
 
         setActivityPeriodicJob();
     }
@@ -548,6 +562,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int m = data.getIntExtra("m",0);
             int y = data.getIntExtra("y",0);
 
+            Calendar c = Calendar.getInstance();
+            int day = c.get(Calendar.DAY_OF_MONTH);
+            int month = c.get(Calendar.MONTH);
+            int year = c.get(Calendar.YEAR);
+
+            if(d == day && m == month && y == year)
+                getActivityStartToday();
+
             ArrayList<Integer> list = new ArrayList<>();
             list.add(d);
             list.add(m);
@@ -711,8 +733,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setActivityPeriodicJob() {
-        mJobManager.cancelAll();
-        /*if(mJobManager.getAllJobRequests().size() == 0) {
+        if(mJobManager.getAllJobRequestsForTag(ActivitySyncJob.TAG).size() == 0) {
             getActivityStartToday();
 
             new JobRequest.Builder(ActivitySyncJob.TAG)
@@ -722,16 +743,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     .setRequirementsEnforced(true)
                     .build()
                     .schedule();
-        }*/
-
-        //Editor prefsEditor = mPrefs.edit();
-        //Gson gson = new Gson();
-        //String json = gson.toJson(MyObject);
-        //prefsEditor.putString("MyObject", json);
-        //prefsEditor.commit();
-        //Gson gson = new Gson();
-        //String json = mPrefs.getString("MyObject", "");
-        //MyObject obj = gson.fromJson(json, MyObject.class);
+        }
     }
 
     private void getActivityStartToday(){
@@ -766,12 +778,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleResponseToday(Response response) {
 
+        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+            mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
+
         ArrayList<Object> list = new ArrayList<>();
+        ArrayList<ActivityOfDay> list_notify = new ArrayList<>();
         boolean commitments = false;
 
         int startsAtHour = 0;
         int startsAtMinute = 0;
-        String title_will_happen = "";
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
@@ -1130,6 +1145,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Activity
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
+                list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT));
 
                 hourStartText = String.format("%02d", activityServer.getHourStart());
                 minuteStartText = String.format("%02d", activityServer.getMinuteStart());
@@ -1187,14 +1203,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startsAtMinute = activityServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = activityServer.getTitle();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = activityServer.getHourStart();
                             startsAtMinute = activityServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = activityServer.getTitle();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -1206,6 +1220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
+                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG));
 
                 hourStartText = String.format("%02d", flagServer.getHourStart());
                 minuteStartText = String.format("%02d", flagServer.getMinuteStart());
@@ -1263,14 +1278,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startsAtMinute = flagServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = flagServer.getTitle();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = flagServer.getHourStart();
                             startsAtMinute = flagServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = flagServer.getTitle();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -1282,6 +1295,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
+                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER));
 
                 hourStartText = String.format("%02d", reminderServer.getHourStart());
                 minuteStartText = String.format("%02d", reminderServer.getMinuteStart());
@@ -1305,14 +1319,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         startsAtMinute = reminderServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = reminderServer.getTitle();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = reminderServer.getHourStart();
                             startsAtMinute = reminderServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = reminderServer.getTitle();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -1322,13 +1334,61 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
+        for (int i = 0; i < list_notify.size(); i++) {
+            int j = i;
+            int count_same = 0;
+            ActivityOfDay activityOfDay = list_notify.get(i);
+            ActivityOfDay activityOfDayNext = list_notify.get(j);
+
+            while(activityOfDayNext !=null &&
+                    (activityOfDay.getMinuteStart() == activityOfDayNext.getMinuteStart() &&
+                    activityOfDay.getHourStart() == activityOfDayNext.getHourStart())){
+
+                j++;
+                count_same++;
+                if(j < list_notify.size())
+                    activityOfDayNext = list_notify.get(j);
+                else
+                    activityOfDayNext = null;
+            }
+            activityOfDay.setCommitmentSameHour(count_same);
+            i=j-1;
+        }
+
         if (commitments && count_will_happen > 0) {
-            if (count_will_happen_at_same_time > 1) {
-                //commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
-                //commitmentStartTime.setText(getResources().getString(R.string.starts_at_plural, startsAtHourText, startsAtMinuteText));
-            } else {
-                //commitmentTitle.setText(title_will_happen);
-                //commitmentStartTime.setText(getResources().getString(R.string.starts_at, startsAtHourText, startsAtMinuteText));
+
+            SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(list_notify);
+            editor.putString("ListActDay", json);
+            editor.apply();
+
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = Calendar.getInstance();
+            int time_exact;
+            long time_to_happen;
+
+            for(int i=0;i<list_notify.size();i++) {
+                PersistableBundleCompat extras = new PersistableBundleCompat();
+                extras.putInt("position_act", i);
+
+                ActivityOfDay activityOfDay = list_notify.get(i);
+                c2.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
+                c2.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
+                time_exact = (int)(c2.getTimeInMillis()-c1.getTimeInMillis())/(1000*60);
+                if(time_exact > 30) {
+                    c2.add(Calendar.MINUTE, -30);
+                    time_to_happen = c2.getTimeInMillis()-c1.getTimeInMillis();
+                    new JobRequest.Builder(NotificationSyncJob.TAG)
+                            .setExact(time_to_happen)
+                            .setExtras(extras)
+                            .setPersisted(true)
+                            .build()
+                            .schedule();
+                }
+
+                if(activityOfDay.getCommitmentSameHour() > 1)
+                    i+=activityOfDay.getCommitmentSameHour()-1;
             }
         }
     }

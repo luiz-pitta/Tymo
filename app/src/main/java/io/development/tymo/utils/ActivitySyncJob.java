@@ -13,7 +13,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.evernote.android.job.Job;
+import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
+import com.evernote.android.job.util.support.PersistableBundleCompat;
+import com.google.gson.Gson;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,6 +28,7 @@ import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 
 import io.development.tymo.R;
+import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.IconServer;
@@ -103,12 +107,16 @@ public class ActivitySyncJob extends Job {
 
     private void handleResponseToday(Response response) {
 
+        JobManager mJobManager = JobManager.instance();
+        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+            mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
+
         ArrayList<Object> list = new ArrayList<>();
+        ArrayList<ActivityOfDay> list_notify = new ArrayList<>();
         boolean commitments = false;
 
         int startsAtHour = 0;
         int startsAtMinute = 0;
-        String title_will_happen = "";
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
@@ -467,6 +475,7 @@ public class ActivitySyncJob extends Job {
             // Activity
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
+                list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT));
 
                 hourStartText = String.format("%02d", activityServer.getHourStart());
                 minuteStartText = String.format("%02d", activityServer.getMinuteStart());
@@ -524,14 +533,12 @@ public class ActivitySyncJob extends Job {
                         startsAtMinute = activityServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = activityServer.getTitle();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = activityServer.getHourStart();
                             startsAtMinute = activityServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = activityServer.getTitle();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -543,6 +550,7 @@ public class ActivitySyncJob extends Job {
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
+                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG));
 
                 hourStartText = String.format("%02d", flagServer.getHourStart());
                 minuteStartText = String.format("%02d", flagServer.getMinuteStart());
@@ -600,14 +608,12 @@ public class ActivitySyncJob extends Job {
                         startsAtMinute = flagServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = flagServer.getTitle();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = flagServer.getHourStart();
                             startsAtMinute = flagServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = flagServer.getTitle();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -619,6 +625,7 @@ public class ActivitySyncJob extends Job {
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
+                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER));
 
                 hourStartText = String.format("%02d", reminderServer.getHourStart());
                 minuteStartText = String.format("%02d", reminderServer.getMinuteStart());
@@ -642,14 +649,12 @@ public class ActivitySyncJob extends Job {
                         startsAtMinute = reminderServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = reminderServer.getTitle();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = reminderServer.getHourStart();
                             startsAtMinute = reminderServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = reminderServer.getTitle();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -659,28 +664,66 @@ public class ActivitySyncJob extends Job {
             }
         }
 
+        for (int i = 0; i < list_notify.size(); i++) {
+            int j = i;
+            int count_same = 0;
+            ActivityOfDay activityOfDay = list_notify.get(i);
+            ActivityOfDay activityOfDayNext = list_notify.get(j);
+
+            while(activityOfDayNext !=null &&
+                    (activityOfDay.getMinuteStart() == activityOfDayNext.getMinuteStart() &&
+                            activityOfDay.getHourStart() == activityOfDayNext.getHourStart())){
+
+                j++;
+                count_same++;
+                if(j < list_notify.size())
+                    activityOfDayNext = list_notify.get(j);
+                else
+                    activityOfDayNext = null;
+            }
+            activityOfDay.setCommitmentSameHour(count_same);
+            i=j-1;
+        }
+
         if (commitments && count_will_happen > 0) {
-            if (count_will_happen_at_same_time > 1) {
-                //commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
-                //commitmentStartTime.setText(getResources().getString(R.string.starts_at_plural, startsAtHourText, startsAtMinuteText));
-            } else {
-                //commitmentTitle.setText(title_will_happen);
-                //commitmentStartTime.setText(getResources().getString(R.string.starts_at, startsAtHourText, startsAtMinuteText));
+
+            SharedPreferences.Editor editor = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).edit();
+            Gson gson = new Gson();
+            String json = gson.toJson(list_notify);
+            editor.putString("ListActDay", json);
+            editor.apply();
+
+            Calendar c1 = Calendar.getInstance();
+            Calendar c2 = Calendar.getInstance();
+            int time_exact;
+            long time_to_happen;
+
+            for(int i=0;i<list_notify.size();i++) {
+                PersistableBundleCompat extras = new PersistableBundleCompat();
+                extras.putInt("position_act", i);
+
+                ActivityOfDay activityOfDay = list_notify.get(i);
+                c2.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
+                c2.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
+                time_exact = (int)(c2.getTimeInMillis()-c1.getTimeInMillis())/(1000*60);
+                if(time_exact > 30) {
+                    c2.add(Calendar.MINUTE, -30);
+                    time_to_happen = c2.getTimeInMillis()-c1.getTimeInMillis();
+                    new JobRequest.Builder(NotificationSyncJob.TAG)
+                            .setExact(time_to_happen)
+                            .setExtras(extras)
+                            .setPersisted(true)
+                            .build()
+                            .schedule();
+                }
+
+                if(activityOfDay.getCommitmentSameHour() > 1)
+                    i+=activityOfDay.getCommitmentSameHour()-1;
             }
         }
     }
 
     private void handleError(Throwable error) {
-    }
-
-    private void setNextActivityNotification(long time) {
-
-        new JobRequest.Builder(ActivitySyncJob.TAG)
-                .setExact(time)
-                .setPersisted(true)
-                .setUpdateCurrent(true)
-                .build()
-                .schedule();
     }
 
     private boolean isTimeInBefore(String now, String time) {
