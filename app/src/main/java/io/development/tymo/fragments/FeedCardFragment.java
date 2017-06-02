@@ -29,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.development.tymo.R;
+import io.development.tymo.TymoApplication;
 import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.MainActivity;
 import io.development.tymo.activities.ShowActivity;
@@ -218,9 +219,14 @@ public class FeedCardFragment extends Fragment {
         FeedFragment fragment = (FeedFragment)activity.getFragmentNavigator().getFragment(0);
         setAdapterItens(fragment.getListFeed());
 
+        double lat = TymoApplication.getInstance().getLatLng().get(0);
+        double lng = TymoApplication.getInstance().getLatLng().get(1);
+
         mRecyclerView.scrollToPosition(fragment.getCurrentPosition());
 
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+
+        setLatLng(lat, lng);
     }
 
     public void setLatLng(double lat, double lng) {

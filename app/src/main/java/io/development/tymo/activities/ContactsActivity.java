@@ -197,6 +197,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 m_contacts_qty = adapter.getCount();
 
                 if(m_contacts_qty == 0){
+                    findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
+                    findViewById(R.id.searchSelection).setVisibility(View.GONE);
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
                     findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
                     recyclerView.showEmpty();
@@ -291,8 +293,11 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
             m_contacts_qty = response.getPeople().size();
 
             if(m_contacts_qty == 0){
+                findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
                 findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
                 findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
+                findViewById(R.id.searchSelection).setVisibility(View.GONE);
+                recyclerView.showEmpty();
             }
             else if(m_contacts_qty == 1){
                 contactsQty.setText(R.string.contacts_qty_one);
@@ -320,6 +325,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
 
         if(m_contacts_qty == 0){
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
+            findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
         }
