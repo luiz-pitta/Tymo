@@ -957,7 +957,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             date.add(day_start);
             date.add(month_start);
             date.add(year_start);
-            TymoApplication.getInstance().setDate(date);
 
             updatePlansFriend(year_start, month_start - 1, day_start, false);
 
@@ -984,7 +983,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             date.add(day_start);
             date.add(month_start);
             date.add(year_start);
-            TymoApplication.getInstance().setDate(date);
 
             updatePlansFriend(year_start, month_start - 1, day_start, false);
         }

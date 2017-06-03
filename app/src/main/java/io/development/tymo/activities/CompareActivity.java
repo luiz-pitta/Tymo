@@ -715,7 +715,6 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             date.add(day_start);
             date.add(month_start);
             date.add(year_start);
-            TymoApplication.getInstance().setDate(date);
 
             updateLayout(day_start, month_start - 1, year_start);
 
@@ -741,7 +740,6 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             date.add(day_start);
             date.add(month_start);
             date.add(year_start);
-            TymoApplication.getInstance().setDate(date);
 
             updateLayout(day_start, month_start - 1, year_start);
         }else if(view == deselectAll){

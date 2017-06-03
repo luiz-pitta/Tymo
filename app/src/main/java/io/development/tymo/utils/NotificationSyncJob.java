@@ -1,44 +1,26 @@
 package io.development.tymo.utils;
 
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NotificationManagerCompat;
-import android.support.v7.app.NotificationCompat;
-import android.widget.Toast;
 
 import com.evernote.android.job.Job;
-import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.util.ArrayList;
-import java.util.Random;
-import java.util.concurrent.CountDownLatch;
 
 import io.development.tymo.R;
-import io.development.tymo.activities.MainActivity;
 import io.development.tymo.activities.NextCommitmentsActivity;
 import io.development.tymo.model_server.ActivityOfDay;
-import io.development.tymo.model_server.IconServer;
-import io.development.tymo.network.NetworkUtil;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * @author rwondratschek
- */
 public class NotificationSyncJob extends Job {
 
     public static final String TAG = "job_notification_tag";
@@ -71,11 +53,12 @@ public class NotificationSyncJob extends Job {
         boolean notification3 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_REMINDER, true);
 
         int qty = list_json.get(position).getCommitmentSameHour();
+        int size = qty;
 
         if(notification1 && notification2 && notification3)
             return qty;
 
-        for(int i=0;i<list_json.size();i++){
+        for(int i=position;i<size;i++){
             ActivityOfDay activityOfDay = list_json.get(i);
             int type = activityOfDay.getType();
 

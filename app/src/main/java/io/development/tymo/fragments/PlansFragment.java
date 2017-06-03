@@ -35,7 +35,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import io.development.tymo.activities.MainActivity;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.TymoApplication;
 import io.development.tymo.model_server.ActivityServer;
@@ -62,9 +61,6 @@ import rx.subscriptions.CompositeSubscription;
 
 import static android.content.Context.MODE_PRIVATE;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
     private SharedPreferences settings;
@@ -270,10 +266,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         }
 
         ArrayList<Integer> list = TymoApplication.getInstance().getDate();
-        if(list == null && !TymoApplication.getInstance().isCreatedActivity()) {
+        if(list == null && !TymoApplication.getInstance().isCreatedActivity())
             setPlans(plans, true);
-            TymoApplication.getInstance().setDate(date);
-        }
         else {
             updateLayout(list.get(0), list.get(1), list.get(2), true);
             TymoApplication.getInstance().setDate(null);
@@ -377,7 +371,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         date.add(day_start);
         date.add(month_start);
         date.add(year_start);
-        TymoApplication.getInstance().setDate(date);
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
@@ -921,7 +914,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         date.add(day_start);
         date.add(month_start);
         date.add(year_start);
-        TymoApplication.getInstance().setDate(date);
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
@@ -1032,7 +1024,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             date.add(day_start);
             date.add(month_start);
             date.add(year_start);
-            TymoApplication.getInstance().setDate(date);
 
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "previousWeek" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1058,7 +1049,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             date.add(day_start);
             date.add(month_start);
             date.add(year_start);
-            TymoApplication.getInstance().setDate(date);
 
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "nextWeek" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
