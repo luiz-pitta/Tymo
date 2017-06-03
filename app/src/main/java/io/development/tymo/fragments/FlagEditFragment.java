@@ -4,11 +4,14 @@ package io.development.tymo.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -72,7 +75,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
     private int repeat_type = 0;
     private int repeat_qty = -1;
-    private int send_toAll = 0;
+    private int send_toAll = 1;
     private boolean isEdit = false;
 
     ArrayList<User> data = new ArrayList<>();
@@ -172,13 +175,21 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 if(position != 0) {
+                    FlagActivity flagActivity = (FlagActivity) getActivity();
+                    DisplayMetrics metrics = new DisplayMetrics();
+                    flagActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
+
+                    flagActivity.getScrollView().smoothScrollTo(0, metrics.heightPixels);
                     selectionGuestBox.setVisibility(View.VISIBLE);
                 }
-                else {
+                else
                     selectionGuestBox.setVisibility(View.GONE);
-                }
+
             }
         });
+
+        sendPicker.setSelectedIndex(1);
+        selectionGuestBox.setVisibility(View.VISIBLE);
 
         dateStart.setOnClickListener(this);
         dateEnd.setOnClickListener(this);

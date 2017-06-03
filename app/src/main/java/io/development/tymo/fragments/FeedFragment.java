@@ -499,7 +499,6 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         User usr = response.getUser();
         editor.putBoolean(Constants.LOCATION, usr.isLocationGps());
-        editor.putBoolean(Constants.NOTIFICATION, usr.isNotifications());
         editor.putBoolean(Constants.NOTIFICATION_ACT, usr.isNotificationActivity());
         editor.putBoolean(Constants.NOTIFICATION_FLAG, usr.isNotificationFlag());
         editor.putBoolean(Constants.NOTIFICATION_REMINDER, usr.isNotificationReminder());

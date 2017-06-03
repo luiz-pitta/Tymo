@@ -444,10 +444,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         commitments = false;
 
         if (response.getNumberContacts() > 0) {
-            numberContacts.setText(getResources().getString(R.string.my_contacts_count, response.getNumberContacts()));
+            String num_contacts;
+            int nc = response.getNumberContacts();
+            if(nc > 999)
+                num_contacts = nc/1000 + "," + (nc%1000)/100 + "k";
+            else
+                num_contacts = String.valueOf(response.getNumberContacts());
+            numberContacts.setText(num_contacts);
             numberContacts.setVisibility(View.VISIBLE);
         } else
             numberContacts.setVisibility(View.GONE);
+
 
         if (response.getNumberInvitationRequest() > 0) {
             invitationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));

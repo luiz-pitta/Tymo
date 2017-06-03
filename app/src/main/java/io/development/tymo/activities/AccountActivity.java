@@ -19,6 +19,8 @@ import android.widget.Toast;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.android.Utils;
 import com.cloudinary.utils.ObjectUtils;
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -145,13 +147,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         editor.putBoolean(Constants.LOGIN_TYPE, false);
         editor.putString(Constants.USER_NAME, "");
         editor.putBoolean(Constants.LOCATION, false);
-        editor.putBoolean(Constants.NOTIFICATION, false);
         editor.putBoolean(Constants.NOTIFICATION_ACT, false);
         editor.putBoolean(Constants.NOTIFICATION_FLAG, false);
         editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
         editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
         editor.putBoolean(Constants.INTRO, false);
         editor.apply();
+
+        if(AccessToken.getCurrentAccessToken() != null)
+            LoginManager.getInstance().logOut();
 
         Intent intent = new Intent(getApplicationContext(), Login1Activity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

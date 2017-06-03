@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.design.widget.Snackbar;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
@@ -31,8 +32,13 @@ import com.bumptech.glide.load.data.StreamAssetPathFetcher;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -46,6 +52,7 @@ import org.json.JSONObject;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -67,11 +74,15 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
+import static io.development.tymo.utils.Validation.validateEmail;
+
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView mBackButton, profilePhoto, logo;
     private TextView m_title, fullName;
     private TextView versionName;
+
+    private CallbackManager callbackManager;
 
     private final int USER_UPDATE = 37;
 
@@ -99,6 +110,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         UserWrapper userWrapper = (UserWrapper)getIntent().getSerializableExtra("user_about");
         user = userWrapper.getUser();
+
+        facebookSDKInitialize();
 
         mSubscriptions = new CompositeSubscription();
 
@@ -192,6 +205,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         locationSwitch.setChecked(user.isLocationGps());
         notificationsSwitch.setChecked(user.isNotifications());
 
+        boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
+
+        if(!login_type)
+            getLoginDetails();
+
         getContactUs();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -231,13 +249,20 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleResponsePush(Response response) {
+
         SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).edit();
         editor.putString(Constants.EMAIL,"");
         editor.putBoolean(Constants.LOGIN_TYPE, false);
         editor.putString(Constants.USER_NAME, "");
         editor.putBoolean(Constants.LOCATION, false);
-        editor.putBoolean(Constants.NOTIFICATION, false);
+        editor.putBoolean(Constants.NOTIFICATION_ACT, false);
+        editor.putBoolean(Constants.NOTIFICATION_FLAG, false);
+        editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
+        editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
         editor.apply();
+
+        if (AccessToken.getCurrentAccessToken() != null)
+            LoginManager.getInstance().logOut();
 
         FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
 
@@ -250,7 +275,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void handleResponse(User user) {
         SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).edit();
         editor.putBoolean(Constants.LOCATION, user.isLocationGps());
-        editor.putBoolean(Constants.NOTIFICATION, user.isNotifications());
+        editor.putBoolean(Constants.NOTIFICATION_ACT, user.isNotificationActivity());
+        editor.putBoolean(Constants.NOTIFICATION_FLAG, user.isNotificationFlag());
+        editor.putBoolean(Constants.NOTIFICATION_REMINDER, user.isNotificationReminder());
+        editor.putBoolean(Constants.NOTIFICATION_PUSH, user.isNotificationPush());
         editor.apply();
 
         setProgress(false);
@@ -265,7 +293,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleResponseFacebookImported(Response response) {
-        Toast.makeText(this, getResources().getString(R.string.settings_import_facebook_success), Toast.LENGTH_LONG).show();
+        if(response.getNumberInvitationRequest() > 0)
+            Toast.makeText(this, getResources().getString(R.string.settings_import_facebook_success), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_facebook_no_activities), Toast.LENGTH_LONG).show();
         setProgress(false);
     }
 
@@ -611,8 +642,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 user.setNotificationFlag(notification2);
                 user.setNotificationReminder(notification3);
                 user.setNotificationPush(notification4);
-            }
-        }
+            }else
+                callbackManager.onActivityResult(requestCode, resultCode, intent);
+        }else if(resultCode == RESULT_CANCELED)
+            setProgress(false);
     }
 
     private void createDialogFacebookImport() {
@@ -631,7 +664,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         buttonText1.setText(getResources().getString(R.string.no));
         buttonText2.setText(getResources().getString(R.string.yes));
 
-
         Dialog dialog = new Dialog(this, R.style.NewDialog);
 
         dialog.setContentView(customView);
@@ -647,12 +679,98 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         buttonText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                importFromFacebookRequest();
+                boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
+
+                if(!login_type) {
+                    if (AccessToken.getCurrentAccessToken() != null)
+                        LoginManager.getInstance().logOut();
+
+                    setProgress(true);
+                    LoginManager.getInstance().logInWithReadPermissions(SettingsActivity.this, Arrays.asList("email", "public_profile", "user_events"));
+                }else
+                    importFromFacebookRequest();
                 dialog.dismiss();
             }
         });
 
         dialog.show();
+    }
+
+    protected void getLoginDetails(){
+
+        LoginManager.getInstance().registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult login_result) {
+
+                GraphRequest request = GraphRequest.newMeRequest(
+                        login_result.getAccessToken(),
+                        new GraphRequest.GraphJSONObjectCallback() {
+                            @Override
+                            public void onCompleted(JSONObject object, GraphResponse response) {
+
+                                // Application code
+                                try {
+                                    JSONArray events = object.getJSONObject("events").getJSONArray("data");
+                                    ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
+                                    for(int i=0;i<events.length();i++){
+                                        JSONObject jsonObject = events.getJSONObject(i);
+                                        ActivityServer server = createActivity(jsonObject);
+                                        if(server != null)
+                                            list_activities_to_import.add(server);
+                                    }
+
+                                    if(list_activities_to_import.size() > 0)
+                                        importFromFacebook(list_activities_to_import);
+                                }
+                                catch (Exception  e){
+                                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_no_activities), Toast.LENGTH_LONG).show();
+                                }
+                            }
+                        });
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name, email,gender,birthday, picture.width(600).height(600), events, link");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                showSnackbarFacebookError();
+                setProgress(false);
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                showSnackbarFacebookError();
+                setProgress(false);
+            }
+        });
+    }
+
+    private void showSnackbarFacebookError(){
+        Snackbar snackbar =  Snackbar.make(findViewById(android.R.id.content),getString(R.string.error_facebook_login), Snackbar.LENGTH_LONG)
+                .setActionTextColor(ContextCompat.getColor(this, R.color.white))
+                .setAction(getResources().getString(R.string.help), new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "error_facebook_login" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tymo.me/termos-de-uso"));
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent.setPackage("com.android.chrome");
+                        try {
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+                            intent.setPackage(null);
+                            startActivity(intent);
+                        }
+                    }
+                });
+
+        snackbar.show();
     }
 
     private void createDialogGoogleImport() {
@@ -796,7 +914,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 importFromFacebook(list_activities_to_import);
                         }
                         catch (Exception  e){
-                            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_no_activities), Toast.LENGTH_LONG).show();
+                            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_facebook_no_activities), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -804,6 +922,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         parameters.putString("fields", "id, email, events");
         request.setParameters(parameters);
         request.executeAsync();
+    }
+
+    protected void facebookSDKInitialize() {
+        callbackManager = CallbackManager.Factory.create();
     }
 
     private ActivityServer createActivity(JSONObject jsonObject){

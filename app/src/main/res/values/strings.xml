@@ -152,7 +152,7 @@
     <string name="administrator_toast">Novo Administrador: %1$s</string>
     <string name="advance">Avançar</string>
     <string name="all_commitments_already_finished">Todos os seus compromissos já terminaram</string>
-    <string name="allow_notifications">Permitir Notificações</string>
+    <string name="allow_notifications">Central de Notificações</string>
     <string name="already_happened">Já passou</string>
     <string name="apply">Aplicar</string>
     <string name="back">Voltar</string>
@@ -303,8 +303,8 @@
     <string name="holidays_and_celebrations">Feriados e Datas Comemorativas</string>
     <string name="hour">Hora</string>
     <string name="ignore">Ignorar</string>
-    <string name="import_from_facebook">Importar do Facebook</string>
-    <string name="import_from_google_agenda">Importar do Google Agenda</string>
+    <string name="import_from_facebook">Importar Eventos do Facebook</string>
+    <string name="import_from_google_agenda">Importar Compromissos do Google Agenda</string>
     <string name="import_google_calendar_permission">Você precisa dessa permissão para importar do Google Agenda</string>
     <string name="infos_to_contact">Informações para contato</string>
     <string name="interests">Interesses</string>
@@ -434,10 +434,11 @@
     <string name="settings">Configurações</string>
     <string name="settings_import_facebook_success">Importado do Facebook com sucesso!</string>
     <string name="settings_import_facebook_tag">Facebook</string>
-    <string name="settings_import_facebook_text">Você deseja importar as suas atividades?</string>
-    <string name="settings_import_google_calendar_text">Você deseja importar as suas atividades de qual conta?</string>
+    <string name="settings_import_facebook_text">Você deseja importar seus eventos?</string>
+    <string name="settings_import_google_calendar_text">Você deseja importar seus compromissos de qual conta?</string>
     <string name="settings_import_google_calendar_title">Google Agenda</string>
-    <string name="settings_import_google_no_activities">Você não possui nenhuma atividade para importar!</string>
+    <string name="settings_import_google_no_activities">Você não possui nenhum compromisso para importar!</string>
+    <string name="settings_import_facebook_no_activities">Você não possui nenhum evento para importar!</string>
     <string name="settings_import_google_error">Erro ao conectar com o Google Agenda!</string>
     <string name="settings_import_google_success">Importado do Google Agenda com sucesso!</string>
     <string name="settings_import_google_tag">Google Agenda</string>

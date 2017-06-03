@@ -165,7 +165,6 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
         editor.putBoolean(Constants.LOGIN_TYPE, usr.getFromFacebook());
         editor.putString(Constants.USER_NAME, usr.getName());
         editor.putBoolean(Constants.LOCATION, usr.isLocationGps());
-        editor.putBoolean(Constants.NOTIFICATION, usr.isNotifications());
         editor.putBoolean(Constants.NOTIFICATION_ACT, usr.isNotificationActivity());
         editor.putBoolean(Constants.NOTIFICATION_FLAG, usr.isNotificationFlag());
         editor.putBoolean(Constants.NOTIFICATION_REMINDER, usr.isNotificationReminder());
@@ -186,7 +185,10 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 editor.putBoolean(Constants.LOGIN_TYPE, false);
                 editor.putString(Constants.USER_NAME, "");
                 editor.putBoolean(Constants.LOCATION, false);
-                editor.putBoolean(Constants.NOTIFICATION, false);
+                editor.putBoolean(Constants.NOTIFICATION_ACT, false);
+                editor.putBoolean(Constants.NOTIFICATION_FLAG, false);
+                editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
+                editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
                 editor.putBoolean(Constants.INTRO, false);
                 editor.apply();
                 Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_LONG).show();
@@ -194,6 +196,9 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
         }else{
             editUser.setText(null);
             editPassword.setText(null);
+
+            if(AccessToken.getCurrentAccessToken() != null)
+                LoginManager.getInstance().logOut();
 
             Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

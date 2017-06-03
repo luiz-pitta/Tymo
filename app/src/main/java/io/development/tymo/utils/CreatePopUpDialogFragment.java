@@ -908,10 +908,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
         args.putSerializable("type", type);
         f.setArguments(args);
         f.setTiltEnabled(true);
-        if (object instanceof Flag || object instanceof BirthdayCard || object instanceof ActivityCard)
-            f.setSwipeable(false);
-        else
-            f.setSwipeable(true);
+        f.setSwipeable(false);
         obj = object;
         screen = s;
         friend = usr;

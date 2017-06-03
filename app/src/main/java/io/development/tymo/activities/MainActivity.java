@@ -699,7 +699,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 profileFragment.updateLayout();
 
 
-            if(feedFragment != null && mNavigator.getCurrentPosition() != FEED)
+            if(feedFragment != null)
                 feedFragment.setFeedRefresh();
 
             if(searchFragment != null && mNavigator.getCurrentPosition() == SEARCH)

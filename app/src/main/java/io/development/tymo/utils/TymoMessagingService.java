@@ -36,13 +36,12 @@ public class TymoMessagingService extends FirebaseMessagingService {
         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-        boolean notification = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION, true);
         boolean notification_push = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_PUSH, true);
 
         if (type.matches("peopleAccept"))
             updateSearchMessageToActivity();
 
-        if(notification && notification_push) {
+        if(notification_push) {
             if (type.matches("engagement")) {
                 if (map.get("activated").matches("true")) {
                     sendNotificationEngagement(map.get("title"), map.get("text"));

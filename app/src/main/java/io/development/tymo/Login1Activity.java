@@ -112,6 +112,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
         if(validateEmail(log))
             startActivity(new Intent(Login1Activity.this, MainActivity.class));
         else {
+
             mSubscriptions = new CompositeSubscription();
             getLoginDetails();
 
@@ -178,7 +179,6 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             editor.putBoolean(Constants.LOGIN_TYPE, usr.getFromFacebook());
             editor.putString(Constants.USER_NAME, usr.getName());
             editor.putBoolean(Constants.LOCATION, usr.isLocationGps());
-            editor.putBoolean(Constants.NOTIFICATION, usr.isNotifications());
             editor.putBoolean(Constants.NOTIFICATION_ACT, usr.isNotificationActivity());
             editor.putBoolean(Constants.NOTIFICATION_FLAG, usr.isNotificationFlag());
             editor.putBoolean(Constants.NOTIFICATION_REMINDER, usr.isNotificationReminder());

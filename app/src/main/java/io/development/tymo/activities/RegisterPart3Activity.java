@@ -206,7 +206,10 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         editor.putBoolean(Constants.LOGIN_TYPE, user.getFromFacebook());
         editor.putString(Constants.USER_NAME, user.getName());
         editor.putBoolean(Constants.LOCATION, user.isLocationGps());
-        editor.putBoolean(Constants.NOTIFICATION, user.isNotifications());
+        editor.putBoolean(Constants.NOTIFICATION_ACT, user.isNotificationActivity());
+        editor.putBoolean(Constants.NOTIFICATION_FLAG, user.isNotificationFlag());
+        editor.putBoolean(Constants.NOTIFICATION_REMINDER, user.isNotificationReminder());
+        editor.putBoolean(Constants.NOTIFICATION_PUSH, user.isNotificationPush());
 
         editor.apply();
 
