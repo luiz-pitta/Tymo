@@ -220,4 +220,12 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
         super.onDestroy();
         mSubscriptions.unsubscribe();
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        getFriendRequest(email);
+    }
 }

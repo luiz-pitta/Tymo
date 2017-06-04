@@ -83,7 +83,6 @@ public class SearchPeopleFragment extends Fragment {
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(listPeople);
-            mRecyclerView.showRecycler();
         }
     }
 
@@ -98,7 +97,6 @@ public class SearchPeopleFragment extends Fragment {
         if (isVisibleToUser && adapter != null) {
             adapter.clear();
             adapter.addAll(listPeople);
-            mRecyclerView.showRecycler();
         }
     }
 

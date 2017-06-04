@@ -75,7 +75,6 @@ public class SearchWhatsFragment extends Fragment {
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(listWhats);
-            mRecyclerView.showRecycler();
         }
     }
 
@@ -90,7 +89,6 @@ public class SearchWhatsFragment extends Fragment {
         if (isVisibleToUser && adapter != null) {
             adapter.clear();
             adapter.addAll(listWhats);
-            mRecyclerView.showRecycler();
         }
     }
 }

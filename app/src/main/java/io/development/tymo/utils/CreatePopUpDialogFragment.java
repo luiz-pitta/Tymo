@@ -191,9 +191,44 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 //ACTIVITY_DELETED_SUCCESSFULLY, RELATIONSHIP_UPDATED_SUCCESSFULLY e WITHOUT_NOTIFICATION
 
                 if (callback != null) {
+                    Calendar c = Calendar.getInstance();
+                    int day = c.get(Calendar.DAY_OF_MONTH);
+                    int month = c.get(Calendar.MONTH) + 1;
+                    int year = c.get(Calendar.YEAR);
+
+                    Calendar c2 = Calendar.getInstance();
+                    c2.add(Calendar.DATE, 1);
+                    int day2 = c2.get(Calendar.DAY_OF_MONTH);
+                    int month2 = c2.get(Calendar.MONTH) + 1;
+                    int year2 = c2.get(Calendar.YEAR);
+
+                    int d;
+                    int m;
+                    int y;
+
                     callback.refreshLayout(true);
                     updateFeedMessageToActivity(mContext);
-                    updateNotificationStartToday(mContext);
+
+                    if(activityServer != null){
+                        d = activityServer.getDayStart();
+                        m = activityServer.getMonthStart();
+                        y = activityServer.getYearStart();
+                    }else if(flagServer != null){
+                        d = flagServer.getDayStart();
+                        m = flagServer.getMonthStart();
+                        y = flagServer.getYearStart();
+                    }else if(reminderServer != null){
+                        d = reminderServer.getDayStart();
+                        m = reminderServer.getMonthStart();
+                        y = reminderServer.getYearStart();
+                    }else {
+                        d = day;
+                        m = month;
+                        y = year;
+                    }
+
+                    if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+                        updateNotificationStartToday(mContext);
                 }
             }
 

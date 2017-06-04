@@ -26,6 +26,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.lsjwzh.widget.recyclerviewpager.RecyclerViewPager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -64,6 +65,8 @@ public class FeedCardFragment extends Fragment {
     private FeedZoomMoreAdapter adapter;
     private CompositeSubscription mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    int d_notify, m_notify, y_notify;
 
     private List<Object> listFeed = new ArrayList<>();
 
@@ -276,8 +279,24 @@ public class FeedCardFragment extends Fragment {
     }
 
     private void handleDeleteIgnoreConfirm(Response response) {
-        Intent intent = new Intent("notification_update");
-        LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.add(Calendar.DATE, 1);
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);
+        int month2 = c2.get(Calendar.MONTH) + 1;
+        int year2 = c2.get(Calendar.YEAR);
+
+        if((d_notify == day && m_notify == month && y_notify == year) || (d_notify == day2 && m_notify == month2 && y_notify == year2)) {
+            d_notify = -1;
+            m_notify = -1;
+            y_notify = -1;
+            Intent intent = new Intent("notification_update");
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
         //Toast.makeText(getActivity(), ServerMessage.getServerMessage(getActivity(), response.getMessage()), Toast.LENGTH_LONG).show();
     }
 
@@ -289,6 +308,18 @@ public class FeedCardFragment extends Fragment {
         Object item = adapter.getCurrentItem();
         Snackbar snackbar;
         int currentPosition = adapter.getCurrentItemId();
+
+        if(item instanceof ActivityServer){
+            ActivityServer activityServer = (ActivityServer)item;
+            d_notify = activityServer.getDayStart();
+            m_notify = activityServer.getMonthStart();
+            y_notify = activityServer.getYearStart();
+        }else if(item instanceof FlagServer){
+            FlagServer flagServer = (FlagServer)item;
+            d_notify = flagServer.getDayStart();
+            m_notify = flagServer.getMonthStart();
+            y_notify = flagServer.getYearStart();
+        }
 
         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
         v.vibrate(200);
@@ -362,6 +393,18 @@ public class FeedCardFragment extends Fragment {
         Object item = adapter.getCurrentItem();
         Snackbar snackbar;
         int currentPosition = adapter.getCurrentItemId();
+
+        if(item instanceof ActivityServer){
+            ActivityServer activityServer = (ActivityServer)item;
+            d_notify = activityServer.getDayStart();
+            m_notify = activityServer.getMonthStart();
+            y_notify = activityServer.getYearStart();
+        }else if(item instanceof FlagServer){
+            FlagServer flagServer = (FlagServer)item;
+            d_notify = flagServer.getDayStart();
+            m_notify = flagServer.getMonthStart();
+            y_notify = flagServer.getYearStart();
+        }
 
         if(item != null) {
             adapter.removeCurrentItem();

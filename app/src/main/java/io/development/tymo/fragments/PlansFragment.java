@@ -63,8 +63,6 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
-    private SharedPreferences settings;
-    private SharedPreferences.Editor editor;
     private FragmentNavigator mNavigator;
     private LinearLayout mDateBox;
     private NestedScrollView scrollView;
@@ -132,8 +130,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
         gestureDetector = new GestureDetector(getActivity(), new SingleTapConfirm());
-        settings = view.getContext().getSharedPreferences(Utilities.PREFS_NAME, MODE_PRIVATE);
-        editor = settings.edit();
 
         commitmentsButton = (TextView) view.findViewById(R.id.commitmentsButton);
         freeTimeButton = (TextView) view.findViewById(R.id.freeTimeButton);
@@ -184,27 +180,14 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         cal.clear(Calendar.SECOND);
         cal.clear(Calendar.MILLISECOND);
 
-        while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+        while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
             cal.add(Calendar.DATE, -1);
-        }
 
         cal.add(Calendar.DAY_OF_WEEK, -15);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
         int month = cal.get(Calendar.MONTH) + 1;
-        int year = cal.get(Calendar.YEAR);
-
-        cal.set(year, month-1,day, 0,0);
-        long time1 = cal.getTimeInMillis();
 
         cal.add(Calendar.DAY_OF_WEEK, 21);
-        int day2 = cal.get(Calendar.DAY_OF_MONTH);
         int month2 = cal.get(Calendar.MONTH) + 1;
-        int year2 = cal.get(Calendar.YEAR);
-
-        cal.set(year2, month2-1,day2, 23,59);
-        long time2 = cal.getTimeInMillis();
-
-        int d1f = day;
 
         if (month != month2) {
             Calendar cal2 = Calendar.getInstance();
@@ -216,23 +199,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             cal2.add(Calendar.DAY_OF_WEEK, 1);
             int day3 = cal2.get(Calendar.DAY_OF_MONTH);
             while (day3 != 1) {
-                d1f = day3;
                 cal2.add(Calendar.DAY_OF_WEEK, 1);
                 day3 = cal2.get(Calendar.DAY_OF_MONTH);
             }
         }
-
-        Plans plans = new Plans();
-        plans.setEmail(email);
-        plans.setA(year);
-        plans.setA2(year2);
-        plans.setD1(day);
-        plans.setD2(day2);
-        plans.setM(month);
-        plans.setM2(month2);
-        plans.setD1f(d1f);
-
-        plans.addEmails("");
 
         int day_start_temp = cal.get(Calendar.DAY_OF_MONTH);
         int month_start_temp = cal.get(Calendar.MONTH) + 1;
@@ -241,11 +211,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         day_start = cal.get(Calendar.DAY_OF_MONTH);
         month_start = cal.get(Calendar.MONTH) + 1;
         year_start = cal.get(Calendar.YEAR);
-
-        ArrayList<Integer> date = new ArrayList<>();
-        date.add(day_start);
-        date.add(month_start);
-        date.add(year_start);
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
@@ -260,15 +225,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                     1);
         }
 
-        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR)
-                == PackageManager.PERMISSION_GRANTED) {
-            list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(),time1,time2);
-        }
-
         ArrayList<Integer> list = TymoApplication.getInstance().getDate();
         if(list == null && !TymoApplication.getInstance().isCreatedActivity())
-            setPlans(plans, true);
-        else {
+            refreshLayout(true);
+        else if(list != null && list.size() >= 3){
             updateLayout(list.get(0), list.get(1), list.get(2), true);
             TymoApplication.getInstance().setDate(null);
             TymoApplication.getInstance().setCreatedActivity(false);
@@ -276,7 +236,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     }
 
     void refreshItems() {
-        // Load items
+
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -290,7 +250,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             }
         }, 500);
 
-        // Load complete
     }
 
     public void updateLayout(int dayOfMonth, int monthOfYear, int year, boolean showRefresh) {
@@ -366,11 +325,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         day_start = cal.get(Calendar.DAY_OF_MONTH);
         month_start = cal.get(Calendar.MONTH) + 1;
         year_start = cal.get(Calendar.YEAR);
-
-        ArrayList<Integer> date = new ArrayList<>();
-        date.add(day_start);
-        date.add(month_start);
-        date.add(year_start);
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
@@ -910,11 +864,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         month_start = cal.get(Calendar.MONTH) + 1;
         year_start = cal.get(Calendar.YEAR);
 
-        ArrayList<Integer> date = new ArrayList<>();
-        date.add(day_start);
-        date.add(month_start);
-        date.add(year_start);
-
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
         dateTextWeek.setText(getResources().getString(R.string.date_format_2, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp),month_text_start_temp));
@@ -1020,11 +969,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
 
-            ArrayList<Integer> date = new ArrayList<>();
-            date.add(day_start);
-            date.add(month_start);
-            date.add(year_start);
-
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "previousWeek" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1044,11 +988,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             day_start = cal.get(Calendar.DAY_OF_MONTH);
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
-
-            ArrayList<Integer> date = new ArrayList<>();
-            date.add(day_start);
-            date.add(month_start);
-            date.add(year_start);
 
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "nextWeek" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));

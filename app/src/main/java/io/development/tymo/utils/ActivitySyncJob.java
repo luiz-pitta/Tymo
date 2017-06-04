@@ -26,6 +26,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityOfDay;
@@ -48,6 +49,30 @@ public class ActivitySyncJob extends Job {
 
     private CompositeSubscription mSubscriptions;
 
+    public static void schedule() {
+        schedule(true);
+    }
+
+    private static void schedule(boolean updateCurrent) {
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute = calendar.get(Calendar.MINUTE);
+
+        // 0:05 AM - 0:20 AM, ignore seconds
+        long startMs = TimeUnit.MINUTES.toMillis(60 - minute) - TimeUnit.MINUTES.toMillis(55)
+                + TimeUnit.HOURS.toMillis((24 - hour));
+        long endMs = startMs + TimeUnit.MINUTES.toMillis(15);
+
+        new JobRequest.Builder(TAG)
+                .setExecutionWindow(startMs, endMs)
+                .setPersisted(true)
+                .setUpdateCurrent(updateCurrent)
+                .setRequiredNetworkType(JobRequest.NetworkType.values()[1])
+                .setRequirementsEnforced(true)
+                .build()
+                .schedule();
+    }
+
     @Override
     @NonNull
     protected Result onRunJob(final Params params) {
@@ -56,7 +81,7 @@ public class ActivitySyncJob extends Job {
 
         final CountDownLatch countDownLatch = new CountDownLatch(1);
 
-        //Para previnir que o gerenciador de memoria do android mate o job antes de pegar as atividades
+        //Para previnir que o gerenciador de memória do android mate o job antes de pegar as atividades
         new Thread() {
             @Override
             public void run() {
@@ -69,10 +94,13 @@ public class ActivitySyncJob extends Job {
 
         try {
             countDownLatch.await();
+            return Result.SUCCESS;
         } catch (InterruptedException ignored) {
+            return Result.FAILURE;
+        }finally {
+            schedule(false); // don't update current, it would cancel this currently running job
         }
 
-        return Result.SUCCESS;
     }
 
     private void getActivityStartToday(){
@@ -144,6 +172,9 @@ public class ActivitySyncJob extends Job {
                 int start_hour2 = 0, start_minute2 = 0;
                 int end_hour = 0, end_minute = 0;
                 int end_hour2 = 0, end_minute2 = 0;
+                int day = 0, day2 = 0;
+                int month = 0, month2 = 0;
+                int year = 0, year2 = 0;
                 int status = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
                 int status2 = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
 
@@ -158,6 +189,10 @@ public class ActivitySyncJob extends Job {
                     start_minute = activityServer.getMinuteStart();
                     end_hour = activityServer.getHourEnd();
                     end_minute = activityServer.getMinuteEnd();
+
+                    day = activityServer.getDayStart();
+                    month = activityServer.getMonthStart();
+                    year = activityServer.getYearStart();
 
                     String hour = String.format("%02d", start_hour);
                     String minute = String.format("%02d", start_minute);
@@ -217,6 +252,10 @@ public class ActivitySyncJob extends Job {
                     end_hour = flagServer.getHourEnd();
                     end_minute = flagServer.getMinuteEnd();
 
+                    day = flagServer.getDayStart();
+                    month = flagServer.getMonthStart();
+                    year = flagServer.getYearStart();
+
                     String hour = String.format("%02d", start_hour);
                     String minute = String.format("%02d", start_minute);
                     String hourEnd = String.format("%02d", end_hour);
@@ -273,6 +312,10 @@ public class ActivitySyncJob extends Job {
                     start_hour = reminderServer.getHourStart();
                     start_minute = reminderServer.getMinuteStart();
 
+                    day = reminderServer.getDayStart();
+                    month = reminderServer.getMonthStart();
+                    year = reminderServer.getYearStart();
+
                     if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
                         status = -1;
                     } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
@@ -280,9 +323,6 @@ public class ActivitySyncJob extends Job {
                     } else {
                         status = 0;
                     }
-
-                    String hour = String.format("%02d", start_hour);
-                    String minute = String.format("%02d", start_minute);
 
                     reminderServer.setStatus(status);
                 }
@@ -294,6 +334,10 @@ public class ActivitySyncJob extends Job {
                     start_minute2 = activityServer.getMinuteStart();
                     end_hour2 = activityServer.getHourEnd();
                     end_minute2 = activityServer.getMinuteEnd();
+
+                    day2 = activityServer.getDayStart();
+                    month2 = activityServer.getMonthStart();
+                    year2 = activityServer.getYearStart();
 
                     String hour = String.format("%02d", start_hour2);
                     String minute = String.format("%02d", start_minute2);
@@ -353,6 +397,10 @@ public class ActivitySyncJob extends Job {
                     end_hour2 = flagServer.getHourEnd();
                     end_minute2 = flagServer.getMinuteEnd();
 
+                    day2 = flagServer.getDayStart();
+                    month2 = flagServer.getMonthStart();
+                    year2 = flagServer.getYearStart();
+
                     String hour = String.format("%02d", start_hour2);
                     String minute = String.format("%02d", start_minute2);
                     String hourEnd = String.format("%02d", end_hour2);
@@ -409,6 +457,10 @@ public class ActivitySyncJob extends Job {
                     start_hour2 = reminderServer.getHourStart();
                     start_minute2 = reminderServer.getMinuteStart();
 
+                    day2 = reminderServer.getDayStart();
+                    month2 = reminderServer.getMonthStart();
+                    year2 = reminderServer.getYearStart();
+
                     if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour2 + ":" + start_minute2)) {
                         status2 = -1;
                     } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour2 + ":" + start_minute2)) {
@@ -417,14 +469,23 @@ public class ActivitySyncJob extends Job {
                         status2 = 0;
                     }
 
-                    String hour = String.format("%02d", start_hour2);
-                    String minute = String.format("%02d", start_minute2);
-
                     reminderServer.setStatus(status2);
 
                 }
 
-                if (status < status2)
+                if (year < year2)
+                    return -1;
+                else if (year > year2)
+                    return 1;
+                else if (month < month2)
+                    return -1;
+                else if (month > month2)
+                    return 1;
+                else if (day < day2)
+                    return -1;
+                else if (day > day2)
+                    return 1;
+                else if (status < status2)
                     return -1;
                 else if (status > status2)
                     return 1;
@@ -475,7 +536,8 @@ public class ActivitySyncJob extends Job {
             // Activity
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
-                list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT));
+                list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
+                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
 
                 hourStartText = String.format("%02d", activityServer.getHourStart());
                 minuteStartText = String.format("%02d", activityServer.getMinuteStart());
@@ -550,7 +612,8 @@ public class ActivitySyncJob extends Job {
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
-                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG));
+                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
+                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
 
                 hourStartText = String.format("%02d", flagServer.getHourStart());
                 minuteStartText = String.format("%02d", flagServer.getMinuteStart());
@@ -625,7 +688,8 @@ public class ActivitySyncJob extends Job {
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER));
+                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
 
                 hourStartText = String.format("%02d", reminderServer.getHourStart());
                 minuteStartText = String.format("%02d", reminderServer.getMinuteStart());
@@ -703,6 +767,9 @@ public class ActivitySyncJob extends Job {
                 extras.putInt("position_act", i);
 
                 ActivityOfDay activityOfDay = list_notify.get(i);
+                c2.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
+                c2.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+                c2.set(Calendar.YEAR, activityOfDay.getYear());
                 c2.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
                 c2.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
                 time_exact = (int)(c2.getTimeInMillis()-c1.getTimeInMillis())/(1000*60);

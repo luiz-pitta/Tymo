@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.android.Utils;
 import com.cloudinary.utils.ObjectUtils;
+import com.evernote.android.job.JobManager;
 import com.facebook.AccessToken;
 import com.facebook.login.LoginManager;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -157,17 +158,21 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         if(AccessToken.getCurrentAccessToken() != null)
             LoginManager.getInstance().logOut();
 
+        JobManager mJobManager = JobManager.instance();
+        if(mJobManager.getAllJobRequests().size() > 0)
+            mJobManager.cancelAll();
+
         Intent intent = new Intent(getApplicationContext(), Login1Activity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
     }
 
     private void handleError(Throwable error) {
-        if (error instanceof HttpException) {
+        if (error instanceof retrofit2.HttpException) {
             Gson gson = new GsonBuilder().create();
             try {
 
-                String errorBody = ((HttpException) error).response().errorBody().string();
+                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
                 findViewById(R.id.include).setVisibility(View.GONE);
                 Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();

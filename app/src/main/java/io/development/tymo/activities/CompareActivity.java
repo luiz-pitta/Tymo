@@ -711,11 +711,6 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
 
-            ArrayList<Integer> date = new ArrayList<>();
-            date.add(day_start);
-            date.add(month_start);
-            date.add(year_start);
-
             updateLayout(day_start, month_start - 1, year_start);
 
         } else if (view == nextWeek) {
@@ -735,11 +730,6 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             day_start = cal.get(Calendar.DAY_OF_MONTH);
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
-
-            ArrayList<Integer> date = new ArrayList<>();
-            date.add(day_start);
-            date.add(month_start);
-            date.add(year_start);
 
             updateLayout(day_start, month_start - 1, year_start);
         }else if(view == deselectAll){

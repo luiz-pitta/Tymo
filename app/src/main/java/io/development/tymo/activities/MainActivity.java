@@ -567,7 +567,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int month = c.get(Calendar.MONTH);
             int year = c.get(Calendar.YEAR);
 
-            if(d == day && m == month && y == year)
+            Calendar c2 = Calendar.getInstance();
+            c2.add(Calendar.DATE, 1);
+            int day2 = c2.get(Calendar.DAY_OF_MONTH);
+            int month2 = c2.get(Calendar.MONTH);
+            int year2 = c2.get(Calendar.YEAR);
+
+            if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
                 getActivityStartToday();
 
             ArrayList<Integer> list = new ArrayList<>();
@@ -687,7 +693,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     plansFragment.refreshLayout(false);
                 }else {
                     d = date.get(0);
-                    m = date.get(1)-1;
+                    m = date.get(1);
                     y = date.get(2);
                     plansFragment.updateLayout(d,m,y, true);
                 }
@@ -735,14 +741,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void setActivityPeriodicJob() {
         if(mJobManager.getAllJobRequestsForTag(ActivitySyncJob.TAG).size() == 0) {
             getActivityStartToday();
-
-            new JobRequest.Builder(ActivitySyncJob.TAG)
-                    .setPeriodic(TimeUnit.HOURS.toMillis(8), TimeUnit.HOURS.toMillis(1))
-                    .setPersisted(true)
-                    .setRequiredNetworkType(JobRequest.NetworkType.values()[1])
-                    .setRequirementsEnforced(true)
-                    .build()
-                    .schedule();
+            ActivitySyncJob.schedule();
         }
     }
 
@@ -778,6 +777,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleResponseToday(Response response) {
 
+        JobManager mJobManager = JobManager.instance();
         if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
             mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
 
@@ -814,6 +814,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 int start_hour2 = 0, start_minute2 = 0;
                 int end_hour = 0, end_minute = 0;
                 int end_hour2 = 0, end_minute2 = 0;
+                int day = 0, day2 = 0;
+                int month = 0, month2 = 0;
+                int year = 0, year2 = 0;
                 int status = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
                 int status2 = 0; // -1 = already happened ; 0 = is happening ; 1 = will happen
 
@@ -828,6 +831,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start_minute = activityServer.getMinuteStart();
                     end_hour = activityServer.getHourEnd();
                     end_minute = activityServer.getMinuteEnd();
+
+                    day = activityServer.getDayStart();
+                    month = activityServer.getMonthStart();
+                    year = activityServer.getYearStart();
 
                     String hour = String.format("%02d", start_hour);
                     String minute = String.format("%02d", start_minute);
@@ -887,6 +894,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     end_hour = flagServer.getHourEnd();
                     end_minute = flagServer.getMinuteEnd();
 
+                    day = flagServer.getDayStart();
+                    month = flagServer.getMonthStart();
+                    year = flagServer.getYearStart();
+
                     String hour = String.format("%02d", start_hour);
                     String minute = String.format("%02d", start_minute);
                     String hourEnd = String.format("%02d", end_hour);
@@ -943,6 +954,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start_hour = reminderServer.getHourStart();
                     start_minute = reminderServer.getMinuteStart();
 
+                    day = reminderServer.getDayStart();
+                    month = reminderServer.getMonthStart();
+                    year = reminderServer.getYearStart();
+
                     if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
                         status = -1;
                     } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour + ":" + start_minute)) {
@@ -950,9 +965,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     } else {
                         status = 0;
                     }
-
-                    String hour = String.format("%02d", start_hour);
-                    String minute = String.format("%02d", start_minute);
 
                     reminderServer.setStatus(status);
                 }
@@ -964,6 +976,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start_minute2 = activityServer.getMinuteStart();
                     end_hour2 = activityServer.getHourEnd();
                     end_minute2 = activityServer.getMinuteEnd();
+
+                    day2 = activityServer.getDayStart();
+                    month2 = activityServer.getMonthStart();
+                    year2 = activityServer.getYearStart();
 
                     String hour = String.format("%02d", start_hour2);
                     String minute = String.format("%02d", start_minute2);
@@ -1023,6 +1039,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     end_hour2 = flagServer.getHourEnd();
                     end_minute2 = flagServer.getMinuteEnd();
 
+                    day2 = flagServer.getDayStart();
+                    month2 = flagServer.getMonthStart();
+                    year2 = flagServer.getYearStart();
+
                     String hour = String.format("%02d", start_hour2);
                     String minute = String.format("%02d", start_minute2);
                     String hourEnd = String.format("%02d", end_hour2);
@@ -1079,6 +1099,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     start_hour2 = reminderServer.getHourStart();
                     start_minute2 = reminderServer.getMinuteStart();
 
+                    day2 = reminderServer.getDayStart();
+                    month2 = reminderServer.getMonthStart();
+                    year2 = reminderServer.getYearStart();
+
                     if (isTimeInBefore(hourNow + ":" + minuteNow, start_hour2 + ":" + start_minute2)) {
                         status2 = -1;
                     } else if (isTimeInAfter(hourNow + ":" + minuteNow, start_hour2 + ":" + start_minute2)) {
@@ -1087,14 +1111,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         status2 = 0;
                     }
 
-                    String hour = String.format("%02d", start_hour2);
-                    String minute = String.format("%02d", start_minute2);
-
                     reminderServer.setStatus(status2);
 
                 }
 
-                if (status < status2)
+                if (year < year2)
+                    return -1;
+                else if (year > year2)
+                    return 1;
+                else if (month < month2)
+                    return -1;
+                else if (month > month2)
+                    return 1;
+                else if (day < day2)
+                    return -1;
+                else if (day > day2)
+                    return 1;
+                else if (status < status2)
                     return -1;
                 else if (status > status2)
                     return 1;
@@ -1145,7 +1178,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Activity
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
-                list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT));
+                list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
+                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
 
                 hourStartText = String.format("%02d", activityServer.getHourStart());
                 minuteStartText = String.format("%02d", activityServer.getMinuteStart());
@@ -1220,7 +1254,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
-                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG));
+                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
+                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
 
                 hourStartText = String.format("%02d", flagServer.getHourStart());
                 minuteStartText = String.format("%02d", flagServer.getMinuteStart());
@@ -1295,7 +1330,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER));
+                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
 
                 hourStartText = String.format("%02d", reminderServer.getHourStart());
                 minuteStartText = String.format("%02d", reminderServer.getMinuteStart());
@@ -1373,6 +1409,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 extras.putInt("position_act", i);
 
                 ActivityOfDay activityOfDay = list_notify.get(i);
+                c2.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
+                c2.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+                c2.set(Calendar.YEAR, activityOfDay.getYear());
                 c2.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
                 c2.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
                 time_exact = (int)(c2.getTimeInMillis()-c1.getTimeInMillis())/(1000*60);

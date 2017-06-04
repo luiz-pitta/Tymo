@@ -206,13 +206,13 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
     private void handleError(Throwable error) {
 
-        if (error instanceof HttpException) {
+        if (error instanceof retrofit2.HttpException) {
 
             Gson gson = new GsonBuilder().create();
 
             try {
 
-                String errorBody = ((HttpException) error).response().errorBody().string();
+                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
                 Response response = gson.fromJson(errorBody,Response.class);
                 if(response.getMessage().matches("REGISTER")) {
 

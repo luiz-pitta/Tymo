@@ -953,11 +953,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
 
-            ArrayList<Integer> date = new ArrayList<>();
-            date.add(day_start);
-            date.add(month_start);
-            date.add(year_start);
-
             updatePlansFriend(year_start, month_start - 1, day_start, false);
 
         }
@@ -978,11 +973,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             day_start = cal.get(Calendar.DAY_OF_MONTH);
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
-
-            ArrayList<Integer> date = new ArrayList<>();
-            date.add(day_start);
-            date.add(month_start);
-            date.add(year_start);
 
             updatePlansFriend(year_start, month_start - 1, day_start, false);
         }

@@ -51,10 +51,8 @@ public class NextCommitmentsActivity extends AppCompatActivity implements View.O
     private NotificationAdapter adapter;
     private DateFormat dateFormat;
 
-    private Handler handler = new Handler();
-
     private ImageView mBackButton;
-    private TextView m_title, dateText, commitmentsQtyText;
+    private TextView m_title, dateText;
 
     private CompositeSubscription mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -76,7 +74,6 @@ public class NextCommitmentsActivity extends AppCompatActivity implements View.O
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
-        //commitmentsQtyText = (TextView) findViewById(R.id.commitmentsQtyText);
         dateText = (TextView) findViewById(R.id.dateMonthYear);
         recyclerView = (EasyRecyclerView) findViewById(R.id.recycler_view);
 
@@ -698,6 +695,26 @@ public class NextCommitmentsActivity extends AppCompatActivity implements View.O
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.unsubscribe();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+
+        Query query = new Query();
+        query.setEmail(email);
+        query.setDay(day);
+        query.setMonth(month);
+        query.setYear(year);
+
+        setNotifications(query);
     }
 
 }
