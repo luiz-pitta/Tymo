@@ -28,7 +28,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.data.StreamAssetPathFetcher;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.AccessToken;
@@ -66,15 +65,12 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
-import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
-
-import static io.development.tymo.utils.Validation.validateEmail;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -546,7 +542,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            startActivity(new Intent(SettingsActivity.this, PreferencesActivity.class));
+            startActivity(new Intent(SettingsActivity.this, MyInterestsActivity.class));
         }
         else if(view == notifications){
             Intent intent = new Intent(this, NotificationsActivity.class);

@@ -122,7 +122,7 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_notification"
+                            android:background="@drawable/bg_settings_account"
                             android:padding="2dp"
                             android:src="@drawable/ic_add_flag"
                             android:tint="@color/white" />
@@ -180,7 +180,7 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_privacy"
+                            android:background="@drawable/bg_settings_account"
                             android:padding="2dp"
                             android:src="@drawable/ic_add_reminder"
                             android:tint="@color/white" />

@@ -37,7 +37,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class PreferencesActivity extends AppCompatActivity implements View.OnClickListener {
+public class MyInterestsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView mBackButton;
     private TextView m_title, advanceButton;
@@ -53,7 +53,7 @@ public class PreferencesActivity extends AppCompatActivity implements View.OnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_preferences);
+        setContentView(R.layout.activity_settings_my_interests);
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
@@ -66,7 +66,7 @@ public class PreferencesActivity extends AppCompatActivity implements View.OnCli
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.preferences));
+        m_title.setText(getResources().getString(R.string.my_interests));
 
         mSubscriptions = new CompositeSubscription();
 

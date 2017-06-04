@@ -38,7 +38,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_notifications);
+        setContentView(R.layout.activity_settings_notifications);
 
         UserWrapper userWrapper = (UserWrapper)getIntent().getSerializableExtra("user_about");
         user = userWrapper.getUser();
