@@ -24,6 +24,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class NotificationSyncJob extends Job {
 
     public static final String TAG = "job_notification_tag";
+    private int position_single = -1;
 
     @Override
     @NonNull
@@ -40,7 +41,7 @@ public class NotificationSyncJob extends Job {
             int qty = isNotificationEnable(list_json, position);
 
             if(qty > 0)
-                sendNotificationNextActivity(qty);
+                sendNotificationNextActivity(qty, list_json);
         }
 
         return Result.SUCCESS;
@@ -66,14 +67,20 @@ public class NotificationSyncJob extends Job {
                 case Constants.ACT:
                     if(!notification1)
                         qty--;
+                    else
+                        position_single = i;
                     break;
                 case Constants.FLAG:
                     if(!notification2)
                         qty--;
+                    else
+                        position_single = i;
                     break;
                 case Constants.REMINDER:
                     if(!notification3)
                         qty--;
+                    else
+                        position_single = i;
                     break;
             }
         }
@@ -81,7 +88,7 @@ public class NotificationSyncJob extends Job {
         return qty;
     }
 
-    private void sendNotificationNextActivity(int qty) {
+    private void sendNotificationNextActivity(int qty, ArrayList<ActivityOfDay> list_json) {
         PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), NextCommitmentsActivity.class), 0);
 
         android.support.v4.app.NotificationCompat.Builder mBuilder =
@@ -100,6 +107,9 @@ public class NotificationSyncJob extends Job {
 
 
         if (qty == 1) {
+            ActivityOfDay activityOfDay = list_json.get(position_single >= 0 ? position_single : 0);
+            String title = activityOfDay.getTitle();
+            int type = activityOfDay.getType(); //Constants.ACT, Constants.FLAG e Constants.REM
             mBuilder.setContentText(getContext().getString(R.string.push_notification_6_text_1));
             bigTextStyle.bigText(getContext().getString(R.string.push_notification_6_text_1));
             mBuilder.setContentTitle(getContext().getString(R.string.push_notification_6_title_1));

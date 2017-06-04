@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.evernote.android.job.JobManager;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -68,6 +69,7 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
+import io.development.tymo.utils.NotificationSyncJob;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -259,6 +261,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         if (AccessToken.getCurrentAccessToken() != null)
             LoginManager.getInstance().logOut();
+
+        JobManager mJobManager = JobManager.instance();
+        if(mJobManager.getAllJobRequests().size() > 0)
+            mJobManager.cancelAll();
 
         FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
 

@@ -174,14 +174,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if(position != 0) {
-                    FlagActivity flagActivity = (FlagActivity) getActivity();
-                    DisplayMetrics metrics = new DisplayMetrics();
-                    flagActivity.getWindowManager().getDefaultDisplay().getMetrics(metrics);
-
-                    flagActivity.getScrollView().smoothScrollTo(0, metrics.heightPixels);
+                if(position != 0)
                     selectionGuestBox.setVisibility(View.VISIBLE);
-                }
                 else
                     selectionGuestBox.setVisibility(View.GONE);
 

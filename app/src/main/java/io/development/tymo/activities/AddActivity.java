@@ -1340,7 +1340,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             activityServer.setLng(latLng.get(1));
 
             d = date.get(0);
-            m = date.get(1) + 1;
+            m = date.get(1);
             y = date.get(2);
 
             activityServer.setDayStart(date.get(0));

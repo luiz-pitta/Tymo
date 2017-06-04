@@ -41,6 +41,9 @@ public class TymoMessagingService extends FirebaseMessagingService {
         if (type.matches("peopleAccept"))
             updateSearchMessageToActivity();
 
+        if (type.matches("cancel"))
+            updateNotificationStartToday();
+
         if(notification_push) {
             if (type.matches("engagement")) {
                 if (map.get("activated").matches("true")) {
@@ -59,7 +62,6 @@ public class TymoMessagingService extends FirebaseMessagingService {
                 } else if (type.matches("inviteAccept")) {
                     sendNotificationInviteAccept(map.get("title"), name, number_solicitation);
                 } else if (type.matches("cancel")) {
-                    updateNotificationStartToday();
                     sendNotificationCancel(map.get("title"), name, number_solicitation);
                 }
             }

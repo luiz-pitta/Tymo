@@ -556,7 +556,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             }
 
             d = date.get(0);
-            m = date.get(1) + 1;
+            m = date.get(1);
             y = date.get(2);
 
             activityServer.setId(getReminder().getId());
