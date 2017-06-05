@@ -79,13 +79,13 @@ public class FreeFragment extends Fragment {
             list = parent.getListPlans();
             screen = Utilities.TYPE_FRIEND;
             weekAdapter = new PlansAdapter(view.getContext(), screen, (FriendProfileActivity)getActivity(), parent.getUserFriend(), true);
-            recyclerView.setEmptyView(R.layout.empty_plans_private);
+            recyclerView.setEmptyView(R.layout.empty_profile_private);
         }
         else {
             list = fragment.getListPlans();
             screen = Utilities.TYPE_PLANS;
             weekAdapter = new PlansAdapter(view.getContext(), screen, fragment, null, true);
-            recyclerView.setEmptyView(R.layout.empty_timer);
+            recyclerView.setEmptyView(R.layout.empty_commitments_of_the_day);
         }
 
         recyclerView.setAdapterWithProgress(weekAdapter);

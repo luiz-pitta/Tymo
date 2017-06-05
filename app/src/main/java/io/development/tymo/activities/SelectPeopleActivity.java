@@ -66,7 +66,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_base);
+        setContentView(R.layout.activity_list_items_select);
 
         mSubscriptions = new CompositeSubscription();
 

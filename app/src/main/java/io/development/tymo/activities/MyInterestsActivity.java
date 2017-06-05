@@ -195,16 +195,16 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
         dg.setCanceledOnTouchOutside(true);
 
         if (listSize == 0){
-            text2.setText(getResources().getString(R.string.error_preferences_none_selected));
+            text2.setText(getResources().getString(R.string.validation_field_my_interests_selected_none));
         }
         else if (listSize == 1){
-            text2.setText(getResources().getString(R.string.error_preferences_already_selected_one));
+            text2.setText(getResources().getString(R.string.validation_field_my_interests_selected_one));
         }
         else{
-            text2.setText(getResources().getString(R.string.error_preferences_already_selected, listSize));
+            text2.setText(getResources().getString(R.string.validation_field_my_interests_selected, listSize));
         }
 
-        text1.setText(R.string.error_preferences_required);
+        text1.setText(R.string.validation_field_my_interests_minimum);
         buttonText2.setText(R.string.try_again);
 
         buttonText2.setOnClickListener(new View.OnClickListener() {

@@ -136,27 +136,27 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
 
         if (!validateFields(et_name)) {
             err++;
-            name.setError(getResources().getString(R.string.error_field_invalid));
-            Toast.makeText(this, getResources().getString(R.string.error_name_required), Toast.LENGTH_LONG).show();
+            name.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+            Toast.makeText(this, getResources().getString(R.string.validation_field_required_name), Toast.LENGTH_LONG).show();
         }
         else if (!validateEmail(et_email)) {
             err++;
-            email.setError(getResources().getString(R.string.error_field_invalid));
-            Toast.makeText(this, getResources().getString(R.string.error_email_required), Toast.LENGTH_LONG).show();
+            email.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+            Toast.makeText(this, getResources().getString(R.string.validation_field_email_required), Toast.LENGTH_LONG).show();
         }
         else if (!validateFields(et_password)) {
             err++;
-            password.setError(getResources().getString(R.string.error_field_invalid));
-            Toast.makeText(this, getResources().getString(R.string.error_password_required), Toast.LENGTH_LONG).show();
+            password.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+            Toast.makeText(this, getResources().getString(R.string.validation_field_required_password), Toast.LENGTH_LONG).show();
         }
         else if (!validatePasswordSize(et_password)) {
             err++;
-            password.setError(getResources().getString(R.string.error_password_minimun));
-            Toast.makeText(this, getResources().getString(R.string.error_password_minimun), Toast.LENGTH_LONG).show();
+            password.setError(getResources().getString(R.string.validation_field_password_minimum));
+            Toast.makeText(this, getResources().getString(R.string.validation_field_password_minimum), Toast.LENGTH_LONG).show();
         }
         else if (age == -1) {
             err++;
-            Toast.makeText(this, getResources().getString(R.string.error_birth_date_required), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.validation_field_birth_date_required), Toast.LENGTH_LONG).show();
         }
         else if(age <= 13){
             err++;
@@ -164,7 +164,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         }
         else if (!radioButton1.isChecked() && !radioButton2.isChecked()) {
             err++;
-            Toast.makeText(this, getResources().getString(R.string.error_gender_required), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.validation_field_gender_required), Toast.LENGTH_LONG).show();
         }
 
         if (err == 0) {

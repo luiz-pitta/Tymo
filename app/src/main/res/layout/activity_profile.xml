@@ -256,7 +256,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@+id/pendingRequestsIcon"
-                                android:background="@drawable/box_qty"
+                                android:background="@drawable/box_qty_notification"
                                 android:gravity="center"
                                 android:paddingBottom="2dp"
                                 android:paddingLeft="8dp"
@@ -317,7 +317,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@+id/invitationsIcon"
-                                android:background="@drawable/box_qty"
+                                android:background="@drawable/box_qty_notification"
                                 android:gravity="center"
                                 android:paddingBottom="2dp"
                                 android:paddingLeft="8dp"
@@ -388,7 +388,7 @@
                                     android:tint="@color/deep_purple_400" />
 
                                 <TextView
-                                    android:id="@+id/numberContacts"
+                                    android:id="@+id/myContactsQty"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_toRightOf="@+id/myContactsIcon"

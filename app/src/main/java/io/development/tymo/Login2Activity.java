@@ -42,7 +42,6 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -118,11 +117,11 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
 
         if (!validateEmail(email)) {
             err++;
-            editUser.setError(getResources().getString(R.string.error_login_email_required));
+            editUser.setError(getResources().getString(R.string.validation_field_email_invalid_or_not_registered));
         }
         if (!validateFields(password)) {
             err++;
-            editPassword.setError(getResources().getString(R.string.error_login_password_required));
+            editPassword.setError(getResources().getString(R.string.validation_field_login_password_invalid));
         }
 
         if (err == 0) {
@@ -396,7 +395,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "forgot" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(Login2Activity.this, ForgotLoginActivity.class));
+            startActivity(new Intent(Login2Activity.this, LoginForgotActivity.class));
         }
         else if(view == signinButton) {
             Bundle bundle = new Bundle();

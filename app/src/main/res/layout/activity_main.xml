@@ -25,6 +25,6 @@
             android:layout_height="wrap_content" />
     </FrameLayout>
 
-    <include layout="@layout/activity_add_reveal_framelayout" />
+    <include layout="@layout/activity_add_reveal" />
 
 </FrameLayout>

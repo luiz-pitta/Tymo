@@ -345,16 +345,16 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         if (!validateFields(title)) {
 
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_title_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
         } else if (date.size() == 0 || date.get(0) == -1 || date.get(3) == -1) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_date_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_hour_required, Toast.LENGTH_LONG).show();
         } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
         } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         }
         if (err == 0) {
 
@@ -505,10 +505,10 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             repeat = true;
             if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
                 err++;
-                Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
             } else if (repeat_single.get(1) == 0 || repeat_single.get(1) > 30) {
                 err++;
-                Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
             }
         }
 

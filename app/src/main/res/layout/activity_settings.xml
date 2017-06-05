@@ -68,7 +68,7 @@
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:lines="1"
-                            android:text="@string/edit_profile"
+                            android:text="@string/settings_edit_profile"
                             android:textAllCaps="true"
                             android:textColor="@color/grey_500"
                             android:textSize="12sp" />
@@ -135,7 +135,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/account"
+                            android:text="@string/settings_account"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -175,7 +175,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/import_from_facebook"
+                            android:text="@string/settings_import_from_facebook"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -215,7 +215,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/import_from_google_agenda"
+                            android:text="@string/settings_import_from_google_agenda"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -269,7 +269,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/tutorial"
+                            android:text="@string/settings_turorial"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -284,7 +284,7 @@
                     android:background="@color/horizontal_line" />
 
                 <LinearLayout
-                    android:id="@+id/preferences"
+                    android:id="@+id/myInterests"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -311,7 +311,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/my_interests"
+                            android:text="@string/settings_my_interests"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -365,7 +365,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/privacy"
+                            android:text="@string/settings_privacy"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -407,7 +407,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/blocked_user_list"
+                            android:text="@string/settings_list_blocked_users"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -429,7 +429,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/notifications"
+                    android:id="@+id/notificationCenter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -450,9 +450,9 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_notification"
+                            android:background="@drawable/bg_settings_notification_center"
                             android:padding="2dp"
-                            android:src="@drawable/ic_settings_notification"
+                            android:src="@drawable/ic_settings_notification_center"
                             android:tint="@color/white" />
 
                         <RelativeLayout
@@ -464,15 +464,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toLeftOf="@+id/notificationsSwitch"
+                                android:layout_toLeftOf="@+id/notificationCenterSwitch"
                                 android:ellipsize="end"
                                 android:maxLines="2"
-                                android:text="@string/allow_notifications"
+                                android:text="@string/settings_notification_center"
                                 android:textColor="@color/grey_900"
                                 android:textSize="16sp" />
 
                             <Switch
-                                android:id="@+id/notificationsSwitch"
+                                android:id="@+id/notificationCenterSwitch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -526,7 +526,7 @@
                                 android:layout_toLeftOf="@+id/locationSwitch"
                                 android:ellipsize="end"
                                 android:maxLines="2"
-                                android:text="@string/show_location"
+                                android:text="@string/settings_show_location"
                                 android:textColor="@color/grey_900"
                                 android:textSize="16sp" />
 
@@ -590,7 +590,7 @@
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/contact_us"
+                            android:text="@string/settings_contact_us"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -627,13 +627,13 @@
                             android:tint="@color/white" />
 
                         <TextView
-                            android:id="@+id/textView4"
+                            android:id="@+id/useTermsText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/use_terms"
+                            android:text="@string/settings_use_terms"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -670,13 +670,13 @@
                             android:tint="@color/white" />
 
                         <TextView
-                            android:id="@+id/textView2"
+                            android:id="@+id/privacyPolicyText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="@string/privacy_policy"
+                            android:text="@string/settings_privacy_policy"
                             android:textColor="@color/grey_900"
                             android:textSize="16sp" />
 
@@ -713,7 +713,7 @@
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
-                    android:text="@string/logout_app"
+                    android:text="@string/settings_logout_app"
                     android:textColor="@color/grey_900"
                     android:textSize="16sp" />
 

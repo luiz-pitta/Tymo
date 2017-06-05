@@ -30,23 +30,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.christophesmet.android.views.colorpicker.ColorPickerView;
 import com.cunoraz.tagview.Tag;
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -55,19 +48,14 @@ import io.development.tymo.adapters.CustomizeAddActivityAdapter;
 import io.development.tymo.fragments.WhatEditFragment;
 import io.development.tymo.fragments.WhenEditFragment;
 import io.development.tymo.fragments.WhoEditFragment;
-import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
-import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.IconServer;
-import io.development.tymo.model_server.Query;
-import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.UpdateButtonController;
@@ -754,19 +742,19 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         if (!validateFields(title)) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_title_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
         }  else if (tags.size() == 0) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_tag_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
         } else if (date.size() == 0 || date.get(0) == -1 || date.get(6) == -1) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_date_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_hour_required, Toast.LENGTH_LONG).show();
         } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
         } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
             err++;
             Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
@@ -979,16 +967,16 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         if (!validateFields(title)) {
 
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_title_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
         } else if (tags.size() == 0) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_tag_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
         } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
         } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         }else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
             err++;
             Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
@@ -1254,10 +1242,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         if (!validateFields(title)) {
 
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_title_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
         } else if (tags.size() == 0) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_tag_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
         } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType())) {
             err++;
             Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType()), Toast.LENGTH_LONG).show();
@@ -1267,10 +1255,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             repeat = true;
             if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
                 err++;
-                Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
             } else if (repeat_single.get(1) == 0 || repeat_single.get(1) > 30) {
                 err++;
-                Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
             }
         }
 
@@ -1446,15 +1434,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         LocalDate end = new LocalDate(y2, m2, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
         if (timePeriod.getDays() > 15)
-            return getResources().getString(R.string.error_act_max_lenght_days);
+            return getResources().getString(R.string.validation_field_act_max_lenght_days);
 
         switch (period) {
             case 1:
-                return getResources().getString(R.string.error_act_max_lenght_days_daily);
+                return getResources().getString(R.string.validation_field_act_max_lenght_days_daily);
             case 2:
-                return getResources().getString(R.string.error_act_max_lenght_days_weekly);
+                return getResources().getString(R.string.validation_field_act_max_lenght_days_weekly);
             case 3:
-                return getResources().getString(R.string.error_act_max_lenght_days_monthly);
+                return getResources().getString(R.string.validation_field_act_max_lenght_days_monthly);
             default:
                 return "";
         }

@@ -24,7 +24,7 @@ import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
 
-public class NotificationsActivity extends AppCompatActivity implements View.OnClickListener {
+public class NotificationCenterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView mBackButton;
     private TextView mTitle;
@@ -38,7 +38,7 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings_notifications);
+        setContentView(R.layout.activity_settings_notification_center);
 
         UserWrapper userWrapper = (UserWrapper)getIntent().getSerializableExtra("user_about");
         user = userWrapper.getUser();
@@ -48,10 +48,10 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
 
         mTitle = (TextView) findViewById(R.id.text);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
-        activityNotificationSwitch = (Switch) findViewById(R.id.activityNotificationSwitch);
-        flagNotificationSwitch = (Switch) findViewById(R.id.flagNotificationSwitch);
-        reminderNotificationSwitch = (Switch) findViewById(R.id.reminderNotificationSwitch);
-        otherNotificationSwitch = (Switch) findViewById(R.id.otherNotificationSwitch);
+        activityNotificationSwitch = (Switch) findViewById(R.id.startActSwitch);
+        flagNotificationSwitch = (Switch) findViewById(R.id.startFlagSwitch);
+        reminderNotificationSwitch = (Switch) findViewById(R.id.startReminderSwitch);
+        otherNotificationSwitch = (Switch) findViewById(R.id.otherNotificationSwitch2);
 
         mSubscriptions = new CompositeSubscription();
 

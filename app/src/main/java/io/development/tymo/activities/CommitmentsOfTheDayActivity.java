@@ -3,7 +3,6 @@ package io.development.tymo.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -45,7 +44,7 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
 
-public class NextCommitmentsActivity extends AppCompatActivity implements View.OnClickListener {
+public class CommitmentsOfTheDayActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EasyRecyclerView recyclerView;
     private NotificationAdapter adapter;
@@ -60,7 +59,7 @@ public class NextCommitmentsActivity extends AppCompatActivity implements View.O
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_list_items);
 
         dateFormat = new DateFormat(this);
 
@@ -97,14 +96,14 @@ public class NextCommitmentsActivity extends AppCompatActivity implements View.O
                 Intent intent = null;
 
                 if (object instanceof ActivityServer) {
-                    intent = new Intent(NextCommitmentsActivity.this, ShowActivity.class);
+                    intent = new Intent(CommitmentsOfTheDayActivity.this, ShowActivity.class);
                     intent.putExtra("act_show", new ActivityWrapper((ActivityServer) object));
                 } else if (object instanceof ReminderServer) {
-                    intent = new Intent(NextCommitmentsActivity.this, ReminderActivity.class);
+                    intent = new Intent(CommitmentsOfTheDayActivity.this, ReminderActivity.class);
                     intent.putExtra("type_reminder", 1);
                     intent.putExtra("reminder_show", new ReminderWrapper((ReminderServer) object));
                 } else if (object instanceof FlagServer) {
-                    intent = new Intent(NextCommitmentsActivity.this, FlagActivity.class);
+                    intent = new Intent(CommitmentsOfTheDayActivity.this, FlagActivity.class);
                     intent.putExtra("type_flag", 1);
                     intent.putExtra("flag_show", new FlagWrapper((FlagServer) object));
                 }

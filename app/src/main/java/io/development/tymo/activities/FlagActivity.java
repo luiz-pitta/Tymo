@@ -13,7 +13,6 @@ import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
-import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -568,15 +567,15 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         LocalDate end = new LocalDate(y2, m2, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
         if(timePeriod.getDays() > 15)
-            return getResources().getString(R.string.error_act_max_lenght_days);
+            return getResources().getString(R.string.validation_field_act_max_lenght_days);
 
         switch (period){
             case 1:
-                return getResources().getString(R.string.error_act_max_lenght_days_daily);
+                return getResources().getString(R.string.validation_field_act_max_lenght_days_daily);
             case 2:
-                return getResources().getString(R.string.error_act_max_lenght_days_weekly);
+                return getResources().getString(R.string.validation_field_act_max_lenght_days_weekly);
             case 3:
-                return getResources().getString(R.string.error_act_max_lenght_days_monthly);
+                return getResources().getString(R.string.validation_field_act_max_lenght_days_monthly);
             default:
                 return "";
         }
@@ -600,19 +599,19 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         int err = 0;
         if (!validateFields(title)) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_title_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
         }
         else if(date.size() == 0 || date.get(0) == -1 || date.get(6) == -1){
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_date_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_hour_required, Toast.LENGTH_LONG).show();
         }
         else if((repeat.get(0) != 0 && repeat.get(1) < 0)){
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
         }
         else if(repeat.get(1) == 0 || repeat.get(1) > 30) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         }
         else if(!isActivityReadyRegister(date.get(2),date.get(1),date.get(0),date.get(5),date.get(4),date.get(3), repeat.get(0))){
             err++;
@@ -785,10 +784,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             repeat_single_changed = true;
             if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
                 err++;
-                Toast.makeText(getApplicationContext(), R.string.error_repetitions_required, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
             } else if (repeat_single.get(1) == 0 || repeat_single.get(1) > 30) {
                 err++;
-                Toast.makeText(getApplicationContext(), R.string.error_repetitions_required_2, Toast.LENGTH_LONG).show();
+                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
             }
         }
 

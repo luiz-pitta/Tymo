@@ -31,7 +31,6 @@ import java.util.List;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
-import io.development.tymo.TymoApplication;
 import io.development.tymo.adapters.CompareFragmentAdapter;
 import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.fragments.CompareFreeFragment;
@@ -825,7 +824,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                     setCompare(plans);
                 }
                 else
-                    Toast.makeText(this, R.string.error_compare_selected_required, Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.validation_field_compare_selected_required, Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -68,11 +68,11 @@ public class CommitmentFragment extends Fragment{
 
         if(fragment == null) {
             screen = Utilities.TYPE_FRIEND;
-            recyclerView.setEmptyView(R.layout.empty_plans_private);
+            recyclerView.setEmptyView(R.layout.empty_profile_private);
         }
         else {
             screen = Utilities.TYPE_PLANS;
-            recyclerView.setEmptyView(R.layout.empty_timer);
+            recyclerView.setEmptyView(R.layout.empty_commitments_of_the_day);
         }
 
         recyclerView.addItemDecoration(itemDecoration);

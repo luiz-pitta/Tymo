@@ -16,7 +16,7 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 
 import io.development.tymo.R;
-import io.development.tymo.activities.NextCommitmentsActivity;
+import io.development.tymo.activities.CommitmentsOfTheDayActivity;
 import io.development.tymo.model_server.ActivityOfDay;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -89,7 +89,7 @@ public class NotificationSyncJob extends Job {
     }
 
     private void sendNotificationNextActivity(int qty, ArrayList<ActivityOfDay> list_json) {
-        PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), NextCommitmentsActivity.class), 0);
+        PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), CommitmentsOfTheDayActivity.class), 0);
 
         android.support.v4.app.NotificationCompat.Builder mBuilder =
                 new android.support.v4.app.NotificationCompat.Builder(getContext())
@@ -110,15 +110,15 @@ public class NotificationSyncJob extends Job {
             ActivityOfDay activityOfDay = list_json.get(position_single >= 0 ? position_single : 0);
             String title = activityOfDay.getTitle();
             int type = activityOfDay.getType(); //Constants.ACT, Constants.FLAG e Constants.REM
-            mBuilder.setContentText(getContext().getString(R.string.push_notification_6_text_1));
-            bigTextStyle.bigText(getContext().getString(R.string.push_notification_6_text_1));
-            mBuilder.setContentTitle(getContext().getString(R.string.push_notification_6_title_1));
-            bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_6_title_1));
+            mBuilder.setContentText(getContext().getString(R.string.push_notification_start_commitments_text_1));
+            bigTextStyle.bigText(getContext().getString(R.string.push_notification_start_commitments_text_1));
+            mBuilder.setContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
+            bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
         } else {
-            mBuilder.setContentText(getContext().getString(R.string.push_notification_6_text_2, qty));
-            bigTextStyle.bigText(getContext().getString(R.string.push_notification_6_text_2, qty));
-            mBuilder.setContentTitle(getContext().getString(R.string.push_notification_6_title_2));
-            bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_6_title_2));
+            mBuilder.setContentText(getContext().getString(R.string.push_notification_start_commitments_text_2, qty));
+            bigTextStyle.bigText(getContext().getString(R.string.push_notification_start_commitments_text_2, qty));
+            mBuilder.setContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
+            bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
         }
 
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_launcher));

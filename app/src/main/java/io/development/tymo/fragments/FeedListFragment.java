@@ -43,7 +43,6 @@ import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.FlagActivity;
-import io.development.tymo.activities.MainActivity;
 import io.development.tymo.activities.ShowActivity;
 import io.development.tymo.adapters.ActivityAdapter;
 import io.development.tymo.model_server.ActivityServer;
@@ -332,7 +331,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
                 if (direction == ItemTouchHelper.LEFT){
 
-                    mp = MediaPlayer.create(getActivity(), R.raw.ignore_cube);
+                    mp = MediaPlayer.create(getActivity(), R.raw.feed_ignore);
                     mp.start();
 
                     snackbar =  Snackbar.make(recyclerView,getResources().getString(R.string.invitation_activity_ignored), Snackbar.LENGTH_LONG)
@@ -374,7 +373,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         participates = ((FlagServer)item).getParticipates();
 
                     if (participates == 1){
-                        mp = MediaPlayer.create(getActivity(), R.raw.fit_cube);
+                        mp = MediaPlayer.create(getActivity(), R.raw.feed_fit);
                         mp.start();
 
                         lastPositionFit = true;
@@ -390,7 +389,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                     }
                                 });
                     }else {
-                        mp = MediaPlayer.create(getActivity(), R.raw.fit_cube);
+                        mp = MediaPlayer.create(getActivity(), R.raw.feed_fit);
                         mp.start();
 
                         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);

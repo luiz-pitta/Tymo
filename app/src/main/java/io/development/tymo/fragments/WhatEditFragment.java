@@ -127,13 +127,13 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
             if(resultCode == RESULT_OK){
                 List<String> list = intent.getStringArrayListExtra("tags_objs");
 
-                boolean tag_face = isTagPresent(getResources().getString(R.string.settings_import_facebook_tag));
-                boolean tag_google = isTagPresent(getResources().getString(R.string.settings_import_google_tag));
+                boolean tag_face = isTagPresent(getResources().getString(R.string.settings_import_from_facebook_tag));
+                boolean tag_google = isTagPresent(getResources().getString(R.string.settings_import_from_google_agenda_tag));
                 tagGroup.removeAll();
 
                 if(tag_face){
                     Tag tag;
-                    tag = new Tag(getResources().getString(R.string.settings_import_facebook_tag));
+                    tag = new Tag(getResources().getString(R.string.settings_import_from_facebook_tag));
                     tag.radius = Utilities.convertDpToPixel(10.0f, getActivity());
                     tag.layoutColor = ContextCompat.getColor(getActivity(), R.color.deep_purple_400);
                     tag.isDeletable = false;
@@ -141,7 +141,7 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
                 }
                 if(tag_google){
                     Tag tag;
-                    tag = new Tag(getResources().getString(R.string.settings_import_google_tag));
+                    tag = new Tag(getResources().getString(R.string.settings_import_from_google_agenda_tag));
                     tag.radius = Utilities.convertDpToPixel(10.0f, getActivity());
                     tag.layoutColor = ContextCompat.getColor(getActivity(), R.color.deep_purple_400);
                     tag.isDeletable = false;
@@ -231,8 +231,8 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
             tag = new Tag(text);
             tag.radius = Utilities.convertDpToPixel(10.0f, getActivity());
             tag.layoutColor = ContextCompat.getColor(getActivity(), R.color.deep_purple_400);
-            if(text.matches(getResources().getString(R.string.settings_import_facebook_tag)) ||
-                    text.matches(getResources().getString(R.string.settings_import_google_tag)))
+            if(text.matches(getResources().getString(R.string.settings_import_from_facebook_tag)) ||
+                    text.matches(getResources().getString(R.string.settings_import_from_google_agenda_tag)))
                 tag.isDeletable = false;
             else
                 tag.isDeletable = true;

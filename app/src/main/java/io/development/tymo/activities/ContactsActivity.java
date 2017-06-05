@@ -74,7 +74,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_list_items);
 
         mSubscriptions = new CompositeSubscription();
 
@@ -116,11 +116,11 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         if (email.matches(my_email)) {
             m_title.setText(getResources().getString(R.string.my_contacts));
             adapter = new ContactsAdapter(this, true, false, this);
-            recyclerView.setEmptyView(R.layout.empty_contacts);
+            recyclerView.setEmptyView(R.layout.empty_my_contacts_profile);
         } else {
             m_title.setText(getResources().getString(R.string.contacts_of, fullNameToShortName(full_name)));
             adapter = new ContactsAdapter(this, false, false, this);
-            recyclerView.setEmptyView(R.layout.empty_contacts_friend);
+            recyclerView.setEmptyView(R.layout.empty_my_contacts_profile_friend);
         }
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -272,7 +272,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         User user = response.getUser();
 
         if(user.getCountKnows() == 0 && user.getPrivacy() == 1) {
-            recyclerView.setEmptyView(R.layout.empty_plans_private);
+            recyclerView.setEmptyView(R.layout.empty_profile_private);
             findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);

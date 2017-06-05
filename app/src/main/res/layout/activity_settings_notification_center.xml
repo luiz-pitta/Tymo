@@ -27,10 +27,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:ellipsize="end"
-                android:lines="1"
+                android:maxLines="2"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@string/notifications_commitment"
+                android:text="@string/notification_center_title_1"
                 android:textAllCaps="true"
                 android:textColor="@color/grey_500"
                 android:textSize="12sp" />
@@ -43,7 +43,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/activityNotificationBox"
+                    android:id="@+id/startActBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -64,10 +64,8 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_account"
-                            android:padding="2dp"
                             android:src="@drawable/ic_add_cube"
-                            android:tint="@color/white" />
+                            android:tint="@color/deep_purple_400" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -78,15 +76,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toLeftOf="@+id/activityNotificationSwitch"
+                                android:layout_toLeftOf="@+id/startActSwitch"
                                 android:ellipsize="end"
                                 android:lines="1"
-                                android:text="@string/activity"
+                                android:text="@string/notification_center_start_act"
                                 android:textColor="@color/grey_900"
                                 android:textSize="16sp" />
 
                             <Switch
-                                android:id="@+id/activityNotificationSwitch"
+                                android:id="@+id/startActSwitch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -106,7 +104,7 @@
                     android:background="@color/horizontal_line" />
 
                 <LinearLayout
-                    android:id="@+id/flagNotificationBox"
+                    android:id="@+id/startFlagBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -122,10 +120,8 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_account"
-                            android:padding="2dp"
                             android:src="@drawable/ic_add_flag"
-                            android:tint="@color/white" />
+                            android:tint="@color/deep_purple_400" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -136,15 +132,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toLeftOf="@+id/flagNotificationSwitch"
+                                android:layout_toLeftOf="@+id/startFlagSwitch"
                                 android:ellipsize="end"
                                 android:lines="1"
-                                android:text="@string/flag"
+                                android:text="@string/notification_center_start_flag"
                                 android:textColor="@color/grey_900"
                                 android:textSize="16sp" />
 
                             <Switch
-                                android:id="@+id/flagNotificationSwitch"
+                                android:id="@+id/startFlagSwitch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -164,7 +160,7 @@
                     android:background="@color/horizontal_line" />
 
                 <LinearLayout
-                    android:id="@+id/reminderNotificationBox"
+                    android:id="@+id/startReminderBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -180,10 +176,8 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_account"
-                            android:padding="2dp"
                             android:src="@drawable/ic_add_reminder"
-                            android:tint="@color/white" />
+                            android:tint="@color/deep_purple_400" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -194,15 +188,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toLeftOf="@+id/reminderNotificationSwitch"
+                                android:layout_toLeftOf="@+id/startReminderSwitch"
                                 android:ellipsize="end"
                                 android:lines="1"
-                                android:text="@string/reminder"
+                                android:text="@string/notification_center_start_reminder"
                                 android:textColor="@color/grey_900"
                                 android:textSize="16sp" />
 
                             <Switch
-                                android:id="@+id/reminderNotificationSwitch"
+                                android:id="@+id/startReminderSwitch"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
@@ -226,10 +220,10 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:ellipsize="end"
-                android:lines="1"
+                android:maxLines="2"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:text="@string/notifications_other"
+                android:text="@string/notification_center_title_2"
                 android:textAllCaps="true"
                 android:textColor="@color/grey_500"
                 android:textSize="12sp" />
@@ -242,7 +236,7 @@
                 android:orientation="vertical">
 
                 <LinearLayout
-                    android:id="@+id/otherNotificationBox"
+                    android:id="@+id/otherNotificationBox1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
@@ -260,15 +254,11 @@
                         android:orientation="horizontal"
                         android:padding="10dp">
 
-
-
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_settings_blocked_users"
-                            android:padding="2dp"
-                            android:src="@drawable/ic_settings_notification"
-                            android:tint="@color/white" />
+                            android:src="@drawable/ic_settings_notification_center"
+                            android:tint="@color/deep_purple_400" />
 
                         <RelativeLayout
                             android:layout_width="match_parent"
@@ -279,15 +269,15 @@
                                 android:layout_height="wrap_content"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:layout_toLeftOf="@+id/otherNotificationSwitch"
+                                android:layout_toLeftOf="@+id/otherNotificationSwitch2"
                                 android:ellipsize="end"
-                                android:lines="1"
-                                android:text="@string/notifications_push"
+                                android:maxLines="2"
+                                android:text="@string/notification_center_other_1"
                                 android:textColor="@color/grey_900"
                                 android:textSize="16sp" />
 
                             <Switch
-                                android:id="@+id/otherNotificationSwitch"
+                                android:id="@+id/otherNotificationSwitch2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"

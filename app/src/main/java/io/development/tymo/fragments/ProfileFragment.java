@@ -34,8 +34,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
-import com.evernote.android.job.JobRequest;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tumblr.backboard.Actor;
@@ -50,15 +48,13 @@ import java.util.Comparator;
 import java.util.Date;
 
 import info.abdolahi.CircularMusicProgressBar;
-import io.development.tymo.activities.MainActivity;
-import io.development.tymo.utils.ActivitySyncJob;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
 import io.development.tymo.activities.AboutActivity;
 import io.development.tymo.activities.ContactsActivity;
 import io.development.tymo.activities.FriendRequestActivity;
 import io.development.tymo.activities.InviteActivity;
-import io.development.tymo.activities.NextCommitmentsActivity;
+import io.development.tymo.activities.CommitmentsOfTheDayActivity;
 import io.development.tymo.activities.SettingsActivity;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.BgProfileServer;
@@ -159,7 +155,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         invitationsQty = (TextView) view.findViewById(R.id.invitationsQty);
         commitmentStartTime = (TextView) view.findViewById(R.id.commitmentStartTime);
         commitmentTitle = (TextView) view.findViewById(R.id.commitmentTitle);
-        numberContacts = (TextView) view.findViewById(R.id.numberContacts);
+        numberContacts = (TextView) view.findViewById(R.id.myContactsQty);
         timer = (TextView) view.findViewById(R.id.timer);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
 
@@ -1213,7 +1209,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timerBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(getActivity(), NextCommitmentsActivity.class));
+            startActivity(new Intent(getActivity(), CommitmentsOfTheDayActivity.class));
         } else if (v == settingsBox && settingsBox.isClickable() && !noInternet) {
             Intent intent = new Intent(getActivity(), SettingsActivity.class);
             intent.putExtra("user_about", new UserWrapper(user));

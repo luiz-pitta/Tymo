@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import io.development.tymo.ForgotLoginActivity;
+import io.development.tymo.LoginForgotActivity;
 import io.development.tymo.R;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
@@ -120,23 +120,23 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
             if (!validateFields(passwordActual.getText().toString())) {
                 err++;
-                passwordActual.setError(getResources().getString(R.string.error_field_invalid));
-                Toast.makeText(this, getResources().getString(R.string.error_password_required), Toast.LENGTH_LONG).show();
+                passwordActual.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+                Toast.makeText(this, getResources().getString(R.string.validation_field_required_password), Toast.LENGTH_LONG).show();
             }
             else if (!validateFields(passwordNew.getText().toString())) {
                 err++;
-                passwordNew.setError(getResources().getString(R.string.error_field_invalid));
-                Toast.makeText(this, getResources().getString(R.string.error_password_required), Toast.LENGTH_LONG).show();
+                passwordNew.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+                Toast.makeText(this, getResources().getString(R.string.validation_field_required_password), Toast.LENGTH_LONG).show();
             }
             else if (!validateFields(passwordNewAgain.getText().toString())) {
                 err++;
-                passwordNewAgain.setError(getResources().getString(R.string.error_field_invalid));
-                Toast.makeText(this, getResources().getString(R.string.error_password_required), Toast.LENGTH_LONG).show();
+                passwordNewAgain.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+                Toast.makeText(this, getResources().getString(R.string.validation_field_required_password), Toast.LENGTH_LONG).show();
             }
             else if (!validatePasswordSize(passwordNew.getText().toString())) {
                 err++;
-                passwordNew.setError(getResources().getString(R.string.error_password_minimun));
-                Toast.makeText(this, getResources().getString(R.string.error_password_minimun), Toast.LENGTH_LONG).show();
+                passwordNew.setError(getResources().getString(R.string.validation_field_password_minimum));
+                Toast.makeText(this, getResources().getString(R.string.validation_field_password_minimum), Toast.LENGTH_LONG).show();
             }
             else if(!passwordNew.getText().toString().matches(passwordNewAgain.getText().toString())) {
                 err++;
@@ -164,7 +164,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "forgot" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(ChangePasswordActivity.this, ForgotLoginActivity.class));
+            startActivity(new Intent(ChangePasswordActivity.this, LoginForgotActivity.class));
         }
     }
 

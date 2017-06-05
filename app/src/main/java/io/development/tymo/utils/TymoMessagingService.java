@@ -92,11 +92,11 @@ public class TymoMessagingService extends FirebaseMessagingService {
         bigTextStyle.setBigContentTitle(getString(R.string.app_name));
 
         if (qty == 1) {
-            mBuilder.setContentText(getString(R.string.push_notification_3_title));
-            bigTextStyle.bigText(getString(R.string.push_notification_3_title));
+            mBuilder.setContentText(getString(R.string.push_notification_invitations_text_1));
+            bigTextStyle.bigText(getString(R.string.push_notification_invitations_text_1));
         } else {
-            mBuilder.setContentText(getString(R.string.push_notification_4_title, qty));
-            bigTextStyle.bigText(getString(R.string.push_notification_4_title, qty));
+            mBuilder.setContentText(getString(R.string.push_notification_invitations_text_2, qty));
+            bigTextStyle.bigText(getString(R.string.push_notification_invitations_text_2, qty));
         }
 
         mBuilder.setStyle(bigTextStyle);
@@ -130,11 +130,11 @@ public class TymoMessagingService extends FirebaseMessagingService {
         bigTextStyle.setBigContentTitle(title);
 
         if (type == 1) {
-            mBuilder.setContentText(getString(R.string.push_notification_5_text_4, name));
-            bigTextStyle.bigText(getString(R.string.push_notification_5_text_4, name));
+            mBuilder.setContentText(getString(R.string.push_notification_canceled_flag, name));
+            bigTextStyle.bigText(getString(R.string.push_notification_canceled_flag, name));
         } else {
-            mBuilder.setContentText(getString(R.string.push_notification_5_text_3, name));
-            bigTextStyle.bigText(getString(R.string.push_notification_5_text_3, name));
+            mBuilder.setContentText(getString(R.string.push_notification_canceled_act, name));
+            bigTextStyle.bigText(getString(R.string.push_notification_canceled_act, name));
         }
 
         mBuilder.setStyle(bigTextStyle);
@@ -168,11 +168,11 @@ public class TymoMessagingService extends FirebaseMessagingService {
         bigTextStyle.setBigContentTitle(title);
 
         if (qty == 1) {
-            mBuilder.setContentText(getString(R.string.push_notification_5_text_1, name));
-            bigTextStyle.bigText(getString(R.string.push_notification_5_text_1, name));
+            mBuilder.setContentText(getString(R.string.push_notification_invitations_accepted_text_1, name));
+            bigTextStyle.bigText(getString(R.string.push_notification_invitations_accepted_text_1, name));
         } else {
-            mBuilder.setContentText(getString(R.string.push_notification_5_text_2, qty));
-            bigTextStyle.bigText(getString(R.string.push_notification_5_text_2, qty));
+            mBuilder.setContentText(getString(R.string.push_notification_invitations_accepted_text_2, qty));
+            bigTextStyle.bigText(getString(R.string.push_notification_invitations_accepted_text_2, qty));
         }
 
         mBuilder.setStyle(bigTextStyle);
@@ -240,7 +240,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_add_cube)
-                        .setContentTitle(getString(R.string.push_notification_1_title))
+                        .setContentTitle(getString(R.string.push_notification_pending_requests_accepted_title))
                         .setContentIntent(pi)
                         .setAutoCancel(true);
 
@@ -251,14 +251,14 @@ public class TymoMessagingService extends FirebaseMessagingService {
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle(getString(R.string.push_notification_1_title));
+        bigTextStyle.setBigContentTitle(getString(R.string.push_notification_pending_requests_accepted_title));
 
         if (qty == 1) {
-            mBuilder.setContentText(getString(R.string.push_notification_1_text_1, name));
-            bigTextStyle.bigText(getString(R.string.push_notification_1_text_1, name));
+            mBuilder.setContentText(getString(R.string.push_notification_pending_requests_accepted_text_1, name));
+            bigTextStyle.bigText(getString(R.string.push_notification_pending_requests_accepted_text_1, name));
         } else {
-            mBuilder.setContentText(getString(R.string.push_notification_1_text_2, qty));
-            bigTextStyle.bigText(getString(R.string.push_notification_1_text_2, qty));
+            mBuilder.setContentText(getString(R.string.push_notification_pending_requests_accepted_text_2, qty));
+            bigTextStyle.bigText(getString(R.string.push_notification_pending_requests_accepted_text_2, qty));
         }
 
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
@@ -277,7 +277,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this)
                         .setSmallIcon(R.drawable.ic_add_cube)
-                        .setContentTitle(getString(R.string.push_notification_2_title))
+                        .setContentTitle(getString(R.string.push_notification_pending_requests_title))
                         .setContentIntent(pi)
                         .setAutoCancel(true);
 
@@ -288,14 +288,14 @@ public class TymoMessagingService extends FirebaseMessagingService {
         mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
 
         NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
-        bigTextStyle.setBigContentTitle(getString(R.string.push_notification_2_title));
+        bigTextStyle.setBigContentTitle(getString(R.string.push_notification_pending_requests_title));
 
         if (qty == 1) {
-            mBuilder.setContentText(getString(R.string.push_notification_2_text_1, name));
-            bigTextStyle.bigText(getString(R.string.push_notification_2_text_1, name));
+            mBuilder.setContentText(getString(R.string.push_notification_pending_requests_text_1, name));
+            bigTextStyle.bigText(getString(R.string.push_notification_pending_requests_text_1, name));
         } else {
-            mBuilder.setContentText(getString(R.string.push_notification_2_text_2, qty));
-            bigTextStyle.bigText(getString(R.string.push_notification_2_text_2, qty));
+            mBuilder.setContentText(getString(R.string.push_notification_pending_requests_text_2, qty));
+            bigTextStyle.bigText(getString(R.string.push_notification_pending_requests_text_2, qty));
         }
 
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));

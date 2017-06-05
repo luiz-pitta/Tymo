@@ -69,7 +69,6 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
-import io.development.tymo.utils.NotificationSyncJob;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -122,7 +121,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         m_title = (TextView) findViewById(R.id.text);
         versionName = (TextView) findViewById(R.id.versionName);
         fullName = (TextView) findViewById(R.id.fullName);
-        notificationsSwitch = (Switch) findViewById(R.id.notificationsSwitch);
+        notificationsSwitch = (Switch) findViewById(R.id.notificationCenterSwitch);
         locationSwitch = (Switch) findViewById(R.id.locationSwitch);
 
         account = (LinearLayout) findViewById(R.id.account);
@@ -136,8 +135,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         profileAboutBox = (LinearLayout) findViewById(R.id.profileAboutBox);
         tutorial = (LinearLayout) findViewById(R.id.tutorial);
         logout = (LinearLayout) findViewById(R.id.logout);
-        preferences = (LinearLayout) findViewById(R.id.preferences);
-        notifications = (LinearLayout) findViewById(R.id.notifications);
+        preferences = (LinearLayout) findViewById(R.id.myInterests);
+        notifications = (LinearLayout) findViewById(R.id.notificationCenter);
 
         mBackButton.setOnClickListener(this);
 
@@ -155,7 +154,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         preferences.setOnClickListener(this);
         notifications.setOnClickListener(this);
 
-        versionName.setText(getResources().getString(R.string.version_name,BuildConfig.VERSION_NAME));
+        versionName.setText(getResources().getString(R.string.settings_version,BuildConfig.VERSION_NAME));
 
         Glide.clear(logo);
         Glide.with(this)
@@ -296,9 +295,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void handleResponseFacebookImported(Response response) {
         if(response.getNumberInvitationRequest() > 0)
-            Toast.makeText(this, getResources().getString(R.string.settings_import_facebook_success), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.settings_import_from_facebook_success), Toast.LENGTH_LONG).show();
         else
-            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_facebook_no_activities), Toast.LENGTH_LONG).show();
+            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_facebook_no_events), Toast.LENGTH_LONG).show();
         setProgress(false);
     }
 
@@ -311,7 +310,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleResponseGoogleImported(Response response) {
-        Toast.makeText(this, getResources().getString(R.string.settings_import_google_success), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_success), Toast.LENGTH_LONG).show();
         setProgress(false);
     }
 
@@ -364,7 +363,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 activityServer.setRepeatType(list_repeat_google.get(j) != null ? 5 : 0); //Opção 5 caso atividade do Google se repita para colocar msg que ele tem que criar a repetição
                 activityServer.setInvitationType(0); //Somente administrador
                 activityServer.setWhatsappGroupLink("");
-                activityServer.addTags(getResources().getString(R.string.settings_import_google_tag));
+                activityServer.addTags(getResources().getString(R.string.settings_import_from_google_agenda_tag));
 
                 activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube));
                 activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube_light));
@@ -432,11 +431,11 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             if(list_activities_to_import.size() > 0)
                 importFromGoogle(list_activities_to_import);
             else {
-                Toast.makeText(this, getResources().getString(R.string.settings_import_google_no_activities), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
                 setProgress(false);
             }
         }else{
-            Toast.makeText(this, getResources().getString(R.string.settings_import_google_no_activities), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
             setProgress(false);
         }
     }
@@ -551,7 +550,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             startActivity(new Intent(SettingsActivity.this, MyInterestsActivity.class));
         }
         else if(view == notifications){
-            Intent intent = new Intent(this, NotificationsActivity.class);
+            Intent intent = new Intent(this, NotificationCenterActivity.class);
             intent.putExtra("user_about", new UserWrapper(user));
 
             Bundle bundle = new Bundle();
@@ -661,8 +660,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         customView.findViewById(R.id.editText).setVisibility(View.GONE);
 
-        text1.setText(getResources().getString(R.string.settings_import_facebook_tag));
-        text2.setText(getResources().getString(R.string.settings_import_facebook_text));
+        text1.setText(getResources().getString(R.string.settings_import_from_facebook_tag));
+        text2.setText(getResources().getString(R.string.settings_import_from_facebook_text));
         buttonText1.setText(getResources().getString(R.string.no));
         buttonText2.setText(getResources().getString(R.string.yes));
 
@@ -725,7 +724,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                         importFromFacebook(list_activities_to_import);
                                 }
                                 catch (Exception  e){
-                                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_no_activities), Toast.LENGTH_LONG).show();
+                                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
                                 }
                             }
                         });
@@ -788,8 +787,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         customView.findViewById(R.id.editText).setVisibility(View.GONE);
         customView.findViewById(R.id.emailBox).setVisibility(View.VISIBLE);
 
-        text1.setText(getResources().getString(R.string.settings_import_google_calendar_title));
-        text2.setText(getResources().getString(R.string.settings_import_google_calendar_text));
+        text1.setText(getResources().getString(R.string.settings_import_from_google_agenda_title));
+        text2.setText(getResources().getString(R.string.settings_import_from_google_agenda_text));
         buttonText1.setText(getResources().getString(R.string.cancel));
         buttonText2.setText(getResources().getString(R.string.confirm));
 
@@ -821,7 +820,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     list_google = GoogleCalendarEvents.readCalendarEvent(SettingsActivity.this, list_email.get(email_google_position));
                     getImportedGoogle(user.getEmail());
                 }else {
-                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_error), Toast.LENGTH_LONG).show();
+                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error), Toast.LENGTH_LONG).show();
                     setProgress(false);
                 }
 
@@ -843,7 +842,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             dialog.show();
 
         }else {
-            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_google_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error), Toast.LENGTH_LONG).show();
             setProgress(false);
         }
     }
@@ -916,7 +915,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                                 importFromFacebook(list_activities_to_import);
                         }
                         catch (Exception  e){
-                            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_facebook_no_activities), Toast.LENGTH_LONG).show();
+                            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_facebook_no_events), Toast.LENGTH_LONG).show();
                         }
                     }
                 });
@@ -1030,7 +1029,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
             activityServer.setWhatsappGroupLink("");
 
-            activityServer.addTags(getResources().getString(R.string.settings_import_facebook_tag));
+            activityServer.addTags(getResources().getString(R.string.settings_import_from_facebook_tag));
 
             activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
 

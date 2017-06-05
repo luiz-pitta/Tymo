@@ -74,7 +74,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+        setContentView(R.layout.activity_list_items);
 
         dateFormat = new DateFormat(this);
 

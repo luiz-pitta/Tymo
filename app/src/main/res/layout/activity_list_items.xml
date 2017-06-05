@@ -99,7 +99,7 @@
         android:layout_below="@+id/horizontalBottomLine2"
         android:layout_gravity="center"
         android:fillViewport="true"
-        app:layout_empty="@layout/empty_timer"
+        app:layout_empty="@layout/empty_commitments_of_the_day"
         app:layout_progress="@layout/progress_loading_list"
         app:scrollbars="none" />
 

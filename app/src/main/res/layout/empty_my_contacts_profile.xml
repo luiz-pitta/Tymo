@@ -12,7 +12,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:gravity="center"
-        android:text="@string/empty_contacts_friend_text_1"
+        android:text="@string/empty_my_contacts_profile_text_1"
         android:textAllCaps="true"
         android:textColor="@color/grey_500"
         android:textSize="16sp"
@@ -25,7 +25,7 @@
         android:layout_marginRight="50dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="@string/empty_contacts_friend_text_2"
+        android:text="@string/empty_my_contacts_profile_text_2"
         android:textColor="@color/grey_500"
         android:textSize="16sp" />
 
