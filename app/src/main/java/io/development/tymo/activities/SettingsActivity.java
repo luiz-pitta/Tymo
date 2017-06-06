@@ -790,7 +790,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         text1.setText(getResources().getString(R.string.settings_import_from_google_agenda_title));
         text2.setText(getResources().getString(R.string.settings_import_from_google_agenda_text));
         buttonText1.setText(getResources().getString(R.string.cancel));
-        buttonText2.setText(getResources().getString(R.string.confirm));
+        buttonText2.setText(getResources().getString(R.string.action_import));
 
         ArrayList<String> list_email = GoogleCalendarEvents.getCalendarTypes(SettingsActivity.this);
 
