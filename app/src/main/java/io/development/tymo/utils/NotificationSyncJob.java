@@ -121,6 +121,8 @@ public class NotificationSyncJob extends Job {
             bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
         }
 
+        position_single = -1;
+
         mBuilder.setLargeIcon(BitmapFactory.decodeResource(getContext().getResources(), R.mipmap.ic_launcher));
 
         mBuilder.setStyle(bigTextStyle);
