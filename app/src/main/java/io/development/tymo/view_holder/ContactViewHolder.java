@@ -153,13 +153,13 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
             if(blocked){
                 items = new String[1];
-                items[0] = context.getResources().getString(R.string.my_contacts_action_unblock, fullNameToShortName(contactName));
+                items[0] = context.getResources().getString(R.string.my_contacts_unblock, fullNameToShortName(contactName));
             }
             else{
                 items = new String[3];
-                items[0] = context.getResources().getString(R.string.my_contacts_action_view, fullNameToShortName(contactName));
-                items[1] = context.getResources().getString(R.string.my_contacts_action_block, fullNameToShortName(contactName));
-                items[2] = context.getResources().getString(R.string.my_contacts_action_delete, fullNameToShortName(contactName));
+                items[0] = context.getResources().getString(R.string.my_contacts_view, fullNameToShortName(contactName));
+                items[1] = context.getResources().getString(R.string.my_contacts_block, fullNameToShortName(contactName));
+                items[2] = context.getResources().getString(R.string.my_contacts_delete, fullNameToShortName(contactName));
             }
 
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
@@ -336,7 +336,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         if(callback != null)
             callback.refreshLayout();
         if (deleteBlock == Constants.BLOCK)
-            Toast.makeText(context, context.getResources().getString(R.string.user_blocked), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, context.getResources().getString(R.string.user_blocked_one), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(context, context.getResources().getString(R.string.contact_deleted), Toast.LENGTH_LONG).show();
     }

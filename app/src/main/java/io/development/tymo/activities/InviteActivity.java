@@ -286,15 +286,15 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 num_elem--;
                 if(num_elem == 1) {
                     friend_accept = activity_accepted.get(index1).getCreator() + " ";
-                    friend_accept += getResources().getString(R.string.invite_accept_one_person, 1);
+                    friend_accept += getResources().getString(R.string.invitation_accepted_more_others_one, 1);
                 }
                 else if(num_elem > 1){
                     friend_accept = activity_accepted.get(index1).getCreator() + " ";
-                    friend_accept += getResources().getString(R.string.invite_accept_more_one_person, num_elem);
+                    friend_accept += getResources().getString(R.string.invitation_accepted_more_others, num_elem);
                 }
             }else if(num_elem == 1){
                 friend_accept = activity_accepted.get(index1).getCreator() + " ";
-                friend_accept += getResources().getString(R.string.invite_accept_zero_people);
+                friend_accept += getResources().getString(R.string.invitation_accepted_more_others_none);
             }
 
 
@@ -320,15 +320,15 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 num_elem--;
                 if(num_elem == 1) {
                     friend_accept = flag_accepted.get(index1).getCreator() + " ";
-                    friend_accept += getResources().getString(R.string.invite_accept_one_person, 1);
+                    friend_accept += getResources().getString(R.string.invitation_accepted_more_others_one, 1);
                 }
                 else if(num_elem > 1){
                     friend_accept = flag_accepted.get(index1).getCreator() + " ";
-                    friend_accept += getResources().getString(R.string.invite_accept_more_one_person, num_elem);
+                    friend_accept += getResources().getString(R.string.invitation_accepted_more_others, num_elem);
                 }
             }else if(num_elem == 1){
                 friend_accept = flag_accepted.get(index1).getCreator() + " ";
-                friend_accept += getResources().getString(R.string.invite_accept_zero_people);
+                friend_accept += getResources().getString(R.string.invitation_accepted_more_others_none);
             }
 
             InviteModel inviteModel = new InviteModel(flag_accepted.get(index1).getTitle(), friend_accept, "accept", "",0,0, flag_accepted.get(index1));

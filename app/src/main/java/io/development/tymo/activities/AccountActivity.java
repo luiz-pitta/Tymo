@@ -228,7 +228,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
         EditText editText = (EditText) customView.findViewById(R.id.editText);
 
-        editText.setHint(getResources().getString(R.string.email));
+        editText.setHint(getResources().getString(R.string.register_email));
 
         text1.setText(getResources().getString(R.string.popup_message_edit_update_email));
         text2.setText(getResources().getString(R.string.popup_message_edit_enter_new_email));

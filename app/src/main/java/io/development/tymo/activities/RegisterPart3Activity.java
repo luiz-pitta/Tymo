@@ -287,11 +287,11 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     public String getPrivacy(int privacy){
         switch (privacy){
             case 0:
-                return getResources().getString(R.string.privacy_always_public);
+                return getResources().getString(R.string.register_privacy_public);
             case 1:
-                return getResources().getString(R.string.privated);
+                return getResources().getString(R.string.register_privacy_privated);
             case 2:
-                return getResources().getString(R.string.privacy_always_friends);
+                return getResources().getString(R.string.register_privacy_always_friends);
             default:
                 return "";
         }

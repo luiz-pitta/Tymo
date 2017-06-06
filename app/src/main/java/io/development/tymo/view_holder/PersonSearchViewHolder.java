@@ -202,13 +202,13 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
 
             if (know > 0) {
                 items = new String[3];
-                items[0] = mContext.getResources().getString(R.string.my_contacts_action_view, fullNameToShortName(contactName));
-                items[1] = mContext.getResources().getString(R.string.my_contacts_action_block, fullNameToShortName(contactName));
-                items[2] = mContext.getResources().getString(R.string.my_contacts_action_delete, fullNameToShortName(contactName));
+                items[0] = mContext.getResources().getString(R.string.my_contacts_view, fullNameToShortName(contactName));
+                items[1] = mContext.getResources().getString(R.string.my_contacts_block, fullNameToShortName(contactName));
+                items[2] = mContext.getResources().getString(R.string.my_contacts_delete, fullNameToShortName(contactName));
             } else {
                 items = new String[2];
-                items[0] = mContext.getResources().getString(R.string.my_contacts_action_view, fullNameToShortName(contactName));
-                items[1] = mContext.getResources().getString(R.string.my_contacts_action_block, fullNameToShortName(contactName));
+                items[0] = mContext.getResources().getString(R.string.my_contacts_view, fullNameToShortName(contactName));
+                items[1] = mContext.getResources().getString(R.string.my_contacts_block, fullNameToShortName(contactName));
             }
 
 
@@ -382,7 +382,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
         SearchMultipleAdapter adapter = getOwnerAdapter();
 
         if (deleteBlock == Constants.BLOCK) {
-            Toast.makeText(mContext, mContext.getResources().getString(R.string.user_blocked), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.user_blocked_one), Toast.LENGTH_LONG).show();
             adapter.remove(getAdapterPosition());
         }
         else {

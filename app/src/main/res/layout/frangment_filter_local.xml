@@ -44,7 +44,7 @@
                     android:layout_toLeftOf="@+id/mapText"
                     android:layout_toRightOf="@+id/locationIcon"
                     android:background="@drawable/bg_act_edit_box"
-                    android:hint="@string/local"
+                    android:hint="@string/hint_local_filter"
                     android:inputType="text"
                     android:lines="1"
                     android:padding="10dp"

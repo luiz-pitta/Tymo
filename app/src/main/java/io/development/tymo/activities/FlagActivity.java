@@ -207,7 +207,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             privacyIcon.setImageResource(R.drawable.ic_lock);
-            privacyText.setText(getResources().getString(R.string.privacy_always_flag_signalized));
+            privacyText.setText(getResources().getString(R.string.flag_privacy));
 
             if(edit){
                 if (flagWrapper.getFlagServer().getType()){
@@ -460,10 +460,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             if(flagWrapper.getFlagServer().getType() || act_free){
                 privacyIcon.setImageResource(R.drawable.ic_lock);
-                privacyText.setText(getResources().getString(R.string.privacy_always_flag_signalized));
+                privacyText.setText(getResources().getString(R.string.flag_privacy));
             }else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
-                privacyText.setText(getResources().getString(R.string.privacy_always_public));
+                privacyText.setText(getResources().getString(R.string.act_privacy));
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
             }
         }else {
@@ -511,7 +511,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             if(flagWrapper.getFlagServer().getType()){
                 privacyIcon.setImageResource(R.drawable.ic_lock);
-                privacyText.setText(getResources().getString(R.string.privacy_always_flag_signalized));
+                privacyText.setText(getResources().getString(R.string.flag_privacy));
             }else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
                 privacyText.setText(getResources().getString(R.string.visibility_public));
@@ -988,7 +988,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 free = true;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_lock);
-                privacyText.setText(getResources().getString(R.string.privacy_always_flag_signalized));
+                privacyText.setText(getResources().getString(R.string.flag_privacy));
                 availableButton.setImageResource(R.drawable.ic_flag_available);
                 unavailableButton.setImageResource(R.drawable.ic_flag);
                 availableButton.clearColorFilter();

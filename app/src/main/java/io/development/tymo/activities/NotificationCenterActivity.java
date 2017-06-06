@@ -55,7 +55,7 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
 
         mSubscriptions = new CompositeSubscription();
 
-        mTitle.setText(getResources().getString(R.string.notification_center));
+        mTitle.setText(getResources().getString(R.string.settings_notification_center));
 
         mBackButton.setOnClickListener(this);
 

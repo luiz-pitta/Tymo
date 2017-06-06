@@ -1092,7 +1092,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 if (count_is_happening == 1) {
                     commitmentTitle.setText(title_is_happening);
                 } else {
-                    commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_is_happening));
+                    commitmentTitle.setText(getResources().getString(R.string.commitments_of_the_day_qty, count_is_happening));
                 }
                 commitmentStartTime.setVisibility(View.VISIBLE);
                 commitmentStartTime.setText(R.string.commitments_of_the_day_happening_now);
@@ -1104,7 +1104,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 progressBar.setValue(35.0f);
             } else if (count_will_happen > 0) {
                 if (count_will_happen_at_same_time > 1) {
-                    commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
+                    commitmentTitle.setText(getResources().getString(R.string.commitments_of_the_day_qty, count_will_happen_at_same_time));
                     commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at, startsAtHourText, startsAtMinuteText));
                 } else {
                     commitmentTitle.setText(title_will_happen);

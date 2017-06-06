@@ -207,7 +207,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         mNavigator.onCreate(savedInstanceState);
 
         setCurrentTab(mNavigator.getCurrentPosition());
-        privacyText.setText(getResources().getString(R.string.privacy_always_public));
+        privacyText.setText(getResources().getString(R.string.act_privacy));
         privacyIcon.setImageResource(R.drawable.ic_public);
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_edit");

@@ -137,7 +137,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
                 text4.setText(context.getString(R.string.response_invitation_accepted));
                 inviteRequest.setStatus(Constants.YES);
             } else if (v == ignoreButton) {
-                text4.setText(context.getString(R.string.invitation_ignored));
+                text4.setText(context.getString(R.string.response_invitation_ignored));
                 inviteRequest.setStatus(Constants.NO);
             }
 

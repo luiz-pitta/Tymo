@@ -1021,7 +1021,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             filterIconFriends.setVisibility(View.INVISIBLE);
             cleanFriends.setVisibility(View.INVISIBLE);
             //Location
-            locationText.setText(getResources().getString(R.string.local));
+            locationText.setText(getResources().getString(R.string.filter_local));
             lat = -500;
             lng = -500;
             filterIconLocation.setVisibility(View.INVISIBLE);
@@ -1097,7 +1097,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Location
-            locationText.setText(getResources().getString(R.string.local));
+            locationText.setText(getResources().getString(R.string.filter_local));
             lat = -500;
             lng = -500;
             filterIconLocation.setVisibility(View.INVISIBLE);

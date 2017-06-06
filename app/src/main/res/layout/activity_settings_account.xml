@@ -54,7 +54,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/email"
+                        android:text="@string/register_email"
                         android:textColor="@color/grey_900"
                         android:textSize="16sp"
                         android:textStyle="bold" />
@@ -102,7 +102,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/passwordActionForwardIcon"
-                    android:text="@string/password"
+                    android:text="@string/register_password"
                     android:textColor="@color/grey_900"
                     android:textSize="16sp"
                     android:textStyle="bold" />

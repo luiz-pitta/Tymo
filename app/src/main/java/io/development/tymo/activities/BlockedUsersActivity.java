@@ -101,7 +101,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void handleResponseBlockRequest(Response response) {
-        Toast.makeText(this, getResources().getString(R.string.users_blocked), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.user_blocked), Toast.LENGTH_LONG).show();
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         getBlockedUsers(email);
     }

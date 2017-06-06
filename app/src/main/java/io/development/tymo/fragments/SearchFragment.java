@@ -527,9 +527,9 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         else
             adapter = new ViewPagerAdapter(getFragmentManager());
 
-        adapter.addFragment(new SearchPeopleFragment(), getResources().getString(R.string.people));
-        adapter.addFragment(new SearchMyCommitmentFragment(), getResources().getString(R.string.my_commitments));
-        adapter.addFragment(new SearchWhatsFragment(), getResources().getString(R.string.search_what_is_going_on));
+        adapter.addFragment(new SearchPeopleFragment(), getResources().getString(R.string.search_menu_people));
+        adapter.addFragment(new SearchMyCommitmentFragment(), getResources().getString(R.string.search_menu_my_commitments));
+        adapter.addFragment(new SearchWhatsFragment(), getResources().getString(R.string.search_menu_what_is_going_on));
         viewPager.setAdapter(adapter);
 
     }

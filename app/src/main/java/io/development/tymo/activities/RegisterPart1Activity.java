@@ -160,7 +160,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         }
         else if(age <= 13){
             err++;
-            Toast.makeText(this, getResources().getString(R.string.register_minimum_age), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
         }
         else if (!radioButton1.isChecked() && !radioButton2.isChecked()) {
             err++;

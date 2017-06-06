@@ -66,7 +66,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.my_interests));
+        m_title.setText(getResources().getString(R.string.settings_my_interests));
 
         mSubscriptions = new CompositeSubscription();
 

@@ -481,7 +481,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     // All good!
                 } else {
-                    Toast.makeText(this, getResources().getString(R.string.import_google_calendar_permission), Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getResources().getString(R.string.permission_import_from_google_agenda), Toast.LENGTH_LONG).show();
                 }
 
                 break;
@@ -860,7 +860,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         editText.setVisibility(View.GONE);
 
         text1.setText(getResources().getString(R.string.logout_app));
-        text2.setText(getResources().getString(R.string.logout_confirmation_query));
+        text2.setText(getResources().getString(R.string.logout_confirmation_question));
         buttonText1.setText(getResources().getString(R.string.no));
         buttonText2.setText(getResources().getString(R.string.yes));
 

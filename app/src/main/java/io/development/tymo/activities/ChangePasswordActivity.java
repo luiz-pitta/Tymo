@@ -141,7 +141,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             else if(!passwordNew.getText().toString().matches(passwordNewAgain.getText().toString())) {
                 err++;
                 passwordNewAgain.setError(getResources().getString(R.string.validation_field_passwords_diff));
-                Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.password_new_wrong), Toast.LENGTH_LONG).show();
+                Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.validation_field_password_new_wrong), Toast.LENGTH_LONG).show();
             }
 
             if(err == 0){

@@ -33,7 +33,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/email"
+                    android:text="@string/register_email"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />

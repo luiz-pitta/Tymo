@@ -51,7 +51,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="@string/date"
+                    android:text="@string/reminder_date"
                     android:textColor="@color/grey_600"
                     android:textSize="14sp"
                     android:textStyle="normal" />
@@ -90,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    android:text="@string/hour"
+                    android:text="@string/reminder_hour"
                     android:textColor="@color/grey_600"
                     android:textSize="14sp"
                     android:textStyle="normal"/>

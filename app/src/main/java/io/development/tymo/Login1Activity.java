@@ -196,7 +196,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }else
-            Toast.makeText(this, getResources().getString(R.string.register_account_facebook_failed), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.register_account_not_linked_with_facebook), Toast.LENGTH_LONG).show();
 
         progressBox.setVisibility(View.GONE);
     }

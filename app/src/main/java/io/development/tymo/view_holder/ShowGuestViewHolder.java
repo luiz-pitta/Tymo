@@ -251,19 +251,19 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
 
             if (iBlocked > 0) {
                 items = new String[1];
-                items[0] = mContext.getResources().getString(R.string.my_contacts_action_unblock, contactName);
+                items[0] = mContext.getResources().getString(R.string.my_contacts_unblock, contactName);
             } else if (admOrCreator && !isPersonCreator && !isFlag) {
                 if (!isPersonAdm) {
                     items = new String[2];
-                    items[0] = mContext.getResources().getString(R.string.make_admin);
-                    items[1] = mContext.getResources().getString(R.string.my_contacts_action_view, contactName);
+                    items[0] = mContext.getResources().getString(R.string.administrator_make);
+                    items[1] = mContext.getResources().getString(R.string.my_contacts_view, contactName);
                 } else {
                     items = new String[1];
-                    items[0] = mContext.getResources().getString(R.string.my_contacts_action_view, contactName);
+                    items[0] = mContext.getResources().getString(R.string.my_contacts_view, contactName);
                 }
             } else {
                 items = new String[1];
-                items[0] = mContext.getResources().getString(R.string.my_contacts_action_view, contactName);
+                items[0] = mContext.getResources().getString(R.string.my_contacts_view, contactName);
             }
 
 
@@ -472,7 +472,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         if (deleteBlock == Constants.BLOCK) {
             showGuestsAdapter.getItem(getAdapterPosition()).setIBlocked(1);
             showGuestsAdapter.notifyItemChanged(getAdapterPosition());
-            Toast.makeText(mContext, mContext.getResources().getString(R.string.user_blocked), Toast.LENGTH_LONG).show();
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.user_blocked_one), Toast.LENGTH_LONG).show();
         } else {
             showGuestsAdapter.getItem(getAdapterPosition()).setCountKnows(0);
             showGuestsAdapter.notifyItemChanged(getAdapterPosition());
