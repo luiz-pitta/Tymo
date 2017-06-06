@@ -79,7 +79,7 @@ public class FreeFragment extends Fragment {
             list = parent.getListPlans();
             screen = Utilities.TYPE_FRIEND;
             weekAdapter = new PlansAdapter(view.getContext(), screen, (FriendProfileActivity)getActivity(), parent.getUserFriend(), true);
-            recyclerView.setEmptyView(R.layout.empty_profile_private);
+            recyclerView.setEmptyView(R.layout.empty_profile_privated);
         }
         else {
             list = fragment.getListPlans();

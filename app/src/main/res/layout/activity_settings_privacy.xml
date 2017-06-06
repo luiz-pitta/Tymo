@@ -39,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:gravity="center"
-            android:text="@string/privacy_text_1"
+            android:text="@string/login_register_privacy_text_1"
             android:textAllCaps="true"
             android:textColor="@color/grey_500"
             android:textSize="16sp"
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:gravity="center"
-            android:text="@string/privacy_text_2"
+            android:text="@string/login_register_privacy_text_2"
             android:textColor="@color/grey_500"
             android:textSize="16sp" />
 
@@ -138,7 +138,7 @@
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:lines="1"
-                android:text="@string/updating"
+                android:text="@string/progress_updating"
                 android:textColor="@color/grey_600"
                 android:textSize="14sp" />
 

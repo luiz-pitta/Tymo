@@ -324,7 +324,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleErrorBgProfile(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     void refreshItems() {
@@ -1085,7 +1085,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         String dayToday = String.format("%02d", day);
         String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
 
-        todayDate.setText(getResources().getString(R.string.today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
+        todayDate.setText(getResources().getString(R.string.date_format_today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
 
         if (commitments) {
             if (count_is_happening > 0) {
@@ -1095,7 +1095,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_is_happening));
                 }
                 commitmentStartTime.setVisibility(View.VISIBLE);
-                commitmentStartTime.setText(R.string.happening_now);
+                commitmentStartTime.setText(R.string.commitments_of_the_day_happening_now);
                 commitmentTitle.setLines(1);
                 timer.setVisibility(View.GONE);
                 timerIcon.setVisibility(View.VISIBLE);
@@ -1105,10 +1105,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             } else if (count_will_happen > 0) {
                 if (count_will_happen_at_same_time > 1) {
                     commitmentTitle.setText(getResources().getString(R.string.n_commitments, count_will_happen_at_same_time));
-                    commitmentStartTime.setText(getResources().getString(R.string.starts_at_plural, startsAtHourText, startsAtMinuteText));
+                    commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at, startsAtHourText, startsAtMinuteText));
                 } else {
                     commitmentTitle.setText(title_will_happen);
-                    commitmentStartTime.setText(getResources().getString(R.string.starts_at, startsAtHourText, startsAtMinuteText));
+                    commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at_one, startsAtHourText, startsAtMinuteText));
                 }
                 commitmentTitle.setLines(1);
                 commitmentStartTime.setVisibility(View.VISIBLE);
@@ -1119,7 +1119,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
             } else {
                 commitmentStartTime.setVisibility(View.GONE);
-                commitmentTitle.setText(R.string.all_commitments_already_finished);
+                commitmentTitle.setText(R.string.commitments_of_the_day_all_already_finished);
                 commitmentTitle.setLines(2);
                 timer.setVisibility(View.GONE);
                 timerIcon.setVisibility(View.VISIBLE);
@@ -1178,7 +1178,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         //setProgress(false);
         noInternet = true;
         mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
 

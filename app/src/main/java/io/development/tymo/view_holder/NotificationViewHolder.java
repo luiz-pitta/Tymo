@@ -62,11 +62,11 @@ public class NotificationViewHolder extends BaseViewHolder<NotificationModel> {
         }
         text4.setText(invite.getText4());
 
-        if (invite.getText4().matches(context.getResources().getString(R.string.already_happened))){
+        if (invite.getText4().matches(context.getResources().getString(R.string.commitments_of_the_day_already_happened))){
             text4.setTextColor(context.getResources().getColor(R.color.grey_500));
 
         }
-        else if(invite.getText4().matches(context.getResources().getString(R.string.is_happening))){
+        else if(invite.getText4().matches(context.getResources().getString(R.string.commitments_of_the_day_is_happening))){
             text4.setTextColor(context.getResources().getColor(R.color.deep_purple_400));
         }
         else{

@@ -291,7 +291,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private void initSwipe(){
@@ -334,7 +334,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                     mp = MediaPlayer.create(getActivity(), R.raw.feed_ignore);
                     mp.start();
 
-                    snackbar =  Snackbar.make(recyclerView,getResources().getString(R.string.invitation_activity_ignored), Snackbar.LENGTH_LONG)
+                    snackbar =  Snackbar.make(recyclerView,getResources().getString(R.string.feed_invitation_activity_ignored), Snackbar.LENGTH_LONG)
                         .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
                         .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
                             @Override
@@ -352,7 +352,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                             super.onDismissed(transientBottomBar, event);
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -377,9 +377,9 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         mp.start();
 
                         lastPositionFit = true;
-                        snackbar = Snackbar.make(recyclerView, getResources().getString(R.string.invitation_activity_swiped), Snackbar.LENGTH_LONG)
+                        snackbar = Snackbar.make(recyclerView, getResources().getString(R.string.feed_invitation_activity_swiped), Snackbar.LENGTH_LONG)
                                 .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
-                                .setAction(getResources().getString(R.string.unhide), new View.OnClickListener() {
+                                .setAction(getResources().getString(R.string.undo_unhide), new View.OnClickListener() {
                                     @Override
                                     public void onClick(View view) {
                                         adapter.insert(item, position);
@@ -395,7 +395,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(200);
 
-                        snackbar = Snackbar.make(recyclerView, getResources().getString(R.string.invitation_activity_fit), Snackbar.LENGTH_LONG)
+                        snackbar = Snackbar.make(recyclerView, getResources().getString(R.string.feed_invitation_activity_fit), Snackbar.LENGTH_LONG)
                                 .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
                                 .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
                                     @Override
@@ -439,7 +439,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                             if(erase) {
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -581,7 +581,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         }
                         else {
                             stroke.setColor(ContextCompat.getColor(getActivity(), R.color.blue_600));
-                            text = getResources().getString(R.string.fit_already);
+                            text = getResources().getString(R.string.feed_fit_already);
                         }
                         stroke.setStyle(Paint.Style.STROKE);
                         stroke.setAlpha((int)alphaIcon);

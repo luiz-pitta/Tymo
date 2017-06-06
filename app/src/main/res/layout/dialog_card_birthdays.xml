@@ -41,7 +41,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="@string/birthday_person"
+                android:text="@string/card_birthday_text_1"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textAllCaps="true"
@@ -86,7 +86,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="@string/birthday_person_card_text"
+                android:text="@string/card_birthday_text_2"
                 android:textColor="@color/deep_purple_400"
                 android:textSize="16sp"
                 android:textStyle="bold" />

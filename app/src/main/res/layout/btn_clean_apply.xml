@@ -38,7 +38,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="10dp"
-            android:text="@string/cleanAll"
+            android:text="@string/clean_all"
             android:textAllCaps="true"
             android:textColor="@color/grey_900"
             android:textSize="14sp"

@@ -513,7 +513,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -529,7 +529,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
         adapter.addFragment(new SearchPeopleFragment(), getResources().getString(R.string.people));
         adapter.addFragment(new SearchMyCommitmentFragment(), getResources().getString(R.string.my_commitments));
-        adapter.addFragment(new SearchWhatsFragment(), getResources().getString(R.string.what_is_going_on));
+        adapter.addFragment(new SearchWhatsFragment(), getResources().getString(R.string.search_what_is_going_on));
         viewPager.setAdapter(adapter);
 
     }

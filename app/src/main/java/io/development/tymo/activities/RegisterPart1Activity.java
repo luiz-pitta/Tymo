@@ -298,7 +298,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
                     photo.setImageURI(result.getUri());
 
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
-                Toast.makeText(this, getResources().getString(R.string.modify_profile_photo_error), Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getResources().getString(R.string.error_modify_profile_photo), Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -98,7 +98,7 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
             }
         } else {
             setProgress(false);
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         }
     }
 

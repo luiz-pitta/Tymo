@@ -196,7 +196,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
 
         m_title = (TextView) findViewById(R.id.text);
-        m_title.setText(getResources().getString(R.string.activity));
+        m_title.setText(getResources().getString(R.string.act));
 
         m_ic_edit = (ImageView) findViewById(R.id.icon2);
         m_ic_edit.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
@@ -484,7 +484,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         if (response.getTags().size() == 0) {
             finish();
-            Toast.makeText(this, getString(R.string.show_activity_404), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.act_not_found), Toast.LENGTH_LONG).show();
         } else {
 
             ActivityServer activityServer = activityWrapper.getActivityServer();
@@ -636,7 +636,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -755,7 +755,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         editText.setVisibility(View.GONE);
 
-        allRadioButton.setText(getResources().getString(R.string.dialog_delete_plans_all));
+        allRadioButton.setText(getResources().getString(R.string.delete_plans_answer_all));
 
         if (repeat) {
             radioGroup.setVisibility(View.VISIBLE);
@@ -763,14 +763,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             button1.setText(getResources().getString(R.string.cancel));
             button2.setText(getResources().getString(R.string.confirm));
             text2.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.dialog_delete_plans_text));
-            text2.setText(getResources().getString(R.string.dialog_delete_plans_text2));
+            text1.setText(getResources().getString(R.string.delete_plans_question_text_1));
+            text2.setText(getResources().getString(R.string.delete_plans_question_text_2));
         } else {
             button1.setText(getResources().getString(R.string.no));
             button2.setText(getResources().getString(R.string.yes));
             text2.setVisibility(View.GONE);
             text1.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.dialog_delete_plans_title));
+            text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
         }
 
         Dialog dg = new Dialog(this, R.style.NewDialog);
@@ -818,7 +818,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private void createDialogPrivacy() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_plans_visibility, null);
+        View customView = inflater.inflate(R.layout.dialog_visibility, null);
 
         Dialog dialog = new Dialog(this, R.style.NewDialog);
 

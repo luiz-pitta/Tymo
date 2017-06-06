@@ -130,7 +130,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
         String dayToday = String.format("%02d", day);
         String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
 
-        dateText.setText(getResources().getString(R.string.today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
+        dateText.setText(getResources().getString(R.string.date_format_today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
 
         Query query = new Query();
         query.setEmail(email);
@@ -529,11 +529,11 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
 
                 String statusText;
                 if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
-                    statusText = getResources().getString(R.string.is_happening);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_is_happening);
                 } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
-                    statusText = getResources().getString(R.string.will_happen);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_will_happen);
                 } else {
-                    statusText = getResources().getString(R.string.already_happened);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_already_happened);
                 }
 
                 listNotification.add(new NotificationModel(
@@ -585,11 +585,11 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
 
                 String statusText;
                 if (!isTimeInBefore(hour + ":" + minute, hourNow + ":" + minuteNow) && !isTimeInAfter(hourEnd + ":" + minuteEnd, hourNow + ":" + minuteNow)) {
-                    statusText = getResources().getString(R.string.is_happening);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_is_happening);
                 } else if (isTimeInAfter(hourNow + ":" + minuteNow, hourEnd + ":" + minuteEnd)) {
-                    statusText = getResources().getString(R.string.will_happen);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_will_happen);
                 } else {
-                    statusText = getResources().getString(R.string.already_happened);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_already_happened);
                 }
 
                 listNotification.add(new NotificationModel(
@@ -613,11 +613,11 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
 
                 String statusText;
                 if (isTimeInBefore(hourNow + ":" + minuteNow, hour + ":" + minute)) {
-                    statusText = getResources().getString(R.string.already_happened);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_already_happened);
                 } else if (isTimeInAfter(hourNow + ":" + minuteNow, hour + ":" + minute)) {
-                    statusText = getResources().getString(R.string.will_happen);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_will_happen);
                 } else {
-                    statusText = getResources().getString(R.string.is_happening);
+                    statusText = getResources().getString(R.string.commitments_of_the_day_is_happening);
                 }
 
                 listNotification.add(new NotificationModel(
@@ -669,7 +669,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

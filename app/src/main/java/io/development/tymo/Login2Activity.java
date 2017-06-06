@@ -128,7 +128,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             loginProcess(email,password);
         }
         else {
-            showSnackBarMessage(getResources().getString(R.string.fill_fields_correctly));
+            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
         }
     }
 
@@ -240,7 +240,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             }
         } else {
             //progressBox.setVisibility(View.GONE);
-            showSnackBarMessage(getResources().getString(R.string.network_error));
+            showSnackBarMessage(getResources().getString(R.string.error_network));
         }
     }
 

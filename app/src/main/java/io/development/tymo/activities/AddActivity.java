@@ -461,7 +461,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         if (response.getTags().size() == 0) {
             finish();
-            Toast.makeText(this, getString(R.string.show_activity_404), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getString(R.string.act_not_found), Toast.LENGTH_LONG).show();
         } else {
 
             ActivityServer activityServer = activityWrapper.getActivityServer();
@@ -893,7 +893,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             setProgress(true);
 
         } else
-            showSnackBarMessage(getResources().getString(R.string.fill_fields_correctly));
+            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
 
     }
 
@@ -1112,7 +1112,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             setProgress(true);
 
         } else
-            showSnackBarMessage(getResources().getString(R.string.fill_fields_correctly));
+            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
 
     }
 
@@ -1516,7 +1516,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private void showSnackBarMessage(String message) {
@@ -1774,7 +1774,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private void createDialogPrivacy() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_plans_visibility, null);
+        View customView = inflater.inflate(R.layout.dialog_visibility, null);
 
         Dialog dialog = new Dialog(this, R.style.NewDialog);
 
@@ -1915,14 +1915,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         editText.setVisibility(View.GONE);
 
-        text1.setText(getResources().getString(R.string.dialog_edit_reminder_title));
+        text1.setText(getResources().getString(R.string.popup_message_edit_commitments_with_repetitions));
         text2.setVisibility(View.GONE);
         buttonText1.setText(getResources().getString(R.string.cancel));
         buttonText2.setText(getResources().getString(R.string.confirm));
 
         radioGroup.setVisibility(View.VISIBLE);
         text2.setVisibility(View.VISIBLE);
-        text2.setText(getResources().getString(R.string.dialog_edit_reminder_text));
+        text2.setText(getResources().getString(R.string.popup_message_edit_select_which_one_to_modify));
 
         Dialog dg = new Dialog(this, R.style.NewDialog);
 

@@ -258,7 +258,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         editText.setVisibility(View.GONE);
 
-        allRadioButton.setText(getResources().getString(R.string.dialog_delete_plans_all));
+        allRadioButton.setText(getResources().getString(R.string.delete_plans_answer_all));
 
         if (repeat) {
             radioGroup.setVisibility(View.VISIBLE);
@@ -266,14 +266,14 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             buttonText1.setText(getResources().getString(R.string.cancel));
             buttonText2.setText(getResources().getString(R.string.confirm));
             text2.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.dialog_delete_plans_text));
-            text2.setText(getResources().getString(R.string.dialog_delete_plans_text2));
+            text1.setText(getResources().getString(R.string.delete_plans_question_text_1));
+            text2.setText(getResources().getString(R.string.delete_plans_question_text_2));
         } else {
             buttonText1.setText(getResources().getString(R.string.no));
             buttonText2.setText(getResources().getString(R.string.yes));
             text2.setVisibility(View.GONE);
             text1.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.dialog_delete_plans_title));
+            text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
         }
 
         Dialog dg = new Dialog(this, R.style.NewDialog);
@@ -428,7 +428,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             error = true;
             ((ReminderEditFragment) mNavigator.getFragment(0)).updateError(error);
             //requiredText.setVisibility(View.VISIBLE);
-            showSnackBarMessage(getResources().getString(R.string.fill_fields_correctly));
+            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
         }
     }
 
@@ -679,7 +679,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private void showSnackBarMessage(String message) {
@@ -709,14 +709,14 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         editText.setVisibility(View.GONE);
 
-        text1.setText(getResources().getString(R.string.dialog_edit_reminder_title));
+        text1.setText(getResources().getString(R.string.popup_message_edit_commitments_with_repetitions));
         text2.setVisibility(View.GONE);
         buttonText1.setText(getResources().getString(R.string.cancel));
         buttonText2.setText(getResources().getString(R.string.confirm));
 
         radioGroup.setVisibility(View.VISIBLE);
         text2.setVisibility(View.VISIBLE);
-        text2.setText(getResources().getString(R.string.dialog_edit_reminder_text));
+        text2.setText(getResources().getString(R.string.popup_message_edit_select_which_one_to_modify));
 
         Dialog dg = new Dialog(this, R.style.NewDialog);
 
@@ -744,7 +744,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 edit_reminder(idx == 1);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.dialog_edit_reminder_title) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.popup_message_edit_commitments_with_repetitions) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

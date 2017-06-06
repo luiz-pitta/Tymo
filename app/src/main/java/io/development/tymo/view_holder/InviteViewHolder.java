@@ -134,10 +134,10 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
             inviteRequest.setIdAct(id_act_flag);
             inviteRequest.setType(type);
             if (v == acceptButton) {
-                text4.setText(context.getString(R.string.accept_invite));
+                text4.setText(context.getString(R.string.response_invitation_accepted));
                 inviteRequest.setStatus(Constants.YES);
             } else if (v == ignoreButton) {
-                text4.setText(context.getString(R.string.refuse_invite));
+                text4.setText(context.getString(R.string.invitation_ignored));
                 inviteRequest.setStatus(Constants.NO);
             }
 
@@ -167,7 +167,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
 

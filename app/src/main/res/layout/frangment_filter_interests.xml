@@ -41,7 +41,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="Tags"
+                        android:text="@string/filter_interests_tags"
                         android:textColor="@color/grey_600"
                         android:textSize="14sp" />
 
@@ -102,7 +102,7 @@
             android:layout_centerVertical="true"
             android:ellipsize="end"
             android:lines="1"
-            android:text="@string/interests"
+            android:text="@string/filter_interests"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
 

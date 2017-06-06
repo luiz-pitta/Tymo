@@ -170,13 +170,13 @@ public class ShowGuestsActivity extends AppCompatActivity {
                 listQueryInvitedUser.clear();
                 listQueryInvitedUser.addAll(filteredModelList1);
                 invitedPeopleFragment.setAdapterItens(listQueryInvitedUser);
-                adapter.setPageTitle(0, getResources().getString(R.string.show_guests_invited, listQueryInvitedUser.size()));
+                adapter.setPageTitle(0, getResources().getString(R.string.guests_invited, listQueryInvitedUser.size()));
 
                 FitPeopleFragment fitPeopleFragment = (FitPeopleFragment) adapter.getItem(1);
                 listQueryConfirmedUser.clear();
                 listQueryConfirmedUser.addAll(filteredModelList2);
                 fitPeopleFragment.setAdapterItens(listQueryConfirmedUser);
-                adapter.setPageTitle(1, getResources().getString(R.string.show_guests_fit, listQueryConfirmedUser.size()));
+                adapter.setPageTitle(1, getResources().getString(R.string.guests_fit, listQueryConfirmedUser.size()));
 
                 adapter.notifyDataSetChanged();
             }
@@ -204,8 +204,8 @@ public class ShowGuestsActivity extends AppCompatActivity {
     private void setupViewPager(ViewPager viewPager) {
         adapter = new ViewPagerAdapter(getFragmentManager());
 
-        adapter.addFragment(new InvitedPeopleFragment(), getResources().getString(R.string.show_guests_invited, listInvitedUser.size()));
-        adapter.addFragment(new FitPeopleFragment(), getResources().getString(R.string.show_guests_fit, listConfirmedUser.size()));
+        adapter.addFragment(new InvitedPeopleFragment(), getResources().getString(R.string.guests_invited, listInvitedUser.size()));
+        adapter.addFragment(new FitPeopleFragment(), getResources().getString(R.string.guests_fit, listConfirmedUser.size()));
         viewPager.setAdapter(adapter);
 
         InvitedPeopleFragment invitedPeopleFragment = (InvitedPeopleFragment) adapter.getItem(0);
@@ -243,7 +243,7 @@ public class ShowGuestsActivity extends AppCompatActivity {
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

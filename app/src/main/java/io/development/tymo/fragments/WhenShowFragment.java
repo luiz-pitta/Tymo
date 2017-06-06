@@ -101,7 +101,7 @@ public class WhenShowFragment extends Fragment {
                     try {
                         startActivity(intent);
                     } catch (ActivityNotFoundException ex) {
-                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.unable_to_find_application), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), getActivity().getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
                     }
                 }
             });
@@ -159,7 +159,7 @@ public class WhenShowFragment extends Fragment {
                 String repeatly;
                 switch (activityServer.getRepeatType()) {
                     case Constants.DAYLY:
-                        repeatly = getActivity().getString(R.string.repeat_dayly);
+                        repeatly = getActivity().getString(R.string.repeat_daily);
                         break;
                     case Constants.WEEKLY:
                         repeatly = getActivity().getString(R.string.repeat_weekly);
@@ -173,7 +173,7 @@ public class WhenShowFragment extends Fragment {
                 }
 
                 if (activityServer.getRepeatType() == 5)
-                    repeatText.setText(getActivity().getString(R.string.repeat_text_imported_google_calendar));
+                    repeatText.setText(getActivity().getString(R.string.repeat_text_imported_google_agenda));
                 else
                     repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
             }

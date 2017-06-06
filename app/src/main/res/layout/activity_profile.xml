@@ -279,7 +279,7 @@
                             android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/pending_requests"
+                            android:text="@string/profile_menu_pending_requests"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -340,7 +340,7 @@
                             android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/invitations"
+                            android:text="@string/profile_menu_invitations"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -415,7 +415,7 @@
                                 android:maxLines="2"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
-                                android:text="@string/my_contacts"
+                                android:text="@string/profile_menu_my_contacts"
                                 android:textColor="@color/deep_purple_400"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -456,7 +456,7 @@
                             android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/settings"
+                            android:text="@string/profile_menu_settings"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />

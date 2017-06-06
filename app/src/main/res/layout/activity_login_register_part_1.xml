@@ -121,7 +121,7 @@
                 android:layout_height="50dp"
                 android:layout_marginTop="20dp"
                 android:background="@color/white_opacity_10"
-                android:hint="@string/location_where_lives"
+                android:hint="@string/about_where_lives"
                 android:inputType="text"
                 android:lines="1"
                 android:paddingLeft="20dp"
@@ -137,7 +137,7 @@
                 android:layout_marginTop="30dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="@string/birth_date"
+                android:text="@string/about_birth_date"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />
@@ -207,7 +207,7 @@
                 android:layout_marginTop="30dp"
                 android:ellipsize="end"
                 android:lines="1"
-                android:text="@string/gender"
+                android:text="@string/about_gender"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />

@@ -114,7 +114,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         recyclerView.setRefreshingColor(ContextCompat.getColor(this,R.color.deep_purple_400));
 
         if (email.matches(my_email)) {
-            m_title.setText(getResources().getString(R.string.my_contacts));
+            m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
             adapter = new ContactsAdapter(this, true, false, this);
             recyclerView.setEmptyView(R.layout.empty_my_contacts_profile);
         } else {
@@ -130,7 +130,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         user.setEmail(my_email);
 
         if (email.matches(my_email)) {
-            m_title.setText(getResources().getString(R.string.my_contacts));
+            m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
             adapter = new ContactsAdapter(this, true, false, this);
             getContacts(email);
         } else {
@@ -234,7 +234,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 user.setEmail(my_email);
 
                 if (email.matches(my_email)) {
-                    m_title.setText(getResources().getString(R.string.my_contacts));
+                    m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
                     getContacts(email);
                 } else {
                     m_title.setText(getResources().getString(R.string.contacts_of, fullNameToShortName(full_name)));
@@ -272,7 +272,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         User user = response.getUser();
 
         if(user.getCountKnows() == 0 && user.getPrivacy() == 1) {
-            recyclerView.setEmptyView(R.layout.empty_profile_private);
+            recyclerView.setEmptyView(R.layout.empty_profile_privated);
             findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
@@ -340,7 +340,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

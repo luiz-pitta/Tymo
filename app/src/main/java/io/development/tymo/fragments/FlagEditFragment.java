@@ -4,14 +4,11 @@ package io.development.tymo.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -252,7 +249,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -479,8 +476,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
             tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            tpd.setStartTitle(getResources().getString(R.string.start));
-            tpd.setEndTitle(getResources().getString(R.string.end));
+            tpd.setStartTitle(getResources().getString(R.string.date_start));
+            tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(0);
             tpd.show(getFragmentManager(), "Timepickerdialog");
         }else if(v == timeEnd){
@@ -501,8 +498,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            tpd.setStartTitle(getResources().getString(R.string.start));
-            tpd.setEndTitle(getResources().getString(R.string.end));
+            tpd.setStartTitle(getResources().getString(R.string.date_start));
+            tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(1);
             tpd.show(getFragmentManager(), "Timepickerdialog");
         }else if(v == dateStart){
@@ -527,8 +524,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.start));
-            dpd.setEndTitle(getResources().getString(R.string.end));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(0);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
@@ -553,8 +550,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.start));
-            dpd.setEndTitle(getResources().getString(R.string.end));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(1);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         } else if(v == addPersonButton && addPersonButton.isActivated()){

@@ -51,7 +51,6 @@ import java.util.List;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
-import io.development.tymo.TymoApplication;
 import io.development.tymo.adapters.PlansFragmentAdapter;
 import io.development.tymo.fragments.CommitmentFragment;
 import io.development.tymo.fragments.FreeFragment;
@@ -361,7 +360,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void handleErrorBgProfile(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     void refreshItems() {
@@ -526,7 +525,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                 //icon2.setVisibility(View.VISIBLE);
                 icon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_facebook_messenger));
             }
-            friendshipRequestsText.setText(getResources().getString(R.string.friends));
+            friendshipRequestsText.setText(getResources().getString(R.string.profile_friend_menu_friends));
             friendshipRequestsIcon.setImageResource(R.drawable.ic_person_check);
             friendshipRequestsIcon.setTag(R.drawable.ic_person_check);
         }else if(user.getCountAskAdd() > 0){
@@ -535,7 +534,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                 friendshipRequestsIcon.setImageResource(R.drawable.ic_person_cancel);
                 friendshipRequestsIcon.setTag(R.drawable.ic_person_cancel);
             }else{
-                friendshipRequestsText.setText(getResources().getString(R.string.waiting));
+                friendshipRequestsText.setText(getResources().getString(R.string.response_waiting));
                 friendshipRequestsIcon.setImageResource(R.drawable.ic_person_waiting);
                 friendshipRequestsIcon.setTag(R.drawable.ic_person_waiting);
             }
@@ -860,7 +859,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         //setProgress(false);
         //setProgressFriendRequest(false);
         friendshipRequestsBox.setOnClickListener(this);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -1041,14 +1040,14 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         if (item == 0) {
             if (type == R.drawable.ic_person_check){
-                text1.setText(this.getResources().getString(R.string.contact_delete_confirmation_question, user.getName()));
+                text1.setText(this.getResources().getString(R.string.contact_confirmation_question_delete, user.getName()));
             }
             else{
-                text1.setText(this.getResources().getString(R.string.contact_add_confirmation_question, user.getName()));
+                text1.setText(this.getResources().getString(R.string.contact_confirmation_question_add, user.getName()));
             }
         }
         else if(item == 1) {
-            text1.setText(this.getResources().getString(R.string.contact_ignore_confirmation_question, user.getName()));
+            text1.setText(this.getResources().getString(R.string.contact_confirmation_question_ignore_request, user.getName()));
         }
 
         buttonText1.setText(getResources().getString(R.string.no));

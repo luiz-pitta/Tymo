@@ -72,7 +72,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
 
         mBackButton.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.pending_requests));
+        m_title.setText(getResources().getString(R.string.profile_menu_pending_requests));
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(true);
@@ -137,7 +137,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
             else if(users.get(i).getCountCommon() == 1)
                 friends_commun = getResources().getString(R.string.friend_in_common_one);
             else
-                friends_commun = getResources().getString(R.string.friend_in_common_many, users.get(i).getCountCommon());
+                friends_commun = getResources().getString(R.string.friend_in_common, users.get(i).getCountCommon());
 
             FriendRequestModel requestModel = new FriendRequestModel(users.get(i).getName(), location, friends_commun, users.get(i).getEmail(), users.get(i).getPhoto(), users.get(i));
             listRequest.add(requestModel);
@@ -177,7 +177,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

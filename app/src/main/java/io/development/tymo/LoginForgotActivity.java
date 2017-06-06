@@ -81,7 +81,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
 
     private void handleResponse(Response response) {
         setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.error_login_email_check), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.check_email_for_instructions), Toast.LENGTH_LONG).show();
         startActivity(new Intent(LoginForgotActivity.this, LoginPasswordResetActivity.class));
         finish();
     }
@@ -100,7 +100,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
             }
         } else {
             setProgress(false);
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         }
     }
 

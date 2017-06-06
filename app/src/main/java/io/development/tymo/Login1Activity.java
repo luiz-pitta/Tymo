@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -46,7 +45,6 @@ import java.util.List;
 import io.development.tymo.activities.IntroActivity;
 import io.development.tymo.activities.MainActivity;
 import io.development.tymo.activities.RegisterPart2Activity;
-import io.development.tymo.fragments.FeedFragment;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
@@ -54,7 +52,6 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -236,7 +233,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             }
         } else {
             //progressBox.setVisibility(View.GONE);
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         }
     }
 

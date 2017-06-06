@@ -23,7 +23,7 @@
         android:ellipsize="end"
         android:gravity="center"
         android:lines="1"
-        android:queryHint="@string/search_hint"
+        android:queryHint="@string/hint_search"
         android:textAllCaps="true"
         android:textColor="@color/grey_600"
         android:textSize="16sp"

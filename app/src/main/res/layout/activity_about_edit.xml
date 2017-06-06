@@ -57,7 +57,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
-                    android:text="@string/modify_profile_photo"
+                    android:text="@string/about_modify_profile_photo"
                     android:textColor="@color/deep_purple_400"
                     android:textSize="14sp" />
 
@@ -78,7 +78,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/name"
+                    android:text="@string/about_full_name"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -128,7 +128,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/surname"
+                    android:text="@string/about_surname"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -176,7 +176,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/description"
+                    android:text="@string/about_description"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -209,7 +209,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/urlBox"
+                android:id="@+id/infoToContactBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
@@ -223,7 +223,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/infos_to_contact"
+                    android:text="@string/about_info_to_contact"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -234,7 +234,7 @@
                     android:background="@color/horizontal_line" />
 
                 <EditText
-                    android:id="@+id/url"
+                    android:id="@+id/infoToContact"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
@@ -270,7 +270,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/birth_date"
+                    android:text="@string/about_birth_date"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -339,7 +339,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/gender"
+                    android:text="@string/about_gender"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -387,7 +387,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/location_where_lives"
+                    android:text="@string/about_where_lives"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -435,7 +435,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/where_works"
+                    android:text="@string/about_where_works"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />
@@ -483,7 +483,7 @@
                     android:lines="1"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
-                    android:text="@string/where_studied"
+                    android:text="@string/about_where_studied"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_500"
                     android:textSize="12sp" />

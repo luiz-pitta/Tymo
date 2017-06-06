@@ -48,7 +48,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:text="@string/from"
+                        android:text="@string/filter_date_from"
                         android:textColor="@color/grey_600"
                         android:textSize="14sp"
                         android:textStyle="normal" />
@@ -60,7 +60,7 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_act_edit_box"
                         android:gravity="center"
-                        android:hint="@string/date_hint"
+                        android:hint="@string/hint_date"
                         android:inputType="text"
                         android:lines="1"
                         android:paddingBottom="5dp"
@@ -86,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:layout_marginRight="10dp"
-                        android:text="@string/to"
+                        android:text="@string/filter_date_to"
                         android:textColor="@color/grey_600"
                         android:textSize="14sp"
                         android:textStyle="normal" />
@@ -98,7 +98,7 @@
                         android:layout_marginTop="5dp"
                         android:background="@drawable/bg_act_edit_box"
                         android:gravity="center"
-                        android:hint="@string/date_hint"
+                        android:hint="@string/hint_date"
                         android:inputType="text"
                         android:lines="1"
                         android:paddingBottom="5dp"
@@ -133,7 +133,7 @@
             android:layout_centerVertical="true"
             android:ellipsize="end"
             android:lines="1"
-            android:text="@string/date"
+            android:text="@string/filter_date"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
 

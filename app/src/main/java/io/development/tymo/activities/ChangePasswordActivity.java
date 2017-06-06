@@ -62,7 +62,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         cancelButton.setOnClickListener(this);
         forgot.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.password_reset));
+        m_title.setText(getResources().getString(R.string.password_reset_text_1));
         progressBox.setVisibility(View.GONE);
 
 
@@ -80,7 +80,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
     private void handleResponse(Response response) {
 
-        Toast.makeText(this, getResources().getString(R.string.password_reset_done), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.password_reset_success), Toast.LENGTH_LONG).show();
         progressBox.setVisibility(View.GONE);
         passwordActual.setText(null);
         passwordNew.setText(null);
@@ -89,7 +89,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
 
     private void handleError(Throwable error) {
         //progressBox.setVisibility(View.GONE);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -140,7 +140,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             }
             else if(!passwordNew.getText().toString().matches(passwordNewAgain.getText().toString())) {
                 err++;
-                passwordNewAgain.setError(getResources().getString(R.string.passwords_differents));
+                passwordNewAgain.setError(getResources().getString(R.string.validation_field_passwords_diff));
                 Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.password_new_wrong), Toast.LENGTH_LONG).show();
             }
 

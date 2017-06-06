@@ -147,7 +147,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
                 actionButtonType = 3;
                 text2.setVisibility(View.GONE);
                 text4.setVisibility(View.VISIBLE);
-                text4.setText(mContext.getResources().getString(R.string.request_sent));
+                text4.setText(mContext.getResources().getString(R.string.response_request_sent));
                 actionIcon.setImageResource(R.drawable.ic_person_cancel);
                 actionIcon.setTag(R.drawable.ic_person_cancel);
                 actionIcon.setBackgroundResource(R.drawable.bg_contact_icon_add);
@@ -156,7 +156,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
                 actionButtonType = 4;
                 text2.setVisibility(View.GONE);
                 text4.setVisibility(View.VISIBLE);
-                text4.setText(mContext.getResources().getString(R.string.waiting_your_answer));
+                text4.setText(mContext.getResources().getString(R.string.response_waiting_your_answer));
                 actionIcon.setImageResource(R.drawable.ic_person_waiting);
                 actionIcon.setTag(R.drawable.ic_person_waiting);
                 actionIcon.setBackgroundResource(R.drawable.bg_contact_icon_add);
@@ -178,7 +178,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
             text3.setVisibility(View.GONE);
         else {
             if (user.getCountCommon() > 1) {
-                text3.setText(mContext.getResources().getString(R.string.friend_in_common_many, user.getCountCommon()));
+                text3.setText(mContext.getResources().getString(R.string.friend_in_common, user.getCountCommon()));
             } else {
                 text3.setText(mContext.getResources().getString(R.string.friend_in_common_one));
             }
@@ -246,7 +246,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
                 sendFriendRequest(email, user);
                 text2.setVisibility(View.GONE);
                 text4.setVisibility(View.VISIBLE);
-                text4.setText(mContext.getResources().getString(R.string.request_sent));
+                text4.setText(mContext.getResources().getString(R.string.response_request_sent));
             }
             // eu solicitei, mas quero cancelar
             else if (actionButtonType == 3) {
@@ -322,10 +322,10 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
 
 
         if (item == 1) {
-            text1.setText(mContext.getResources().getString(R.string.contact_block_confirmation_question, contactName));
+            text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_block, contactName));
         }
         else{
-            text1.setText(mContext.getResources().getString(R.string.contact_delete_confirmation_question, contactName));
+            text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_delete, contactName));
         }
 
         buttonText1.setText(mContext.getResources().getString(R.string.no));
@@ -414,10 +414,10 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
         text2.setVisibility(View.GONE);
 
         if (item == 0) {
-            text1.setText(mContext.getResources().getString(R.string.contact_add_confirmation_question, contactName));
+            text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_add, contactName));
         }
         else if(item == 1) {
-            text1.setText(mContext.getResources().getString(R.string.contact_ignore_confirmation_question, contactName));
+            text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_ignore_request, contactName));
         }
 
         buttonText1.setText(mContext.getResources().getString(R.string.no));
@@ -598,7 +598,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
     private void handleError(Throwable error) {
         //setProgressFriendRequest(false);
         actionIcon.setOnClickListener(this);
-        Toast.makeText(mContext, mContext.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         /*LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.toast, null);
         TextView toastText = (TextView) layout.findViewById(R.id.toastText);

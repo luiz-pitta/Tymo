@@ -27,7 +27,7 @@
                 android:ellipsize="end"
                 android:gravity="left"
                 android:maxLines="2"
-                android:text="@string/dialog_card_free_time_text_1"
+                android:text="@string/card_free_time_text"
                 android:textColor="@color/grey_900"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -58,7 +58,7 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/activity"
+                    android:text="@string/act"
                     android:textAllCaps="true"
                     android:textColor="@color/grey_900"
                     android:textSize="16sp" />

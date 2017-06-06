@@ -235,7 +235,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         }
     }
 

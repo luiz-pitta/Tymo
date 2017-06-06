@@ -92,7 +92,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
             text2.setVisibility(View.GONE);
         } else {
             if (contact.getCountCommon() > 1) {
-                text2.setText(context.getResources().getString(R.string.friend_in_common_many, contact.getCountCommon()));
+                text2.setText(context.getResources().getString(R.string.friend_in_common, contact.getCountCommon()));
             } else {
                 text2.setText(context.getResources().getString(R.string.friend_in_common_one));
             }
@@ -206,13 +206,13 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         text2.setVisibility(View.GONE);
 
         if (item == 1) {
-            text1.setText(context.getResources().getString(R.string.contact_block_confirmation_question, contactName));
+            text1.setText(context.getResources().getString(R.string.contact_confirmation_question_block, contactName));
         }
         else if(item == 2) {
-            text1.setText(context.getResources().getString(R.string.contact_delete_confirmation_question, contactName));
+            text1.setText(context.getResources().getString(R.string.contact_confirmation_question_delete, contactName));
         }
         else{
-            text1.setText(context.getResources().getString(R.string.contact_unblock_confirmation_question, contactName));
+            text1.setText(context.getResources().getString(R.string.contact_confirmation_question_unblock, contactName));
         }
 
         buttonText1.setText(context.getResources().getString(R.string.no));
@@ -362,7 +362,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     public interface RefreshLayoutPlansCallback {

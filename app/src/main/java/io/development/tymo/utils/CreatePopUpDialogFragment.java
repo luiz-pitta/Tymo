@@ -2,7 +2,6 @@ package io.development.tymo.utils;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -240,7 +239,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             buttonIcon2.setImageResource(R.drawable.ic_trash);
                             buttonIcon2.setColorFilter(ContextCompat.getColor(mContext, R.color.red_600));
                             buttonText2.setText(mContext.getResources().getString(R.string.remove));
-                            buttonText2.setTag(mContext.getResources().getString(R.string.unfit));
+                            buttonText2.setTag(mContext.getResources().getString(R.string.undo_unfit));
                             buttonText2.setTextColor(ContextCompat.getColor(mContext, R.color.red_600));
                         } else {
                             buttonIcon2.setImageResource(R.drawable.ic_check);
@@ -304,7 +303,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             }
 
             private void handleError(Throwable error) {
-                Toast.makeText(mContext, mContext.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+                Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             }
 
             public void setProgress(boolean progress, boolean buttons) {
@@ -338,7 +337,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                 editText.setVisibility(View.GONE);
 
-                allRadioButton.setText(mContext.getResources().getString(R.string.dialog_delete_plans_all));
+                allRadioButton.setText(mContext.getResources().getString(R.string.delete_plans_answer_all));
 
                 if (repeat) {
                     radioGroup.setVisibility(View.VISIBLE);
@@ -346,14 +345,14 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     button1.setText(mContext.getResources().getString(R.string.cancel));
                     button2.setText(mContext.getResources().getString(R.string.confirm));
                     text2.setVisibility(View.VISIBLE);
-                    text1.setText(mContext.getResources().getString(R.string.dialog_delete_plans_text));
-                    text2.setText(mContext.getResources().getString(R.string.dialog_delete_plans_text2));
+                    text1.setText(mContext.getResources().getString(R.string.delete_plans_question_text_1));
+                    text2.setText(mContext.getResources().getString(R.string.delete_plans_question_text_2));
                 } else {
                     button1.setText(mContext.getResources().getString(R.string.no));
                     button2.setText(mContext.getResources().getString(R.string.yes));
                     text2.setVisibility(View.GONE);
                     text1.setVisibility(View.VISIBLE);
-                    text1.setText(mContext.getResources().getString(R.string.dialog_delete_plans_title));
+                    text1.setText(mContext.getResources().getString(R.string.delete_plans_question_text_3));
                 }
 
                 Dialog dg = new Dialog(mContext, R.style.NewDialog);
@@ -393,7 +392,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
                                 activity.setVisibility(Constants.FLAG);
                                 deleteFlagActReminder(flagServer.getId(), activity);
-                            } else if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.unfit))) {
+                            } else if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.undo_unfit))) {
                                 InviteRequest inviteRequest = new InviteRequest();
                                 SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -412,7 +411,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
                                 activity.setVisibility(Constants.ACT);
                                 deleteFlagActReminder(activityServer.getId(), activity);
-                            } else if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.unfit))) {
+                            } else if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.undo_unfit))) {
                                 InviteRequest inviteRequest = new InviteRequest();
                                 SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                                 String email = mSharedPreferences.getString(Constants.EMAIL, "");

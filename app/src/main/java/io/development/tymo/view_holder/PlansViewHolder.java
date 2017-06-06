@@ -201,7 +201,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
                     FlagServer flagServer = new FlagServer();
                     flagServer.setType(false);
-                    flagServer.setTitle(context.getResources().getString(R.string.flag_unavailable_title_dialog));
+                    flagServer.setTitle(context.getResources().getString(R.string.flag_unavailable));
                     flagServer.setDayStart(activityServer.getDayStart());
                     flagServer.setMonthStart(activityServer.getMonthStart());
                     flagServer.setYearStart(activityServer.getYearStart());
@@ -233,7 +233,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 if(screen == Utilities.TYPE_FRIEND && flagServer.getType() && flagServer.getParticipates() == 0){
                     FlagServer flag = new FlagServer();
                     flag.setType(false);
-                    flag.setTitle(context.getResources().getString(R.string.flag_unavailable_title));
+                    flag.setTitle(context.getResources().getString(R.string.flag_menu_unavailable));
                     flag.setDayStart(flagServer.getDayStart());
                     flag.setMonthStart(flagServer.getMonthStart());
                     flag.setYearStart(flagServer.getYearStart());

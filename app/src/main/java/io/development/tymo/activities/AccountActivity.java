@@ -36,7 +36,6 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import retrofit2.adapter.rxjava.HttpException;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 import rx.subscriptions.CompositeSubscription;
@@ -87,7 +86,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         deleteAccount.setOnClickListener(this);
         emailBox.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.account));
+        m_title.setText(getResources().getString(R.string.settings_account));
 
         email.setText(user.getEmail());
 
@@ -182,7 +181,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                 e.printStackTrace();
             }
         } else {
-            Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         }
     }
 
@@ -231,8 +230,8 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         editText.setHint(getResources().getString(R.string.email));
 
-        text1.setText(getResources().getString(R.string.dialog_edit_email_title));
-        text2.setText(getResources().getString(R.string.dialog_edit_email_text));
+        text1.setText(getResources().getString(R.string.popup_message_edit_update_email));
+        text2.setText(getResources().getString(R.string.popup_message_edit_enter_new_email));
         buttonText1.setText(getResources().getString(R.string.cancel));
         buttonText2.setText(getResources().getString(R.string.confirm));
 
@@ -273,7 +272,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
                     findViewById(R.id.include).setVisibility(View.VISIBLE);
                 }else
-                    Toast.makeText(AccountActivity.this, getResources().getString(R.string.email_type_again), Toast.LENGTH_LONG).show();
+                    Toast.makeText(AccountActivity.this, getResources().getString(R.string.error_email_validation), Toast.LENGTH_LONG).show();
             }
         });
 
@@ -344,7 +343,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     cloudinary.uploader().destroy(oldUrl, ObjectUtils.asMap("invalidate", true));
 
             } catch (Exception e) {
-                Toast.makeText(AccountActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+                Toast.makeText(AccountActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             }
             return null;
         }

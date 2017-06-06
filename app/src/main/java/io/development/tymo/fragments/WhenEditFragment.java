@@ -208,8 +208,8 @@ public class WhenEditFragment extends Fragment implements
         TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
         EditText editText = (EditText) customView.findViewById(R.id.editText);
 
-        text1.setText(getActivity().getResources().getString(R.string.dialog_naming_activity_local_title));
-        text2.setText(getActivity().getResources().getString(R.string.dialog_naming_activity_local_text));
+        text1.setText(getActivity().getResources().getString(R.string.popup_message_naming_activity_local_title));
+        text2.setText(getActivity().getResources().getString(R.string.popup_message_naming_activity_local_text));
         buttonText1.setText(getActivity().getResources().getString(R.string.cancel));
         buttonText2.setText(getActivity().getResources().getString(R.string.confirm));
         editText.setText(adr);
@@ -445,8 +445,8 @@ public class WhenEditFragment extends Fragment implements
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
             tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            tpd.setStartTitle(getResources().getString(R.string.start));
-            tpd.setEndTitle(getResources().getString(R.string.end));
+            tpd.setStartTitle(getResources().getString(R.string.date_start));
+            tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(0);
             tpd.show(getFragmentManager(), "Timepickerdialog");
         }else if(v == timeEnd){
@@ -467,8 +467,8 @@ public class WhenEditFragment extends Fragment implements
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
             tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            tpd.setStartTitle(getResources().getString(R.string.start));
-            tpd.setEndTitle(getResources().getString(R.string.end));
+            tpd.setStartTitle(getResources().getString(R.string.date_start));
+            tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(1);
             tpd.show(getFragmentManager(), "Timepickerdialog");
         }else if(v == dateStart){
@@ -493,8 +493,8 @@ public class WhenEditFragment extends Fragment implements
             dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.start));
-            dpd.setEndTitle(getResources().getString(R.string.end));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(0);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
@@ -520,8 +520,8 @@ public class WhenEditFragment extends Fragment implements
             dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.start));
-            dpd.setEndTitle(getResources().getString(R.string.end));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(1);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }

@@ -45,7 +45,7 @@
             android:layout_centerVertical="true"
             android:ellipsize="end"
             android:lines="1"
-            android:text="@string/week_days"
+            android:text="@string/filter_week_days"
             android:textColor="@color/grey_600"
             android:textSize="16sp" />
 

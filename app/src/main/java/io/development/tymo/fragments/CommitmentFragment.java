@@ -68,7 +68,7 @@ public class CommitmentFragment extends Fragment{
 
         if(fragment == null) {
             screen = Utilities.TYPE_FRIEND;
-            recyclerView.setEmptyView(R.layout.empty_profile_private);
+            recyclerView.setEmptyView(R.layout.empty_profile_privated);
         }
         else {
             screen = Utilities.TYPE_PLANS;

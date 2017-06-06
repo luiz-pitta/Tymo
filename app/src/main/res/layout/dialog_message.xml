@@ -76,7 +76,7 @@
                     android:checked="true"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="@string/dialog_delete_plans_only_this"
+                    android:text="@string/delete_plans_answer_only_this"
                     android:textColor="@color/grey_800"
                     android:textSize="14sp"
                     app:buttonTint="@color/grey_800" />
@@ -88,7 +88,7 @@
                     android:layout_weight="1"
                     android:ellipsize="end"
                     android:lines="1"
-                    android:text="@string/dialog_edit_commitment_all"
+                    android:text="@string/popup_message_edit_all_future"
                     android:textColor="@color/grey_800"
                     android:textSize="14sp"
                     app:buttonTint="@color/grey_800" />

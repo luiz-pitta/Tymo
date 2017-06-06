@@ -948,8 +948,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
             dpd.setAccentColor(ContextCompat.getColor(this,R.color.deep_purple_400), ContextCompat.getColor(this,R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.start));
-            dpd.setEndTitle(getResources().getString(R.string.end));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(0);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
@@ -971,8 +971,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
             dpd.setAccentColor(ContextCompat.getColor(this,R.color.deep_purple_400), ContextCompat.getColor(this,R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.start));
-            dpd.setEndTitle(getResources().getString(R.string.end));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(1);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == addPersonButton){
@@ -1029,8 +1029,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //Date
             filterIconDate.setVisibility(View.INVISIBLE);
             cleanDate.setVisibility(View.INVISIBLE);
-            dateStart.setText(getResources().getString(R.string.date_hint));
-            dateEnd.setText(getResources().getString(R.string.date_hint));
+            dateStart.setText(getResources().getString(R.string.hint_date));
+            dateEnd.setText(getResources().getString(R.string.hint_date));
             day_start = -1;
             month_start = -1;
             year_start = -1;
@@ -1040,8 +1040,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //Schedule
             filterIconSchedule.setVisibility(View.INVISIBLE);
             cleanSchedule.setVisibility(View.INVISIBLE);
-            timeStart.setText(getResources().getString(R.string.time_hint));
-            timeEnd.setText(getResources().getString(R.string.time_hint));
+            timeStart.setText(getResources().getString(R.string.hint_time));
+            timeEnd.setText(getResources().getString(R.string.hint_time));
             minutes_start = -1;
             minutes_end = -1;
             hour_start = -1;
@@ -1111,8 +1111,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //Date
             filterIconDate.setVisibility(View.INVISIBLE);
             cleanDate.setVisibility(View.INVISIBLE);
-            dateStart.setText(getResources().getString(R.string.date_hint));
-            dateEnd.setText(getResources().getString(R.string.date_hint));
+            dateStart.setText(getResources().getString(R.string.hint_date));
+            dateEnd.setText(getResources().getString(R.string.hint_date));
             day_start = -1;
             month_start = -1;
             year_start = -1;
@@ -1128,8 +1128,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //Schedule
             filterIconSchedule.setVisibility(View.INVISIBLE);
             cleanSchedule.setVisibility(View.INVISIBLE);
-            timeStart.setText(getResources().getString(R.string.time_hint));
-            timeEnd.setText(getResources().getString(R.string.time_hint));
+            timeStart.setText(getResources().getString(R.string.hint_time));
+            timeEnd.setText(getResources().getString(R.string.hint_time));
             minutes_start = -1;
             minutes_end = -1;
             hour_start = -1;

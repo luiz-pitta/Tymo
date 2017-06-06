@@ -73,7 +73,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
         emailBox.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.contact_us));
+        m_title.setText(getResources().getString(R.string.settings_contact_us));
 
         AppInfoWrapper appInfoWrapper = (AppInfoWrapper)getIntent().getSerializableExtra("contact_us");
         if(appInfoWrapper != null){
@@ -133,7 +133,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
     private void handleError(Throwable error) {
         //setProgress(false);
         mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

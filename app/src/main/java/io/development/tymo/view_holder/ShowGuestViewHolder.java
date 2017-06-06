@@ -213,7 +213,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             text3.setVisibility(View.GONE);
         else {
             if (user.getCountCommon() > 1) {
-                text3.setText(mContext.getResources().getString(R.string.friend_in_common_many, user.getCountCommon()));
+                text3.setText(mContext.getResources().getString(R.string.friend_in_common, user.getCountCommon()));
             } else {
                 text3.setText(mContext.getResources().getString(R.string.friend_in_common_one));
             }
@@ -372,7 +372,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         editText.setVisibility(View.GONE);
         text2.setVisibility(View.GONE);
 
-        text1.setText(mContext.getResources().getString(R.string.contact_unblock_confirmation_question, fullNameToShortName(contactName)));
+        text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_unblock, fullNameToShortName(contactName)));
         buttonText1.setText(mContext.getResources().getString(R.string.no));
         buttonText2.setText(mContext.getResources().getString(R.string.yes));
 
@@ -446,7 +446,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             showGuestsAdapter.getItem(getAdapterPosition()).setAdm(true);
         showGuestsAdapter.notifyItemChanged(getAdapterPosition());
         setProgress(false);
-        Toast.makeText(mContext, mContext.getResources().getString(R.string.administrator_toast, contactName), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, mContext.getResources().getString(R.string.administrator_new, contactName), Toast.LENGTH_LONG).show();
     }
 
     private void handleResponseUnblockRequest(Response response) {
@@ -503,10 +503,10 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         text2.setVisibility(View.GONE);
 
         if (item == 0) {
-            text1.setText(mContext.getResources().getString(R.string.contact_add_confirmation_question, contactName));
+            text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_add, contactName));
         }
         else if(item == 1) {
-            text1.setText(mContext.getResources().getString(R.string.contact_ignore_confirmation_question, contactName));
+            text1.setText(mContext.getResources().getString(R.string.contact_confirmation_question_ignore_request, contactName));
         }
 
         buttonText1.setText(mContext.getResources().getString(R.string.no));
@@ -670,7 +670,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
     private void handleError(Throwable error) {
         //setProgressFriendRequest(false);
         actionIcon.setOnClickListener(this);
-        Toast.makeText(mContext, mContext.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         /*LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.toast, null);
         TextView toastText = (TextView) layout.findViewById(R.id.toastText);

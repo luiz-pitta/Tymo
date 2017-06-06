@@ -130,11 +130,11 @@ public class DateFormat {
         tomorrowCalendar.add(Calendar.DATE, 1);
 
         if (calendar.get(Calendar.YEAR) == todayCalendar.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == todayCalendar.get(Calendar.MONTH) && calendar.get(Calendar.DATE) == todayCalendar.get(Calendar.DATE)) {
-            return context.getResources().getString(R.string.today);
+            return context.getResources().getString(R.string.date_format_today);
         } else if (calendar.get(Calendar.YEAR) == yesterdayCalendar.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == yesterdayCalendar.get(Calendar.MONTH) && calendar.get(Calendar.DATE) == yesterdayCalendar.get(Calendar.DATE)) {
-            return context.getResources().getString(R.string.yesterday);
+            return context.getResources().getString(R.string.date_format_yesterday);
         } else if (calendar.get(Calendar.YEAR) == tomorrowCalendar.get(Calendar.YEAR) && calendar.get(Calendar.MONTH) == tomorrowCalendar.get(Calendar.MONTH) && calendar.get(Calendar.DATE) == tomorrowCalendar.get(Calendar.DATE)) {
-            return context.getResources().getString(R.string.tomorrow);
+            return context.getResources().getString(R.string.date_format_tomorrow);
         } else {
             return formatDayOfWeek(dayOfWeek);
         }

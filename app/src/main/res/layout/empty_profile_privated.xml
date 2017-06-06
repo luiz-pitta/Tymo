@@ -32,7 +32,7 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:gravity="center"
-        android:text="@string/private_account"
+        android:text="@string/empty_profile_privated"
         android:textColor="@color/grey_500"
         android:textSize="16sp" />
 

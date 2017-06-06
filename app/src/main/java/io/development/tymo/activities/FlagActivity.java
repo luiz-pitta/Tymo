@@ -731,7 +731,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             error = true;
             //requiredText.setVisibility(View.VISIBLE);
-            showSnackBarMessage(getResources().getString(R.string.fill_fields_correctly));
+            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
         }
     }
 
@@ -911,7 +911,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private void showSnackBarMessage(String message) {
@@ -984,7 +984,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             if (v == availableText || v == availableButton) {
                 controller.updateAll(0, R.color.flag_available, R.color.flag_available, R.drawable.bg_shape_oval_available_corners);
-                textInputLayout.setHint(R.string.flag_available_hint);
+                textInputLayout.setHint(R.string.hint_flag_available);
                 free = true;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_lock);
@@ -994,7 +994,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 availableButton.clearColorFilter();
             } else if (v ==  unavailableText || v == unavailableButton) {
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
-                textInputLayout.setHint(R.string.flag_unavailable_hint);
+                textInputLayout.setHint(R.string.hint_flag_unavailable);
                 free = false;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_public);
@@ -1126,7 +1126,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         editText.setVisibility(View.GONE);
 
-        allRadioButton.setText(getResources().getString(R.string.dialog_delete_plans_all));
+        allRadioButton.setText(getResources().getString(R.string.delete_plans_answer_all));
 
         if (repeat) {
             radioGroup.setVisibility(View.VISIBLE);
@@ -1134,14 +1134,14 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             button1.setText(getResources().getString(R.string.cancel));
             button2.setText(getResources().getString(R.string.confirm));
             text2.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.dialog_delete_plans_text));
-            text2.setText(getResources().getString(R.string.dialog_delete_plans_text2));
+            text1.setText(getResources().getString(R.string.delete_plans_question_text_1));
+            text2.setText(getResources().getString(R.string.delete_plans_question_text_2));
         } else {
             button1.setText(getResources().getString(R.string.no));
             button2.setText(getResources().getString(R.string.yes));
             text2.setVisibility(View.GONE);
             text1.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.dialog_delete_plans_title));
+            text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
         }
 
         Dialog dg = new Dialog(this, R.style.NewDialog);

@@ -43,7 +43,7 @@
                 android:lines="1"
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
-                android:text="@string/activity"
+                android:text="@string/act"
                 android:textAllCaps="true"
                 android:textColor="@color/deep_purple_400"
                 android:textSize="16sp"

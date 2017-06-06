@@ -94,7 +94,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         mBackButton.setOnClickListener(this);
 
-        m_title.setText(getResources().getString(R.string.invitations));
+        m_title.setText(getResources().getString(R.string.profile_menu_invitations));
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(true);
@@ -415,7 +415,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

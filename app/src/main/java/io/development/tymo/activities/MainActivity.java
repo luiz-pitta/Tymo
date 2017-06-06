@@ -29,13 +29,11 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jaouan.revealator.Revealator;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
-import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -43,7 +41,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
@@ -59,7 +56,6 @@ import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
-import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.ActivitySyncJob;
@@ -279,7 +275,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponse(Response response) {}
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private void handleError2(Throwable error) {}

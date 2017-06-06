@@ -55,7 +55,7 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
 
         fullName = (TextView) findViewById(R.id.fullName);
         description = (TextView) findViewById(R.id.description);
-        url = (TextView) findViewById(R.id.url);
+        url = (TextView) findViewById(R.id.infoToContact);
 
         fullName.setText(user.getName());
         description.setText(user.getDescription());

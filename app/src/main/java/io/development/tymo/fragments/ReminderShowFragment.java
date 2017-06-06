@@ -95,7 +95,7 @@ public class ReminderShowFragment extends Fragment {
             String repeatly;
             switch (reminderServer.getRepeatType()) {
                 case Constants.DAYLY:
-                    repeatly = getActivity().getString(R.string.repeat_dayly);
+                    repeatly = getActivity().getString(R.string.repeat_daily);
                     break;
                 case Constants.WEEKLY:
                     repeatly = getActivity().getString(R.string.repeat_weekly);

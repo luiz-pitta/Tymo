@@ -99,7 +99,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
         name = (EditText) findViewById(R.id.name);
         description = (EditText) findViewById(R.id.description);
-        url = (EditText) findViewById(R.id.url);
+        url = (EditText) findViewById(R.id.infoToContact);
         profilePhotoText = (TextView) findViewById(R.id.profilePhotoText);
 
         name.setText(user.getName());
@@ -168,7 +168,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private String getGender(String gender){
@@ -378,7 +378,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
                 mUser.setPhoto((String) uploadResult.get("secure_url"));
             } catch (Exception e) {
-                Toast.makeText(AboutActivity.this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+                Toast.makeText(AboutActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             }
             return mUser;
         }

@@ -163,7 +163,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(logo);
 
-        m_title.setText(getResources().getString(R.string.settings));
+        m_title.setText(getResources().getString(R.string.profile_menu_settings));
 
         if(!user.getPhoto().matches("")) {
             Glide.clear(profilePhoto);
@@ -459,7 +459,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     public void setProgress(boolean progress) {

@@ -3,10 +3,7 @@ package io.development.tymo.fragments;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -21,7 +18,6 @@ import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -654,7 +650,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 feedListFragment.setAdapterItens(listFeed);
             }
         }else
-            Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     private void initAnimation() {

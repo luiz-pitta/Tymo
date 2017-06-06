@@ -107,7 +107,7 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            text4.setText(context.getResources().getString(R.string.request_to_add_accepted, fullNameToShortName((String) text1.getText())));
+            text4.setText(context.getResources().getString(R.string.response_request_to_add_accepted, fullNameToShortName((String) text1.getText())));
             friendRequest.setStatus(1);
             updateFriendRequest(friendRequest);
         } else if (v == ignoreButton) {
@@ -116,7 +116,7 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            text4.setText(context.getResources().getString(R.string.request_to_add_ignore));
+            text4.setText(context.getResources().getString(R.string.response_request_to_add_ignore));
             friendRequest.setStatus(0);
             updateFriendRequest(friendRequest);
         } else if (v == mainBox) {
@@ -158,7 +158,7 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(context, context.getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
 
@@ -179,7 +179,7 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
             if (friend.getText3().matches("accept")) {
                 text1.setText(friend.getText1());
                 text4.setVisibility(View.VISIBLE);
-                text4.setText(context.getResources().getString(R.string.invitation_request_accepted, fullNameToShortName((String) text1.getText())));
+                text4.setText(context.getResources().getString(R.string.response_invitation_request_accepted, fullNameToShortName((String) text1.getText())));
                 acceptButton.setVisibility(View.GONE);
                 ignoreButton.setVisibility(View.GONE);
             } else {

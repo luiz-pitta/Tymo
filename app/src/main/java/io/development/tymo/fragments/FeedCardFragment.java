@@ -301,7 +301,7 @@ public class FeedCardFragment extends Fragment {
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     public void confirmActivity(){
@@ -329,7 +329,7 @@ public class FeedCardFragment extends Fragment {
             if (adapter.getCurrentItemId() > 0)
                 adapter.setCurrentItemId(adapter.getCurrentItemId() - 1);
 
-            snackbar = Snackbar.make(mRecyclerView, R.string.invitation_activity_fit, Snackbar.LENGTH_LONG)
+            snackbar = Snackbar.make(mRecyclerView, R.string.feed_invitation_activity_fit, Snackbar.LENGTH_LONG)
                     .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
                     .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
                         @Override
@@ -352,7 +352,7 @@ public class FeedCardFragment extends Fragment {
 
                     if (erase) {
                         Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -411,7 +411,7 @@ public class FeedCardFragment extends Fragment {
             if (adapter.getCurrentItemId() > 0)
                 adapter.setCurrentItemId(adapter.getCurrentItemId() - 1);
 
-            snackbar = Snackbar.make(mRecyclerView, R.string.invitation_activity_ignored, Snackbar.LENGTH_LONG)
+            snackbar = Snackbar.make(mRecyclerView, R.string.feed_invitation_activity_ignored, Snackbar.LENGTH_LONG)
                     .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
                     .setAction(R.string.undo, new View.OnClickListener() {
                         @Override
@@ -431,7 +431,7 @@ public class FeedCardFragment extends Fragment {
                     if (erase) {
 
                         Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

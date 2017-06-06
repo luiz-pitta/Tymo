@@ -100,7 +100,7 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
     private void handleError(Throwable error) {
         //progressBox.setVisibility(View.GONE);
         //findViewById(R.id.progressLoadingBox).setVisibility(View.GONE);
-        Toast.makeText(this, getResources().getString(R.string.network_error), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override

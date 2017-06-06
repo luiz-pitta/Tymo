@@ -22,7 +22,7 @@
             android:layout_centerVertical="true"
             android:queryBackground="@color/transparent"
             android:background="@drawable/bg_search"
-            android:queryHint="@string/search_hint"/>
+            android:queryHint="@string/hint_search"/>
     </RelativeLayout>
 
     <View
