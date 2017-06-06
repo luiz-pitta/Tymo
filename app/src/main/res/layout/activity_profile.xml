@@ -392,14 +392,14 @@
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_toRightOf="@+id/myContactsIcon"
-                                    android:background="@drawable/box_qty_guests"
+                                    android:background="@drawable/box_qty_contacts"
                                     android:gravity="center"
                                     android:paddingBottom="2dp"
                                     android:paddingLeft="8dp"
                                     android:paddingRight="8dp"
                                     android:paddingTop="2dp"
                                     android:text="0"
-                                    android:textColor="@color/white"
+                                    android:textColor="@color/deep_purple_400"
                                     android:textSize="14sp"
                                     android:textStyle="normal" />
 
