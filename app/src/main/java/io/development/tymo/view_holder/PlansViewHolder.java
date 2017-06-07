@@ -129,8 +129,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     Calendar day_card = Calendar.getInstance();
                     day_card.set(weekModel.getYear(),weekModel.getMonth()-1, weekModel.getDay());
 
-                    show = isOlderThan7Days(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
-                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+                    //show = isOlderThan7Days(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
+                    //        now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
 
                     createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,

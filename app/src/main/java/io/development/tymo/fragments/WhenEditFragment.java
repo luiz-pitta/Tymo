@@ -490,7 +490,7 @@ public class WhenEditFragment extends Fragment implements
 
             Calendar week_ago = Calendar.getInstance();
             week_ago.add(Calendar.DATE, -7);
-            dpd.setMinDate(week_ago);
+            //dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.date_start));
@@ -517,7 +517,7 @@ public class WhenEditFragment extends Fragment implements
 
             Calendar week_ago = Calendar.getInstance();
             week_ago.add(Calendar.DATE, -7);
-            dpd.setMinDate(week_ago);
+            //dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.date_start));
