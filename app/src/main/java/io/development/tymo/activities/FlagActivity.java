@@ -897,6 +897,23 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponse(Response response) {
         setProgress(false);
 
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH);
+        int year = c.get(Calendar.YEAR);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.add(Calendar.DATE, 1);
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);
+        int month2 = c2.get(Calendar.MONTH);
+        int year2 = c2.get(Calendar.YEAR);
+
+        if(getFlag()!=null) {
+            if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+                getActivityStartToday();
+        }
+
+
         Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("d",d);
         intent.putExtra("m",m);
