@@ -67,7 +67,8 @@ public class ActivitySyncJob extends Job {
                 .setExecutionWindow(startMs, endMs)
                 .setPersisted(true)
                 .setUpdateCurrent(updateCurrent)
-                .setRequiredNetworkType(JobRequest.NetworkType.values()[1])
+                .setRequiredNetworkType(JobRequest.NetworkType.CONNECTED)
+                .setBackoffCriteria(60_000L, JobRequest.BackoffPolicy.EXPONENTIAL)
                 .setRequirementsEnforced(true)
                 .build()
                 .schedule();
@@ -79,7 +80,7 @@ public class ActivitySyncJob extends Job {
 
         mSubscriptions = new CompositeSubscription();
 
-        final CountDownLatch countDownLatch = new CountDownLatch(1);
+        CountDownLatch countDownLatch = new CountDownLatch(1);
 
         //Para previnir que o gerenciador de memória do android mate o job antes de pegar as atividades
         new Thread() {
