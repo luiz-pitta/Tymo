@@ -343,7 +343,10 @@
     <string name="push_notification_pending_requests_title">Solicitações pendentes</string>
     <string name="push_notification_start_commitments_text_1">Você tem 1 compromisso que está para acontecer</string>
     <string name="push_notification_start_commitments_text_2">Você tem %1$d compromissos que estão para acontecer</string>
-    <string name="push_notification_start_commitments_title">Faltam 30 minutos</string>
+    <string name="push_notification_start_commitments_text_3">Você tem 1 compromisso que está para acontecer amanhã</string>
+    <string name="push_notification_start_commitments_text_4">Você tem %1$d compromissos que estão para acontecer amanhã</string>
+    <string name="push_notification_start_commitments_title">Faltam 60 minutos</string>
+    <string name="push_notification_start_commitments_title_2">Falta 1 dia</string>
     <string name="register_account_not_linked_with_facebook">Conta cadastrada no Tymo não vinculada com o Facebook!</string>
     <string name="register_birthday">Data de nascimento</string>
     <string name="register_day">Dia</string>
