@@ -308,7 +308,7 @@ public class ActivitySyncJob extends Job {
 
             PersistableBundleCompat extras2 = new PersistableBundleCompat();
             extras2.putInt("position_act", i);
-            extras2.putBoolean("day_before", true);
+            extras2.putBoolean("day_before", false);
 
             int j = i;
             int count_same = 0;
