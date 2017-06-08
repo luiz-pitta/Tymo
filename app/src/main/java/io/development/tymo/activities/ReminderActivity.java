@@ -986,8 +986,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             extras.putInt("position_act", i);
 
             PersistableBundleCompat extras2 = new PersistableBundleCompat();
-            extras.putInt("position_act", i);
-            extras.putBoolean("day_before", true);
+            extras2.putInt("position_act", i);
+            extras2.putBoolean("day_before", true);
 
             int j = i;
             int count_same = 0;
@@ -1033,7 +1033,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
             time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
             if(time_exact >= 60) {
-                c2.add(Calendar.MINUTE, -60);
+                c1.add(Calendar.MINUTE, -60);
                 time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
@@ -1043,8 +1043,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                         .schedule();
             }
 
-            if(time_exact >= (24*60)) {
-                c2.add(Calendar.MINUTE, -(24*60));
+            if(time_exact >= 1440) {
+                c1.add(Calendar.MINUTE, -1380);
                 time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
