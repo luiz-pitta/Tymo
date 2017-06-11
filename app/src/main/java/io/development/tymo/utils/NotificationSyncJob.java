@@ -43,8 +43,9 @@ public class NotificationSyncJob extends Job {
 
             if(qty > 0 && !day_before)
                 sendNotificationNextActivity(qty, list_json);
-            else if(qty > 0 && day_before)
-                sendNotificationDayBeforeActivity(qty, list_json);
+            else if(qty > 0 && day_before) {
+                //sendNotificationDayBeforeActivity(qty, list_json);
+            }
         }
 
         return Result.SUCCESS;
