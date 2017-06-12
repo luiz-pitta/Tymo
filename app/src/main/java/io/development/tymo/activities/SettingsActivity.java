@@ -759,7 +759,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tymo.me/termos-de-uso"));
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tymo.me/"));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setPackage("com.android.chrome");
                         try {
