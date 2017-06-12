@@ -20,9 +20,9 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateEmail;
 
@@ -32,7 +32,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
     private ImageView mBackButton;
     private TextView m_title, sendButton, text2;
     private EditText email;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private SharedPreferences mSharedPreferences;
     private SharedPreferences.Editor editor;
 
@@ -58,7 +58,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
 
         m_title.setText(getResources().getString(R.string.help));
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -138,7 +138,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

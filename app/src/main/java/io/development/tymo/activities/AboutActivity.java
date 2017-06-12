@@ -46,9 +46,9 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class AboutActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -60,7 +60,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     private Switch facebookMessengerSwitch;
     private DateFormat dateFormat;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
     private Cloudinary cloudinary;
     private UploadCloudinary uploadCloudinary;
@@ -85,7 +85,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
             setLayoutNormal();
         }
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(this));
         uploadCloudinary = new UploadCloudinary();
 
@@ -391,7 +391,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

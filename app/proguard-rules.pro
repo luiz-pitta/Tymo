@@ -15,3 +15,8 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+-dontwarn okio.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn org.jasypt.**
+-dontwarn org.joda.**
+-dontwarn retrofit2.Platform$Java8

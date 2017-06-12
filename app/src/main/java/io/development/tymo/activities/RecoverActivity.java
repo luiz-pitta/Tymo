@@ -20,7 +20,6 @@ import java.util.List;
 import io.development.tymo.adapters.RecoverAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.DateTymo;
-import rx.subscriptions.CompositeSubscription;
 
 public class RecoverActivity extends AppCompatActivity implements android.app.DatePickerDialog.OnDateSetListener, View.OnClickListener, RecoverAdapter.RefreshLayoutAdapterCallback {
 
@@ -37,7 +36,7 @@ public class RecoverActivity extends AppCompatActivity implements android.app.Da
     private List<ActivityServer> activityServerList;
     private ActivityServer currentActivity = null;
 
-    private CompositeSubscription mSubscriptions;
+
     private SharedPreferences mSharedPreferences;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
@@ -60,7 +59,7 @@ public class RecoverActivity extends AppCompatActivity implements android.app.Da
         super.onCreate(savedInstanceState);
         /*setContentView(R.layout.activity_recover);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
@@ -384,7 +383,6 @@ public class RecoverActivity extends AppCompatActivity implements android.app.Da
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
     }
 
 }

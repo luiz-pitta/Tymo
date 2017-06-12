@@ -4,18 +4,19 @@ import android.util.Base64;
 
 
 import io.development.tymo.utils.Constants;
+import io.reactivex.schedulers.Schedulers;
+
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-import rx.schedulers.Schedulers;
 
 public class NetworkUtil {
 
     public static RetrofitInterface getRetrofit(){
 
-        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+        RxJava2CallAdapterFactory rxAdapter = RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io());
 
         return new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -41,7 +42,7 @@ public class NetworkUtil {
 
         });
 
-        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+        RxJava2CallAdapterFactory rxAdapter = RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io());
 
         return new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)
@@ -65,7 +66,7 @@ public class NetworkUtil {
 
         });
 
-        RxJavaCallAdapterFactory rxAdapter = RxJavaCallAdapterFactory.createWithScheduler(Schedulers.io());
+        RxJava2CallAdapterFactory rxAdapter = RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io());
 
         return new Retrofit.Builder()
                 .baseUrl(Constants.BASE_URL)

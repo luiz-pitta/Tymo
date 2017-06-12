@@ -1,45 +1,30 @@
 package io.development.tymo.utils;
 
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.SystemClock;
 import android.support.annotation.NonNull;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
-import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
-import android.view.View;
-import android.widget.Toast;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.evernote.android.job.Job;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.gson.Gson;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
-
-import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
-import io.development.tymo.model_server.IconServer;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -47,7 +32,7 @@ public class ActivitySyncJob extends Job {
 
     public static final String TAG = "job_activity_tag";
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     public static void schedule() {
         schedule(true);
@@ -78,7 +63,7 @@ public class ActivitySyncJob extends Job {
     @NonNull
     protected Result onRunJob(final Params params) {
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         CountDownLatch countDownLatch = new CountDownLatch(1);
 

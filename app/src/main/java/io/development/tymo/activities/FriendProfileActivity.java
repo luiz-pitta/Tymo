@@ -68,9 +68,9 @@ import io.development.tymo.models.WeekModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FriendProfileActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener,
         View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
@@ -112,7 +112,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
     private FragmentNavigator mNavigator;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private SharedPreferences mSharedPreferences;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -126,7 +126,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         dateFormat = new DateFormat(this);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         email_friend = getIntent().getStringExtra("friend_email");
 
@@ -1240,7 +1240,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
         Glide.get(this).clearMemory();
     }
 

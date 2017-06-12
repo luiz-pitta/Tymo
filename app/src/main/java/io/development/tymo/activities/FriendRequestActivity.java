@@ -31,9 +31,9 @@ import io.development.tymo.models.FriendRequestModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FriendRequestActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener {
 
@@ -46,7 +46,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
     private List<FriendRequestModel> listRequest;
     private Handler handler = new Handler();
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private SharedPreferences mSharedPreferences;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -56,7 +56,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
         findViewById(R.id.dateBox).setVisibility(View.GONE);
@@ -218,7 +218,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     @Override

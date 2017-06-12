@@ -69,9 +69,9 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class SettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -92,7 +92,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private FirebaseAnalytics mFirebaseAnalytics;
     private int email_google_position = 0;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     AppInfoServer appInfoServer = null;
     String urlStringPolicyPrivacy = "", urlStringTermsUse = "";
 
@@ -110,7 +110,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         facebookSDKInitialize();
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
@@ -1048,4 +1048,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         return activityServer;
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mSubscriptions.dispose();
+    }
 }

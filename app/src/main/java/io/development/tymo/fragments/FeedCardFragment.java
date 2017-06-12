@@ -44,9 +44,9 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -63,7 +63,7 @@ public class FeedCardFragment extends Fragment {
     private boolean erase = true;
 
     private FeedZoomMoreAdapter adapter;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     int d_notify, m_notify, y_notify;
@@ -98,7 +98,7 @@ public class FeedCardFragment extends Fragment {
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(275);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         LinearLayoutManager layout = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,
@@ -517,7 +517,7 @@ public class FeedCardFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 }
 

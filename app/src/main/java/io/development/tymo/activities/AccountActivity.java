@@ -36,9 +36,9 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateEmail;
 
@@ -49,7 +49,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     private LinearLayout deleteAccount;
     private RelativeLayout passwordBox, emailBox;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private Cloudinary cloudinary;
@@ -63,7 +63,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_account);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(this));
         uploadCloudinary = new UploadCloudinary();
 
@@ -358,6 +358,6 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 }

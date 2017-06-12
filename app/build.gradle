@@ -2,8 +2,8 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '25.0.2'
+    compileSdkVersion 26
+    buildToolsVersion '26.0.0'
 
     lintOptions {
         disable 'MissingTranslation'
@@ -12,8 +12,8 @@ android {
     defaultConfig {
         applicationId "io.development.tymo"
         minSdkVersion 15
-        targetSdkVersion 25
-        versionCode 31
+        targetSdkVersion 26
+        versionCode 32
         versionName "1.0.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -42,17 +42,27 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
-        gcm.initWith(buildTypes.release)
-        gcm {
-            applicationIdSuffix ".gcm"
+    }
+
+    configurations.all {
+        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+            def requested = details.requested
+            if (requested.group == 'com.android.support') {
+                if (!requested.name.startsWith("multidex")) {
+                    details.useVersion '25.3.1'
+                }
+            }
         }
     }
 
-
+    packagingOptions{
+        exclude 'META-INF/rxjava.properties'
+    }
 
 }
 
@@ -62,36 +72,37 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support:support-v4:25.3.1'
-    compile 'com.android.support:support-v13:25.3.1'
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
+    compile 'com.android.support:appcompat-v7:26.0.0-alpha1'
+    compile 'com.android.support:support-v4:26.0.0-alpha1'
+    compile 'com.android.support:support-v13:26.0.0-alpha1'
+    compile 'com.android.support:design:26.0.0-alpha1'
+    compile 'com.android.support:recyclerview-v7:26.0.0-alpha1'
+    compile 'com.google.android.gms:play-services-places:11.0.0'
+    compile 'com.google.android.gms:play-services-location:11.0.0'
+    compile 'com.google.firebase:firebase-core:11.0.0'
+    compile 'com.google.firebase:firebase-messaging:11.0.0'
     compile 'com.android.support:multidex:1.0.1'
-    compile 'com.google.android.gms:play-services-places:10.2.6'
-    compile 'com.google.android.gms:play-services-location:10.2.6'
-    compile 'com.google.firebase:firebase-core:10.2.6'
-    compile 'com.google.firebase:firebase-messaging:10.2.6'
+    compile "com.google.android.gms:play-services-gcm:11.0.0"
+    compile 'com.github.bumptech.glide:glide:3.7.0'
     compile 'com.afollestad.material-dialogs:core:0.9.0.2'
     compile 'jp.wasabeef:recyclerview-animators:2.2.3'
     compile 'com.facebook.rebound:rebound:0.3.8'
     compile 'com.tumblr:backboard:0.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.2.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.2.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava:2.2.0'
-    compile 'io.reactivex:rxjava:1.3.0'
-    compile 'io.reactivex:rxandroid:1.2.1'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    compile 'com.squareup.okhttp3:okhttp:3.8.0'
+    compile 'com.squareup.okio:okio:1.13.0'
+    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
     compile 'com.jakewharton:butterknife:8.4.0'
     compile 'org.jasypt:jasypt:1.9.2'
     compile 'com.facebook.android:facebook-android-sdk:4.+'
     compile 'com.cloudinary:cloudinary-android:1.2.2'
-    compile 'joda-time:joda-time:2.9.7'
-    compile "com.facebook.stetho:stetho:1.4.2"
-    compile 'com.evernote:android-job:1.1.10'
+    compile 'joda-time:joda-time:2.9.9'
+    compile 'com.facebook.stetho:stetho:1.4.2'
+    compile 'com.evernote:android-job:1.1.11'
     compile 'com.google.code.gson:gson:2.8.0'
-
-    gcmCompile "com.google.android.gms:play-services-gcm:10.2.6"
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
     compile project(':MaterialSearchView')
     compile project(':FragmentNavigator')

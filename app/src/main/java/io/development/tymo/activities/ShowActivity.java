@@ -57,9 +57,9 @@ import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -109,7 +109,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -118,7 +118,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_act);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.buttonsBar).setVisibility(View.VISIBLE);
         findViewById(R.id.confirmationBar).setVisibility(View.GONE);
@@ -1000,7 +1000,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     private void getActivityStartToday(){

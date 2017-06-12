@@ -71,9 +71,9 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -113,7 +113,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private int currentPosition = 0;
     private double lat = -500, lng = -500;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private boolean activatedCheck = true;
@@ -158,7 +158,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         // [END shared_app_measurement]
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
 
         view.findViewById(R.id.checkText).setVisibility(View.GONE);
@@ -967,7 +967,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     public void onDestroy() {
         super.onDestroy();
         if (mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
 
         Glide.get(getActivity()).clearMemory();
     }

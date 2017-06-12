@@ -40,9 +40,9 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
@@ -68,7 +68,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     private ArrayList<User> listToInvite = new ArrayList<>();
     private PersonAdapter adapter;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static Fragment newInstance(String text) {
@@ -94,7 +94,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
         feedVisibility = (TextView) view.findViewById(R.id.feedVisibility);
@@ -391,6 +391,6 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 }

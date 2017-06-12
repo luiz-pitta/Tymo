@@ -46,9 +46,9 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class RegisterPart3Activity extends AppCompatActivity implements View.OnClickListener {
 
@@ -61,7 +61,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     private int privacy;
     private UserWrapper wrap;
     private SelectionInterestAdapter selectionInterestAdapter;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     private Cloudinary cloudinary;
     private InputStream inputStream;
@@ -103,7 +103,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
             m_title2.setText(getResources().getString(R.string.register_steps, 3, 3));
         }
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
         mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -328,7 +328,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

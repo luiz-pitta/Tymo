@@ -38,9 +38,9 @@ import io.development.tymo.models.search.ReminderSearch;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 import static io.development.tymo.utils.AlgorithmFeedSearch.runAlgorithmFeedSearch;
@@ -62,7 +62,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     private List<Object> listMyCommitment = new ArrayList<>();
     private List<Object> listPeople = new ArrayList<>();
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private final static int PEOPLE = 0, MY_PLANS = 1, WHATS_GOING = 2;
@@ -95,7 +95,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
@@ -601,7 +601,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     public void onDestroy() {
         super.onDestroy();
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 
 }

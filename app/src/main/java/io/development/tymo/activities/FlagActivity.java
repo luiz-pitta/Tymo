@@ -35,13 +35,10 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import io.development.tymo.adapters.FlagFragmentAdapter;
@@ -63,9 +60,9 @@ import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.R;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
@@ -99,7 +96,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView checkButton, deleteButton;
     private TextView checkText, deleteText;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     private boolean error;
     private TextView requiredText;
@@ -121,7 +118,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_flag);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         icon2 = (ImageView) findViewById(R.id.icon2);
@@ -1207,7 +1204,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     private void getActivityStartToday(){

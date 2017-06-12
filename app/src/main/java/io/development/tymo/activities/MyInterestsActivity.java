@@ -33,9 +33,9 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class MyInterestsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -46,7 +46,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
     private RecyclerView mMultiChoiceRecyclerView;
     private List<String> interestList;
     private SelectionInterestAdapter selectionInterestAdapter;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -68,7 +68,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
 
         m_title.setText(getResources().getString(R.string.settings_my_interests));
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
         mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -231,7 +231,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

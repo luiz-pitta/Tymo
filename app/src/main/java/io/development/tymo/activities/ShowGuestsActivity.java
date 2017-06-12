@@ -25,9 +25,9 @@ import io.development.tymo.model_server.ListUserWrapper;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ShowGuestsActivity extends AppCompatActivity {
 
@@ -38,7 +38,7 @@ public class ShowGuestsActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private SearchView searchView;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private ViewPagerAdapter adapter;
     private boolean isAdm, isFlag;
     private long idAct;
@@ -71,7 +71,7 @@ public class ShowGuestsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_guests);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
@@ -268,7 +268,7 @@ public class ShowGuestsActivity extends AppCompatActivity {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

@@ -67,9 +67,9 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -105,7 +105,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static Fragment newInstance(String text) {
@@ -132,7 +132,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         dateFormat = new DateFormat(getActivity());
 
@@ -1257,7 +1257,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         if (mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
 
         Glide.get(getActivity()).clearMemory();
     }

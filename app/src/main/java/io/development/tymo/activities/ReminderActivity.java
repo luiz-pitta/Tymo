@@ -25,13 +25,10 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -48,9 +45,9 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.NotificationSyncJob;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
@@ -69,7 +66,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
     private FragmentNavigator mNavigator;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -84,7 +81,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_reminder);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         buttonsBar = (LinearLayout) findViewById(R.id.buttonsBar);
         icon2 = (ImageView) findViewById(R.id.icon2);
@@ -720,7 +717,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     private void createDialogEditWithRepeat() {

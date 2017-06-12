@@ -62,9 +62,9 @@ import io.development.tymo.models.cards.HolidayCard;
 import io.development.tymo.models.cards.Reminder;
 import io.development.tymo.network.NetworkUtil;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -85,7 +85,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
             private Context mContext;
             private DateFormat dateFormat;
-            private CompositeSubscription mSubscriptions;
+            private CompositeDisposable mSubscriptions;
             private View horizontalLine;
             private LinearLayout buttonsBox,button2,contentBox;
             private ProgressBar contentProgressBar;
@@ -452,7 +452,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                 dateFormat = new DateFormat(context);
 
-                mSubscriptions = new CompositeSubscription();
+                mSubscriptions = new CompositeDisposable();
 
                 Dialog dialog = new Dialog(context, R.style.NewDialog);
 

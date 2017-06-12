@@ -19,9 +19,9 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class NotificationCenterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -30,7 +30,7 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
     private TextView mTitle;
     private Switch activityNotificationSwitch, flagNotificationSwitch, reminderNotificationSwitch, otherNotificationSwitch;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private User user;
 
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -53,7 +53,7 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
         reminderNotificationSwitch = (Switch) findViewById(R.id.startReminderSwitch);
         otherNotificationSwitch = (Switch) findViewById(R.id.otherNotificationSwitch2);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         mTitle.setText(getResources().getString(R.string.settings_notification_center));
 
@@ -162,7 +162,7 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

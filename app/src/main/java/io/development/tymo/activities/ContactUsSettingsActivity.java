@@ -22,9 +22,9 @@ import io.development.tymo.R;
 import io.development.tymo.model_server.AppInfoServer;
 import io.development.tymo.model_server.AppInfoWrapper;
 import io.development.tymo.network.NetworkUtil;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ContactUsSettingsActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,7 +34,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
@@ -43,7 +43,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_contact_us);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);

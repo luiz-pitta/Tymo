@@ -33,9 +33,9 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
 import io.development.tymo.view_holder.ContactViewHolder;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ContactsActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener, ContactViewHolder.RefreshLayoutPlansCallback {
 
@@ -53,7 +53,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
     private List<User> listContactQuery, listContact;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
@@ -76,7 +76,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.dateBox).setVisibility(View.GONE);
         findViewById(R.id.icon1).setVisibility(View.GONE);
@@ -368,7 +368,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 

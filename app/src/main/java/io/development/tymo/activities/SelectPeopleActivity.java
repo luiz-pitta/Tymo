@@ -30,9 +30,9 @@ import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class SelectPeopleActivity extends AppCompatActivity implements View.OnClickListener {
@@ -42,7 +42,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
     private ArrayList<User> personQueryList, personList, personListSelected;
     private SearchView searchView;
     private SelectionPeopleAdapter selectionPeopleAdapter;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
 
@@ -68,7 +68,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items_select);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         searchView = (SearchView) findViewById(R.id.searchSelectionView);
         applyButton = (TextView) findViewById(R.id.applyButton);
@@ -322,7 +322,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

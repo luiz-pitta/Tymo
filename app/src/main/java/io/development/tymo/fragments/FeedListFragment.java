@@ -55,9 +55,9 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.OvershootInRightAnimator;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -83,7 +83,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     private int scrolled = 0;
     int d_notify, m_notify, y_notify;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private List<Object> listFeed = new ArrayList<>();
@@ -116,7 +116,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         recyclerView = (EasyRecyclerView) view.findViewById(R.id.list);
@@ -626,7 +626,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     public void onDestroy() {
         super.onDestroy();
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 
     public EasyRecyclerView getRecyclerView(){

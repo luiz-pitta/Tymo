@@ -26,10 +26,9 @@ import io.development.tymo.R;
 import io.development.tymo.adapters.SelectionTagAdapter;
 import io.development.tymo.model_server.TagServer;
 import io.development.tymo.network.NetworkUtil;
-import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.development.tymo.utils.Utilities;import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.view.View.GONE;
 
@@ -40,7 +39,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
     private ArrayList<String> tagQueryList, tagList, tagListSelected;
     private SearchView searchView;
     private SelectionTagAdapter selectionTagAdapter;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
 
@@ -66,7 +65,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_items_select);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         searchView = (SearchView) findViewById(R.id.searchSelectionView);
         applyButton = (TextView) findViewById(R.id.applyButton);
@@ -292,7 +291,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     @Override

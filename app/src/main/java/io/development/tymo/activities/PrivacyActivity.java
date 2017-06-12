@@ -16,9 +16,9 @@ import io.development.tymo.R;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class PrivacyActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -27,7 +27,7 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
     private LinearLayout progressBox;
     private MaterialSpinner spinner;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private int privacy_type = 0;
@@ -37,7 +37,7 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_privacy);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
@@ -147,7 +147,7 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
 }

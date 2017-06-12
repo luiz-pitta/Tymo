@@ -52,9 +52,9 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateEmail;
 
@@ -66,7 +66,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     private TextView loginButton, facebookLoginButton, text;
 
     private SharedPreferences mSharedPreferences;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private LinearLayout progressBox;
@@ -110,7 +110,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             startActivity(new Intent(Login1Activity.this, MainActivity.class));
         else {
 
-            mSubscriptions = new CompositeSubscription();
+            mSubscriptions = new CompositeDisposable();
             getLoginDetails();
 
             initSharedPreferences();
@@ -335,7 +335,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tymo.me/termos-de-uso"));
+                        Intent intent=new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.tymo.me/"));
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.setPackage("com.android.chrome");
                         try {
@@ -431,7 +431,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     public void onDestroy() {
         super.onDestroy();
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 }
 

@@ -37,9 +37,9 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -68,7 +68,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
     private int iBlocked;
     private long idAct;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private boolean accept = false;
     private boolean admOrCreator = false, isFlag = false;
     private boolean isPersonAdm = false;
@@ -101,7 +101,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
     }

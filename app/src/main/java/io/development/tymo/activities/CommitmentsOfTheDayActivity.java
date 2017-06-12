@@ -40,9 +40,9 @@ import io.development.tymo.models.NotificationModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CommitmentsOfTheDayActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,7 +53,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
     private ImageView mBackButton;
     private TextView m_title, dateText;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -63,7 +63,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
 
         dateFormat = new DateFormat(this);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.searchSelection).setVisibility(View.GONE);
         findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
@@ -693,7 +693,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     @Override

@@ -72,9 +72,9 @@ import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
@@ -138,7 +138,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private int selected = 0;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     private TextView requiredText;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -153,7 +153,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         findViewById(R.id.buttonsBar).setVisibility(View.GONE);
         findViewById(R.id.icon1).setVisibility(View.GONE);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         whatText = (TextView) findViewById(R.id.whatText);
         whereWhenText = (TextView) findViewById(R.id.whereWhenText);
@@ -1797,7 +1797,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     private void createDialogPrivacy() {

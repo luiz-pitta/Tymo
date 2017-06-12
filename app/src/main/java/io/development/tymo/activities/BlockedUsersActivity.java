@@ -27,9 +27,9 @@ import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class BlockedUsersActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -40,7 +40,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
 
     private ContactsAdapter adapter;
     private SharedPreferences mSharedPreferences;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -48,7 +48,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings_blocked_users);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
@@ -149,7 +149,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     @Override

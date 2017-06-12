@@ -49,9 +49,9 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class CompareActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
@@ -81,7 +81,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     private Handler handler = new Handler();
 
     private FragmentNavigator mNavigator;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
@@ -89,7 +89,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compare);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         email_user = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -961,7 +961,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     @Override

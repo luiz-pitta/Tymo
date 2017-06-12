@@ -9,18 +9,18 @@ import com.google.firebase.iid.FirebaseInstanceIdService;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class FirebaseTymoIDService extends FirebaseInstanceIdService {
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
 
     @Override
     public void onTokenRefresh() {
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -47,11 +47,11 @@ public class FirebaseTymoIDService extends FirebaseInstanceIdService {
 
     private void handleResponse(Response response) {
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 
     private void handleError(Throwable error) {
         if(mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 }

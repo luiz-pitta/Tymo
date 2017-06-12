@@ -48,9 +48,9 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.Utilities;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class InviteActivity extends AppCompatActivity implements View.OnClickListener, SwipeRefreshLayout.OnRefreshListener  {
 
@@ -64,7 +64,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     
     private DateFormat dateFormat;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private SharedPreferences mSharedPreferences;
 
     private List<InviteModel> listInvite;
@@ -78,7 +78,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         dateFormat = new DateFormat(this);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         findViewById(R.id.dateBox).setVisibility(View.GONE);
         findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
@@ -473,7 +473,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     private void getActivityStartToday(){

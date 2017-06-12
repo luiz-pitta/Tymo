@@ -21,9 +21,9 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 import static io.development.tymo.utils.Validation.validatePasswordSize;
@@ -33,7 +33,7 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
 
     private TextView sendButton;
     private EditText password, token;
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
     private User mUser;
 
@@ -49,7 +49,7 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
 
         sendButton.setOnClickListener(this);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
 
         mUser = new User();
         Uri data = getIntent().getData();
@@ -135,7 +135,7 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
     @Override
     public void onDestroy() {
         super.onDestroy();
-        mSubscriptions.unsubscribe();
+        mSubscriptions.dispose();
     }
 
     @Override

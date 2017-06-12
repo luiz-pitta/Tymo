@@ -55,9 +55,9 @@ import io.development.tymo.utils.Utilities;
 import io.development.tymo.activities.CompareActivity;
 import io.development.tymo.adapters.PlansFragmentAdapter;
 import io.development.tymo.R;
-import rx.android.schedulers.AndroidSchedulers;
-import rx.schedulers.Schedulers;
-import rx.subscriptions.CompositeSubscription;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -86,7 +86,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     private GestureDetector gestureDetector;
 
-    private CompositeSubscription mSubscriptions;
+    private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     public static Fragment newInstance(String text) {
@@ -125,7 +125,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
         mNavigator.onCreate(savedInstanceState);
 
-        mSubscriptions = new CompositeSubscription();
+        mSubscriptions = new CompositeDisposable();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
@@ -1010,7 +1010,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     public void onDestroy() {
         super.onDestroy();
         if (mSubscriptions != null)
-            mSubscriptions.unsubscribe();
+            mSubscriptions.dispose();
     }
 
     @Override
