@@ -97,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     String urlStringPolicyPrivacy = "", urlStringTermsUse = "";
 
     private ArrayList<ArrayList<String>> list_google = new ArrayList<>();
+    private ArrayList<String> list_email = new ArrayList<>();
 
     private User user;
 
@@ -428,6 +429,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                 list_activities_to_import.add(activityServer);
             }
+
             if(list_activities_to_import.size() > 0)
                 importFromGoogle(list_activities_to_import);
             else {
@@ -792,7 +794,21 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         buttonText1.setText(getResources().getString(R.string.cancel));
         buttonText2.setText(getResources().getString(R.string.action_import));
 
-        ArrayList<String> list_email = GoogleCalendarEvents.getCalendarTypes(SettingsActivity.this);
+        if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
+                != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(SettingsActivity.this, new String[] { Manifest.permission.READ_CALENDAR },
+                    1);
+        }
+
+        if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
+                == PackageManager.PERMISSION_GRANTED) {
+            list_email = GoogleCalendarEvents.getCalendarTypes(SettingsActivity.this);
+        }else {
+            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error), Toast.LENGTH_LONG).show();
+            setProgress(false);
+        }
+
+
 
         Dialog dialog = new Dialog(this, R.style.NewDialog);
 

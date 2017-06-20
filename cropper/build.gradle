@@ -15,7 +15,7 @@ android {
     compileSdkVersion 26
     buildToolsVersion '26.0.0'
     defaultConfig {
-        minSdkVersion 10
+        minSdkVersion 15
         targetSdkVersion 26
         versionCode 1
         versionName PUBLISH_VERSION
