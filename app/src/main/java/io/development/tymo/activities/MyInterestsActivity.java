@@ -7,8 +7,6 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
@@ -22,18 +20,14 @@ import com.cunoraz.tagview.OnTagDeleteListener;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.adapters.SelectionInterestAdapter;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.TagServer;
 import io.development.tymo.model_server.User;
