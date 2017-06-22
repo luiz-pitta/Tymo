@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +23,9 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.android.Utils;
 import com.cloudinary.utils.ObjectUtils;
+import com.cunoraz.tagview.OnTagDeleteListener;
+import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -31,6 +35,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -55,12 +61,13 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     private ImageView mBackButton;
     private TextView m_title, m_title2, advanceButton;
     private LinearLayout progressBox;
+    private RelativeLayout addTagBox;
 
-    private RecyclerView mMultiChoiceRecyclerView;
-    private List<String> interestList;
+    private TagView tagGroup;
+    ArrayList<String> interestList = new ArrayList<>();
+
     private int privacy;
     private UserWrapper wrap;
-    private SelectionInterestAdapter selectionInterestAdapter;
     private CompositeDisposable mSubscriptions;
 
     private Cloudinary cloudinary;
@@ -70,6 +77,15 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
     private Boolean register_with_facebook;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private OnTagDeleteListener mOnTagDeleteListener = new OnTagDeleteListener() {
+
+        @Override
+        public void onTagDeleted(final TagView view, final Tag tag, final int position) {
+            view.remove(position);
+            interestList.remove(position);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,14 +97,19 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(this));
         uploadCloudinary = new UploadCloudinary();
 
+        tagGroup = (TagView) findViewById(R.id.tagGroup);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
         m_title2 = (TextView) findViewById(R.id.text2);
         advanceButton = (TextView) findViewById(R.id.advanceButton);
         progressBox = (LinearLayout) findViewById(R.id.progressBox);
+        addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
 
+        addTagBox.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
+
+        tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
         m_title.setText(getResources().getString(R.string.register));
 
@@ -105,31 +126,14 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
         mSubscriptions = new CompositeDisposable();
 
-        mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
-        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.deep_purple_200), (int) Utilities.convertDpToPixel(1, this));
-        itemDecoration.setDrawLastItem(false);
-
-        mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
-
         wrap = (UserWrapper) getIntent().getSerializableExtra("user_wrapper");
         privacy = getIntent().getIntExtra("user_privacy",0);
 
         inputStream = TymoApplication.getInstance().getInputStreamer();
 
-        setUpMultiChoiceRecyclerView();
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
-    }
-
-    private void setUpMultiChoiceRecyclerView() {
-        progressBox.setVisibility(View.VISIBLE);
-        mSubscriptions.add(NetworkUtil.getRetrofit().getInterest()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
     }
 
     private void createDialogMessage(int listSize) {
@@ -171,22 +175,6 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         });
 
         dg.show();
-    }
-
-    private void handleResponse(ArrayList<TagServer> interests) {
-
-        int i;
-        interestList = new ArrayList<>();
-        for(i = 0; i < interests.size(); i++){
-            interestList.add(interests.get(i).getTitle());
-        }
-
-
-        selectionInterestAdapter = new SelectionInterestAdapter(interestList, this, true) ;
-        mMultiChoiceRecyclerView.setAdapter(selectionInterestAdapter);
-        selectionInterestAdapter.setSingleClickMode(true);
-
-        progressBox.setVisibility(View.GONE);
     }
 
     private void registerProcess(User user) {
@@ -240,6 +228,42 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     }
 
     @Override
+    public  void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                List<String> list = intent.getStringArrayListExtra("tags_objs");
+                interestList.clear();
+                interestList.addAll(list);
+
+                tagGroup.removeAll();
+
+                Collections.sort(list, new Comparator<String>() {
+                    @Override
+                    public int compare(String c1, String c2) {
+                        if (c1.compareTo(c2) > 0)
+                            return 1;
+                        else if (c1.compareTo(c2) < 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
+                });
+
+                for (int i=0;i<list.size();i++){
+                    Tag tag;
+                    tag = new Tag(list.get(i));
+                    tag.radius = Utilities.convertDpToPixel(10.0f, this);
+                    tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+                    tag.isDeletable = true;
+                    tagGroup.addTag(tag);
+                }
+
+            }
+        }
+    }
+
+    @Override
     public void onClick(View view) {
         if(view == advanceButton){
             Bundle bundle = new Bundle();
@@ -249,20 +273,14 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
             progressBox.setVisibility(View.VISIBLE);
             User user = wrap.getUser();
-            Collection<Integer> collection = selectionInterestAdapter.getSelectedItemList();
-            ArrayList<String> list = new ArrayList<>();
-            Iterator it = collection.iterator();
-            while (it.hasNext()) {
-                Integer i = (Integer)it.next();
-                list.add(interestList.get(i));
-            }
+
             user.setPrivacy(privacy);
-            if(list.size() < 5) {
+            if(interestList.size() < 5) {
                 progressBox.setVisibility(View.GONE);
-                createDialogMessage(list.size());
+                createDialogMessage(interestList.size());
             }
             else {
-                user.addAllInterest(list);
+                user.addAllInterest(interestList);
                 if(inputStream != null)
                     uploadCloudinary.execute(user);
                 else
@@ -275,6 +293,22 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
+        }else if(view == addTagBox){
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            int i;
+            ArrayList<String> list = new ArrayList<>();
+            List<Tag> list_tags = tagGroup.getTags();
+            for(i = 0; i < list_tags.size(); i++){
+                list.add(list_tags.get(i).text);
+            }
+            Intent intent = new Intent(this, SelectInterestActivity.class);
+            intent.putStringArrayListExtra("tags_list", list);
+            startActivityForResult(intent, 1);
         }
     }
 
@@ -282,19 +316,6 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     public void onBackPressed() {
         finish();
         overridePendingTransition(R.anim.push_left_exit_back, R.anim.push_left_enter_back);
-    }
-
-    public String getPrivacy(int privacy){
-        switch (privacy){
-            case 0:
-                return getResources().getString(R.string.register_privacy_public);
-            case 1:
-                return getResources().getString(R.string.register_privacy_privated);
-            case 2:
-                return getResources().getString(R.string.register_privacy_always_friends);
-            default:
-                return "";
-        }
     }
 
     @Override

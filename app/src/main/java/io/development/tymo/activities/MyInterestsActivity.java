@@ -2,6 +2,7 @@ package io.development.tymo.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -13,15 +14,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cunoraz.tagview.OnTagDeleteListener;
+import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -42,13 +49,22 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
     private ImageView mBackButton;
     private TextView m_title, advanceButton;
     private LinearLayout progressBox;
+    private RelativeLayout addTagBox;
 
-    private RecyclerView mMultiChoiceRecyclerView;
-    private List<String> interestList;
-    private SelectionInterestAdapter selectionInterestAdapter;
+    private TagView tagGroup;
+    private ArrayList<String> interestList = new ArrayList<>();
     private CompositeDisposable mSubscriptions;
 
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private OnTagDeleteListener mOnTagDeleteListener = new OnTagDeleteListener() {
+
+        @Override
+        public void onTagDeleted(final TagView view, final Tag tag, final int position) {
+            view.remove(position);
+            interestList.remove(position);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,33 +74,31 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
 
+        tagGroup = (TagView) findViewById(R.id.tagGroup);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
         advanceButton = (TextView) findViewById(R.id.advanceButton);
         progressBox = (LinearLayout) findViewById(R.id.progressBox);
+        addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
 
+        addTagBox.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
+
+        tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
         m_title.setText(getResources().getString(R.string.settings_my_interests));
 
         mSubscriptions = new CompositeDisposable();
 
-        mMultiChoiceRecyclerView = (RecyclerView) findViewById(R.id.recyclerSelectView);
-        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
-        itemDecoration.setDrawLastItem(false);
-
-        mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
-
-        setUpMultiChoiceRecyclerView();
+        setUpInterests();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
     }
 
-    private void setUpMultiChoiceRecyclerView() {
+    private void setUpInterests() {
         progressBox.setVisibility(View.VISIBLE);
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -97,25 +111,34 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
 
     private void handleResponse(Response response) {
 
-        int i,j;
+        int i;
         interestList = new ArrayList<>();
-        ArrayList<TagServer> interests = response.getInterests();
         ArrayList<TagServer> interests_person = response.getTags();
-        for(i = 0; i < interests.size(); i++){
-            interestList.add(interests.get(i).getTitle());
-        }
+        for(i = 0; i < interests_person.size(); i++)
+            interestList.add(interests_person.get(i).getTitle());
 
-        selectionInterestAdapter = new SelectionInterestAdapter(interestList, this, false) ;
-        mMultiChoiceRecyclerView.setAdapter(selectionInterestAdapter);
-        selectionInterestAdapter.setSingleClickMode(true);
 
-        for(i = 0; i < interests.size(); i++){
-            String interest = interests.get(i).getTitle();
-            for(j = 0; j < interests_person.size(); j++) {
-                String my_interest = interests_person.get(j).getTitle();
-                if (my_interest.matches(interest))
-                    selectionInterestAdapter.select(i);
+        tagGroup.removeAll();
+
+        Collections.sort(interestList, new Comparator<String>() {
+            @Override
+            public int compare(String c1, String c2) {
+                if (c1.compareTo(c2) > 0)
+                    return 1;
+                else if (c1.compareTo(c2) < 0)
+                    return -1;
+                else
+                    return 0;
             }
+        });
+
+        for (i=0;i<interestList.size();i++){
+            Tag tag;
+            tag = new Tag(interestList.get(i));
+            tag.radius = Utilities.convertDpToPixel(10.0f, this);
+            tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+            tag.isDeletable = true;
+            tagGroup.addTag(tag);
         }
 
         progressBox.setVisibility(View.GONE);
@@ -127,6 +150,42 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleInterest,this::handleError));
+    }
+
+    @Override
+    public  void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                List<String> list = intent.getStringArrayListExtra("tags_objs");
+                interestList.clear();
+                interestList.addAll(list);
+
+                tagGroup.removeAll();
+
+                Collections.sort(list, new Comparator<String>() {
+                    @Override
+                    public int compare(String c1, String c2) {
+                        if (c1.compareTo(c2) > 0)
+                            return 1;
+                        else if (c1.compareTo(c2) < 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
+                });
+
+                for (int i=0;i<list.size();i++){
+                    Tag tag;
+                    tag = new Tag(list.get(i));
+                    tag.radius = Utilities.convertDpToPixel(10.0f, this);
+                    tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+                    tag.isDeletable = true;
+                    tagGroup.addTag(tag);
+                }
+
+            }
+        }
     }
 
     private void handleInterest(Response response) {
@@ -147,21 +206,15 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             progressBox.setVisibility(View.VISIBLE);
-            Collection<Integer> collection = selectionInterestAdapter.getSelectedItemList();
-            ArrayList<String> list = new ArrayList<>();
-            Iterator it = collection.iterator();
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             User user = new User();
             user.setEmail(email);
-            while (it.hasNext()) {
-                Integer i = (Integer)it.next();
-                user.addInterest(interestList.get(i));
-                list.add(interestList.get(i));
-            }
-            if(list.size() < 5) {
+            user.addAllInterest(interestList);
+
+            if(interestList.size() < 5) {
                 progressBox.setVisibility(View.GONE);
-                createDialogMessage(list.size());
+                createDialogMessage(interestList.size());
             }
             else {
                 updateInterest(user);
@@ -173,6 +226,22 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
+        }else if(view == addTagBox){
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            int i;
+            ArrayList<String> list = new ArrayList<>();
+            List<Tag> list_tags = tagGroup.getTags();
+            for(i = 0; i < list_tags.size(); i++){
+                list.add(list_tags.get(i).text);
+            }
+            Intent intent = new Intent(this, SelectInterestActivity.class);
+            intent.putStringArrayListExtra("tags_list", list);
+            startActivityForResult(intent, 1);
         }
     }
 

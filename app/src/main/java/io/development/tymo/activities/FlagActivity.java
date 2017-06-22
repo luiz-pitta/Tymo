@@ -560,8 +560,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private String getErrorMessage(int y1, int m1, int d1,int y2, int m2, int d2, int period){
-        LocalDate start = new LocalDate (y1, m1, d1);
-        LocalDate end = new LocalDate(y2, m2, d2);
+        LocalDate start = new LocalDate (y1, m1+1, d1);
+        LocalDate end = new LocalDate(y2, m2+1, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
         if(timePeriod.getDays() > 15)
             return getResources().getString(R.string.validation_field_act_max_lenght_days);
