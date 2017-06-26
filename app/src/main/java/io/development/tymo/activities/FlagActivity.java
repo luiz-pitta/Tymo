@@ -311,7 +311,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public FlagServer getFlag(){
-        return flagWrapper.getFlagServer();
+        if(flagWrapper!=null)
+            return flagWrapper.getFlagServer();
+        else
+            return null;
     }
 
     @Nullable
