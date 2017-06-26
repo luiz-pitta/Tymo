@@ -15,6 +15,8 @@ public class User implements Serializable {
     private int i_blocked;
     private int he_blocked;
 
+    private boolean problem_login_facebook = false;
+
     private String name;
     private String token;
     private String id_facebook;
@@ -205,6 +207,10 @@ public class User implements Serializable {
         this.url = url;
     }
 
+    public void setProblemFacebook() {
+        this.problem_login_facebook = true;
+    }
+
     public void setFacebookMessengerEnable(boolean facebook_messenger_enable) {
         this.facebook_messenger_enable = facebook_messenger_enable;
     }
@@ -227,6 +233,10 @@ public class User implements Serializable {
 
     public boolean getFromFacebook() {
         return from_facebook;
+    }
+
+    public boolean isProblemFacebook() {
+        return problem_login_facebook;
     }
 
     public boolean isNotifications() {

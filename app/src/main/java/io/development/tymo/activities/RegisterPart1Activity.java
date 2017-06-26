@@ -48,6 +48,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
     private android.support.v7.widget.AppCompatRadioButton radioButton1, radioButton2;
 
     private DateFormat dateFormat;
+    private UserWrapper wrap;
 
     private EditText name;
     private EditText email;
@@ -97,11 +98,129 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         birthYear.setOnClickListener(this);
         photo.setOnClickListener(this);
 
+        wrap = (UserWrapper) getIntent().getSerializableExtra("user_wrapper");
+        if(wrap!=null)
+            setLayoutError();
+
         m_title.setText(getResources().getString(R.string.register));
         m_title2.setText(getResources().getString(R.string.register_steps, 1, 3));
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+    }
+
+    private void setLayoutError() {
+        User user = wrap.getUser();
+
+        findViewById(R.id.facebookErrorText).setVisibility(View.VISIBLE);
+
+        findViewById(R.id.photoBox).setVisibility(View.GONE);
+        password.setVisibility(View.GONE);
+
+        if(!user.getName().matches(""))
+            name.setVisibility(View.GONE);
+
+        if(!user.getEmail().matches(""))
+            email.setVisibility(View.GONE);
+
+        if(!user.getGender().matches("")) {
+            findViewById(R.id.genderText).setVisibility(View.GONE);
+            findViewById(R.id.radioGroup).setVisibility(View.GONE);
+        }
+
+        if(user.getDayBorn() != 0) {
+            findViewById(R.id.birthDateText).setVisibility(View.GONE);
+            findViewById(R.id.birthdayBox).setVisibility(View.GONE);
+        }
+
+    }
+
+    private void register_error_facebook() {
+        User user = wrap.getUser();
+        setError();
+
+        String et_name = name.getText().toString();
+        String et_email = email.getText().toString();
+
+        int radioButtonID = radioGroup.getCheckedRadioButtonId();
+        View radioButton = radioGroup.findViewById(radioButtonID);
+        int idx = radioGroup.indexOfChild(radioButton);
+
+        String gender = idx == 0 ? "male" : "female";
+
+        LocalDate birthdate;
+        LocalDate now = new LocalDate();
+        Period period;
+
+        if (!(day_start == -1 || month_start == -1 || year_start == -1)){
+            birthdate = new LocalDate (year_start, month_start+1, day_start);
+            period = new Period(birthdate, now, PeriodType.yearMonthDay());
+            age = period.getYears();
+        }
+        else{
+            age = -1;
+        }
+
+        int err = 0;
+
+        if (!validateFields(et_name) && user.getName().matches("")) {
+            err++;
+            name.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+            Toast.makeText(this, getResources().getString(R.string.validation_field_required_name), Toast.LENGTH_LONG).show();
+        }
+
+
+        if (!validateEmail(et_email) && user.getEmail().matches("")) {
+            err++;
+            email.setError(getResources().getString(R.string.validation_field_invalid_required_field));
+            Toast.makeText(this, getResources().getString(R.string.validation_field_email_required), Toast.LENGTH_LONG).show();
+        }
+
+        if(user.getDayBorn() == 0) {
+            if (age == -1) {
+                err++;
+                Toast.makeText(this, getResources().getString(R.string.validation_field_birth_date_required), Toast.LENGTH_LONG).show();
+            }
+            if (age <= 13) {
+                err++;
+                Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
+            }
+        }
+
+
+        if (!radioButton1.isChecked() && !radioButton2.isChecked() && user.getGender().matches("")) {
+            err++;
+            Toast.makeText(this, getResources().getString(R.string.validation_field_gender_required), Toast.LENGTH_LONG).show();
+        }
+
+        if (err == 0) {
+
+            if(user.getName().matches("")) {
+                user.setName(et_name);
+                user.setModifyFacebookName(true);
+            }
+
+            if(user.getEmail().matches(""))
+                user.setEmail(et_email);
+
+            if(user.getGender().matches(""))
+                user.setGender(gender);
+
+            if(user.getDayBorn() == 0) {
+                user.setDayBorn(day_start);
+                user.setMonthBorn(month_start+1);
+                user.setYearBorn(year_start);
+            }
+
+            Intent register = new Intent(RegisterPart1Activity.this, RegisterPart2Activity.class);
+
+            UserWrapper wrapper = new UserWrapper(wrap.getUser());
+            register.putExtra("user_wrapper", wrapper);
+
+            startActivity(register);
+            overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
+
+        }
     }
 
     private void register() {
@@ -196,8 +315,6 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
 
         }
-        else {
-        }
     }
 
     private void setError() {
@@ -242,7 +359,11 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "advanceButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            register();
+
+            if(wrap==null)
+                register();
+            else
+                register_error_facebook();
         }
         else if (view == photo) {
             Bundle bundle = new Bundle();

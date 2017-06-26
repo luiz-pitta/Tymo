@@ -29,6 +29,17 @@
             android:paddingLeft="30dp"
             android:paddingRight="30dp">
 
+            <TextView
+                android:id="@+id/facebookErrorText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="Erro ao conectar com  o Facebook, por favor preencha algumas informações importantes que faltaram!"
+                android:textColor="@color/white"
+                android:textSize="18sp"
+                android:gravity="center_horizontal"
+                android:visibility="gone"/>
+
             <RelativeLayout
                 android:id="@+id/photoBox"
                 android:layout_width="wrap_content"

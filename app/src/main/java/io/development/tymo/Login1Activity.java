@@ -44,6 +44,7 @@ import java.util.List;
 
 import io.development.tymo.activities.IntroActivity;
 import io.development.tymo.activities.MainActivity;
+import io.development.tymo.activities.RegisterPart1Activity;
 import io.development.tymo.activities.RegisterPart2Activity;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
@@ -51,6 +52,7 @@ import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.ServerMessage;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -214,11 +216,17 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                 if(response.getMessage().matches("REGISTER")) {
 
                     Intent register = new Intent(Login1Activity.this, RegisterPart2Activity.class);
+                    Intent error_face = new Intent(Login1Activity.this, RegisterPart1Activity.class);
 
                     UserWrapper wrapper = new UserWrapper(user);
                     register.putExtra("user_wrapper", wrapper);
+                    error_face.putExtra("user_wrapper", wrapper);
 
-                    startActivity(register);
+                    if(!user.isProblemFacebook())
+                        startActivity(register);
+                    else
+                        startActivity(error_face);
+
                     overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
                     progressBox.setVisibility(View.GONE);
                 }
@@ -254,24 +262,36 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
 
-                                // Application code
                                 try {
+                                    SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
                                     user = new User();
                                     try{
                                         String email = object.getString("email");
                                         if(!validateEmail(email)){
-                                            showSnackbarFacebookError();
-                                            progressBox.setVisibility(View.GONE);
-                                            return;
-                                        }
+                                            user.setProblemFacebook();
+                                            user.setEmail("");
+                                        }else
+                                            user.setEmail(object.getString("email"));
+                                    }catch (Exception  e) {
+                                        user.setProblemFacebook();
+                                        user.setEmail("");
+                                    }
+
+                                    try{
+                                        user.setName(object.getString("name"));
+                                    }catch (Exception  e) {
+                                        user.setProblemFacebook();
+                                        user.setName("");
+                                    }
+
+                                    try{
+                                        user.setIdFacebook(object.getString("id"));
                                     }catch (Exception  e) {
                                         showSnackbarFacebookError();
                                         progressBox.setVisibility(View.GONE);
                                         return;
                                     }
-                                    user.setEmail(object.getString("email"));
-                                    user.setName(object.getString("name"));
-                                    user.setIdFacebook(object.getString("id"));
+
 
                                     try {
                                         String date = object.getString("birthday");
@@ -284,12 +304,25 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                         user.setYearBorn(0);
                                     }
 
-                                    user.setLivesIn("");
-                                    user.setGender(object.getString("gender"));
-                                    user.setPhoto(object.getJSONObject("picture").getJSONObject("data").getString("url"));
-                                    user.setFromFacebook(true);
-                                    user.setPassword(user.getPhoto());
 
+                                    try{
+                                        user.setGender(object.getString("gender"));
+                                    }catch (Exception  e) {
+                                        user.setProblemFacebook();
+                                        user.setGender("");
+                                    }
+
+
+                                    try{
+                                        user.setPhoto(object.getJSONObject("picture").getJSONObject("data").getString("url"));
+                                    }catch (Exception  e) {
+                                        user.setPhoto("");
+                                    }
+
+                                    user.setPassword(converter.toGraphProperty(user.getIdFacebook()));
+
+                                    user.setFromFacebook(true);
+                                    user.setLivesIn("");
                                     user.setFacebookMessenger("");
                                     user.setWhereStudy("");
                                     user.setWhereWork("");
@@ -312,7 +345,6 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onCancel() {
-                showSnackbarFacebookError();
                 progressBox.setVisibility(View.GONE);
             }
 
@@ -327,7 +359,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     private void showSnackbarFacebookError(){
         Snackbar snackbar =  Snackbar.make(findViewById(android.R.id.content),getString(R.string.error_facebook_login), Snackbar.LENGTH_LONG)
                 .setActionTextColor(ContextCompat.getColor(Login1Activity.this, R.color.white))
-                .setAction(getResources().getString(R.string.help), new View.OnClickListener() {
+                /*.setAction(getResources().getString(R.string.help), new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         Bundle bundle = new Bundle();
@@ -345,7 +377,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                             startActivity(intent);
                         }
                     }
-                });
+                })*/;
 
         snackbar.show();
     }
