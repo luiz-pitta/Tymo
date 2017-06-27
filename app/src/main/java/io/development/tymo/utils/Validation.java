@@ -7,7 +7,7 @@ public class Validation {
 
     public static boolean validateFields(String name){
 
-        if (TextUtils.isEmpty(name)) {
+        if (TextUtils.isEmpty(name) || name.matches("")) {
 
             return false;
 

@@ -304,14 +304,12 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                         user.setYearBorn(0);
                                     }
 
-
                                     try{
                                         user.setGender(object.getString("gender"));
                                     }catch (Exception  e) {
                                         user.setProblemFacebook();
                                         user.setGender("");
                                     }
-
 
                                     try{
                                         user.setPhoto(object.getJSONObject("picture").getJSONObject("data").getString("url"));
