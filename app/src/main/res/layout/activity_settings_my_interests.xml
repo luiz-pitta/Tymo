@@ -22,7 +22,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:gravity="center"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="30dp"
             android:paddingRight="30dp">
@@ -35,7 +35,7 @@
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_1"
                 android:textAllCaps="true"
-                android:textColor="@color/grey_500"
+                android:textColor="@color/grey_600"
                 android:textSize="16sp"
                 android:textStyle="bold" />
 
@@ -46,7 +46,7 @@
                 android:layout_marginTop="10dp"
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_2"
-                android:textColor="@color/grey_500"
+                android:textColor="@color/grey_600"
                 android:textSize="16sp" />
 
             <TextView
@@ -56,13 +56,12 @@
                 android:layout_marginBottom="30dp"
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_3"
-                android:textColor="@color/deep_purple_300"
+                android:textColor="@color/grey_500"
                 android:textSize="16sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:background="@drawable/bg_act_edit_box"
                 android:orientation="vertical"
                 android:paddingBottom="5dp"
@@ -80,7 +79,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:text="@string/filter_interests"
+                        android:text="@string/settings_my_interests"
                         android:textColor="@color/deep_purple_400"
                         android:textSize="14sp" />
 
@@ -111,10 +110,9 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/advanceButton"
+                android:id="@+id/updateButton"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginBottom="30dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/btn_accept"
                 android:ellipsize="end"
@@ -127,6 +125,52 @@
                 android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/cancelButton"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/btn_clean"
+                android:clickable="true"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:lines="1"
+                android:paddingLeft="10dp"
+                android:paddingRight="10dp"
+                android:text="@string/cancel"
+                android:textAllCaps="true"
+                android:textColor="@color/grey_900"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/progressBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <ProgressBar
+                    android:id="@+id/progressIcon"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp" />
+
+                <TextView
+                    android:id="@+id/progressText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:lines="1"
+                    android:text="@string/progress_updating"
+                    android:textColor="@color/grey_600"
+                    android:textSize="14sp" />
+
+            </LinearLayout>
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

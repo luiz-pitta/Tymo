@@ -30,15 +30,28 @@
             android:paddingRight="30dp">
 
             <TextView
-                android:id="@+id/facebookErrorText"
+                android:id="@+id/facebookErrorText1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
-                android:text="Erro ao conectar com  o Facebook, por favor preencha algumas informações importantes que faltaram!"
-                android:textColor="@color/white"
-                android:textSize="18sp"
                 android:gravity="center_horizontal"
-                android:visibility="gone"/>
+                android:text="@string/login_register_facebook_incomplete_text_1"
+                android:textAllCaps="true"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/facebookErrorText2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:text="@string/login_register_facebook_incomplete_text_2"
+                android:textColor="@color/white"
+                android:textSize="16sp"
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/photoBox"
@@ -126,7 +139,6 @@
                 android:textSize="18sp" />
 
             <EditText
-                android:visibility="gone"
                 android:id="@+id/locationWhereLives"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -139,7 +151,8 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/birthDateText"

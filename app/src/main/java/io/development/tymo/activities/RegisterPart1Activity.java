@@ -112,7 +112,8 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
     private void setLayoutError() {
         User user = wrap.getUser();
 
-        findViewById(R.id.facebookErrorText).setVisibility(View.VISIBLE);
+        findViewById(R.id.facebookErrorText1).setVisibility(View.VISIBLE);
+        findViewById(R.id.facebookErrorText2).setVisibility(View.VISIBLE);
 
         findViewById(R.id.photoBox).setVisibility(View.GONE);
         password.setVisibility(View.GONE);

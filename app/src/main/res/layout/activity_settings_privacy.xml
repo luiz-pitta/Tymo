@@ -15,7 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/actionBar"
-        android:gravity="center"
+        android:gravity="center_horizontal"
         android:orientation="vertical"
         android:paddingLeft="30dp"
         android:paddingRight="30dp">
@@ -24,6 +24,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
             android:background="@drawable/bg_shape_oval_grey_500_corners">
 
             <ImageView
@@ -57,22 +58,22 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
             android:background="@drawable/bg_act_edit_box"
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="10dp"
-            android:layout_marginTop="20dp">
+            android:paddingTop="10dp">
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/visibilityCalendarPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/bg_act_edit_box"
                 android:clickable="true"
                 android:gravity="center_vertical|center_horizontal"
                 android:textSize="16sp"
                 android:textStyle="normal"
-                android:background="@drawable/bg_act_edit_box"
                 app:ms_arrow_tint="@color/grey_900"
                 app:ms_dropdown_height="wrap_content"
                 app:ms_dropdown_max_height="120dp"

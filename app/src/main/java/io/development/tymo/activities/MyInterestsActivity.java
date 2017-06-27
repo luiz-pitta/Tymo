@@ -41,7 +41,7 @@ import io.reactivex.schedulers.Schedulers;
 public class MyInterestsActivity extends AppCompatActivity implements View.OnClickListener {
 
     private ImageView mBackButton;
-    private TextView m_title, advanceButton;
+    private TextView m_title, updateButton, cancelButton;
     private LinearLayout progressBox;
     private RelativeLayout addTagBox;
 
@@ -71,13 +71,15 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
         tagGroup = (TagView) findViewById(R.id.tagGroup);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
-        advanceButton = (TextView) findViewById(R.id.advanceButton);
+        updateButton = (TextView) findViewById(R.id.updateButton);
+        cancelButton = (TextView) findViewById(R.id.cancelButton);
         progressBox = (LinearLayout) findViewById(R.id.progressBox);
         addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
 
         addTagBox.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
-        advanceButton.setOnClickListener(this);
+        updateButton.setOnClickListener(this);
+        cancelButton.setOnClickListener(this);
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
@@ -193,9 +195,9 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
 
     @Override
     public void onClick(View view) {
-        if(view == advanceButton){
+        if(view == updateButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "advanceButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updateButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -213,6 +215,13 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
             else {
                 updateInterest(user);
             }
+        }
+        else if(view == cancelButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButton");
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            finish();
         }else if(view == mBackButton) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));

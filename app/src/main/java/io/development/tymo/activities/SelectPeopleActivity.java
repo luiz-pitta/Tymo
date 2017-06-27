@@ -34,6 +34,8 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
+import static android.view.View.GONE;
+
 
 public class SelectPeopleActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -69,6 +71,9 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         setContentView(R.layout.activity_list_items_select);
 
         mSubscriptions = new CompositeDisposable();
+
+        findViewById(R.id.exampleBox).setVisibility(GONE);
+        findViewById(R.id.horizontalBottomLine2).setVisibility(GONE);
 
         searchView = (SearchView) findViewById(R.id.searchSelectionView);
         applyButton = (TextView) findViewById(R.id.applyButton);

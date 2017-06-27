@@ -68,6 +68,9 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
 
         mSubscriptions = new CompositeDisposable();
 
+        findViewById(R.id.exampleBox).setVisibility(GONE);
+        findViewById(R.id.horizontalBottomLine2).setVisibility(GONE);
+
         searchView = (SearchView) findViewById(R.id.searchSelectionView);
         applyButton = (TextView) findViewById(R.id.applyButton);
         cleanButton = (TextView) findViewById(R.id.cleanButton);

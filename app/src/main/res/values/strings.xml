@@ -109,7 +109,7 @@
     <string name="act_not_found">Atividade não encontrada!</string>
     <string name="act_people_selected">Pessoas selecionadas</string>
     <string name="act_privacy">Pública</string>
-    <string name="act_tags">TAGS de Interesses (mín. = 1)</string>
+    <string name="act_tags">TAGS de Interesses (mín. 1)</string>
     <string name="act_who_can_invite">Quem pode convidar?</string>
     <string name="act">Atividade</string>
     <string name="add">Adicionar</string>
@@ -276,6 +276,8 @@
     <string name="login_forgot_password">Esqueceu sua senha?</string>
     <string name="login_forgot_text_1">Esqueceu seus dados de login?</string>
     <string name="login_forgot_text_2">Insira o email correspondente a sua conta no Tymo. Em seguida, lhe enviaremos uma mensagem de recuperação de senha.</string>
+    <string name="login_register_facebook_incomplete_text_1">Conexão com o Facebook realizada com sucesso</string>
+    <string name="login_register_facebook_incomplete_text_2">Complete as informações abaixo:</string>
     <string name="login_register_my_interests_text_1">Ajude-nos a exibir o que você deseja</string>
     <string name="login_register_my_interests_text_2">O que você gostaria de ver com mais frequência no seu FEED e na BUSCA?</string>
     <string name="login_register_my_interests_text_3">(selecione no mín. 5 interesses)</string>
@@ -370,7 +372,7 @@
     <string name="reminder">Lembrete</string>
     <string name="remove">Remover</string>
     <string name="repeat_daily">diariamente</string>
-    <string name="repeat_how_many_times">Repetir quantas vezes? (máx. = 30)</string>
+    <string name="repeat_how_many_times">Repetir quantas vezes? (máx. 30)</string>
     <string name="repeat_monthly">mensalmente</string>
     <string name="repeat_not">Não se repete</string>
     <string name="repeat_text_imported_google_agenda">Atividade importada sem as repetições, edite para criá-las!</string>
@@ -457,18 +459,19 @@
     <string name="signin">Cadastre-se</string>
     <string name="site">Site</string>
     <string name="skip">Pular</string>
+    <string name="tag_example">Show, Restaurante, Esportes, Médico, Cupom ...</string>
     <string name="token">Token</string>
     <string name="try_again">Tente Novamente</string>
     <string name="tutorial_1_text_1">Atividade</string>
-    <string name="tutorial_1_text_2">Monte desde pequenos momentos à grandes eventos.</string>
+    <string name="tutorial_1_text_2">Monte desde pequenos momentos a grandes eventos.</string>
     <string name="tutorial_1_text_3">Lembrete</string>
     <string name="tutorial_1_text_4">Sem esquecimento! Registre qualquer informação rapidamente.</string>
     <string name="tutorial_1_text_5">Sinalizador</string>
     <string name="tutorial_1_text_6">Informe de forma direta e simples se você está OCUPADO ou LIVRE para fazer algo.</string>
     <string name="tutorial_1_title">Crie</string>
     <string name="tutorial_2_text_1">Encontre e capture atividades públicas e da sua rede de amigos</string>
-    <string name="tutorial_2_text_2">deslize para esquerda para ignorar uma atividade</string>
-    <string name="tutorial_2_text_3">deslize para direita para encaixar uma atividade nos seus planos</string>
+    <string name="tutorial_2_text_2">deslize para a esquerda para ignorar uma atividade</string>
+    <string name="tutorial_2_text_3">deslize para a direita para encaixar uma atividade nos seus planos</string>
     <string name="tutorial_2_title">Feed</string>
     <string name="tutorial_3_text_1">Filtre quais atividades irão aparecer no seu FEED por interesse, localidade, hora, etc.</string>
     <string name="tutorial_3_title">Filtro</string>

@@ -32,11 +32,43 @@
         android:layout_below="@+id/searchSelection"
         android:background="@color/horizontal_line" />
 
+    <LinearLayout
+        android:id="@+id/exampleBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/horizontalBottomLine"
+        android:background="@color/grey_100"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        android:paddingBottom="10dp"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:paddingTop="10dp">
+
+        <TextView
+            android:id="@+id/example"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:lines="1"
+            android:text="@string/tag_example"
+            android:textColor="@color/grey_500"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/horizontalBottomLine2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/horizontal_line_height"
+        android:layout_below="@+id/exampleBox"
+        android:background="@color/horizontal_line" />
+
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/horizontalBottomLine">
+        android:layout_below="@id/horizontalBottomLine2">
 
     <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
