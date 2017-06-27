@@ -167,28 +167,20 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             err++;
             name.setError(getResources().getString(R.string.validation_field_invalid_required_field));
             Toast.makeText(this, getResources().getString(R.string.validation_field_required_name), Toast.LENGTH_LONG).show();
-        }
-
-
-        if (!validateEmail(et_email) && user.getEmail().matches("")) {
+        } else if (!validateEmail(et_email) && user.getEmail().matches("")) {
             err++;
             email.setError(getResources().getString(R.string.validation_field_invalid_required_field));
             Toast.makeText(this, getResources().getString(R.string.validation_field_email_required), Toast.LENGTH_LONG).show();
-        }
-
-        if(user.getDayBorn() == 0) {
+        }else if(user.getDayBorn() == 0 && age < 13) {
             if (age == -1) {
                 err++;
                 Toast.makeText(this, getResources().getString(R.string.validation_field_birth_date_required), Toast.LENGTH_LONG).show();
             }
-            if (age <= 13) {
+            else if (age <= 13) {
                 err++;
                 Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
             }
-        }
-
-
-        if (!radioButton1.isChecked() && !radioButton2.isChecked() && user.getGender().matches("")) {
+        }else if (!radioButton1.isChecked() && !radioButton2.isChecked() && user.getGender().matches("")) {
             err++;
             Toast.makeText(this, getResources().getString(R.string.validation_field_gender_required), Toast.LENGTH_LONG).show();
         }
