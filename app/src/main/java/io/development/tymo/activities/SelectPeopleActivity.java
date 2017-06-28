@@ -290,6 +290,9 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
 
 
     private List<User> filter(List<User> models, String query) {
+        if(models == null)
+            return new ArrayList<>();
+
         final String lowerCaseQuery = query.toLowerCase();
 
         final List<User> filteredModelList = new ArrayList<>();

@@ -254,6 +254,9 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
     }
 
     private List<String> filter(List<String> models, String query) {
+        if(models == null)
+            return new ArrayList<>();
+
         final String lowerCaseQuery = query.toLowerCase();
 
         final List<String> filteredModelList = new ArrayList<>();
