@@ -95,6 +95,7 @@
     <string name="about_full_name">Nome completo</string>
     <string name="about_gender">Gênero</string>
     <string name="about_info_to_contact">Informações para contato</string>
+    <string name="about_info_to_contact_example">Instagram, Facebook, Email, LinkedIn, etc.</string>
     <string name="about_modify_profile_photo">Alterar foto do perfil</string>
     <string name="about_surname">Sobrenome</string>
     <string name="about_where_lives">Local onde mora</string>
