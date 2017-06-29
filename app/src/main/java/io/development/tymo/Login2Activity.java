@@ -177,7 +177,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 editUser.setText(null);
                 editPassword.setText(null);
 
-                Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+                Intent intent = new Intent(this, IntroActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
             } else {
@@ -200,7 +200,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             if(AccessToken.getCurrentAccessToken() != null)
                 LoginManager.getInstance().logOut();
 
-            Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+            Intent intent = new Intent(this, IntroActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
         }

@@ -594,7 +594,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            Intent intent = new Intent(SettingsActivity.this, IntroActivity.class);
+            Intent intent = new Intent(this, IntroActivity.class);
             intent.putExtra("settings", true);
             startActivity(intent);
         }

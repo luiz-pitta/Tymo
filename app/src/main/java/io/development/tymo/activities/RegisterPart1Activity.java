@@ -177,7 +177,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
                 err++;
                 Toast.makeText(this, getResources().getString(R.string.validation_field_birth_date_required), Toast.LENGTH_LONG).show();
             }
-            else if (age <= 13) {
+            else if (age < 13) {
                 err++;
                 Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
             }
@@ -270,7 +270,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             err++;
             Toast.makeText(this, getResources().getString(R.string.validation_field_birth_date_required), Toast.LENGTH_LONG).show();
         }
-        else if(age <= 13){
+        else if(age < 13){
             err++;
             Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
         }

@@ -194,7 +194,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
         editor.apply();
 
-        Intent intent = new Intent(getApplicationContext(), IntroActivity.class);
+        Intent intent = new Intent(this, IntroActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
 
