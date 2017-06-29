@@ -42,7 +42,8 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
 
     private ImageView mBackButton;
     private TextView m_title, updateButton, cancelButton;
-    private LinearLayout progressBox;
+    private View progressBox;
+    private LinearLayout updateBox;
     private RelativeLayout addTagBox;
 
     private TagView tagGroup;
@@ -73,7 +74,8 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
         m_title = (TextView) findViewById(R.id.text);
         updateButton = (TextView) findViewById(R.id.updateButton);
         cancelButton = (TextView) findViewById(R.id.cancelButton);
-        progressBox = (LinearLayout) findViewById(R.id.progressBox);
+        progressBox = findViewById(R.id.progressBox);
+        updateBox = (LinearLayout) findViewById(R.id.updateBox);
         addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
 
         addTagBox.setOnClickListener(this);
@@ -185,7 +187,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void handleInterest(Response response) {
-        progressBox.setVisibility(View.GONE);
+        updateBox.setVisibility(View.GONE);
     }
 
     private void handleError(Throwable error) {
@@ -201,7 +203,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            progressBox.setVisibility(View.VISIBLE);
+            updateBox.setVisibility(View.VISIBLE);
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             User user = new User();
@@ -209,7 +211,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
             user.addAllInterest(interestList);
 
             if(interestList.size() < 5) {
-                progressBox.setVisibility(View.GONE);
+                updateBox.setVisibility(View.GONE);
                 createDialogMessage(interestList.size());
             }
             else {
