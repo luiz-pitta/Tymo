@@ -257,6 +257,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         editor.putBoolean(Constants.NOTIFICATION_FLAG, false);
         editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
         editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
+        editor.putBoolean(Constants.INTRO, false);
         editor.apply();
 
         if (AccessToken.getCurrentAccessToken() != null)

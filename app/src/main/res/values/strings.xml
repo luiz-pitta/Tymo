@@ -506,6 +506,7 @@
     <string name="validation_field_my_interests_selected_one">Você só selecionou 1</string>
     <string name="validation_field_my_interests_selected">Você só selecionou %1$d</string>
     <string name="validation_field_password_minimum">A senha deve ter no mínimo 8 caracteres</string>
+    <string name="validation_field_password_old_wrong">A senha atual está incorreta!</string>
     <string name="validation_field_password_new_wrong">As senhas não estão iguais. Digite a nova senha novamente!</string>
     <string name="validation_field_passwords_diff">O campo está diferente da nova senha</string>
     <string name="validation_field_register_minimum_age">Esse aplicativo só é permitido para maiores de 13 anos</string>

@@ -181,8 +181,9 @@ public class TagView extends RelativeLayout {
             tagLayout.setBackgroundDrawable(getSelector(tag));
 
             // tag text
+            String text = tag.text;
             TextView tagView = (TextView) tagLayout.findViewById(R.id.tv_tag_item_contain);
-            tagView.setText(tag.text);
+            tagView.setText(text);
             LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tagView.getLayoutParams();
             params.setMargins(textPaddingLeft, textPaddingTop, textPaddingRight, texPaddingBottom);
             tagView.setLayoutParams(params);
@@ -198,7 +199,19 @@ public class TagView extends RelativeLayout {
             });
 
             // calculate　of tag layout width
-            float tagWidth = tagView.getPaint().measureText(tag.text) + textPaddingLeft + textPaddingRight;
+            float tagWidth = tagView.getPaint().measureText(text) + textPaddingLeft + textPaddingRight;
+            while ((mWidth-50) < tagWidth){
+                if((mWidth-50) < tagWidth){
+                    text = text.substring(0, (int)(text.length()*0.8));
+                    text = text.concat("...");
+                    tagView.setText(text);
+                    params = (LinearLayout.LayoutParams) tagView.getLayoutParams();
+                    params.setMargins(textPaddingLeft, textPaddingTop, textPaddingRight, texPaddingBottom);
+                    tagView.setLayoutParams(params);
+                }
+                tagWidth = tagView.getPaint().measureText(text) + textPaddingLeft + textPaddingRight;
+            }
+
             // tagView padding (left & right)
 
             // deletable text

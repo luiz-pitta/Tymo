@@ -12,13 +12,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import java.io.IOException;
 
 import io.development.tymo.LoginForgotActivity;
 import io.development.tymo.R;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
+import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.ServerMessage;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -33,6 +39,8 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     private LinearLayout progressBox;
     private EditText passwordNew, passwordNewAgain;
     private EditText passwordActual;
+
+    private User usr;
 
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -65,7 +73,6 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         m_title.setText(getResources().getString(R.string.password_reset_text_1));
         progressBox.setVisibility(View.GONE);
 
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
@@ -88,8 +95,26 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     }
 
     private void handleError(Throwable error) {
-        //progressBox.setVisibility(View.GONE);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if (error instanceof retrofit2.HttpException) {
+            Gson gson = new GsonBuilder().create();
+            try {
+
+                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
+                Response response = gson.fromJson(errorBody,Response.class);
+                if(response.getMessage().matches("CURRENT_PASS_WRONG")){
+                    passwordActual.setError(getResources().getString(R.string.validation_field_password_old_wrong));
+                    Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.validation_field_password_old_wrong), Toast.LENGTH_LONG).show();
+                    progressBox.setVisibility(View.GONE);
+                }else {
+                    Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                    progressBox.setVisibility(View.GONE);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -143,6 +168,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 passwordNewAgain.setError(getResources().getString(R.string.validation_field_passwords_diff));
                 Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.validation_field_password_new_wrong), Toast.LENGTH_LONG).show();
             }
+
 
             if(err == 0){
                 progressBox.setVisibility(View.VISIBLE);
