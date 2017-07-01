@@ -272,7 +272,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.matches(activityServer.getCreatorEmail())){
+            if (email.equals(activityServer.getCreatorEmail())){
                 creator = this.getResources().getString(R.string.created_by_me);
             }
             else{
@@ -298,7 +298,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.matches(flagServer.getCreatorEmail())){
+            if (email.equals(flagServer.getCreatorEmail())){
                 creator = this.getResources().getString(R.string.created_by_me);
             }
             else{
@@ -435,7 +435,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.matches(activityServer.getCreatorEmail())){
+            if (email.equals(activityServer.getCreatorEmail())){
                 creator = this.getResources().getString(R.string.created_by_me);
             }
             else{
@@ -461,7 +461,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.matches(flagServer.getCreatorEmail())){
+            if (email.equals(flagServer.getCreatorEmail())){
                 creator = this.getResources().getString(R.string.created_by_me);
             }
             else{

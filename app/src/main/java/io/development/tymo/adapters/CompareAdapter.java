@@ -221,7 +221,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHo
 
                 String email_user = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
 
-                if (!activityServer.getEmailInvited().matches(email_user) && activityServer.getParticipates() == 0) {
+                if (!activityServer.getEmailInvited().equals(email_user) && activityServer.getParticipates() == 0) {
                     if (activityServer.getKnowCreator() == 0 && activityServer.getVisibility() > 0) //não é meu contato e visibilidade é somente amigos ou privada
                         act_as_red_flag = true;
                     else if (activityServer.getVisibility() == 2 && activityServer.getKnowCreator() > 0) // é meu contato e visibilidade é privada

@@ -183,7 +183,7 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
         List<Tag> tags = tagGroup.getTags();
         for(int i=0;i<tags.size();i++){
             Tag t = tags.get(i);
-            if(t.text.matches(tag))
+            if(t.text.equals(tag))
                 return true;
         }
         return false;

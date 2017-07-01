@@ -234,7 +234,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             private boolean setLayout(ArrayList<User> list, String email, boolean activity) {
                 boolean in = false;
                 for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getEmail().matches(email)) {
+                    if (list.get(i).getEmail().equals(email)) {
                         if (list.get(i).getInvitation() == 1) {
                             buttonIcon2.setImageResource(R.drawable.ic_trash);
                             buttonIcon2.setColorFilter(ContextCompat.getColor(mContext, R.color.red_600));
@@ -270,7 +270,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 boolean activity_buttons = false;
 
                 if (response.getTags() != null) {
-                    if (email.matches(activityServer.getCreator())) {
+                    if (email.equals(activityServer.getCreator())) {
                         buttonIcon2.setImageResource(R.drawable.ic_trash);
                         buttonIcon2.setColorFilter(ContextCompat.getColor(mContext, R.color.red_600));
                         buttonText2.setText(mContext.getResources().getString(R.string.remove));
@@ -282,7 +282,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     PersonSmallAdapter adapter = new PersonSmallAdapter(response.getPeople(), mContext);
                     recyclerView.setAdapter(adapter);
                 } else {
-                    if (email.matches(flagServer.getCreator())) {
+                    if (email.equals(flagServer.getCreator())) {
                         buttonIcon2.setImageResource(R.drawable.ic_trash);
                         buttonIcon2.setColorFilter(ContextCompat.getColor(mContext, R.color.red_600));
                         buttonText2.setText(mContext.getResources().getString(R.string.remove));
@@ -490,7 +490,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         title.setText(flagServer.getTitle());
 
                         String email = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
-                        boolean isMe = flagServer.getEmailInvited() != null && flagServer.getEmailInvited().matches(email);
+                        boolean isMe = flagServer.getEmailInvited() != null && flagServer.getEmailInvited().equals(email);
 
                         if (!flagServer.getType()) {
                             setColorCard(R.color.flag_unavailable);

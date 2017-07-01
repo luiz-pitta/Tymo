@@ -45,8 +45,8 @@ public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHold
     @Override
     public void setActive(View view, boolean state) {
 
-        ImageView checkBoxActivated  = (ImageView) view.findViewById(R.id.checkBoxActivated);
-        RelativeLayout tagBox  = (RelativeLayout) view.findViewById(R.id.tagBox);
+        ImageView checkBoxActivated  = view.findViewById(R.id.checkBoxActivated);
+        RelativeLayout tagBox  = view.findViewById(R.id.tagBox);
 
         if(checkBoxActivated != null){
             if(state){

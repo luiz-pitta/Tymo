@@ -83,7 +83,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
      * @return True if the view has been selected, False if the view is already selected or is not part of the item list
      */
     public boolean select(int position) {
-            if (mItemList.containsKey(position) && mItemList.get(position) == State.INACTIVE) {
+        if (position < getItemCount() && mItemList.get(position) == State.INACTIVE) {
             perform(Action.SELECT, position, true, true);
             return true;
         }
@@ -97,7 +97,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
      * @return True if the view has been deselected, False if the view is already deselected or is not part of the item list
      */
     public boolean deselect(int position) {
-        if (mItemList.containsKey(position) && mItemList.get(position) == State.ACTIVE) {
+        if (position < getItemCount() && mItemList.get(position) == State.ACTIVE) {
             perform(Action.DESELECT, position, true, true);
             return true;
         }
@@ -193,7 +193,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
     }
 
     private void processUpdate(View view, int position) {
-        if (mItemList.containsKey(position)) {
+        if (position < getItemCount()) {
             if (mItemList.get(position).equals(State.ACTIVE)) {
                 setActive(view, true);
             } else {
@@ -201,12 +201,11 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
             }
         } else {
             mItemList.put(position, State.INACTIVE);
-            processUpdate(view, position);
         }
     }
 
     private void processClick(int position) {
-        if (mItemList.containsKey(position)) {
+        if (position < getItemCount()) {
             if (mItemList.get(position).equals(State.ACTIVE)) {
                 perform(Action.DESELECT, position, true, true);
             } else {
@@ -228,10 +227,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
     }
 
     private void perform(Action action, int position, boolean withCallback, boolean withVibration) {
-        if (withVibration) {
-            //performVibrate();
-        }
-
         if (action == Action.SELECT) {
             mItemList.put(position, State.ACTIVE);
         } else {
@@ -240,7 +235,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
 
         int selectedListSize = getSelectedItemListInternal().size();
 
-        //updateToolbarIfNeeded(selectedListSize);
         updateMultiChoiceMode(selectedListSize);
         processNotifyItemChanged(position);
 
@@ -328,6 +322,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
     @Override
     public void onBindViewHolder(final VH holder, final int position) {
         View mCurrentView = holder.itemView;
+        processUpdate(mCurrentView, holder.getAdapterPosition());
 
         if ((mIsInMultiChoiceMode || mIsInSingleClickMode) && isSelectableInMultiChoiceMode(position)) {
             mCurrentView.setOnClickListener(new View.OnClickListener() {
@@ -347,8 +342,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
                 return true;
             }
         });
-
-        processUpdate(mCurrentView, holder.getAdapterPosition());
     }
 
     //endregion

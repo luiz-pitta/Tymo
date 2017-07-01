@@ -280,7 +280,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         for (int i = 0; i < usr.size(); i++) {
-            if (email.matches(usr.get(i).getEmail()))
+            if (email.equals(usr.get(i).getEmail()))
                 return usr.get(i);
         }
 
@@ -289,7 +289,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     public boolean checkIfAdm(ArrayList<User> usr, String email) {
         for (int i = 0; i < usr.size(); i++) {
-            if (email.matches(usr.get(i).getEmail()))
+            if (email.equals(usr.get(i).getEmail()))
                 return true;
         }
 
@@ -610,7 +610,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
-        return email.matches(email_creator);
+        return email.equals(email_creator);
     }
 
     public ArrayList<ActivityServer> getActivityServers() {

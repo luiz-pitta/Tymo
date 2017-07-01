@@ -396,7 +396,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<User> getConfirmed(ArrayList<User> users){
         ArrayList<User> confirmed = new ArrayList<>();
         for(int i=0;i<users.size();i++){
-            if(!users.get(i).getEmail().matches(creator_flag.getEmail()) && users.get(i).getInvitation() == 1)
+            if(!users.get(i).getEmail().equals(creator_flag.getEmail()) && users.get(i).getInvitation() == 1)
                 confirmed.add(users.get(i));
         }
         return setOrderGuests(confirmed);
@@ -405,7 +405,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<User> getInvited(ArrayList<User> users){
         ArrayList<User> confirmed = new ArrayList<>();
         for(int i=0;i<users.size();i++){
-            if((users.get(i).getInvitation() == 0 ||  users.get(i).getInvitation() == 2) && !users.get(i).getEmail().matches(creator_flag.getEmail()))
+            if((users.get(i).getInvitation() == 0 ||  users.get(i).getInvitation() == 2) && !users.get(i).getEmail().equals(creator_flag.getEmail()))
                 confirmed.add(users.get(i));
         }
         return setOrderGuests(confirmed);
@@ -526,7 +526,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         for(int i = 0; i < usr.size(); i++){
-            if(email.matches(usr.get(i).getEmail()))
+            if(email.equals(usr.get(i).getEmail()))
                 return usr.get(i);
         }
 
@@ -537,7 +537,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
-        return email.matches(email_creator);
+        return email.equals(email_creator);
     }
 
     private boolean isActivityReadyRegister(int y1, int m1, int d1,int y2, int m2, int d2, int period){

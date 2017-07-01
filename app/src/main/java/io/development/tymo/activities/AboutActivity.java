@@ -249,7 +249,7 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     }
 
     public void updateFacebook(){
-        if(!name.getText().toString().matches(user.getName()))
+        if(!name.getText().toString().equals(user.getName()))
             user.setModifyFacebookName(true);
 
         user.setName(name.getText().toString());

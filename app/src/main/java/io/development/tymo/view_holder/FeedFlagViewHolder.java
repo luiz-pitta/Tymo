@@ -117,7 +117,7 @@ public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> {
             photoCreatorRingBox.setVisibility(View.VISIBLE);
             photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_my_contact_zoom_less);
         }
-        else if(cube.getUser().getEmail().matches(email)){
+        else if(cube.getUser().getEmail().equals(email)){
             photoCreatorRingBox.setVisibility(View.VISIBLE);
             photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_you_zoom_less);
         }

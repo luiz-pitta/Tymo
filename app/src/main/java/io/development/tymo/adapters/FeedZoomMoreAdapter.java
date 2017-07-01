@@ -372,7 +372,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
             } else if (feedCubeModel.getKnowCreator() > 0) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);
                 holder.photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_my_contact_zoom_more);
-            } else if (feedCubeModel.getUser().getEmail().matches(email)) {
+            } else if (feedCubeModel.getUser().getEmail().equals(email)) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);
                 holder.photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_you_zoom_more);
             } else {
@@ -445,7 +445,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
             } else if (feedFlagModel.getKnowCreator() > 0) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);
                 holder.photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_my_contact_zoom_more);
-            } else if (feedFlagModel.getUser().getEmail().matches(email)) {
+            } else if (feedFlagModel.getUser().getEmail().equals(email)) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);
                 holder.photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_you_zoom_more);
             } else {

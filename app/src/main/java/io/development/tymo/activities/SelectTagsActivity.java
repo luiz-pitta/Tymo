@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -162,7 +163,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
     private void handleResponse(ArrayList<TagServer> tags) {
 
-        int i;
+        int i,j;
         tagQueryList = new ArrayList<>();
         for(i = 0; i < tags.size(); i++){
             tagQueryList.add(tags.get(i).getTitle());
@@ -177,8 +178,10 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         selectionTagAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
-                if(!tagListSelected.contains(tagQueryList.get(selectedPosition)))
+                int position = getPositionSelected(tagQueryList.get(selectedPosition));
+                if(position == -1)
                     tagListSelected.add(tagQueryList.get(selectedPosition));
+
             }
 
             @Override
@@ -205,8 +208,10 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         List<String> stock_list = getIntent().getStringArrayListExtra("tags_list");
         for(i = 0; i < tagList.size() && stock_list.size() > 0; i++){
-            if(stock_list.contains(tagList.get(i)))
-                selectionTagAdapter.select(i);
+            for(j = 0; j < stock_list.size(); j++) {
+                if (stock_list.get(j).equals(tagList.get(i)))
+                    selectionTagAdapter.select(i);
+            }
 
         }
 
@@ -285,7 +290,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         int i;
         for(i=0;i<tagListSelected.size();i++){
             String text = tagListSelected.get(i);
-            if(text.matches(name))
+            if(text.equals(name))
                 return i;
         }
         return -1;

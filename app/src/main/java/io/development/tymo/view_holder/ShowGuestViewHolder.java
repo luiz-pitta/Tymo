@@ -222,7 +222,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
 
         email = user.getEmail();
 
-        if (email.matches(mSharedPreferences.getString(Constants.EMAIL, "")) || user.getHeBlocked() > 0) {
+        if (email.equals(mSharedPreferences.getString(Constants.EMAIL, "")) || user.getHeBlocked() > 0) {
             setOnClick(false);
             actionIcon.setVisibility(View.GONE);
             moreVerticalIcon.setVisibility(View.GONE);

@@ -145,7 +145,7 @@ public class ShowGuestsActivity extends AppCompatActivity {
 
                 for(int i=0;i<listInvitedUser.size();i++){
                     for(int j=0;i<listQueryInvitedUser.size();i++){
-                        if(listInvitedUser.get(i).getEmail().matches(listQueryInvitedUser.get(j).getEmail()))
+                        if(listInvitedUser.get(i).getEmail().equals(listQueryInvitedUser.get(j).getEmail()))
                         {
                             listInvitedUser.remove(i);
                             listInvitedUser.add(i, listQueryInvitedUser.get(j));
@@ -155,7 +155,7 @@ public class ShowGuestsActivity extends AppCompatActivity {
 
                 for(int i=0;i<listConfirmedUser.size();i++){
                     for(int j=0;i<listQueryConfirmedUser.size();i++){
-                        if(listConfirmedUser.get(i).getEmail().matches(listQueryConfirmedUser.get(j).getEmail()))
+                        if(listConfirmedUser.get(i).getEmail().equals(listQueryConfirmedUser.get(j).getEmail()))
                         {
                             listConfirmedUser.remove(i);
                             listConfirmedUser.add(i, listQueryInvitedUser.get(j));

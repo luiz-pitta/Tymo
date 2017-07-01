@@ -163,7 +163,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 passwordNew.setError(getResources().getString(R.string.validation_field_password_minimum));
                 Toast.makeText(this, getResources().getString(R.string.validation_field_password_minimum), Toast.LENGTH_LONG).show();
             }
-            else if(!passwordNew.getText().toString().matches(passwordNewAgain.getText().toString())) {
+            else if(!passwordNew.getText().toString().equals(passwordNewAgain.getText().toString())) {
                 err++;
                 passwordNewAgain.setError(getResources().getString(R.string.validation_field_passwords_diff));
                 Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.validation_field_password_new_wrong), Toast.LENGTH_LONG).show();

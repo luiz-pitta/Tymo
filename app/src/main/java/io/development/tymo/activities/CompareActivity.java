@@ -344,7 +344,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             for(j = 0; j < response.getMyCommitAct().size(); j++) {
                 ActivityServer activity = response.getMyCommitAct().get(j);
                 ActivityServer activityServer = new ActivityServer(activity);
-                if(isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day, month) && invited.matches(activityServer.getEmailInvited())) {
+                if(isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day, month) && invited.equals(activityServer.getEmailInvited())) {
                     boolean start = isStartedFinishedToday(day, activityServer.getDayStart());
                     boolean finish = isStartedFinishedToday(day, activityServer.getDayEnd());
                     if(!start && finish) {
@@ -375,7 +375,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             for(j = 0; j < response.getMyCommitFlag().size(); j++) {
                 FlagServer flag = response.getMyCommitFlag().get(j);
                 FlagServer flagServer = new FlagServer(flag);
-                if(isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day, month) && invited.matches(flagServer.getEmailInvited())) {
+                if(isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day, month) && invited.equals(flagServer.getEmailInvited())) {
                     boolean start = isStartedFinishedToday(day, flagServer.getDayStart());
                     boolean finish = isStartedFinishedToday(day, flagServer.getDayEnd());
                     if(!start && finish) {

@@ -200,10 +200,10 @@ public class TagView extends RelativeLayout {
 
             // calculate　of tag layout width
             float tagWidth = tagView.getPaint().measureText(text) + textPaddingLeft + textPaddingRight;
-            int offset_verify = (int)Utils.convertDpToPixel(50.0f, getContext());
+            int offset_verify = (int)Utils.convertDpToPixel(40.0f, getContext());
             while ((mWidth-offset_verify) < tagWidth){
                 if((mWidth-offset_verify) < tagWidth){
-                    text = text.substring(0, (int)(text.length()*0.8));
+                    text = text.substring(0, (int)(text.length()*0.85));
                     text = text.concat("...");
                     tagView.setText(text);
                     params = (LinearLayout.LayoutParams) tagView.getLayoutParams();

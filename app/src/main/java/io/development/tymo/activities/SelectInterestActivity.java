@@ -181,7 +181,8 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         selectionTagAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
-                if(!tagListSelected.contains(tagQueryList.get(selectedPosition)))
+                int position = getPositionSelected(tagQueryList.get(selectedPosition));
+                if(position == -1)
                     tagListSelected.add(tagQueryList.get(selectedPosition));
             }
 
@@ -289,7 +290,7 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         int i;
         for(i=0;i<tagListSelected.size();i++){
             String text = tagListSelected.get(i);
-            if(text.matches(name))
+            if(text.equals(name))
                 return i;
         }
         return -1;

@@ -316,7 +316,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         for (int i = 0; i < usr.size(); i++) {
-            if (email.matches(usr.get(i).getEmail()))
+            if (email.equals(usr.get(i).getEmail()))
                 return usr.get(i);
         }
 
@@ -325,7 +325,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     public boolean checkIfAdm(ArrayList<User> usr, String email) {
         for (int i = 0; i < usr.size(); i++) {
-            if (email.matches(usr.get(i).getEmail()))
+            if (email.equals(usr.get(i).getEmail()))
                 return true;
         }
 
@@ -971,7 +971,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         } else {
             cube_color = mColorView.getTag() == null ? getActivity().getCubeColor() : (int) mColorView.getTag();
             cube_color_upper = mColorViewUpper.getTag() == null ? getActivity().getCubeColorUpper() : (int) mColorViewUpper.getTag();
-            cube_icon = urlIcon.matches(Constants.IC_ADD_CUBE_URL) ? getActivity().getCubeIcon() : urlIcon;
+            cube_icon = urlIcon.equals(Constants.IC_ADD_CUBE_URL) ? getActivity().getCubeIcon() : urlIcon;
         }
 
         int err = 0;
@@ -1244,7 +1244,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         } else {
             cube_color = mColorView.getTag() == null ? getActivity().getCubeColor() : (int) mColorView.getTag();
             cube_color_upper = mColorViewUpper.getTag() == null ? getActivity().getCubeColorUpper() : (int) mColorViewUpper.getTag();
-            cube_icon = urlIcon.matches(Constants.IC_ADD_CUBE_URL) ? getActivity().getCubeIcon() : urlIcon;
+            cube_icon = urlIcon.equals(Constants.IC_ADD_CUBE_URL) ? getActivity().getCubeIcon() : urlIcon;
         }
 
         int err = 0;

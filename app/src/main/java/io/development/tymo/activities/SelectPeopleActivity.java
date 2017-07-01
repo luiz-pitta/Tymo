@@ -183,7 +183,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         else{
             User userFriend = userWrapper.getUser();
             for (i = 0; i < users.size(); i++) {
-                if (!users.get(i).getEmail().matches(userFriend.getEmail()))
+                if (!users.get(i).getEmail().equals(userFriend.getEmail()))
                     personQueryList.add(users.get(i));
             }
         }
@@ -321,7 +321,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         int i;
         for(i=0;i<personListSelected.size();i++){
             String text = personListSelected.get(i).getEmail();
-            if(text.matches(name))
+            if(text.equals(name))
                 return i;
         }
         return -1;
