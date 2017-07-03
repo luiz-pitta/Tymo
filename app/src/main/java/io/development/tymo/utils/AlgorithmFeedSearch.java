@@ -260,9 +260,9 @@ public class AlgorithmFeedSearch {
          *      3              Nº de contatos          filtrado (Popularidade)
          *      4              Data/Hora               filtrado (Data e Hora)
          *      5              Criação                 criado há menos de 1 hora
-         *      6              Data/Hora               há menos de 1 semana para acontecer
+         *      6              Data/Hora               há menos de 1 dia para acontecer
          *      7              Criação                 criado há menos de 12 horas
-         *      8              Data/Hora               há menos de 1 mês para acontecer
+         *      8              Data/Hora               há menos de 1 semana para acontecer
          *      9              Interesses              -
          *      10             Criação                 criado há menos de 24 horas
          *      11             Nº de contatos          NÃO filtrado (Popularidade)
@@ -300,17 +300,17 @@ public class AlgorithmFeedSearch {
             return -1;
         else if (created_for_how_long > created_for_how_long2 && created_for_how_long2 < millis_one_hour)
             return 1;
-        else if (start_date_time < start_date_time2 && time_left_to_start < millis_one_week)
+        else if (start_date_time < start_date_time2 && time_left_to_start < millis_one_day)
             return -1;
-        else if (start_date_time > start_date_time2 && time_left_to_start2 < millis_one_week)
+        else if (start_date_time > start_date_time2 && time_left_to_start2 < millis_one_day)
             return 1;
         else if (created_for_how_long < created_for_how_long2 && created_for_how_long < millis_twelve_hours)
             return -1;
         else if (created_for_how_long > created_for_how_long2 && created_for_how_long2 < millis_twelve_hours)
             return 1;
-        else if (start_date_time < start_date_time2 && time_left_to_start < millis_one_month)
+        else if (start_date_time < start_date_time2 && time_left_to_start < millis_one_week)
             return -1;
-        else if (start_date_time > start_date_time2 && time_left_to_start2 < millis_one_month)
+        else if (start_date_time > start_date_time2 && time_left_to_start2 < millis_one_week)
             return 1;
         else if (count_interests > count_interests2)
             return -1;
