@@ -24,11 +24,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.development.tymo.R;
 
 public class SelectionTagViewHolder extends RecyclerView.ViewHolder {
+
+    private boolean state = false;
 
     @BindView(R.id.text1)
     public TextView text1;

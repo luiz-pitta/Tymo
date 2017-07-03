@@ -10,6 +10,7 @@ import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 
 import java.io.Serializable;
@@ -163,7 +164,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
             int selectedListSize = getSelectedItemListInternal().size();
             updateToolbarIfNeeded(selectedListSize);
             updateMultiChoiceMode(selectedListSize);
-            processNotifyDataSetChanged();
+            //processNotifyDataSetChanged();
         }
     }
 
@@ -180,10 +181,14 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         return selectedList;
     }
 
+    public boolean isPositionSelected(int position){
+        return mItemList.get(position).equals(State.ACTIVE);
+    }
+
     private void processSingleClick(int position) {
-        if (mIsInMultiChoiceMode || mIsInSingleClickMode) {
+        if (mIsInMultiChoiceMode || mIsInSingleClickMode)
             processClick(position);
-        }
+
     }
 
     private void processLongClick(int position) {
@@ -236,7 +241,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         int selectedListSize = getSelectedItemListInternal().size();
 
         updateMultiChoiceMode(selectedListSize);
-        processNotifyItemChanged(position);
+        //processNotifyItemChanged(position);
 
         if (mListener != null && withCallback) {
             if (action == Action.SELECT) {
@@ -320,28 +325,33 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
     }
 
     @Override
-    public void onBindViewHolder(final VH holder, final int position) {
+    public void onBindViewHolder(final VH holder, int position) {
         View mCurrentView = holder.itemView;
-        processUpdate(mCurrentView, holder.getAdapterPosition());
 
-        if ((mIsInMultiChoiceMode || mIsInSingleClickMode) && isSelectableInMultiChoiceMode(position)) {
+        if ((mIsInMultiChoiceMode || mIsInSingleClickMode)) {
             mCurrentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                   if (mItemList.get(holder.getAdapterPosition()).equals(State.ACTIVE))
+                       setActive(view, false);
+                   else
+                       setActive(view, true);
                     processSingleClick(holder.getAdapterPosition());
                 }
             });
         } else if (defaultItemViewClickListener(holder, position) != null) {
             mCurrentView.setOnClickListener(defaultItemViewClickListener(holder, position));
+
+            mCurrentView.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View view) {
+                    processLongClick(holder.getAdapterPosition());
+                    return true;
+                }
+            });
         }
 
-        mCurrentView.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                processLongClick(holder.getAdapterPosition());
-                return true;
-            }
-        });
+        processUpdate(mCurrentView, holder.getAdapterPosition());
     }
 
     //endregion

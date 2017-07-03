@@ -1,6 +1,7 @@
 package io.development.tymo.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +44,7 @@ public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHold
      * Override this method to implement a custom active/deactive state
      */
     @Override
-    public void setActive(View view, boolean state) {
+    public void setActive(@NonNull View view, boolean state) {
 
         ImageView checkBoxActivated  = view.findViewById(R.id.checkBoxActivated);
         RelativeLayout tagBox  = view.findViewById(R.id.tagBox);

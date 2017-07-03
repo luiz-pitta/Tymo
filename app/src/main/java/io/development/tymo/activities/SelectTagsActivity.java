@@ -188,7 +188,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
                 int position = getPositionSelected(tagQueryList.get(deselectedPosition));
                 if(position >= 0)
-                    tagListSelected.remove(getPositionSelected(tagQueryList.get(deselectedPosition)));
+                    tagListSelected.remove(position);
             }
 
             @Override
