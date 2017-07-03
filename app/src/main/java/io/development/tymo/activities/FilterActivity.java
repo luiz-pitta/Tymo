@@ -169,7 +169,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         popularityCorners = findViewById(R.id.popularityCorners);
         dateHourCorners = findViewById(R.id.dateHourCorners);
 
-        proximityButton = (ImageView)findViewById(R.id.proximityIcon);;
+        proximityButton = (ImageView)findViewById(R.id.proximityIcon);
         popularButton = (ImageView)findViewById(R.id.popularityIcon);
         dateTimeButton = (ImageView)findViewById(R.id.dateHourIcon);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);

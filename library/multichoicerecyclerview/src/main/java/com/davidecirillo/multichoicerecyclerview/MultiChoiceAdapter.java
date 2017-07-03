@@ -241,7 +241,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         int selectedListSize = getSelectedItemListInternal().size();
 
         updateMultiChoiceMode(selectedListSize);
-        //processNotifyItemChanged(position);
+        processNotifyItemChanged(position);
 
         if (mListener != null && withCallback) {
             if (action == Action.SELECT) {

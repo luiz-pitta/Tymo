@@ -365,10 +365,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String hourString = String.format("%02d", hourOfDay);;
-        String minuteString = String.format("%02d", minute);;
-        String hourStringEnd = String.format("%02d", hourOfDayEnd);;
-        String minuteStringEnd = String.format("%02d", minuteEnd);;
+        String hourString = String.format("%02d", hourOfDay);
+        String minuteString = String.format("%02d", minute);
+        String hourStringEnd = String.format("%02d", hourOfDayEnd);
+        String minuteStringEnd = String.format("%02d", minuteEnd);
         String time = hourString+":"+minuteString;
         String time2 = hourStringEnd+":"+minuteStringEnd;
 

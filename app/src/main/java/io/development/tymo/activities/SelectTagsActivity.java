@@ -173,7 +173,6 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         tagList.addAll(tagQueryList);
         selectionTagAdapter = new SelectionTagAdapter(tagQueryList, this) ;
         mMultiChoiceRecyclerView.setAdapter(selectionTagAdapter);
-        selectionTagAdapter.setSingleClickMode(true);
 
         selectionTagAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
@@ -215,6 +214,8 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         }
 
+        selectionTagAdapter.setSingleClickMode(true);
+
         if(selectionTagAdapter.getItemCount() > 60) {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
@@ -222,7 +223,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
                 public void run() {
                     setProgress(false);
                 }
-            }, 1500);
+            }, 2000);
         }else
             setProgress(false);
     }

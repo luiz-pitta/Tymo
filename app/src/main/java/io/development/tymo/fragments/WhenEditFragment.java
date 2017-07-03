@@ -303,10 +303,10 @@ public class WhenEditFragment extends Fragment implements
 
     @Override
     public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
-        String hourString = String.format("%02d", hourOfDay);;
-        String minuteString = String.format("%02d", minute);;
-        String hourStringEnd = String.format("%02d", hourOfDayEnd);;
-        String minuteStringEnd = String.format("%02d", minuteEnd);;
+        String hourString = String.format("%02d", hourOfDay);
+        String minuteString = String.format("%02d", minute);
+        String hourStringEnd = String.format("%02d", hourOfDayEnd);
+        String minuteStringEnd = String.format("%02d", minuteEnd);
         String time = hourString+":"+minuteString;
         String time2 = hourStringEnd+":"+minuteStringEnd;
 
@@ -541,10 +541,10 @@ public class WhenEditFragment extends Fragment implements
             String date = day+"/"+month+"/"+activityServer.getYearStart();
             String date2 = day2+"/"+month2+"/"+activityServer.getYearEnd();
 
-            String hourString = String.format("%02d", activityServer.getHourStart());;
-            String minuteString = String.format("%02d", activityServer.getMinuteStart());;
-            String hourStringEnd = String.format("%02d", activityServer.getHourEnd());;
-            String minuteStringEnd = String.format("%02d", activityServer.getMinuteEnd());;
+            String hourString = String.format("%02d", activityServer.getHourStart());
+            String minuteString = String.format("%02d", activityServer.getMinuteStart());
+            String hourStringEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteStringEnd = String.format("%02d", activityServer.getMinuteEnd());
             String time = hourString+":"+minuteString;
             String time2 = hourStringEnd+":"+minuteStringEnd;
 
