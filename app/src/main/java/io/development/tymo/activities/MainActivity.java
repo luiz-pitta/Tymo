@@ -3,14 +3,17 @@ package io.development.tymo.activities;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -42,6 +45,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 
+import io.development.tymo.Login1Activity;
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
 import io.development.tymo.fragments.FeedFragment;
@@ -60,6 +64,7 @@ import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.ActivitySyncJob;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.ForceUpdateChecker;
 import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
@@ -68,7 +73,10 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+import static io.development.tymo.utils.Validation.validateEmail;
+
+public class MainActivity extends AppCompatActivity implements View.OnClickListener,
+        ForceUpdateChecker.OnUpdateNeededListener{
 
     public static final String ADD_VIEW_IS_VISIBLE = "add_is_visible";
 
@@ -132,6 +140,93 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initInterface(savedInstanceState);
+    }
+
+    @Override
+    public void onUpdateNotNeeded() {}
+
+    @Override
+    public void onUpdateNeeded(String updateUrl, String version) {
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.version_new_update_needed, version))
+                .setCancelable(false)
+                .setMessage(getResources().getString(R.string.version_new_update_text))
+                .setPositiveButton(getResources().getString(R.string.version_new_update),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                redirectStore(updateUrl);
+                            }
+                        }).setNegativeButton(getResources().getString(R.string.version_new_update_no_tks),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).create();
+        dialog.show();
+    }
+
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    public void updateProfileMainInformation(){
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        Query query = new Query();
+        query.setEmail(email);
+        query.setDay(day);
+        query.setMonth(month);
+        query.setYear(year);
+        query.setHourStart(hour);
+        query.setMinuteStart(minute);
+
+        getPendingSolicitation(query);
+    }
+
+    private void getPendingSolicitation(Query query) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().getPendingSolicitaion(query)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseMain,this::handleError2));
+    }
+
+    private void handleResponseMain(Response response) {
+        boolean isTherePendingSolicitation = response.getNumberFriendRequest() + response.getNumberInvitationRequest() > 0;
+        if(isTherePendingSolicitation){
+            notificationView.setVisibility(View.VISIBLE);
+        }else {
+            notificationView.setVisibility(View.GONE);
+        }
+    }
+
+    private void updatePushNotification(UserPushNotification pushNotification) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().setPushNotification(pushNotification)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse,this::handleError));
+    }
+
+    private void handleResponse(Response response) {}
+
+    private void handleError(Throwable error) {
+        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+    }
+
+    private void handleError2(Throwable error) {}
+
+    private void initInterface(Bundle savedInstanceState){
         mSubscriptions = new CompositeDisposable();
         mJobManager = JobManager.instance();
 
@@ -227,58 +322,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         setActivityPeriodicJob();
     }
-
-    public void updateProfileMainInformation(){
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH) + 1;
-        int year = c.get(Calendar.YEAR);
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-
-        Query query = new Query();
-        query.setEmail(email);
-        query.setDay(day);
-        query.setMonth(month);
-        query.setYear(year);
-        query.setHourStart(hour);
-        query.setMinuteStart(minute);
-
-        getPendingSolicitation(query);
-    }
-
-    private void getPendingSolicitation(Query query) {
-
-        mSubscriptions.add(NetworkUtil.getRetrofit().getPendingSolicitaion(query)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseMain,this::handleError2));
-    }
-
-    private void handleResponseMain(Response response) {
-        boolean isTherePendingSolicitation = response.getNumberFriendRequest() + response.getNumberInvitationRequest() > 0;
-        if(isTherePendingSolicitation){
-            notificationView.setVisibility(View.VISIBLE);
-        }else {
-            notificationView.setVisibility(View.GONE);
-        }
-    }
-
-    private void updatePushNotification(UserPushNotification pushNotification) {
-
-        mSubscriptions.add(NetworkUtil.getRetrofit().setPushNotification(pushNotification)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
-    }
-
-    private void handleResponse(Response response) {}
-
-    private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
-    }
-
-    private void handleError2(Throwable error) {}
 
     private void initAnimation() {
         new Actor.Builder(SpringSystem.create(), closeButton)
@@ -675,6 +718,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onResume() {
         super.onResume();  // Always call the superclass method first
+
+        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
 
         if(mNavigator != null) {
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);

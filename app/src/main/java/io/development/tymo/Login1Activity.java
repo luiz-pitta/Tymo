@@ -1,6 +1,7 @@
 package io.development.tymo;
 
 import android.content.ActivityNotFoundException;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -8,6 +9,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -52,6 +54,7 @@ import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.ForceUpdateChecker;
 import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.ServerMessage;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -60,7 +63,9 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateEmail;
 
-public class Login1Activity extends AppCompatActivity implements View.OnClickListener, BaseSliderView.OnSliderClickListener, ViewPagerEx.OnPageChangeListener {
+public class Login1Activity extends AppCompatActivity implements View.OnClickListener, BaseSliderView.OnSliderClickListener,
+        ViewPagerEx.OnPageChangeListener,
+        ForceUpdateChecker.OnUpdateNeededListener{
 
     private CallbackManager callbackManager;
 
@@ -107,22 +112,61 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             mDemoSlider.addSlider(defaultSliderView);
         }
 
-        String log = mSharedPreferences.getString(Constants.EMAIL, "");
-        if(validateEmail(log))
-            startActivity(new Intent(Login1Activity.this, MainActivity.class));
-        else {
+        initDemoSlider();
 
+        progressBox.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onUpdateNotNeeded() {
+        String log = mSharedPreferences.getString(Constants.EMAIL, "");
+        if(validateEmail(log)) {
+            Intent intent = new Intent(Login1Activity.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+        }
+        else {
             mSubscriptions = new CompositeDisposable();
             getLoginDetails();
 
             initSharedPreferences();
-            initDemoSlider();
 
             FirebaseMessaging.getInstance().unsubscribeFromTopic("Tymo");
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
             mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+
+            progressBox.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    public void onUpdateNeeded(String updateUrl, String version) {
+        progressBox.setVisibility(View.GONE);
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setTitle(getResources().getString(R.string.version_new_update_needed, version))
+                .setCancelable(false)
+                .setMessage(getResources().getString(R.string.version_new_update_text))
+                .setPositiveButton(getResources().getString(R.string.version_new_update),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                redirectStore(updateUrl);
+                            }
+                        }).setNegativeButton(getResources().getString(R.string.version_new_update_no_tks),
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        }).create();
+        dialog.show();
+    }
+
+    private void redirectStore(String updateUrl) {
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(updateUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
     }
 
     private void initDemoSlider(){
@@ -392,6 +436,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
+        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
         AppEventsLogger.activateApp(getApplication());
     }
 

@@ -527,4 +527,9 @@
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
 
+    <string name="version_new_update_needed">Versão %1$s disponível</string>
+    <string name="version_new_update_no_tks">Não, Obrigado</string>
+    <string name="version_new_update">Atualizar</string>
+    <string name="version_new_update_text">Por favor, atualize o app para poder continuar usando</string>
+
 </resources>
