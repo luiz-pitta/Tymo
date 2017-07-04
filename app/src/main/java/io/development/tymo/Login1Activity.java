@@ -114,6 +114,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
         initDemoSlider();
 
+        mSubscriptions = new CompositeDisposable();
+
         progressBox.setVisibility(View.VISIBLE);
     }
 
@@ -126,7 +128,6 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             startActivity(intent);
         }
         else {
-            mSubscriptions = new CompositeDisposable();
             getLoginDetails();
 
             initSharedPreferences();
@@ -436,7 +437,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     @Override
     protected void onResume() {
         super.onResume();
-        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
+        ForceUpdateChecker.with(this).onUpdateNeeded(this, mSubscriptions).check();
         AppEventsLogger.activateApp(getApplication());
     }
 

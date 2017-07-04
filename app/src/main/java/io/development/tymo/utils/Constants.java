@@ -19,6 +19,7 @@ public class Constants {
     public static final String INTRO = "intro";
     public static final String FORGOT_PASS = "forgot_pass";
     public static final String USER_CREDENTIALS = "user_credentials";
+    public static final String APP_INFO = "app_info";
     public static final String LOGIN_TYPE = "login_type";
     public static final String USER_NAME = "user_name";
 

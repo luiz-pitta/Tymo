@@ -719,7 +719,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        ForceUpdateChecker.with(this).onUpdateNeeded(this).check();
+        ForceUpdateChecker.with(this).onUpdateNeeded(this ,mSubscriptions).check();
 
         if(mNavigator != null) {
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);

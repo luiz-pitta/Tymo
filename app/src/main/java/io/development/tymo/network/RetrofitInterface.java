@@ -169,6 +169,9 @@ public interface RetrofitInterface {
     @GET("appInfo")
     Observable<ArrayList<AppInfoServer>> getAppInfo();
 
+    @GET("app_info_version")
+    Observable<AppInfoServer> getAppInfoVersionUpdate();
+
     @GET("bgFeed")
     Observable<ArrayList<BgFeedServer>> getBgFeed();
 

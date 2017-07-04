@@ -6,6 +6,8 @@ public class AppInfoServer implements Serializable {
     private static final long serialVersionUID = 53L;
 
     private String name, email, site, site_url, use_terms_url, privacy_policy_url;
+    private String version, play_store_url;
+    private boolean update_required;
 
     public void setName(String name) {
         this.name = name;
@@ -39,6 +41,14 @@ public class AppInfoServer implements Serializable {
         return email;
     }
 
+    public String getPlayStoreUrl() {
+        return play_store_url;
+    }
+
+    public String getVersion() {
+        return version;
+    }
+
     public String getSite() {
         return site;
     }
@@ -53,6 +63,10 @@ public class AppInfoServer implements Serializable {
 
     public String getPrivacyPoliceUrl() {
         return privacy_policy_url;
+    }
+
+    public boolean isUpdateRequired(){
+        return update_required;
     }
 
 }
