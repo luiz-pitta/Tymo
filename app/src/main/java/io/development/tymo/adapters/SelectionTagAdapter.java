@@ -3,6 +3,7 @@ package io.development.tymo.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,16 @@ import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import java.util.List;
 
 import io.development.tymo.R;
+import io.development.tymo.view_holder.FooterViewHolder;
 import io.development.tymo.view_holder.SelectionTagViewHolder;
 
-public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHolder> {
+public class SelectionTagAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder> {
 
     private List<String> tagList;
     private Context context;
+
+    private static final int TYPE_ITEM = 1;
+    private static final int TYPE_FOOTER = 2;
 
     public SelectionTagAdapter(List<String> tagList, Context context) {
         this.tagList = tagList;
@@ -27,16 +32,34 @@ public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHold
     }
 
     @Override
-    public SelectionTagViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SelectionTagViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_tag, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == TYPE_ITEM)
+            return new SelectionTagViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_tag, parent, false));
+        else
+            return new FooterViewHolder(LayoutInflater.from (parent.getContext ()).inflate (R.layout.footer_list_items_selects, parent, false));
     }
 
 
     @Override
-    public void onBindViewHolder(SelectionTagViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        String tag = tagList.get(position);
-        holder.text1.setText(tag);
+        if(holder instanceof SelectionTagViewHolder) {
+            SelectionTagViewHolder selectionTagViewHolder = (SelectionTagViewHolder)holder;
+            String tag = tagList.get(position);
+            selectionTagViewHolder.text1.setText(tag);
+        }
+    }
+
+    private boolean isPositionFooter (int position) {
+        return position == tagList.size ();
+    }
+
+    @Override
+    public int getItemViewType (int position) {
+        if(isPositionFooter (position))
+            return TYPE_FOOTER;
+
+        return TYPE_ITEM;
     }
 
 
@@ -81,7 +104,7 @@ public class SelectionTagAdapter extends MultiChoiceAdapter<SelectionTagViewHold
 
     @Override
     public int getItemCount() {
-        return tagList.size();
+        return tagList.size() + 1;
     }
 
 }

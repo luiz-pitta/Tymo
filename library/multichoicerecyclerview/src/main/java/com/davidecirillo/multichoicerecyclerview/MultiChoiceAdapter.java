@@ -181,10 +181,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         return selectedList;
     }
 
-    public boolean isPositionSelected(int position){
-        return mItemList.get(position).equals(State.ACTIVE);
-    }
-
     private void processSingleClick(int position) {
         if (mIsInMultiChoiceMode || mIsInSingleClickMode)
             processClick(position);
@@ -213,18 +209,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
 
     }
 
-    /**
-     * Remember to call this method before selecting or deselection something otherwise it won't vibrate
-     */
-    private void performVibrate() {
-        if (!mIsInMultiChoiceMode && !mIsInSingleClickMode && mRecyclerView != null) {
-            if (ContextCompat.checkSelfPermission(mRecyclerView.getContext(), Manifest.permission.VIBRATE) == PermissionChecker.PERMISSION_GRANTED) {
-                Vibrator v = (Vibrator) mRecyclerView.getContext().getSystemService(Context.VIBRATOR_SERVICE);
-                v.vibrate(10);
-            }
-        }
-    }
-
     private void perform(Action action, int position, boolean withCallback, boolean withVibration) {
         if (action == Action.SELECT) {
             mItemList.put(position, State.ACTIVE);
@@ -235,7 +219,7 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
         int selectedListSize = getSelectedItemListInternal().size();
 
         updateMultiChoiceMode(selectedListSize);
-        //processNotifyItemChanged(position);
+        processNotifyItemChanged(position);
 
         if (mListener != null && withCallback) {
             if (action == Action.SELECT) {
@@ -273,7 +257,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
     }
 
     private void performAll(Action action) {
-        //performVibrate();
 
         int selectedItems;
         State state;
@@ -289,7 +272,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
             mItemList.put(i, state);
         }
 
-        //updateToolbarIfNeeded(selectedItems);
         updateMultiChoiceMode(selectedItems);
 
         processNotifyDataSetChanged();
@@ -326,10 +308,6 @@ public abstract class MultiChoiceAdapter<VH extends RecyclerView.ViewHolder> ext
             mCurrentView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                   if (mItemList.get(holder.getAdapterPosition()).equals(State.ACTIVE))
-                       setActive(view, false);
-                   else
-                       setActive(view, true);
                     processSingleClick(holder.getAdapterPosition());
                 }
             });

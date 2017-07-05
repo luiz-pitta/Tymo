@@ -70,29 +70,10 @@
         android:layout_height="match_parent"
         android:layout_below="@id/horizontalBottomLine2">
 
-    <android.support.v4.widget.NestedScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true"
-        android:scrollbars="vertical">
-
-        <LinearLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerSelectView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/recyclerSelectView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
-
-            <Space
-                android:layout_width="match_parent"
-                android:layout_height="60dp"/>
-
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+            android:layout_height="match_parent"/>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

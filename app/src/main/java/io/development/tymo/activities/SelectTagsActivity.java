@@ -202,6 +202,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         });
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
+        itemDecoration.setDrawLastItem(false);
 
         mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
         mMultiChoiceRecyclerView.setHasFixedSize(true);
@@ -217,16 +218,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         selectionTagAdapter.setSingleClickMode(true);
 
-        if(selectionTagAdapter.getItemCount() > 60) {
-            Handler handler = new Handler();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    setProgress(false);
-                }
-            }, 750);
-        }else
-            setProgress(false);
+        setProgress(false);
 
         String query = searchView.getQuery().toString();
         if(!query.equals(""))

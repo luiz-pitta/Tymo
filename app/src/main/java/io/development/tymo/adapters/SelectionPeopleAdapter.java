@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,13 +21,18 @@ import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.model_server.User;
+import io.development.tymo.view_holder.FooterViewHolder;
 import io.development.tymo.view_holder.SelectionDialogViewHolder;
+import io.development.tymo.view_holder.SelectionTagViewHolder;
 
 
-public class SelectionPeopleAdapter extends MultiChoiceAdapter<SelectionDialogViewHolder> {
+public class SelectionPeopleAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder> {
 
     private List<User> personList;
     private final Context context;
+
+    private static final int TYPE_ITEM = 1;
+    private static final int TYPE_FOOTER = 2;
 
     public SelectionPeopleAdapter(List<User> personList, Context context) {
         this.personList = personList;
@@ -34,35 +40,40 @@ public class SelectionPeopleAdapter extends MultiChoiceAdapter<SelectionDialogVi
     }
 
     @Override
-    public SelectionDialogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        return new SelectionDialogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_profile, parent, false));
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        if(viewType == TYPE_ITEM)
+            return new SelectionDialogViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_choose_profile, parent, false));
+        else
+            return new FooterViewHolder(LayoutInflater.from (parent.getContext ()).inflate (R.layout.footer_list_items_selects, parent, false));
     }
 
 
     @Override
-    public void onBindViewHolder(SelectionDialogViewHolder holder, int position) {
-        User person = personList.get(position);
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        holder.text1.setText(person.getName());
+        if(holder instanceof SelectionDialogViewHolder) {
+            User person = personList.get(position);
+            SelectionDialogViewHolder  selectionDialogViewHolder = (SelectionDialogViewHolder)holder;
+            selectionDialogViewHolder.text1.setText(person.getName());
 
-        if(!person.getPhoto().matches("")) {
-            Glide.clear(holder.profilePhoto);
-            Glide.with(context)
-                    .load(person.getPhoto())
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(new BitmapImageViewTarget(holder.profilePhoto) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(context.getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            holder.profilePhoto.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
+            if (!person.getPhoto().matches("")) {
+                Glide.clear(selectionDialogViewHolder.profilePhoto);
+                Glide.with(context)
+                        .load(person.getPhoto())
+                        .asBitmap()
+                        .diskCacheStrategy(DiskCacheStrategy.ALL)
+                        .into(new BitmapImageViewTarget(selectionDialogViewHolder.profilePhoto) {
+                            @Override
+                            protected void setResource(Bitmap resource) {
+                                RoundedBitmapDrawable circularBitmapDrawable =
+                                        RoundedBitmapDrawableFactory.create(context.getResources(), resource);
+                                circularBitmapDrawable.setCircular(true);
+                                selectionDialogViewHolder.profilePhoto.setImageDrawable(circularBitmapDrawable);
+                            }
+                        });
+            } else
+                selectionDialogViewHolder.profilePhoto.setImageResource(R.drawable.ic_profile_photo_empty);
         }
-        else
-            holder.profilePhoto.setImageResource(R.drawable.ic_profile_photo_empty);
 
 
     }
@@ -88,6 +99,18 @@ public class SelectionPeopleAdapter extends MultiChoiceAdapter<SelectionDialogVi
         }
     }
 
+    private boolean isPositionFooter (int position) {
+        return position == personList.size ();
+    }
+
+    @Override
+    public int getItemViewType (int position) {
+        if(isPositionFooter (position))
+            return TYPE_FOOTER;
+
+        return TYPE_ITEM;
+    }
+
     private void clearData() {
         int size = personList.size();
         if (size > 0) {
@@ -109,7 +132,7 @@ public class SelectionPeopleAdapter extends MultiChoiceAdapter<SelectionDialogVi
 
     @Override
     public int getItemCount() {
-        return personList.size();
+        return personList.size() + 1;
     }
 
 }
