@@ -64,7 +64,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(adapter.getCount() > 60)
+            if(adapter.getCount() > 60 || query.equals(""))
                 recyclerView.showProgress();
             executeFilter(query);
             return true;
@@ -197,8 +197,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 m_contacts_qty = adapter.getCount();
 
                 if(m_contacts_qty == 0){
-                    findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
-                    findViewById(R.id.searchSelection).setVisibility(View.GONE);
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
                     findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
                     recyclerView.showEmpty();
@@ -292,6 +290,10 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
             m_contacts_qty = response.getPeople().size();
 
+            String query = searchView.getQuery().toString();
+            if(!query.equals(""))
+                executeFilter(query);
+
             if(m_contacts_qty == 0){
                 findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
                 findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
@@ -318,6 +320,10 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         adapter.addAll(users);
 
         m_contacts_qty = users.size();
+
+        String query = searchView.getQuery().toString();
+        if(!query.equals(""))
+            executeFilter(query);
 
         findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
         findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
@@ -348,17 +354,35 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         super.onSaveInstanceState(outState);
     }
 
-    private List<User> filter(List<User> models, String query) {
+    private String caseAndAccentInsensitive(String word) {
+        String textFold = "";
+
+        if (word == null)
+            return textFold;
+
+        word = word.toLowerCase();
+        //text = cleanUpSpecialChars(text);
+
+        for (int idx = 0; idx < word.length(); idx++) {
+            String letter = String.valueOf(word.charAt(idx));
+            textFold += Utilities.convertAccent(letter);
+        }
+
+        return "(?i).*" + textFold + ".*";
+    }
+
+    private ArrayList<User> filter(List<User> models, String query) {
+        if(models == null)
+            return new ArrayList<>();
+
         String lowerCaseQuery = query.toLowerCase();
+        lowerCaseQuery = caseAndAccentInsensitive(lowerCaseQuery);
 
-        List<User> filteredModelList = new ArrayList<>();
-
-        if(models != null) {
-            for (User model : models) {
-                String text = model.getName().toLowerCase();
-                if (text.contains(lowerCaseQuery)) {
-                    filteredModelList.add(model);
-                }
+        ArrayList<User> filteredModelList = new ArrayList<>();
+        for (User model : models) {
+            String text = model.getName().toLowerCase();
+            if (text.matches(lowerCaseQuery)) {
+                filteredModelList.add(model);
             }
         }
 
@@ -396,10 +420,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         if(m_contacts_qty == 0){
             recyclerView.setEmptyView(null);
-            findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
-            findViewById(R.id.searchSelection).setVisibility(View.GONE);
             recyclerView.showEmpty();
         }
         else if(m_contacts_qty == 1){

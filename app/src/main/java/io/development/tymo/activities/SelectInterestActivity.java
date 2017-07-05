@@ -54,7 +54,7 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60)
+            if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60 || query.equals(""))
                 setProgress(true);
             executeFilter(query);
             return true;
@@ -225,6 +225,10 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
             }, 1500);
         }else
             setProgress(false);
+
+        String query = searchView.getQuery().toString();
+        if(!query.equals(""))
+            executeFilter(query);
     }
 
     private void handleError(Throwable error) {
@@ -258,16 +262,34 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         super.onSaveInstanceState(outState);
     }
 
-    private List<String> filter(List<String> models, String query) {
+    private String caseAndAccentInsensitive(String word) {
+        String textFold = "";
+
+        if (word == null)
+            return textFold;
+
+        word = word.toLowerCase();
+        //text = cleanUpSpecialChars(text);
+
+        for (int idx = 0; idx < word.length(); idx++) {
+            String letter = String.valueOf(word.charAt(idx));
+            textFold += Utilities.convertAccent(letter);
+        }
+
+        return "(?i).*" + textFold + ".*";
+    }
+
+    private ArrayList<String> filter(List<String> models, String query) {
         if(models == null)
             return new ArrayList<>();
 
-        final String lowerCaseQuery = query.toLowerCase();
+        String lowerCaseQuery = query.toLowerCase();
+        lowerCaseQuery = caseAndAccentInsensitive(lowerCaseQuery);
 
-        final List<String> filteredModelList = new ArrayList<>();
+        ArrayList<String> filteredModelList = new ArrayList<>();
         for (String model : models) {
-            final String text = model.toLowerCase();
-            if (text.contains(lowerCaseQuery)) {
+            String text = model.toLowerCase();
+            if (text.matches(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }
         }

@@ -25,6 +25,7 @@ import io.development.tymo.model_server.ListUserWrapper;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -251,14 +252,34 @@ public class ShowGuestsActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
     }
 
+    private String caseAndAccentInsensitive(String word) {
+        String textFold = "";
+
+        if (word == null)
+            return textFold;
+
+        word = word.toLowerCase();
+        //text = cleanUpSpecialChars(text);
+
+        for (int idx = 0; idx < word.length(); idx++) {
+            String letter = String.valueOf(word.charAt(idx));
+            textFold += Utilities.convertAccent(letter);
+        }
+
+        return "(?i).*" + textFold + ".*";
+    }
 
     private ArrayList<User> filter(ArrayList<User> models, String query) {
+        if(models == null)
+            return new ArrayList<>();
+
         String lowerCaseQuery = query.toLowerCase();
+        lowerCaseQuery = caseAndAccentInsensitive(lowerCaseQuery);
 
         ArrayList<User> filteredModelList = new ArrayList<>();
         for (User model : models) {
             String text = model.getName().toLowerCase();
-            if (text.contains(lowerCaseQuery)) {
+            if (text.matches(lowerCaseQuery)) {
                 filteredModelList.add(model);
             }
         }

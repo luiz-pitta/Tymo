@@ -61,6 +61,53 @@ public class Utilities {
         return px/scaledDensity;
     }
 
+    public static String convertAccent(String letter){
+        switch (letter){
+            case "a":
+                return "[aàáâãäå]";
+            case "c":
+                return "[cç]";
+            case "e":
+                return "[eèéêë]";
+            case "i":
+                return "[iìíîï]";
+            case "n":
+                return "[nñ]";
+            case "o":
+                return "[oòóôõöø]";
+            case "s":
+                return "[sß]";
+            case "u":
+                return "[uùúûü]";
+            case "y":
+                return "[yÿ]";
+            case "(":
+                return "[(]";
+            case ")":
+                return "[)]";
+            case "*":
+                return "[*]";
+            case "?":
+                return "[?]";
+            case ".":
+                return "[.]";
+            case "|":
+                return "[|]";
+            case "{":
+                return "[{]";
+            case "}":
+                return "[}]";
+            case "^":
+                return "[^]";
+            case "[":
+                return "";
+            case "]":
+                return "";
+            default:
+                return letter;
+        }
+    }
+
     public static void buildAlertMessageNoGps(Context context) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.dialog_message, null);
