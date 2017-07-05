@@ -207,6 +207,7 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
 
         mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
+        mMultiChoiceRecyclerView.setHasFixedSize(true);
 
         List<String> stock_list = getIntent().getStringArrayListExtra("tags_list");
         for(i = 0; i < tagList.size() && stock_list.size() > 0; i++){

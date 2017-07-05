@@ -233,6 +233,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
 
         mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
+        mMultiChoiceRecyclerView.setHasFixedSize(true);
 
         if(stock_list != null) {
             for (i = 0; i < personList.size() && stock_list.size() > 0; i++) {
