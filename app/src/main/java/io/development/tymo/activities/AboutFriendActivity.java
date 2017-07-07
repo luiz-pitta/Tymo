@@ -58,8 +58,17 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
         url = (TextView) findViewById(R.id.infoToContact);
 
         fullName.setText(user.getName());
-        description.setText(user.getDescription());
-        url.setText(user.getUrl());
+
+        if(!user.getDescription().equals(""))
+            description.setText(user.getDescription());
+        else
+            findViewById(R.id.descriptionBox).setVisibility(View.GONE);
+
+        if(!user.getUrl().equals(""))
+            url.setText(user.getUrl());
+        else
+            findViewById(R.id.infoToContactBox).setVisibility(View.GONE);
+
 
         if(!user.getPhoto().matches("")) {
             Glide.clear(profilePhoto);
