@@ -76,6 +76,8 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         cleanButton = (TextView) findViewById(R.id.cleanButton);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
+        searchView.setQueryHint(getResources().getString(R.string.hint_search_interests));
+
         mSwipeRefreshLayout.setDistanceToTriggerSync(225);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {

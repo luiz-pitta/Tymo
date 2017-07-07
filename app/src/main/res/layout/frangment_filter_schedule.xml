@@ -26,15 +26,6 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <ImageView
-                    android:id="@+id/imageView"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_clock"
-                    android:tint="@color/grey_600" />
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -44,7 +35,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20dp"
-                        android:layout_marginTop="10dp"
                         android:layout_weight="1"
                         android:orientation="vertical">
 
@@ -134,26 +124,32 @@
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
 
-        <TextView
-            android:id="@+id/text"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:ellipsize="end"
-            android:lines="1"
-            android:text="@string/filter_schedule"
-            android:textColor="@color/grey_600"
-            android:textSize="16sp" />
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <ImageView
-            android:id="@+id/filterIconSchedule"
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="10dp"
-            android:layout_toRightOf="@+id/text"
-            android:src="@drawable/ic_filter"
-            android:tint="@color/deep_purple_400" />
+            <ImageView
+                android:id="@+id/filterIconSchedule"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_filter_schedule"
+                android:tint="@color/grey_600" />
+
+            <TextView
+                android:id="@+id/filterTextSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:lines="1"
+                android:text="@string/filter_schedule"
+                android:textColor="@color/grey_600"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/cleanSchedule"

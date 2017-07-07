@@ -205,7 +205,7 @@
                 android:layout_height="@dimen/horizontal_line_height"
                 android:background="@color/horizontal_line" />
 
-            <include layout="@layout/frangment_filter_interests" />
+            <include layout="@layout/frangment_filter_tags" />
 
             <View
                 android:id="@+id/topHorizontalLineInterests"

@@ -63,6 +63,9 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private UpdateButtonController controller;
     private FilterWrapper filterWrapper;
 
+    private TextView filterTextDate, filterTextFriends, filterTextLocation;
+    private TextView filterTextSchedule, filterTextInterests, filterTextWeekDays;
+
     private View topHorizontalLineInterests;
     private View topHorizontalLineFriends;
     private View topHorizontalLineLocal;
@@ -97,7 +100,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         public void onTagDeleted(final TagView view, final Tag tag, final int position) {
             view.remove(position);
             if(tagGroup.getTags().size() == 0) {
-                filterIconInterests.setVisibility(View.INVISIBLE);
+                filterIconInterests.setColorFilter(getResources().getColor(R.color.grey_600));
+                filterTextInterests.setTextColor(getResources().getColor(R.color.grey_600));
                 cleanInterests.setVisibility(View.INVISIBLE);
             }
         }
@@ -164,6 +168,13 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         proximityText = (TextView)findViewById(R.id.proximityText);
         popularText = (TextView)findViewById(R.id.popularityText);
         dateTimeText = (TextView)findViewById(R.id.dateHourText);
+
+        filterTextDate = (TextView)findViewById(R.id.filterTextDate);
+        filterTextFriends = (TextView)findViewById(R.id.filterTextFriends);
+        filterTextLocation = (TextView)findViewById(R.id.filterTextLocation);
+        filterTextSchedule = (TextView)findViewById(R.id.filterTextSchedule);
+        filterTextInterests = (TextView)findViewById(R.id.filterTextInterests);
+        filterTextWeekDays = (TextView)findViewById(R.id.filterTextWeekDays);
 
         proximityCorners = findViewById(R.id.proximityCorners);
         popularityCorners = findViewById(R.id.popularityCorners);
@@ -243,7 +254,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         hour_start = hourOfDay;
         timeStart.setText(time);
 
-        filterIconSchedule.setVisibility(View.VISIBLE);
+        filterIconSchedule.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+        filterTextSchedule.setTextColor(getResources().getColor(R.color.deep_purple_400));
         cleanSchedule.setVisibility(View.VISIBLE);
     }
 
@@ -282,7 +294,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             dateEnd.setText(date);
         }
 
-        filterIconDate.setVisibility(View.VISIBLE);
+        filterIconDate.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+        filterTextDate.setTextColor(getResources().getColor(R.color.deep_purple_400));
         cleanDate.setVisibility(View.VISIBLE);
 
     }
@@ -347,7 +360,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandableLayoutWeekDays = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutWeekDays);
         multichoiceRecyclerviewWeekDays = (RecyclerView) findViewById(R.id.multichoiceRecyclerviewWeekDays);
 
-        filterIconWeekDays.setVisibility(View.INVISIBLE);
+        filterIconWeekDays.setColorFilter(getResources().getColor(R.color.grey_600));
+        filterTextWeekDays.setTextColor(getResources().getColor(R.color.grey_600));
         cleanWeekDays.setVisibility(View.INVISIBLE);
         expandableLayoutWeekDays.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR));
         expandableLayoutWeekDays.setExpanded(false);
@@ -374,14 +388,16 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         selectionWeekDaysAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
-                filterIconWeekDays.setVisibility(View.VISIBLE);
+                filterIconWeekDays.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextWeekDays.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanWeekDays.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
                 if(selectionWeekDaysAdapter.getSelectedItemList().size() == 0){
-                    filterIconWeekDays.setVisibility(View.INVISIBLE);
+                    filterIconWeekDays.setColorFilter(getResources().getColor(R.color.grey_600));
+                    filterTextWeekDays.setTextColor(getResources().getColor(R.color.grey_600));
                     cleanWeekDays.setVisibility(View.INVISIBLE);
                 }
             }
@@ -405,7 +421,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             }
 
             if(filterServer.getWeekDays().size() > 0){
-                filterIconWeekDays.setVisibility(View.VISIBLE);
+                filterIconWeekDays.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextWeekDays.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanWeekDays.setVisibility(View.VISIBLE);
             }
         }
@@ -421,7 +438,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         timeStart = (TextView) findViewById(R.id.timeStart);
         timeEnd = (TextView) findViewById(R.id.timeEnd);
 
-        filterIconSchedule.setVisibility(View.INVISIBLE);
+        filterIconSchedule.setColorFilter(getResources().getColor(R.color.grey_600));
+        filterTextSchedule.setTextColor(getResources().getColor(R.color.grey_600));
         cleanSchedule.setVisibility(View.INVISIBLE);
         expandableLayoutSchedule.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR));
         expandableLayoutSchedule.setExpanded(false);
@@ -462,7 +480,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 timeStart.setText(time);
                 timeEnd.setText(time2);
 
-                filterIconSchedule.setVisibility(View.VISIBLE);
+                filterIconSchedule.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextSchedule.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanSchedule.setVisibility(View.VISIBLE);
             }
         }
@@ -478,7 +497,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         dateStart = (TextView) findViewById(R.id.dateStart);
         dateEnd = (TextView) findViewById(R.id.dateEnd);
 
-        filterIconDate.setVisibility(View.INVISIBLE);
+        filterIconDate.setColorFilter(getResources().getColor(R.color.grey_600));
+        filterTextDate.setTextColor(getResources().getColor(R.color.grey_600));
         cleanDate.setVisibility(View.INVISIBLE);
         expandableLayoutDate.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR));
         expandableLayoutDate.setExpanded(false);
@@ -524,7 +544,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 dateStart.setText(date);
                 dateEnd.setText(date2);
 
-                filterIconDate.setVisibility(View.VISIBLE);
+                filterIconDate.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextDate.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanDate.setVisibility(View.VISIBLE);
             }
         }
@@ -540,7 +561,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         locationText = (TextView) findViewById(R.id.locationText);
         mapText = (TextView) findViewById(R.id.mapText);
 
-        filterIconLocation.setVisibility(View.INVISIBLE);
+        filterIconLocation.setColorFilter(getResources().getColor(R.color.grey_600));
+        filterTextLocation.setTextColor(getResources().getColor(R.color.grey_600));
         cleanLocation.setVisibility(View.INVISIBLE);
         expandableLayoutLocation.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR));
         expandableLayoutLocation.setExpanded(false);
@@ -572,7 +594,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 lat = filterServer.getLat();
                 lng = filterServer.getLng();
                 locationText.setText(filterServer.getLocation());
-                filterIconLocation.setVisibility(View.VISIBLE);
+                filterIconLocation.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextLocation.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanLocation.setVisibility(View.VISIBLE);
                 LatLng latLng = new LatLng(lat, lng);
                 LatLngBounds latLngBounds = new LatLngBounds(latLng, latLng);
@@ -598,7 +621,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         recyclerView = (RecyclerView) findViewById(R.id.guestRow);
         addPersonButton = (ImageView) findViewById(R.id.addGuestButton);
 
-        filterIconFriends.setVisibility(View.INVISIBLE);
+        filterIconFriends.setColorFilter(getResources().getColor(R.color.grey_600));
+        filterTextFriends.setTextColor(getResources().getColor(R.color.grey_600));
         cleanFriends.setVisibility(View.INVISIBLE);
         expandableLayoutFriends.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR));
         expandableLayoutFriends.setExpanded(false);
@@ -638,7 +662,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                     listPerson.remove(position);
                     adapter.notifyItemRemoved(position);
                     if(listPerson.size() == 0) {
-                        filterIconFriends.setVisibility(View.INVISIBLE);
+                        filterIconFriends.setColorFilter(getResources().getColor(R.color.grey_600));
+                        filterTextFriends.setTextColor(getResources().getColor(R.color.grey_600));
                         cleanFriends.setVisibility(View.INVISIBLE);
                     }
                 }
@@ -657,7 +682,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             FilterServer filterServer = filterWrapper.getFilterServer();
             if(filterServer.getFriends().size() > 0) {
                 adapter.swap(filterServer.getFriends());
-                filterIconFriends.setVisibility(View.VISIBLE);
+                filterIconFriends.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextFriends.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanFriends.setVisibility(View.VISIBLE);
             }
         }
@@ -675,7 +701,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
-        filterIconInterests.setVisibility(View.INVISIBLE);
+        filterIconInterests.setColorFilter(getResources().getColor(R.color.grey_600));
+        filterTextInterests.setTextColor(getResources().getColor(R.color.grey_600));
         cleanInterests.setVisibility(View.INVISIBLE);
         expandableLayoutInterests.setInterpolator(Utils.createInterpolator(Utils.ACCELERATE_DECELERATE_INTERPOLATOR));
         expandableLayoutInterests.setExpanded(false);
@@ -722,7 +749,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 tagGroup.addTag(tag);
             }
             if(filterServer.getTags().size() > 0) {
-                filterIconInterests.setVisibility(View.VISIBLE);
+                filterIconInterests.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextInterests.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanInterests.setVisibility(View.VISIBLE);
             }
         }
@@ -751,7 +779,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 lat = selectedPlace.getLatLng().latitude;
                 lng = selectedPlace.getLatLng().longitude;
                 locationText.setText(name);
-                filterIconLocation.setVisibility(View.VISIBLE);
+                filterIconLocation.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextLocation.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanLocation.setVisibility(View.VISIBLE);
             }
         }else if (requestCode == 133) {
@@ -761,7 +790,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
                 list.addAll(wrap.getItemDetails());
                 adapter.swap(list);
-                filterIconFriends.setVisibility(View.VISIBLE);
+                filterIconFriends.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextFriends.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanFriends.setVisibility(View.VISIBLE);
             }
         }else if (requestCode == 135) {
@@ -789,7 +819,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                     tag.isDeletable = true;
                     tagGroup.addTag(tag);
                 }
-                filterIconInterests.setVisibility(View.VISIBLE);
+                filterIconInterests.setColorFilter(getResources().getColor(R.color.deep_purple_400));
+                filterTextInterests.setTextColor(getResources().getColor(R.color.deep_purple_400));
                 cleanInterests.setVisibility(View.VISIBLE);
             }
         }
@@ -1013,21 +1044,25 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
             //Interest
             tagGroup.removeAll();
-            filterIconInterests.setVisibility(View.INVISIBLE);
+            filterIconInterests.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextInterests.setTextColor(getResources().getColor(R.color.grey_600));
             cleanInterests.setVisibility(View.INVISIBLE);
             //Friends
             adapter.clearData();
             listPerson.clear();
-            filterIconFriends.setVisibility(View.INVISIBLE);
+            filterIconFriends.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextFriends.setTextColor(getResources().getColor(R.color.grey_600));
             cleanFriends.setVisibility(View.INVISIBLE);
             //Location
             locationText.setText(getResources().getString(R.string.filter_local));
             lat = -500;
             lng = -500;
-            filterIconLocation.setVisibility(View.INVISIBLE);
+            filterIconLocation.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextLocation.setTextColor(getResources().getColor(R.color.grey_600));
             cleanLocation.setVisibility(View.INVISIBLE);
             //Date
-            filterIconDate.setVisibility(View.INVISIBLE);
+            filterIconDate.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextDate.setTextColor(getResources().getColor(R.color.grey_600));
             cleanDate.setVisibility(View.INVISIBLE);
             dateStart.setText(getResources().getString(R.string.hint_date));
             dateEnd.setText(getResources().getString(R.string.hint_date));
@@ -1038,7 +1073,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             month_end = -1;
             year_end = -1;
             //Schedule
-            filterIconSchedule.setVisibility(View.INVISIBLE);
+            filterIconSchedule.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextSchedule.setTextColor(getResources().getColor(R.color.grey_600));
             cleanSchedule.setVisibility(View.INVISIBLE);
             timeStart.setText(getResources().getString(R.string.hint_time));
             timeEnd.setText(getResources().getString(R.string.hint_time));
@@ -1047,7 +1083,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             hour_start = -1;
             hour_end = -1;
             //WeekDays
-            filterIconWeekDays.setVisibility(View.INVISIBLE);
+            filterIconWeekDays.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextWeekDays.setTextColor(getResources().getColor(R.color.grey_600));
             cleanWeekDays.setVisibility(View.INVISIBLE);
             selectionWeekDaysAdapter.deselectAll();
             //buttons
@@ -1077,7 +1114,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
             //Interest
             tagGroup.removeAll();
-            filterIconInterests.setVisibility(View.INVISIBLE);
+            filterIconInterests.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextInterests.setTextColor(getResources().getColor(R.color.grey_600));
             cleanInterests.setVisibility(View.INVISIBLE);
         }else if(v == cleanFriends){
             Bundle bundle = new Bundle();
@@ -1088,7 +1126,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             //Friends
             adapter.clearData();
             listPerson.clear();
-            filterIconFriends.setVisibility(View.INVISIBLE);
+            filterIconFriends.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextFriends.setTextColor(getResources().getColor(R.color.grey_600));
             cleanFriends.setVisibility(View.INVISIBLE);
         }else if(v == cleanLocation){
             Bundle bundle = new Bundle();
@@ -1100,7 +1139,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             locationText.setText(getResources().getString(R.string.filter_local));
             lat = -500;
             lng = -500;
-            filterIconLocation.setVisibility(View.INVISIBLE);
+            filterIconLocation.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextLocation.setTextColor(getResources().getColor(R.color.grey_600));
             cleanLocation.setVisibility(View.INVISIBLE);
         }else if(v == cleanDate){
             Bundle bundle = new Bundle();
@@ -1109,7 +1149,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Date
-            filterIconDate.setVisibility(View.INVISIBLE);
+            filterIconDate.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextDate.setTextColor(getResources().getColor(R.color.grey_600));
             cleanDate.setVisibility(View.INVISIBLE);
             dateStart.setText(getResources().getString(R.string.hint_date));
             dateEnd.setText(getResources().getString(R.string.hint_date));
@@ -1126,7 +1167,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //Schedule
-            filterIconSchedule.setVisibility(View.INVISIBLE);
+            filterIconSchedule.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextSchedule.setTextColor(getResources().getColor(R.color.grey_600));
             cleanSchedule.setVisibility(View.INVISIBLE);
             timeStart.setText(getResources().getString(R.string.hint_time));
             timeEnd.setText(getResources().getString(R.string.hint_time));
@@ -1141,19 +1183,20 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             //WeekDays
-            filterIconWeekDays.setVisibility(View.INVISIBLE);
+            filterIconWeekDays.setColorFilter(getResources().getColor(R.color.grey_600));
+            filterTextWeekDays.setTextColor(getResources().getColor(R.color.grey_600));
             cleanWeekDays.setVisibility(View.INVISIBLE);
             selectionWeekDaysAdapter.deselectAll();
         }
     }
 
     public boolean checkFilterAvailable() {
-        return (!(  filterIconInterests.getVisibility() == View.INVISIBLE
-                 && filterIconFriends.getVisibility()   == View.INVISIBLE
-                 && filterIconLocation.getVisibility()  == View.INVISIBLE
-                 && filterIconDate.getVisibility()      == View.INVISIBLE
-                 && filterIconSchedule.getVisibility()  == View.INVISIBLE
-                 && filterIconWeekDays.getVisibility()  == View.INVISIBLE
+        return (!(  cleanInterests.getVisibility() == View.INVISIBLE
+                 && cleanFriends.getVisibility()   == View.INVISIBLE
+                 && cleanLocation.getVisibility()  == View.INVISIBLE
+                 && cleanDate.getVisibility()      == View.INVISIBLE
+                 && cleanSchedule.getVisibility()  == View.INVISIBLE
+                 && cleanWeekDays.getVisibility()  == View.INVISIBLE
                  && controller.checkAllUnselected()));
     }
 

@@ -228,8 +228,7 @@
     <string name="filter_date_to">Até</string>
     <string name="filter_date">Data</string>
     <string name="filter_friends">Amigos</string>
-    <string name="filter_interests_tags">TAGS de Interesses</string>
-    <string name="filter_interests">Interesses</string>
+    <string name="filter_tags">TAGS de Interesses</string>
     <string name="filter_local">Local</string>
     <string name="filter_popularity">Popularidade</string>
     <string name="filter_proximity_enable">Ative a sua localização em Configurações para poder usar esse filtro</string>
@@ -264,6 +263,8 @@
     <string name="hint_local_filter">Local</string>
     <string name="hint_local">Insira um local (opcional)</string>
     <string name="hint_search">Pesquisar...</string>
+    <string name="hint_search_tags">Encontre tags...</string>
+    <string name="hint_search_interests">Encontre interesses...</string>
     <string name="hint_time">Horário</string>
     <string name="hint_title">Insira um título</string>
     <string name="hint_whatsapp_group_link">Link do grupo no WhatsApp (opcional)</string>
