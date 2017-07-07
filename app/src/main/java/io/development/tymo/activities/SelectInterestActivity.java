@@ -54,8 +54,8 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60 || query.equals(""))
-                setProgress(true);
+            //if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60 || query.equals(""))
+            //    setProgress(true);
             executeFilter(query);
             return true;
         }

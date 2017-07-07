@@ -54,8 +54,8 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60 || query.equals(""))
-                setProgress(true);
+            //if(selectionTagAdapter != null && selectionTagAdapter.getItemCount() > 60 || query.equals(""))
+            //    setProgress(true);
             executeFilter(query);
             return true;
         }

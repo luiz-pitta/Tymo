@@ -58,8 +58,8 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(selectionPeopleAdapter.getItemCount() > 50 || query.equals(""))
-                setProgress(true);
+            //if(selectionPeopleAdapter.getItemCount() > 50 || query.equals(""))
+            //    setProgress(true);
             executeFilter(query);
             return true;
         }
