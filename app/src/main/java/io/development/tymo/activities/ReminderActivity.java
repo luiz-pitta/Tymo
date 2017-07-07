@@ -588,7 +588,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             activityServer.setDateTimeListStart(date_time_list_start);
 
             if (repeat_type > 0) {
-                if (sameDay(y, m, d, getReminder().getYearStart(), getReminder().getMonthStart(), getReminder().getDayStart())) // So editar os dados
+                if (sameDay(y, m+1, d, getReminder().getYearStart(), getReminder().getMonthStart(), getReminder().getDayStart())) // So editar os dados
                     activityServer.setVisibility(1);
                 else
                     activityServer.setVisibility(2);

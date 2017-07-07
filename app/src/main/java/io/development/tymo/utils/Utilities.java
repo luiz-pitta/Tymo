@@ -103,6 +103,8 @@ public class Utilities {
                 return "";
             case "]":
                 return "";
+            case "+":
+                return "";
             default:
                 return letter;
         }

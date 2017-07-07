@@ -1392,7 +1392,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             }
 
             if (repeat_type > 0) {
-                if (sameDay(y, m, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
+                if (sameDay(y, m+1, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
                         && sameDay(date.get(5), date.get(4) + 1, date.get(3), getActivity().getYearEnd(), getActivity().getMonthEnd(), getActivity().getDayEnd())) // So editar os dados
                     activityServer.setId(1);
                 else
