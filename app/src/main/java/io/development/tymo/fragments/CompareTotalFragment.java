@@ -68,6 +68,7 @@ public class CompareTotalFragment extends Fragment{
 
         recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerView.setNestedScrollingEnabled(false);
 
         adapter = new CompareAdapter(data, getActivity(), false, (CompareActivity)getActivity());
 

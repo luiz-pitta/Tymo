@@ -1,5 +1,6 @@
 package io.development.tymo.fragments;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
@@ -77,6 +78,8 @@ public class CommitmentFragment extends Fragment{
 
         recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recyclerView.getRecyclerView().setNestedScrollingEnabled(false);
 
         if(screen == Utilities.TYPE_FRIEND)
             callback = (FriendProfileActivity)getActivity();

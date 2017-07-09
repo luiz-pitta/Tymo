@@ -73,6 +73,8 @@ public class CompareFreeFragment extends Fragment{
         recyclerView.addItemDecoration(itemDecoration);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+        recyclerView.setNestedScrollingEnabled(false);
+
         CompareActivity activity = (CompareActivity)getActivity();
         List<CompareModel> list = activity.getListCompare();
 

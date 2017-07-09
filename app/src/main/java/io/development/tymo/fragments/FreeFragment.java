@@ -2,6 +2,7 @@ package io.development.tymo.fragments;
 
 
 import android.app.Fragment;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -87,6 +88,8 @@ public class FreeFragment extends Fragment {
             weekAdapter = new PlansAdapter(view.getContext(), screen, fragment, null, true);
             recyclerView.setEmptyView(R.layout.empty_commitments_of_the_day);
         }
+
+        recyclerView.getRecyclerView().setNestedScrollingEnabled(false);
 
         recyclerView.setAdapterWithProgress(weekAdapter);
         recyclerView.showProgress();
