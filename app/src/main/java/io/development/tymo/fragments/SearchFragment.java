@@ -555,6 +555,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         int month = c.get(Calendar.MONTH)+1;
         int year = c.get(Calendar.YEAR);
 
+        mQuery = Utilities.cleanBackSlash(mQuery);
+
         Query query = new Query();
         query.setEmail(email);
         query.setQuery(mQuery);

@@ -354,36 +354,16 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         super.onSaveInstanceState(outState);
     }
 
-    private String caseAndAccentInsensitive(String word) {
-        String textFold = "";
-
-        if (word == null)
-            return textFold;
-
-        word = word.toLowerCase();
-        //text = cleanUpSpecialChars(text);
-
-        for (int idx = 0; idx < word.length(); idx++) {
-            String letter = String.valueOf(word.charAt(idx));
-            textFold += Utilities.convertAccent(letter);
-        }
-
-        return "(?i).*" + textFold + ".*";
-    }
-
     private ArrayList<User> filter(List<User> models, String query) {
         if(models == null)
             return new ArrayList<>();
 
-        String lowerCaseQuery = query.toLowerCase();
-        lowerCaseQuery = caseAndAccentInsensitive(lowerCaseQuery);
-
         ArrayList<User> filteredModelList = new ArrayList<>();
         for (User model : models) {
             String text = model.getName().toLowerCase();
-            if (text.matches(lowerCaseQuery)) {
+            if (Utilities.isListContainsQuery(text, query))
                 filteredModelList.add(model);
-            }
+
         }
 
         return filteredModelList;

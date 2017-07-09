@@ -61,7 +61,50 @@ public class Utilities {
         return px/scaledDensity;
     }
 
-    public static String convertAccent(String letter){
+    public static String cleanBackSlash(String word) {
+        String newWord = "";
+        for (int idx = 0; idx < word.length(); idx++) {
+            String letter = String.valueOf(word.charAt(idx));
+            if(!letter.contains("\\"))
+                newWord += letter;
+        }
+        return newWord;
+
+    }
+
+    public static String caseAndAccentInsensitive(String word) {
+        String textFold = "";
+
+        if (word == null)
+            return textFold;
+
+        word = word.toLowerCase();
+        word = cleanBackSlash(word);
+
+        for (int idx = 0; idx < word.length(); idx++) {
+            String letter = String.valueOf(word.charAt(idx));
+            textFold += convertAccent(letter);
+        }
+
+        return "(?i).*" + textFold + ".*";
+    }
+
+    public static boolean isListContainsQuery(String word, String query){
+        boolean contains;
+        String pattern;
+
+        query = query.toLowerCase();
+        pattern = caseAndAccentInsensitive(query);
+
+        try {
+            contains = word.matches(pattern) || word.contains(query);
+        }catch (Exception e){
+            contains = word.contains(query);
+        }
+        return contains;
+    }
+
+    private static String convertAccent(String letter){
         switch (letter){
             case "a":
                 return "[aàáâãäå]";
