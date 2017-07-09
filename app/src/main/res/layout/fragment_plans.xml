@@ -8,6 +8,7 @@
         android:id="@+id/listPlans"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         app:scrollbarStyle="insideOverlay"
         app:layout_progress="@layout/progress_loading_list" />
 

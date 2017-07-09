@@ -175,6 +175,13 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                         deselectAll.setVisibility(View.VISIBLE);
 
                     contactsQty.setText(String.valueOf(listPerson.size()));
+                }else if(position > 0) {
+                    String name = listPerson.get(position).getName();
+                    String email = listPerson.get(position).getEmail();
+                    Intent myIntent = new Intent(CompareActivity.this, FriendProfileActivity.class);
+                    myIntent.putExtra("name", name);
+                    myIntent.putExtra("friend_email", email);
+                    startActivity(myIntent);
                 }
             }
 
@@ -338,7 +345,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             month = cal.get(Calendar.MONTH)+1;
             invited = listPerson.get(i).getEmail();
 
-            CompareModel compareModel = new CompareModel(listPerson.get(i).getPhoto(), listPerson.get(i).getName());
+            CompareModel compareModel = new CompareModel(listPerson.get(i).getPhoto(), listPerson.get(i).getName(), listPerson.get(i).getEmail());
 
             int j;
             for(j = 0; j < response.getMyCommitAct().size(); j++) {

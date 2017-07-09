@@ -1631,6 +1631,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 5);
         recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setNestedScrollingEnabled(false);
 
         CustomizeAddActivityAdapter adapter;
 

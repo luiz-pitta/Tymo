@@ -2,6 +2,7 @@ package io.development.tymo.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.development.tymo.R;
+import io.development.tymo.activities.FriendProfileActivity;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.DateTymo;
 import io.development.tymo.model_server.FlagServer;
@@ -43,7 +45,7 @@ import io.development.tymo.utils.Utilities;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHolder> {
+public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareUserViewHolder> {
 
     private List<CompareModel> compareList;
     private List<Integer> dateList;
@@ -52,14 +54,14 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHo
     private boolean free;
     private CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback;
 
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class CompareUserViewHolder extends RecyclerView.ViewHolder {
         private ImageView profilePhoto;
         private TextView profileName;
         private EasyRecyclerView mRecyclerView;
         private PlansCardsAdapter adapter;
         private FirebaseAnalytics mFirebaseAnalytics;
 
-        public MyViewHolder(View view) {
+        public CompareUserViewHolder(View view) {
             super(view);
             profilePhoto = (ImageView) view.findViewById(R.id.profilePhoto);
             profileName = (TextView) view.findViewById(R.id.profileName);
@@ -71,9 +73,22 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHo
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
-            if (free) {
+            if (free)
                 mRecyclerView.setEmptyView(R.layout.empty_free_time);
-            }
+
+            profileName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openFriend(getAdapterPosition());
+                }
+            });
+
+            profilePhoto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    openFriend(getAdapterPosition());
+                }
+            });
 
             adapter = new PlansCardsAdapter(view.getContext());
 
@@ -125,6 +140,17 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHo
 
             view.findViewById(R.id.dayDate).setVisibility(View.GONE);
         }
+
+        private void openFriend(int position){
+            if(position > 0) {
+                String name = compareList.get(position).getName();
+                String email = compareList.get(position).getEmail();
+                Intent myIntent = new Intent(context, FriendProfileActivity.class);
+                myIntent.putExtra("name", name);
+                myIntent.putExtra("friend_email", email);
+                context.startActivity(myIntent);
+            }
+        }
     }
 
     public CompareAdapter(List<CompareModel> compareList, Context context, boolean free, CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback) {
@@ -136,18 +162,18 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.MyViewHo
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public CompareUserViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.list_item_plans, parent, false);
 
         itemView.getLayoutParams().height = (int) Utilities.convertDpToPixel(100, context);
         settings = itemView.getContext().getSharedPreferences(Utilities.PREFS_NAME, MODE_PRIVATE);
 
-        return new MyViewHolder(itemView);
+        return new CompareUserViewHolder(itemView);
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, int position) {
+    public void onBindViewHolder(CompareUserViewHolder holder, int position) {
         CompareModel compare = compareList.get(position);
 
         if (!compare.getPhoto().matches("")) {
