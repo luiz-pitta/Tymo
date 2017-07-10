@@ -145,10 +145,12 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void run() {
                 List<User> filteredModelList = filter(personList, query);
-                selectionPeopleAdapter.swap(filteredModelList);
-                selectionPeopleAdapter.deselectAll();
-                setSelectionQuery();
-                mMultiChoiceRecyclerView.scrollToPosition(0);
+                if(selectionPeopleAdapter !=null) {
+                    selectionPeopleAdapter.swap(filteredModelList);
+                    selectionPeopleAdapter.deselectAll();
+                    setSelectionQuery();
+                    mMultiChoiceRecyclerView.scrollToPosition(0);
+                }
                 setProgress(false);
             }
         });

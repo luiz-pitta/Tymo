@@ -141,10 +141,12 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
             @Override
             public void run() {
                 List<String> filteredModelList = filter(tagList, query);
-                selectionTagAdapter.swap(filteredModelList);
-                selectionTagAdapter.deselectAll();
-                mMultiChoiceRecyclerView.scrollToPosition(0);
-                setSelectionQuery();
+                if(selectionTagAdapter != null) {
+                    selectionTagAdapter.swap(filteredModelList);
+                    selectionTagAdapter.deselectAll();
+                    mMultiChoiceRecyclerView.scrollToPosition(0);
+                    setSelectionQuery();
+                }
                 setProgress(false);
             }
         });

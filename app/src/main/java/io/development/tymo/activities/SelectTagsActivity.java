@@ -138,10 +138,12 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void run() {
                 List<String> filteredModelList = filter(tagList, query);
-                selectionTagAdapter.swap(filteredModelList);
-                selectionTagAdapter.deselectAll();
-                mMultiChoiceRecyclerView.scrollToPosition(0);
-                setSelectionQuery();
+                if(selectionTagAdapter !=null) {
+                    selectionTagAdapter.swap(filteredModelList);
+                    selectionTagAdapter.deselectAll();
+                    mMultiChoiceRecyclerView.scrollToPosition(0);
+                    setSelectionQuery();
+                }
                 setProgress(false);
             }
         });
