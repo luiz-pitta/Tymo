@@ -46,6 +46,7 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
     private TextView whoCanInvite, guestsNumber;
     private TextView feedVisibility;
     private ImageView addGuestButton;
+    private View progressLoadingBox, whoLinearBox;
     private final int GUEST_UPDATE = 37, ADD_GUEST = 39;
 
     private RecyclerView recyclerView;
@@ -85,6 +86,8 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
         addGuestButton = (ImageView) view.findViewById(R.id.addGuestButton);
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
+        progressLoadingBox = view.findViewById(R.id.progressLoadingBox);
+        whoLinearBox = view.findViewById(R.id.whoLinearBox);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setNestedScrollingEnabled(false);
@@ -133,7 +136,8 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
         if(resultCode == RESULT_OK) {
             if (requestCode == GUEST_UPDATE) {
                 ShowActivity showActivity = (ShowActivity) getActivity();
-                showActivity.refreshItems();
+                setProgress(true);
+                showActivity.updateLayout();
             } else if (requestCode == ADD_GUEST) {
                 ShowActivity showActivity = (ShowActivity) getActivity();
                 ActivityServer activityServer = new ActivityServer();
@@ -191,6 +195,17 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
                 addGuestButton.setOnClickListener(null);
                 addGuestButton.setVisibility(View.GONE);
             }
+        }
+    }
+
+    public void setProgress(boolean progress){
+        if(progress) {
+            whoLinearBox.setVisibility(View.INVISIBLE);
+            progressLoadingBox.setVisibility(View.VISIBLE);
+        }
+        else {
+            whoLinearBox.setVisibility(View.VISIBLE);
+            progressLoadingBox.setVisibility(View.GONE);
         }
     }
 

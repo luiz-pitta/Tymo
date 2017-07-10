@@ -565,7 +565,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     }
 
     public void setActivityGuestInformation(long id, ActivityServer activityServer) {
-        setProgress(true);
+        WhoEditFragment whoEditFragment = (WhoEditFragment) mNavigator.getFragment(2);
+        whoEditFragment.setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().getActivity2(id, activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -597,7 +598,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         WhoEditFragment whoEditFragment = (WhoEditFragment) mNavigator.getFragment(2);
         whoEditFragment.setLayout(getActivity(), invitedList, confirmedList, edit);
 
-        setProgress(false);
+        whoEditFragment.setProgress(false);
     }
 
     public ActivityServer getActivity() {

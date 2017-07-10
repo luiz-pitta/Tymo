@@ -253,6 +253,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
 
         mDateText.setText(getResources().getString(R.string.date_format_3, day_text, String.format("%02d", day_start), month_text, year_start));
 
+        setProgress(true);
         setCompare(plans);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -297,7 +298,17 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     }
 
     private void setCompare(Plans plans) {
-        setProgress(true);
+        //setProgress(true);
+        CompareTotalFragment compareTotalFragment = (CompareTotalFragment) mNavigator.getFragment(0);
+        CompareFreeFragment compareFreeFragment = (CompareFreeFragment) mNavigator.getFragment(1);
+
+        if (compareFreeFragment != null)
+            compareFreeFragment.setProgress(true);
+
+
+        if (compareTotalFragment != null)
+            compareTotalFragment.setProgress(true);
+
         mSubscriptions.add(NetworkUtil.getRetrofit().getCompare(plans)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -580,10 +591,13 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         if(compareFreeFragment != null) {
             mNavigator.resetFragments(mNavigator.getCurrentPosition());
             compareFreeFragment.setDataAdapter(listCompare);
+            compareFreeFragment.setProgress(false);
         }
 
-        if(compareTotalFragment != null)
+        if(compareTotalFragment != null) {
             compareTotalFragment.setDataAdapter(listCompare);
+            compareTotalFragment.setProgress(false);
+        }
 
         setProgress(false);
     }

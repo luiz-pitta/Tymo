@@ -34,6 +34,7 @@ public class CompareTotalFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private CompareAdapter adapter;
+    private View progressLoadingBox;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     List<CompareModel> data = new ArrayList<>();
@@ -65,6 +66,7 @@ public class CompareTotalFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listPlans);
+        progressLoadingBox = view.findViewById(R.id.progressLoadingBox);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(getActivity(),R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, getActivity()));
@@ -81,26 +83,35 @@ public class CompareTotalFragment extends Fragment{
         CompareActivity activity = (CompareActivity)getActivity();
         List<CompareModel> list = activity.getListCompare();
 
-        for (int i = 0; i < list.size(); i++){
-            data.add(list.get(i));
-            adapter.notifyItemInserted(i);
-        }
+        data.addAll(list);
+        adapter.notifyDataSetChanged();
 
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
 
     public void setDataAdapter(List<CompareModel> list){
         adapter.clear();
-        for (int i = 0; i < list.size(); i++){
-            data.add(list.get(i));
-            adapter.notifyItemInserted(i);
-        }
+        data.clear();
+
+        data.addAll(list);
+        adapter.notifyDataSetChanged();
     }
 
     public void updateDelete(int position){
         if(adapter!=null) {
             data.remove(position);
             adapter.notifyItemRemoved(position);
+        }
+    }
+
+    public void setProgress(boolean progress){
+        if(progress) {
+            recyclerView.setVisibility(View.GONE);
+            progressLoadingBox.setVisibility(View.VISIBLE);
+        }
+        else {
+            recyclerView.setVisibility(View.VISIBLE);
+            progressLoadingBox.setVisibility(View.GONE);
         }
     }
 

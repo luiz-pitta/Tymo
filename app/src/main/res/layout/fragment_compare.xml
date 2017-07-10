@@ -12,4 +12,11 @@
         app:layout_progress="@layout/progress_loading_screen"
         />
 
+    <include
+        android:id="@+id/progressLoadingBox"
+        layout="@layout/progress_loading_feed"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 </FrameLayout>

@@ -34,6 +34,7 @@ public class CompareFreeFragment extends Fragment{
 
     private RecyclerView recyclerView;
     private CompareAdapter adapter;
+    private View progressLoadingBox;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     List<CompareModel> data = new ArrayList<>();
@@ -65,6 +66,7 @@ public class CompareFreeFragment extends Fragment{
         super.onViewCreated(view, savedInstanceState);
 
         adapter = new CompareAdapter(data, getActivity(), true, (CompareActivity)getActivity());
+        progressLoadingBox = view.findViewById(R.id.progressLoadingBox);
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.listPlans);
@@ -82,11 +84,8 @@ public class CompareFreeFragment extends Fragment{
         CompareActivity activity = (CompareActivity)getActivity();
         List<CompareModel> list = activity.getListCompare();
 
-        for (int i = 0; i < list.size(); i++){
-            data.add(list.get(i));
-            adapter.notifyItemInserted(i);
-        }
-
+        data.addAll(list);
+        adapter.notifyDataSetChanged();
         adapter.setDateList(activity.getTodayDate());
 
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -94,9 +93,20 @@ public class CompareFreeFragment extends Fragment{
 
     public void setDataAdapter(List<CompareModel> list){
         adapter.clear();
-        for (int i = 0; i < list.size(); i++){
-            data.add(list.get(i));
-            adapter.notifyItemInserted(i);
+        data.clear();
+
+        data.addAll(list);
+        adapter.notifyDataSetChanged();
+    }
+
+    public void setProgress(boolean progress){
+        if(progress) {
+            recyclerView.setVisibility(View.GONE);
+            progressLoadingBox.setVisibility(View.VISIBLE);
+        }
+        else {
+            recyclerView.setVisibility(View.VISIBLE);
+            progressLoadingBox.setVisibility(View.GONE);
         }
     }
 

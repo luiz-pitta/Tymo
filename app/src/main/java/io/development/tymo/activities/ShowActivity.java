@@ -245,18 +245,21 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                mSwipeRefreshLayout.setRefreshing(false);
-                ActivityServer activityServer = new ActivityServer();
-                SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                String email = mSharedPreferences.getString(Constants.EMAIL, "");
-                activityServer.setId(0);
-                activityServer.setCreator(email);
-
-                setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
+                updateLayout();
             }
         }, 200);
 
         // Load complete
+    }
+
+    public void updateLayout(){
+        ActivityServer activityServer = new ActivityServer();
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        activityServer.setId(0);
+        activityServer.setCreator(email);
+
+        setActivityInformationRefresh(activityWrapper.getActivityServer().getId(), activityServer);
     }
 
     public void setProgress(boolean progress) {
@@ -269,6 +272,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private void setActivityInformation(long id, ActivityServer activityServer) {
         setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().getActivity2(id, activityServer)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse, this::handleError));
+    }
+
+    private void setActivityInformationRefresh(long id, ActivityServer activityServer) {
+
         mSubscriptions.add(NetworkUtil.getRetrofit().getActivity2(id, activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -595,11 +606,15 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             permissionInvite = checkIfCanInvite(getActivity().getInvitationType());
 
             WhoShowFragment whoShowFragment = (WhoShowFragment) mNavigator.getFragment(2);
-            if (whoShowFragment != null)
+            if (whoShowFragment != null) {
                 whoShowFragment.setLayout(activityServer, invitedList, confirmedList, permissionInvite);
+                whoShowFragment.setProgress(false);
+            }
         }
 
         setProgress(false);
+
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     public boolean getPermissionInvite() {

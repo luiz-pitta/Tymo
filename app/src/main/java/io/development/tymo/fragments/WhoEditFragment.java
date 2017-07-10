@@ -56,8 +56,10 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     private TextView feedVisibility;
     private ImageView addPersonButton;
     private int invite = 0;
+    private View progressLoadingBox, whoLinearBox;
     private RecyclerView recyclerView;
     private MaterialSpinner spinner;
+
     private View profilesPhotos;
     private LinearLayout guestBox;
     private boolean isEdit = false;
@@ -102,6 +104,8 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         profilesPhotos = view.findViewById(R.id.profilesPhotos);
         guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
         addPersonButton = (ImageView) view.findViewById(R.id.addGuestButton);
+        progressLoadingBox = view.findViewById(R.id.progressLoadingBox);
+        whoLinearBox = view.findViewById(R.id.whoLinearBox);
 
         addPersonButton.setOnClickListener(this);
 
@@ -140,7 +144,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
 
         if(addActivity.getActivity() == null || addActivity.getUserList() == null || (addActivity.getUserList() != null && addActivity.getUserList().size() == 0)) {
             getUser(email);
-            addActivity.setProgress(true);
+            setProgress(true);
         }
         else {
             setLayout(addActivity.getActivity(), addActivity.getUserList(), addActivity.getConfirmedList(), addActivity.getEditable());
@@ -199,7 +203,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
             addPersonButton.setActivated(true);
         }
 
-        addActivity.setProgress(false);
+        setProgress(false);
     }
 
     private void handleError(Throwable error) {
@@ -208,6 +212,16 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
     }
 
+    public void setProgress(boolean progress){
+        if(progress) {
+            whoLinearBox.setVisibility(View.INVISIBLE);
+            progressLoadingBox.setVisibility(View.VISIBLE);
+        }
+        else {
+            whoLinearBox.setVisibility(View.VISIBLE);
+            progressLoadingBox.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void onClick(View v) {
