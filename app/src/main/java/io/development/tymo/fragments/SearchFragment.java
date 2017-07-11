@@ -44,6 +44,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
 import static io.development.tymo.utils.AlgorithmFeedSearch.runAlgorithmFeedSearch;
+import static io.development.tymo.utils.AlgorithmFeedSearch.runAlgorithmSearchMyCommitments;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -342,7 +343,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         Collections.sort(listMyCommitment, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return runAlgorithmFeedSearch(c1, c2, filter.getProximity(), filter.getPopularity(), filter.getDateHour(), getActivity());
+                return runAlgorithmSearchMyCommitments(c1, c2, filter.getProximity(), filter.getPopularity(), filter.getDateHour(), getActivity());
             }
         });
 
@@ -498,7 +499,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         Collections.sort(listMyCommitment, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return runAlgorithmFeedSearch(c1, c2, false, false, false, getActivity());
+                return runAlgorithmSearchMyCommitments(c1, c2, false, false, false, getActivity());
             }
         });
 

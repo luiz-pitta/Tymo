@@ -347,4 +347,160 @@ public class AlgorithmFeedSearch {
         else
             return 0;
     }
+
+    public static int runAlgorithmSearchMyCommitments(Object c1, Object c2, boolean orderByProximity, boolean orderByPopularity, boolean orderByDateHour, Context context) {
+        ActivityServer activityServer;
+        FlagServer flagServer;
+        ReminderServer reminderServer;
+
+        int count_my_contacts = 0, count_my_contacts2 = 0;
+        int count_my_favorites = 0, count_my_favorites2 = 0;
+        int count_my_contacts_final = 0, count_my_contacts_final2 = 0;
+
+        long start_date_time = 0, start_date_time2 = 0;
+        long end_date_time = 0, end_date_time2 = 0;
+        long time_left_to_end = 0, time_left_to_end2 = 0;
+
+        double distance = -1, distance2 = -1;
+        double lat = -500, lng = -500, lat2 = -500, lng2 = -500;
+
+        Calendar calendar = Calendar.getInstance();
+        long nowTime = calendar.getTimeInMillis();
+
+        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+
+        if (c1 instanceof ActivityServer || c1 instanceof ActivitySearch) {
+            if (c1 instanceof ActivityServer)
+                activityServer = (ActivityServer) c1;
+            else
+                activityServer = ((ActivitySearch) c1).getActivityServer();
+
+            count_my_contacts = activityServer.getCountMyContacts();
+            count_my_favorites = activityServer.getCountMyFavorites();
+            count_my_contacts_final = count_my_contacts + count_my_favorites;
+
+            start_date_time = activityServer.getDateTimeStart();
+
+            end_date_time = activityServer.getDateTimeEnd();
+            time_left_to_end = end_date_time - nowTime;
+
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !(activityServer.getLat() == -500 || (activityServer.getLat() == 0 && activityServer.getLng() == 0))) {
+                lat = TymoApplication.getInstance().getLatLng().get(0);
+                lng = TymoApplication.getInstance().getLatLng().get(1);
+                distance = Utilities.distance(activityServer.getLat(), activityServer.getLng(), lat, lng);
+            }
+        }
+        else if (c1 instanceof FlagServer || c1 instanceof FlagSearch) {
+            if (c1 instanceof FlagServer)
+                flagServer = (FlagServer) c1;
+            else
+                flagServer = ((FlagSearch) c1).getFlagServer();
+
+            count_my_contacts = flagServer.getCountMyContacts();
+            count_my_favorites = flagServer.getCountMyFavorites();
+            count_my_contacts_final = count_my_contacts + count_my_favorites;
+
+            start_date_time = flagServer.getDateTimeStart();
+
+            end_date_time = flagServer.getDateTimeEnd();
+            time_left_to_end = end_date_time - nowTime;
+        }
+        else if (c1 instanceof ReminderServer || c1 instanceof ReminderSearch) {
+            if (c1 instanceof ReminderServer)
+                reminderServer = (ReminderServer) c1;
+            else
+                reminderServer = ((ReminderSearch) c1).getReminderServer();
+
+            start_date_time = reminderServer.getDateTimeStart();
+
+            end_date_time = reminderServer.getDateTimeStart();
+            time_left_to_end = end_date_time - nowTime;
+        }
+
+        if (c2 instanceof ActivityServer || c2 instanceof ActivitySearch) {
+            if (c2 instanceof ActivityServer)
+                activityServer = (ActivityServer) c2;
+            else
+                activityServer = ((ActivitySearch) c2).getActivityServer();
+
+            count_my_contacts2 = activityServer.getCountMyContacts();
+            count_my_favorites2 = activityServer.getCountMyFavorites();
+            count_my_contacts_final2 = count_my_contacts2 + count_my_favorites2;
+
+            start_date_time2 = activityServer.getDateTimeStart();
+
+            end_date_time2 = activityServer.getDateTimeEnd();
+            time_left_to_end2 = end_date_time2 - nowTime;
+
+            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !(activityServer.getLat() == -500 || (activityServer.getLat() == 0 && activityServer.getLng() == 0))) {
+                lat2 = TymoApplication.getInstance().getLatLng().get(0);
+                lng2 = TymoApplication.getInstance().getLatLng().get(1);
+                distance2 = Utilities.distance(activityServer.getLat(), activityServer.getLng(), lat2, lng2);
+            }
+        }
+        else if (c2 instanceof FlagServer || c2 instanceof FlagSearch) {
+            if (c2 instanceof FlagServer)
+                flagServer = (FlagServer) c2;
+            else
+                flagServer = ((FlagSearch) c2).getFlagServer();
+
+            count_my_contacts2 = flagServer.getCountMyContacts();
+            count_my_favorites2 = flagServer.getCountMyFavorites();
+            count_my_contacts_final2 = count_my_contacts2 + count_my_favorites2;
+
+            start_date_time2 = flagServer.getDateTimeStart();
+
+            end_date_time2 = flagServer.getDateTimeEnd();
+            time_left_to_end2 = end_date_time2 - nowTime;
+        }
+        else if (c2 instanceof ReminderServer || c2 instanceof ReminderSearch) {
+            if (c2 instanceof ReminderServer)
+                reminderServer = (ReminderServer) c2;
+            else
+                reminderServer = ((ReminderSearch) c2).getReminderServer();
+
+            start_date_time2 = reminderServer.getDateTimeStart();
+
+            end_date_time2 = reminderServer.getDateTimeStart();
+            time_left_to_end2 = end_date_time2 - nowTime;
+        }
+
+        /*******************************************************************************
+         * ALGORITMO DE EXIBIÇÃO DE PEÇAS
+         *
+         * PRIORIDADE      ATRIBUTO                               CONDIÇÃO
+         *      1          Presente e Futuro                      -
+         *      2          Local                                 filtrado (Proximidade)
+         *      3          Nº de contatos                         filtrado (Popularidade)
+         *      4          Data/Hora de começo mais próximo       -
+         *******************************************************************************/
+
+        if (time_left_to_end >= 0 && time_left_to_end2 < 0)
+            return -1;
+        else if (time_left_to_end < 0 && time_left_to_end2 >= 0)
+            return 1;
+        else if (distance >= 0 && distance2 < 0 && orderByProximity == true)
+            return -1;
+        else if (distance < 0 && distance2 >= 0 && orderByProximity == true)
+            return 1;
+        else if (distance < distance2 && orderByProximity == true)
+            return -1;
+        else if (distance > distance2 && orderByProximity == true)
+            return 1;
+        else if (count_my_contacts_final > count_my_contacts_final2 && orderByPopularity == true)
+            return -1;
+        else if (count_my_contacts_final < count_my_contacts_final2 && orderByPopularity == true)
+            return 1;
+        else if (start_date_time > start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0)
+            return -1;
+        else if (start_date_time < start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0)
+            return 1;
+        else if (start_date_time < start_date_time2)
+            return -1;
+        else if (start_date_time > start_date_time2)
+            return 1;
+        else
+            return 0;
+    }
+
 }
