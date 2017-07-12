@@ -514,7 +514,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         Collections.sort(listFeed, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return runAlgorithmFeedSearch(c1, c2, false, false, false, getActivity());
+                return runAlgorithmFeedSearch(c1, c2);
             }
         });
 
@@ -603,7 +603,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         Collections.sort(listFeed, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return runAlgorithmFeedSearch(c1, c2, filterServer.getProximity(), filterServer.getPopularity(), filterServer.getDateHour(), getActivity());
+                return runAlgorithmFeedSearch(c1, c2);
             }
         });
 

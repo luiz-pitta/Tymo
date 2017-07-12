@@ -10,24 +10,23 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/horizontalBottomLine"
         android:background="@color/white"
-        android:orientation="vertical"
         android:gravity="center_horizontal"
+        android:orientation="vertical"
         app:ael_duration="400"
         app:ael_expanded="false">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/multichoiceRecyclerviewWeekDays"
-            android:layout_margin="20dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp" />
 
     </com.github.aakira.expandablelayout.ExpandableLinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center_horizontal">
-    </LinearLayout>
+        android:gravity="center_horizontal"></LinearLayout>
 
     <RelativeLayout
         android:id="@+id/itemBoxWeekDays"
@@ -67,16 +66,17 @@
 
         <TextView
             android:id="@+id/cleanWeekDays"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/expandMoreIconWeekDays"
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/expandMoreIconWeekDays"
             android:gravity="center"
             android:text="@string/clean"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/expandMoreIconWeekDays"

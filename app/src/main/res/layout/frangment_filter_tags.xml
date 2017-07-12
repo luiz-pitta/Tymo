@@ -18,7 +18,10 @@
             android:id="@+id/expandableBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
             android:orientation="vertical">
 
             <LinearLayout
@@ -131,6 +134,7 @@
             android:layout_height="30dp"
             android:gravity="center"
             android:text="@string/clean"
+            android:textStyle="bold"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"
             android:textSize="14sp" />

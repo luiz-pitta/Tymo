@@ -8,6 +8,8 @@ import java.util.List;
 public class ActivityServer implements Serializable {
     private static final long serialVersionUID = 4L;
 
+    private double rank_points;
+
     private String email_invited;
     private String creator;
     private String name_inviter;
@@ -135,6 +137,16 @@ public class ActivityServer implements Serializable {
 
         this.id_google = activityServer.getIdGoogle();
         this.id_facebook = activityServer.getIdFacebook();
+
+        this.rank_points = activityServer.getRankPoints();
+    }
+
+    public double getRankPoints() {
+        return rank_points;
+    }
+
+    public void setRankPoints(double rank_points) {
+        this.rank_points = rank_points;
     }
 
     public int getStatus() {

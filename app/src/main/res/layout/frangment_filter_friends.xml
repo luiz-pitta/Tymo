@@ -35,13 +35,13 @@
         android:id="@+id/itemBoxFriends"
         android:layout_width="match_parent"
         android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:background="@color/grey_50"
         android:orientation="vertical"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:paddingRight="20dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -72,16 +72,17 @@
 
         <TextView
             android:id="@+id/cleanFriends"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/expandMoreIconFriends"
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/expandMoreIconFriends"
             android:gravity="center"
             android:text="@string/clean"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/expandMoreIconFriends"

@@ -7,6 +7,8 @@ import java.util.List;
 public class FlagServer implements Serializable {
     private static final long serialVersionUID = 3L;
 
+    private double rank_points;
+
     private String email_invited;
     private String creator;
     private String name_inviter;
@@ -108,6 +110,16 @@ public class FlagServer implements Serializable {
 
         this.participates = flagServer.getParticipates();
         this.know_creator = flagServer.getKnowCreator();
+
+        this.rank_points = flagServer.getRankPoints();
+    }
+
+    public double getRankPoints() {
+        return rank_points;
+    }
+
+    public void setRankPoints(double rank_points) {
+        this.rank_points = rank_points;
     }
 
     public void setCountMyContacts(int count_my_contacts) {

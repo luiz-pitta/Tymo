@@ -18,7 +18,10 @@
             android:id="@+id/expandableBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginLeft="30dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -98,16 +101,17 @@
 
         <TextView
             android:id="@+id/cleanLocation"
-            android:layout_centerVertical="true"
-            android:layout_toLeftOf="@+id/expandMoreIconLocation"
-            android:layout_marginRight="20dp"
             android:layout_width="wrap_content"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="20dp"
+            android:layout_toLeftOf="@+id/expandMoreIconLocation"
             android:gravity="center"
             android:text="@string/clean"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:textStyle="bold" />
 
         <ImageView
             android:id="@+id/expandMoreIconLocation"
