@@ -39,6 +39,8 @@ public class FilterServer implements Serializable {
 
     private double lat;
     private double lng;
+    private double lat_current;
+    private double lng_current;
     private String location;
 
     public FilterServer() {
@@ -117,6 +119,14 @@ public class FilterServer implements Serializable {
 
     public void setLng(double lng) {
         this.lng = lng;
+    }
+
+    public void setLatCurrent(double lat_current) {
+        this.lat_current = lat_current;
+    }
+
+    public void setLngCurrent(double lng_current) {
+        this.lng_current = lng_current;
     }
 
     public int getDayStart() {

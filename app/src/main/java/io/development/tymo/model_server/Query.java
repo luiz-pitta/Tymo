@@ -11,6 +11,22 @@ public class Query {
     private int minute_start;
     private int hour_start;
 
+    private long date_time_now;
+
+    private double lat_current;
+    private double lng_current;
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public void setLatCurrent(double lat_current) {
+        this.lat_current = lat_current;
+    }
+
+    public void setLngCurrent(double lng_current) {
+        this.lng_current = lng_current;
+    }
 
     public void setEmail(String email) {
         this.email = email;

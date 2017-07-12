@@ -408,6 +408,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         dateTymo.setMinute(minute);
         dateTymo.setHour(hour);
         dateTymo.setDateTimeNow(c.getTimeInMillis());
+        dateTymo.setLatCurrent(TymoApplication.getInstance().getLatLng().get(0));
+        dateTymo.setLngCurrent(TymoApplication.getInstance().getLatLng().get(1));
 
         retrieveFeedActivities(email, dateTymo);
     }
@@ -836,6 +838,9 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                     (FilterWrapper) data.getSerializableExtra("filter_att");
 
             filterServer = wrap.getFilterServer();
+
+            filterServer.setLatCurrent(TymoApplication.getInstance().getLatLng().get(0));
+            filterServer.setLngCurrent(TymoApplication.getInstance().getLatLng().get(1));
 
             if(filterServer.isFilterFilled())
                 retrieveFeedFilter(filterServer);

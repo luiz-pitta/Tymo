@@ -22,6 +22,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import io.development.tymo.TymoApplication;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
 import io.development.tymo.adapters.ViewPagerAdapter;
@@ -564,6 +565,9 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         query.setDay(day);
         query.setMonth(month);
         query.setYear(year);
+        query.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+        query.setLatCurrent(TymoApplication.getInstance().getLatLng().get(0));
+        query.setLngCurrent(TymoApplication.getInstance().getLatLng().get(1));
 
         getSearchResults(query);
     }
@@ -584,6 +588,9 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         searchMyCommitmentFragment.showProgress();
         searchPeopleFragment.showProgress();
         searchWhatsFragment.showProgress();
+
+        filter.setLatCurrent(TymoApplication.getInstance().getLatLng().get(0));
+        filter.setLngCurrent(TymoApplication.getInstance().getLatLng().get(1));
 
         if(filter.isFilterFilled())
             getSearchResultsFilter(email, filter);
