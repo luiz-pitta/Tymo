@@ -705,7 +705,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         String query = searchView.getQuery();
         if(query.matches(""))
             query = ".";
-        if(searchFragment != null)
+        if(searchFragment != null && !filterServer.isFilterFilled())
             searchFragment.doSearch(query);
     }
 
