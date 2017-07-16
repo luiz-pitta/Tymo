@@ -40,4 +40,6 @@ public class Constants {
     public static final int NEXT_COMMITMENT = 6;
 
     public final static int DAYLY = 1, WEEKLY = 2, MONTHLY = 3;
+
+    public final static int MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT = 5;
 }

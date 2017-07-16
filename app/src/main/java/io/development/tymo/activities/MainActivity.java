@@ -37,15 +37,11 @@ import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
-import io.development.tymo.Login1Activity;
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
 import io.development.tymo.fragments.FeedFragment;
@@ -72,8 +68,6 @@ import io.development.tymo.adapters.MainFragmentAdapter;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static io.development.tymo.utils.Validation.validateEmail;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
         ForceUpdateChecker.OnUpdateNeededListener{
@@ -1036,8 +1030,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             activityOfDay.setCommitmentSameHour(count_same);
 
             time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= 60) {
-                c1.add(Calendar.MINUTE, -60);
+            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+                c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
                 time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)

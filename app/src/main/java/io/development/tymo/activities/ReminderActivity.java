@@ -1029,8 +1029,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             activityOfDay.setCommitmentSameHour(count_same);
 
             time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= 60) {
-                c1.add(Calendar.MINUTE, -60);
+            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+                c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
                 time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)

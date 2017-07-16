@@ -30,13 +30,10 @@ import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.Date;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.ShowActivityFragmentAdapter;
@@ -1268,8 +1265,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             activityOfDay.setCommitmentSameHour(count_same);
 
             time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= 60) {
-                c1.add(Calendar.MINUTE, -60);
+            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+                c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
                 time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
