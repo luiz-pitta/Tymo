@@ -7,7 +7,8 @@ import java.util.List;
 public class FlagServer implements Serializable {
     private static final long serialVersionUID = 3L;
 
-    private double rank_points;
+    private double rank_points_ue, rank_points_we, rank_points_de;
+    private double popularity_points;
 
     private String email_invited;
     private String creator;
@@ -113,16 +114,44 @@ public class FlagServer implements Serializable {
         this.participates = flagServer.getParticipates();
         this.know_creator = flagServer.getKnowCreator();
 
-        this.rank_points = flagServer.getRankPoints();
+        this.rank_points_ue = flagServer.getRankPointsUe();
+        this.rank_points_we = flagServer.getRankPointsWe();
+        this.rank_points_de = flagServer.getRankPointsDe();
+        this.popularity_points = flagServer.getPopularityPoints();
+
         this.date_time_now = flagServer.getDateTimeNow();
     }
 
-    public double getRankPoints() {
-        return rank_points;
+    public double getRankPointsUe() {
+        return rank_points_ue;
     }
 
-    public void setRankPoints(double rank_points) {
-        this.rank_points = rank_points;
+    public void setRankPointsUe(double rank_points_ue) {
+        this.rank_points_ue = rank_points_ue;
+    }
+
+    public double getRankPointsWe() {
+        return rank_points_we;
+    }
+
+    public void setRankPointsWe(double rank_points_we) {
+        this.rank_points_we = rank_points_we;
+    }
+
+    public double getRankPointsDe() {
+        return rank_points_de;
+    }
+
+    public void setRankPointsDe(double rank_points_de) {
+        this.rank_points_de = rank_points_de;
+    }
+
+    public double getPopularityPoints() {
+        return popularity_points;
+    }
+
+    public void setPopularityPoints(double popularity_points) {
+        this.popularity_points = popularity_points;
     }
 
     public void setDateTimeNow(long date_time_now) {

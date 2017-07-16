@@ -8,7 +8,10 @@ import java.util.List;
 public class ActivityServer implements Serializable {
     private static final long serialVersionUID = 4L;
 
-    private double rank_points;
+    private double rank_points_ue, rank_points_we, rank_points_de;
+    private double rank_points_range_base;
+    private String rank_points_range_op;
+    private double popularity_points;
 
     private String email_invited;
     private String creator;
@@ -140,16 +143,62 @@ public class ActivityServer implements Serializable {
         this.id_google = activityServer.getIdGoogle();
         this.id_facebook = activityServer.getIdFacebook();
 
-        this.rank_points = activityServer.getRankPoints();
+        this.rank_points_ue = activityServer.getRankPointsUe();
+        this.rank_points_we = activityServer.getRankPointsWe();
+        this.rank_points_de = activityServer.getRankPointsDe();
+        this.rank_points_range_base = activityServer.getRankPointsRangeBase();
+        this.rank_points_range_op = activityServer.getRankPointsRangeOp();
+        this.popularity_points = activityServer.getPopularityPoints();
+
         this.date_time_now = activityServer.getDateTimeNow();
     }
 
-    public double getRankPoints() {
-        return rank_points;
+    public double getRankPointsUe() {
+        return rank_points_ue;
     }
 
-    public void setRankPoints(double rank_points) {
-        this.rank_points = rank_points;
+    public void setRankPointsUe(double rank_points_ue) {
+        this.rank_points_ue = rank_points_ue;
+    }
+
+    public double getRankPointsWe() {
+        return rank_points_we;
+    }
+
+    public void setRankPointsWe(double rank_points_we) {
+        this.rank_points_we = rank_points_we;
+    }
+
+    public double getRankPointsDe() {
+        return rank_points_de;
+    }
+
+    public void setRankPointsDe(double rank_points_de) {
+        this.rank_points_de = rank_points_de;
+    }
+
+    public double getRankPointsRangeBase() {
+        return rank_points_range_base;
+    }
+
+    public void setRankPointsRangeBase(double rank_points_range_base) {
+        this.rank_points_range_base = rank_points_range_base;
+    }
+
+    public String getRankPointsRangeOp() {
+        return rank_points_range_op;
+    }
+
+    public void setRankPointsRangeOp(String rank_points_range_op) {
+        this.rank_points_range_op = rank_points_range_op;
+    }
+
+    public double getPopularityPoints() {
+        return popularity_points;
+    }
+
+    public void setPopularityPoints(double popularity_points) {
+        this.popularity_points = popularity_points;
     }
 
     public void setDateTimeNow(long date_time_now) {

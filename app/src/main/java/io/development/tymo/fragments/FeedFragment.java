@@ -77,7 +77,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Context.MODE_PRIVATE;
-import static io.development.tymo.utils.AlgorithmFeedSearch.runAlgorithmFeedSearch;
+import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmFeedSearch;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -514,7 +514,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         Collections.sort(listFeed, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return runAlgorithmFeedSearch(c1, c2);
+                return algorithmFeedSearch(c1, c2, false, false, false, getActivity());
             }
         });
 
@@ -603,7 +603,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         Collections.sort(listFeed, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return runAlgorithmFeedSearch(c1, c2);
+                return algorithmFeedSearch(c1, c2, filterServer.getProximity(), filterServer.getPopularity(), filterServer.getDateHour(), getActivity());
             }
         });
 

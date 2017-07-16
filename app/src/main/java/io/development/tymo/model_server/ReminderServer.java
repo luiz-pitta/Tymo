@@ -7,7 +7,7 @@ import java.util.List;
 public class ReminderServer implements Serializable {
     private static final long serialVersionUID = 5L;
 
-    private double rank_points;
+    private double rank_points_ue, rank_points_we, rank_points_de;
 
     private String title;
     private String creator;
@@ -31,12 +31,28 @@ public class ReminderServer implements Serializable {
     private List<Integer> year_list_start = new ArrayList<>();
     private List<Long> date_time_list_start = new ArrayList<>();
 
-    public double getRankPoints() {
-        return rank_points;
+    public double getRankPointsUe() {
+        return rank_points_ue;
     }
 
-    public void setRankPoints(double rank_points) {
-        this.rank_points = rank_points;
+    public void setRankPointsUe(double rank_points_ue) {
+        this.rank_points_ue = rank_points_ue;
+    }
+
+    public double getRankPointsWe() {
+        return rank_points_we;
+    }
+
+    public void setRankPointsWe(double rank_points_we) {
+        this.rank_points_we = rank_points_we;
+    }
+
+    public double getRankPointsDe() {
+        return rank_points_de;
+    }
+
+    public void setRankPointsDe(double rank_points_de) {
+        this.rank_points_de = rank_points_de;
     }
 
     public void setDateTimeCreation(long date_time_creation) {
