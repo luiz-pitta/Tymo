@@ -11,6 +11,15 @@ public class UserPushNotification implements Serializable {
     private String email;
     private String id_device;
     private String last_login_date_time;
+    private long date_time_now;
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
+    }
 
     public void setToken(String token) {
         this.token = token;

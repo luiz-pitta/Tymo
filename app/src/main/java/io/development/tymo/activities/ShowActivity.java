@@ -224,6 +224,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         activityServer.setId(0);
         activityServer.setCreator(email);
+        activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
         setProgress(true);
@@ -255,6 +256,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         activityServer.setId(0);
         activityServer.setCreator(email);
+        activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         setActivityInformationRefresh(activityWrapper.getActivityServer().getId(), activityServer);
     }
@@ -714,6 +716,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
             inviteRequest.setEmail(email);
             inviteRequest.setStatus(Constants.YES);
+            inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             inviteRequest.setType(Constants.ACT);
             inviteRequest.setIdAct(getActivity().getId());
@@ -734,6 +737,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                 inviteRequest.setEmail(email);
+                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 inviteRequest.setStatus(Constants.NO);
 
                 inviteRequest.setType(Constants.ACT);
@@ -986,6 +990,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         activityServer.setId(0);
         activityServer.setCreator(email);
+        activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         setActivityInformation(getActivity().getId(), activityServer);
 

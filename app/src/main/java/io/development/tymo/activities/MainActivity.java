@@ -238,6 +238,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 pushNotification.setIdDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                 pushNotification.setName(android.os.Build.BRAND + " " + android.os.Build.MODEL);
                 pushNotification.setToken(token);
+                pushNotification.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                 updatePushNotification(pushNotification);
             }

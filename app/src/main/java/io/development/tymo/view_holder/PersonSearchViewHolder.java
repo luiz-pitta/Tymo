@@ -27,6 +27,8 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import java.util.Calendar;
+
 import io.development.tymo.R;
 import io.development.tymo.activities.ContactsActivity;
 import io.development.tymo.activities.FriendProfileActivity;
@@ -236,6 +238,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
             String email_user = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
             User user = new User();
             user.setEmail(email_user);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             CharSequence[] items;
 
@@ -252,6 +255,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
             else if (actionButtonType == 3) {
                 FriendRequest friendRequest = new FriendRequest();
                 friendRequest.setEmail(email_user);
+                friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 friendRequest.setEmailFriend(email);
                 cancelFriendRequest(friendRequest);
                 if(text2Exists){
@@ -350,6 +354,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                 User user = new User();
                 user.setEmail(email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 if (item == 1) {
                     deleteBlock = Constants.BLOCK;
                     user.setPrivacy(Constants.BLOCK);
@@ -442,8 +447,10 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
                 String email_user = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
                 User user = new User();
                 user.setEmail(email_user);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 FriendRequest friendRequest = new FriendRequest();
                 friendRequest.setEmail(email_user);
+                friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 friendRequest.setEmailFriend(email);
 
                 if (item == 0) {

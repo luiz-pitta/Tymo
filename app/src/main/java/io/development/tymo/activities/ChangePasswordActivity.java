@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import io.development.tymo.LoginForgotActivity;
 import io.development.tymo.R;
@@ -173,6 +174,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
             if(err == 0){
                 progressBox.setVisibility(View.VISIBLE);
                 user.setEmail(email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 user.setNewPassword(passwordNew.getText().toString());
                 user.setPassword(passwordActual.getText().toString());
                 updatePassword(user);

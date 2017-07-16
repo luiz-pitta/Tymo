@@ -23,6 +23,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -208,6 +209,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             User user = new User();
             user.setEmail(email);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             user.addAllInterest(interestList);
 
             if(interestList.size() < 5) {

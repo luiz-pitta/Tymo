@@ -447,6 +447,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                                 inviteRequest.setEmail(email);
+                                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                 inviteRequest.setStatus(Constants.YES);
 
                                 if(item instanceof ActivityServer){

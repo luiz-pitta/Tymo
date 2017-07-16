@@ -42,6 +42,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.activities.IntroActivity;
@@ -235,6 +236,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                 pushNotification.setIdDevice(Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
                 pushNotification.setName(android.os.Build.BRAND + " " + android.os.Build.MODEL);
                 pushNotification.setToken(token);
+                pushNotification.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                 setPushNotification(pushNotification);
             }
@@ -315,11 +317,15 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                         if(!validateEmail(email)){
                                             user.setProblemFacebook();
                                             user.setEmail("");
-                                        }else
+                                            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+                                        }else {
                                             user.setEmail(object.getString("email"));
+                                            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+                                        }
                                     }catch (Exception  e) {
                                         user.setProblemFacebook();
                                         user.setEmail("");
+                                        user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                     }
 
                                     try{

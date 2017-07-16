@@ -17,6 +17,8 @@ public class ActivityServer implements Serializable {
     private long id;
     private long id_google, id_facebook;
 
+    private long date_time_now;
+
     private User user;
     private int count_guest;
     private int know_creator;
@@ -139,6 +141,7 @@ public class ActivityServer implements Serializable {
         this.id_facebook = activityServer.getIdFacebook();
 
         this.rank_points = activityServer.getRankPoints();
+        this.date_time_now = activityServer.getDateTimeNow();
     }
 
     public double getRankPoints() {
@@ -147,6 +150,14 @@ public class ActivityServer implements Serializable {
 
     public void setRankPoints(double rank_points) {
         this.rank_points = rank_points;
+    }
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
     }
 
     public int getStatus() {

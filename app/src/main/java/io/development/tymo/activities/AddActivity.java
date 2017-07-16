@@ -246,6 +246,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             activityServer.setId(0);
             activityServer.setCreator(email);
+            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
         }
 
@@ -557,6 +558,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         activityServer.setId(0);
         activityServer.setCreator(email);
+        activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         setActivityGuestInformation(getActivity().getId(), activityServer);
     }
@@ -898,6 +900,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 activityServer.addGuest(user_friend.getEmail());
 
             activityServer.setCreator(creator);
+            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             registerProcess(activityServer);
             setProgress(true);
@@ -1117,6 +1120,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             }
 
             activityServer.setCreator(creator);
+            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             registerProcess(activityServer);
             setProgress(true);

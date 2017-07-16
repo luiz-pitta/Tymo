@@ -239,6 +239,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         plans.setM(month1);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         plans.addEmails(email_user);
         if(wrap != null)
@@ -841,6 +842,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                     plans.setM(month1);
                     plans.setM2(month2);
                     plans.setD1f(d1f);
+                    plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                     setCompare(plans);
                 }
@@ -900,6 +902,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         plans.setM(month1);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         day_start = cal.get(Calendar.DAY_OF_MONTH);
         month_start = cal.get(Calendar.MONTH)+1;
@@ -966,6 +969,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         plans.setM(month1);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         day_start = cal.get(Calendar.DAY_OF_MONTH);
         month_start = cal.get(Calendar.MONTH)+1;

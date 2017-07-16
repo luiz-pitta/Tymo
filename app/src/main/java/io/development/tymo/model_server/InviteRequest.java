@@ -6,6 +6,15 @@ public class InviteRequest {
     private long id_act;
     private int status;
     private int type;
+    private long date_time_now;
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
+    }
 
     public void setEmail(String email) {
         this.email = email;

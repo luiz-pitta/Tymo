@@ -21,6 +21,8 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import java.util.Calendar;
+
 import io.development.tymo.R;
 import io.development.tymo.activities.FriendProfileActivity;
 import io.development.tymo.adapters.FriendResquestAdapter;
@@ -100,6 +102,7 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
         FriendRequest friendRequest = new FriendRequest();
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         friendRequest.setEmail(email);
+        friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
         friendRequest.setEmailFriend(email_friend);
         if (v == acceptButton) {
             Bundle bundle = new Bundle();

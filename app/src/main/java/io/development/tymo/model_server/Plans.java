@@ -15,6 +15,15 @@ public class Plans {
     private int m2;
     private int a2;
     private String id_device;
+    private long date_time_now;
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
+    }
 
     public void setIdDevice(String id_device) {
         this.id_device = id_device;

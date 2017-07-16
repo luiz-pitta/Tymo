@@ -31,6 +31,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Calendar;
 
 import io.development.tymo.activities.IntroActivity;
 import io.development.tymo.activities.MainActivity;
@@ -310,11 +311,15 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                                         if(!validateEmail(email)){
                                             user.setProblemFacebook();
                                             user.setEmail("");
-                                        }else
+                                            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+                                        }else {
                                             user.setEmail(object.getString("email"));
+                                            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+                                        }
                                     }catch (Exception  e) {
                                         user.setProblemFacebook();
                                         user.setEmail("");
+                                        user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                     }
 
                                     try{

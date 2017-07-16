@@ -14,6 +14,7 @@ public class User implements Serializable {
     private int count_favorite;
     private int i_blocked;
     private int he_blocked;
+    private long date_time_now;
 
     private boolean problem_login_facebook = false;
 
@@ -58,6 +59,14 @@ public class User implements Serializable {
     private boolean delete = true;
 
     private List<String> emails = new ArrayList<>();
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
+    }
 
     public boolean getDelete() {
         return delete;

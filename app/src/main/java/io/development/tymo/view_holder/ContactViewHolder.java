@@ -26,6 +26,8 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import java.util.Calendar;
+
 import io.development.tymo.R;
 import io.development.tymo.activities.ContactsActivity;
 import io.development.tymo.adapters.ContactsAdapter;
@@ -186,6 +188,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             User user = new User();
             user.setEmail(email);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             user.setPrivacy(favorite);
 
             sendFavoriteRequest(email_friend, user);
@@ -237,6 +240,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                 User user = new User();
                 user.setEmail(email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 Bundle bundle = new Bundle();
 
                 if (item == 1) {

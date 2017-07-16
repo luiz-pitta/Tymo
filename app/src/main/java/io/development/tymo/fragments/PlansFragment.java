@@ -315,6 +315,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         plans.setM(m);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         plans.addEmails("");
 
@@ -853,6 +854,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         plans.setM(m);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         plans.addEmails("");
 

@@ -27,6 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
+import java.util.Calendar;
 
 import io.development.tymo.Login1Activity;
 import io.development.tymo.R;
@@ -265,6 +266,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     User usr = new User();
                     usr.setEmail(email);
                     usr.setName(newEmail);
+                    usr.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                     updateEmail(usr);
 

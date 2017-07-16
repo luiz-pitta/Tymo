@@ -15,6 +15,8 @@ public class FlagServer implements Serializable {
     private String creator_email;
     private long id;
 
+    private long date_time_now;
+
     private User user;
     private int count_guest;
     private int know_creator;
@@ -112,6 +114,7 @@ public class FlagServer implements Serializable {
         this.know_creator = flagServer.getKnowCreator();
 
         this.rank_points = flagServer.getRankPoints();
+        this.date_time_now = flagServer.getDateTimeNow();
     }
 
     public double getRankPoints() {
@@ -120,6 +123,14 @@ public class FlagServer implements Serializable {
 
     public void setRankPoints(double rank_points) {
         this.rank_points = rank_points;
+    }
+
+    public void setDateTimeNow(long date_time_now) {
+        this.date_time_now = date_time_now;
+    }
+
+    public long getDateTimeNow() {
+        return date_time_now;
     }
 
     public void setCountMyContacts(int count_my_contacts) {

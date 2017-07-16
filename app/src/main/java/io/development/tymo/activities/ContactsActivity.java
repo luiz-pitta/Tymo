@@ -23,6 +23,7 @@ import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -128,6 +129,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         User user = new User();
         user.setEmail(my_email);
+        user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         if (email.matches(my_email)) {
             m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
@@ -230,6 +232,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
                 User user = new User();
                 user.setEmail(my_email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                 if (email.matches(my_email)) {
                     m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));

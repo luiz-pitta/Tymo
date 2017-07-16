@@ -200,6 +200,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                 flagServer.setId(0);
                 flagServer.setCreator(email);
+                flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 setFlagInformation(flagWrapper.getFlagServer().getId(),flagServer);
             }
 
@@ -225,6 +226,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             flagServer.setId(0);
             flagServer.setCreator(email);
+            flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             setFlagInformation(flagWrapper.getFlagServer().getId(),flagServer);
             setProgress(true);
 
@@ -287,6 +289,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                     String email = mSharedPreferences.getString(Constants.EMAIL, "");
                     flagServer.setId(0);
                     flagServer.setCreator(email);
+                    flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                     setFlagInformation(flagWrapper.getFlagServer().getId(),flagServer);
                     setProgress(true);
 
@@ -677,6 +680,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             FlagServer flagServer = new FlagServer();
             flagServer.setCreator(creator);
+            flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             flagServer.setTitle(title);
 
             d = date.get(0);
@@ -963,6 +967,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
         flagServer.setId(0);
         flagServer.setCreator(email);
+        flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
         setFlagInformation(getFlag().getId(),flagServer);
 
         Calendar c = Calendar.getInstance();
@@ -1064,6 +1069,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             inviteRequest.setEmail(email);
             inviteRequest.setStatus(Constants.YES);
+            inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             inviteRequest.setType(Constants.FLAG);
             inviteRequest.setIdAct(getFlag().getId());
@@ -1084,6 +1090,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                 inviteRequest.setEmail(email);
+                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 inviteRequest.setStatus(Constants.NO);
 
                 inviteRequest.setType(Constants.FLAG);

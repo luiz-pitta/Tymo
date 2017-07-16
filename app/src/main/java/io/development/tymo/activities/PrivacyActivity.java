@@ -12,6 +12,8 @@ import android.widget.Toast;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 
+import java.util.Calendar;
+
 import io.development.tymo.R;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
@@ -139,6 +141,7 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
 
             user.setPrivacy(privacy_type);
             user.setEmail(email);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             setPrivacy(user);
         }

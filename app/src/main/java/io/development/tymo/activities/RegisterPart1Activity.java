@@ -193,8 +193,10 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
                 user.setModifyFacebookName(true);
             }
 
-            if(user.getEmail().matches(""))
+            if(user.getEmail().matches("")) {
                 user.setEmail(et_email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+            }
 
             if(user.getGender().matches(""))
                 user.setGender(gender);
@@ -284,6 +286,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             User user = new User();
             user.setName(et_name);
             user.setEmail(et_email);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             user.setPassword(et_password);
             user.setLivesIn("");
             user.setGender(gender);

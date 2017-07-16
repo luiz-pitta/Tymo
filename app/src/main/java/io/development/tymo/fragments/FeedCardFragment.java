@@ -361,6 +361,7 @@ public class FeedCardFragment extends Fragment {
 
                         inviteRequest.setEmail(email);
                         inviteRequest.setStatus(Constants.YES);
+                        inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                         if (item instanceof ActivityServer) {
                             inviteRequest.setType(Constants.ACT);

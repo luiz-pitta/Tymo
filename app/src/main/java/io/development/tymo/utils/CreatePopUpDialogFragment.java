@@ -397,6 +397,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                                 inviteRequest.setEmail(email);
+                                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                 inviteRequest.setIdAct(flagServer.getId());
                                 inviteRequest.setType(Constants.FLAG);
                                 inviteRequest.setStatus(Constants.NO);
@@ -416,6 +417,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                                 inviteRequest.setEmail(email);
+                                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                 inviteRequest.setIdAct(activityServer.getId());
                                 inviteRequest.setType(Constants.ACT);
                                 inviteRequest.setStatus(Constants.NO);
@@ -560,6 +562,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                     SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                                     String email = mSharedPreferences.getString(Constants.EMAIL, "");
                                     inviteRequest.setEmail(email);
+                                    inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                     inviteRequest.setIdAct(flagServer.getId());
                                     inviteRequest.setType(Constants.FLAG);
                                     inviteRequest.setStatus(Constants.YES);
@@ -732,6 +735,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                     SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                                     String email = mSharedPreferences.getString(Constants.EMAIL, "");
                                     inviteRequest.setEmail(email);
+                                    inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                                     inviteRequest.setIdAct(activityServer.getId());
                                     inviteRequest.setType(Constants.ACT);
                                     inviteRequest.setStatus(Constants.YES);

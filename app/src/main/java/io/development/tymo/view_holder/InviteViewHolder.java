@@ -18,6 +18,8 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import java.util.Calendar;
+
 import io.development.tymo.R;
 import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.ShowActivity;
@@ -131,6 +133,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
             InviteRequest inviteRequest = new InviteRequest();
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             inviteRequest.setEmail(email);
+            inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             inviteRequest.setIdAct(id_act_flag);
             inviteRequest.setType(type);
             if (v == acceptButton) {

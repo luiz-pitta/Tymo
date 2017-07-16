@@ -247,6 +247,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         plans.setM(month);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         plans.addEmails(mSharedPreferences.getString(Constants.EMAIL, ""));
 
@@ -984,6 +985,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             User user = new User();
             user.setEmail(email);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             CharSequence[] items;
 
@@ -1000,6 +1002,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                 FriendRequest friendRequest = new FriendRequest();
                 friendRequest.setEmail(email);
                 friendRequest.setEmailFriend(email_friend);
+                friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 progressText.setVisibility(View.GONE);
                 //progressText.setText(getResources().getString(R.string.canceling));
                 cancelFriendRequest(friendRequest);
@@ -1072,6 +1075,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                 User user = new User();
                 user.setEmail(email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updateFriendRequest" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1084,6 +1088,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                     FriendRequest friendRequest = new FriendRequest();
                     friendRequest.setEmail(email);
                     friendRequest.setEmailFriend(email_friend);
+                    friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+
 
                     if(item == 0){
                         friendRequest.setStatus(1);
@@ -1199,6 +1205,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         plans.setM(m);
         plans.setM2(month2);
         plans.setD1f(d1f);
+        plans.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         plans.addEmails(mSharedPreferences.getString(Constants.EMAIL, ""));
 

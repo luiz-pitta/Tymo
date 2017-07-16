@@ -27,6 +27,8 @@ import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 
+import java.util.Calendar;
+
 import io.development.tymo.R;
 import io.development.tymo.activities.ContactsActivity;
 import io.development.tymo.activities.FriendProfileActivity;
@@ -278,6 +280,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
                         if (item == 0 && !isPersonAdm) {
                             InviteRequest inviteRequest = new InviteRequest();
                             inviteRequest.setEmail(email);
+                            inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                             inviteRequest.setType(Constants.ADM);
                             inviteRequest.setIdAct(idAct);
                             sendAdmRequest(inviteRequest);
@@ -305,6 +308,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             String email_user = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
             User user = new User();
             user.setEmail(email_user);
+            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
             CharSequence[] items;
 
@@ -322,6 +326,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
                 FriendRequest friendRequest = new FriendRequest();
                 friendRequest.setEmail(email_user);
                 friendRequest.setEmailFriend(email);
+                friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 cancelFriendRequest(friendRequest);
                 //text4.setVisibility(View.GONE);
             }
@@ -395,6 +400,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                 User user = new User();
                 user.setEmail(email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 deleteBlock = Constants.UNBLOCK;
                 user.setPrivacy(Constants.UNBLOCK);
                 sendUnBlockRequest(email_friend, user);
@@ -531,9 +537,11 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
                 String email_user = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
                 User user = new User();
                 user.setEmail(email_user);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 FriendRequest friendRequest = new FriendRequest();
                 friendRequest.setEmail(email_user);
                 friendRequest.setEmailFriend(email);
+                friendRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                 if (item == 0) {
                     //text4.setVisibility(View.GONE);
