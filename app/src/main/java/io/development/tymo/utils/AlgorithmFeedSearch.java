@@ -15,10 +15,9 @@ import io.development.tymo.models.search.ReminderSearch;
 
 public class AlgorithmFeedSearch {
 
-    public static int algorithmFeedSearch(Object c1, Object c2, boolean orderByProximity, boolean orderByPopularity, boolean orderByDateHour, Context context) {
+    public static int algorithmFeedSearchWhats(Object c1, Object c2, boolean orderByProximity, boolean orderByPopularity, boolean orderByDateHour, Context context) {
         ActivityServer activityServer;
         FlagServer flagServer;
-        ReminderServer reminderServer;
 
         long start_date_time = 0, start_date_time2 = 0;
         long end_date_time = 0, end_date_time2 = 0;
@@ -97,24 +96,6 @@ public class AlgorithmFeedSearch {
             rank_points = rank_points_ue * rank_points_we * rank_points_de;
 
         }
-        else if (c1 instanceof ReminderServer || c1 instanceof ReminderSearch) {
-            if (c1 instanceof ReminderServer)
-                reminderServer = (ReminderServer) c1;
-            else
-                reminderServer = ((ReminderSearch) c1).getReminderServer();
-
-            start_date_time = reminderServer.getDateTimeStart();
-
-            end_date_time = reminderServer.getDateTimeStart();
-            time_left_to_end = end_date_time - nowTime;
-
-            rank_points_ue = reminderServer.getRankPointsUe();
-            rank_points_we = reminderServer.getRankPointsWe();
-            rank_points_de = reminderServer.getRankPointsDe();
-
-            rank_points = rank_points_ue * rank_points_we * rank_points_de;
-
-        }
 
         if (c2 instanceof ActivityServer || c2 instanceof ActivitySearch) {
             if (c2 instanceof ActivityServer)
@@ -176,25 +157,6 @@ public class AlgorithmFeedSearch {
             rank_points2 = rank_points_ue2 * rank_points_we2 * rank_points_de2;
 
         }
-        else if (c2 instanceof ReminderServer || c2 instanceof ReminderSearch) {
-            if (c2 instanceof ReminderServer)
-                reminderServer = (ReminderServer) c2;
-            else
-                reminderServer = ((ReminderSearch) c2).getReminderServer();
-
-            start_date_time2 = reminderServer.getDateTimeStart();
-
-            end_date_time2 = reminderServer.getDateTimeStart();
-            time_left_to_end2 = end_date_time2 - nowTime;
-
-            rank_points_ue2 = reminderServer.getRankPointsUe();
-            rank_points_we2 = reminderServer.getRankPointsWe();
-            rank_points_de2 = reminderServer.getRankPointsDe();
-
-            rank_points2 = rank_points_ue2 * rank_points_we2 * rank_points_de2;
-
-        }
-
 
 
         if (time_left_to_end >= 0 && time_left_to_end2 < 0)
@@ -228,4 +190,107 @@ public class AlgorithmFeedSearch {
         else
             return 0;
     }
+
+    public static int algorithmSearchMyCommitments(Object c1, Object c2) {
+        ActivityServer activityServer;
+        FlagServer flagServer;
+        ReminderServer reminderServer;
+
+        long start_date_time = 0, start_date_time2 = 0;
+        long end_date_time = 0, end_date_time2 = 0;
+        long time_left_to_end = 0, time_left_to_end2 = 0;
+
+        Calendar calendar = Calendar.getInstance();
+        long nowTime = calendar.getTimeInMillis();
+
+        if (c1 instanceof ActivityServer || c1 instanceof ActivitySearch) {
+            if (c1 instanceof ActivityServer)
+                activityServer = (ActivityServer) c1;
+            else
+                activityServer = ((ActivitySearch) c1).getActivityServer();
+
+            start_date_time = activityServer.getDateTimeStart();
+
+            end_date_time = activityServer.getDateTimeEnd();
+            time_left_to_end = end_date_time - nowTime;
+
+        }
+        else if (c1 instanceof FlagServer || c1 instanceof FlagSearch) {
+            if (c1 instanceof FlagServer)
+                flagServer = (FlagServer) c1;
+            else
+                flagServer = ((FlagSearch) c1).getFlagServer();
+
+            start_date_time = flagServer.getDateTimeStart();
+
+            end_date_time = flagServer.getDateTimeEnd();
+            time_left_to_end = end_date_time - nowTime;
+
+        }
+        else if (c1 instanceof ReminderServer || c1 instanceof ReminderSearch) {
+            if (c1 instanceof ReminderServer)
+                reminderServer = (ReminderServer) c1;
+            else
+                reminderServer = ((ReminderSearch) c1).getReminderServer();
+
+            start_date_time = reminderServer.getDateTimeStart();
+
+            end_date_time = reminderServer.getDateTimeStart();
+            time_left_to_end = end_date_time - nowTime;
+
+        }
+
+        if (c2 instanceof ActivityServer || c2 instanceof ActivitySearch) {
+            if (c2 instanceof ActivityServer)
+                activityServer = (ActivityServer) c2;
+            else
+                activityServer = ((ActivitySearch) c2).getActivityServer();
+
+            start_date_time2 = activityServer.getDateTimeStart();
+
+            end_date_time2 = activityServer.getDateTimeEnd();
+            time_left_to_end2 = end_date_time2 - nowTime;
+
+        }
+        else if (c2 instanceof FlagServer || c2 instanceof FlagSearch) {
+            if (c2 instanceof FlagServer)
+                flagServer = (FlagServer) c2;
+            else
+                flagServer = ((FlagSearch) c2).getFlagServer();
+
+            start_date_time2 = flagServer.getDateTimeStart();
+
+            end_date_time2 = flagServer.getDateTimeEnd();
+            time_left_to_end2 = end_date_time2 - nowTime;
+
+        }
+        else if (c2 instanceof ReminderServer || c2 instanceof ReminderSearch) {
+            if (c2 instanceof ReminderServer)
+                reminderServer = (ReminderServer) c2;
+            else
+                reminderServer = ((ReminderSearch) c2).getReminderServer();
+
+            start_date_time2 = reminderServer.getDateTimeStart();
+
+            end_date_time2 = reminderServer.getDateTimeStart();
+            time_left_to_end2 = end_date_time2 - nowTime;
+        }
+
+
+        if (time_left_to_end >= 0 && time_left_to_end2 < 0)
+            return -1;
+        else if (time_left_to_end < 0 && time_left_to_end2 >= 0)
+            return 1;
+        else if (start_date_time > start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0)
+            return -1;
+        else if (start_date_time < start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0)
+            return 1;
+        else if (start_date_time < start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0)
+            return -1;
+        else if (start_date_time > start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0)
+            return 1;
+        else
+            return 0;
+    }
+
 }

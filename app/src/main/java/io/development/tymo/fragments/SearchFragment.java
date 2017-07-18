@@ -44,7 +44,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 import static android.content.Context.MODE_PRIVATE;
-import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmFeedSearch;
+import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmFeedSearchWhats;
+import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmSearchMyCommitments;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -336,14 +337,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         Collections.sort(listWhats, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return algorithmFeedSearch(c1, c2, filter.getProximity(), filter.getPopularity(), filter.getDateHour(), getActivity());
+                return algorithmFeedSearchWhats(c1, c2, filter.getProximity(), filter.getPopularity(), filter.getDateHour(), getActivity());
             }
         });
 
         Collections.sort(listMyCommitment, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return algorithmFeedSearch(c1, c2, filter.getProximity(), filter.getPopularity(), filter.getDateHour(), getActivity());
+                return algorithmSearchMyCommitments(c1, c2);
             }
         });
 
@@ -413,7 +414,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         Collections.sort(listWhats, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return algorithmFeedSearch(c1, c2, false, false, false, getActivity());
+                return algorithmFeedSearchWhats(c1, c2, false, false, false, getActivity());
             }
         });
 
@@ -499,7 +500,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         Collections.sort(listMyCommitment, new Comparator<Object>() {
             @Override
             public int compare(Object c1, Object c2) {
-                return algorithmFeedSearch(c1, c2, false, false, false, getActivity());
+                return algorithmSearchMyCommitments(c1, c2);
             }
         });
 
