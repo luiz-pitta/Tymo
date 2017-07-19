@@ -108,16 +108,6 @@ public class CommitmentFragment extends Fragment{
 
         if(list.size() == 0)
             recyclerView.showEmpty();
-
-        PlansFragment fragment = (PlansFragment)getActivity().getFragmentManager().findFragmentByTag("Plans_main");
-
-        if(fragment == null) {
-            FriendProfileActivity parent = (FriendProfileActivity)getActivity();
-            parent.getScrollView().smoothScrollTo(0,0);
-        }
-        else
-            fragment.getScrollView().smoothScrollTo(0,0);
-
     }
 
     @Override
