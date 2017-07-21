@@ -26,10 +26,11 @@ public class AlgorithmFeedSearch {
         double distance = -1, distance2 = -1;
         double lat = -500, lng = -500, lat2 = -500, lng2 = -500;
 
-        double rank_points = 0, rank_points_ue = 0, rank_points_we = 0, rank_points_de = 0, rank_points_range = 0;
-        double rank_points2 = 0, rank_points_ue2 = 0, rank_points_we2 = 0, rank_points_de2 = 0, rank_points_range2 = 0;
+        double rank_points = 0, rank_points_ue = 0, rank_points_we = 0, rank_points_de = 0, rank_points_distance = 0;
+        double rank_points2 = 0, rank_points_ue2 = 0, rank_points_we2 = 0, rank_points_de2 = 0, rank_points_distance2 = 0;
+        double rank_points_distance_zero = 0, rank_points_distance_null = 0;
+        double rank_points_distance_zero2 = 0, rank_points_distance_null2 = 0;
         double popularity_points = 0, popularity_points2 = 0;
-        String rank_points_range_op = "+", rank_points_range_op2 = "+";
 
         Calendar calendar = Calendar.getInstance();
         long nowTime = calendar.getTimeInMillis();
@@ -58,20 +59,15 @@ public class AlgorithmFeedSearch {
             rank_points_ue = activityServer.getRankPointsUe();
             rank_points_we = activityServer.getRankPointsWe();
             rank_points_de = activityServer.getRankPointsDe();
-            rank_points_range = Math.pow(activityServer.getRankPointsRangeBase(), distance);
-            rank_points_range_op = activityServer.getRankPointsRangeOp();
+            rank_points_distance_zero = activityServer.getRankPointsDistanceZero();
+            rank_points_distance_null = activityServer.getRankPointsDistanceNull();
 
-            switch (rank_points_range_op) {
-                case "+":
-                    rank_points_we += rank_points_range;
-                    break;
-                case "*":
-                    rank_points_we *= rank_points_range;
-                    break;
-                default:
-                    rank_points_we += rank_points_range;
-                    break;
-            }
+            if (distance == -1)
+                rank_points_we /= rank_points_distance_null;
+            else if (distance == 0)
+                rank_points_we /= rank_points_distance_zero;
+            else
+                rank_points_we /= distance;
 
             rank_points = rank_points_ue * rank_points_we * rank_points_de;
 
@@ -119,20 +115,15 @@ public class AlgorithmFeedSearch {
             rank_points_ue2 = activityServer.getRankPointsUe();
             rank_points_we2 = activityServer.getRankPointsWe();
             rank_points_de2 = activityServer.getRankPointsDe();
-            rank_points_range2 = Math.pow(activityServer.getRankPointsRangeBase(), distance2);
-            rank_points_range_op2 = activityServer.getRankPointsRangeOp();
+            rank_points_distance_zero2 = activityServer.getRankPointsDistanceZero();
+            rank_points_distance_null2 = activityServer.getRankPointsDistanceNull();
 
-            switch (rank_points_range_op2) {
-                case "+":
-                    rank_points_we2 += rank_points_range2;
-                    break;
-                case "*":
-                    rank_points_we2 *= rank_points_range2;
-                    break;
-                default:
-                    rank_points_we2 += rank_points_range2;
-                    break;
-            }
+            if (distance2 == -1)
+                rank_points_we2 /= rank_points_distance_null2;
+            else if (distance2 == 0)
+                rank_points_we2 /= rank_points_distance_zero2;
+            else
+                rank_points_we2 /= distance2;
 
             rank_points2 = rank_points_ue2 * rank_points_we2 * rank_points_de2;
 
@@ -175,9 +166,13 @@ public class AlgorithmFeedSearch {
             return -1;
         else if (popularity_points < popularity_points2 && orderByPopularity == true)
             return 1;
-        else if (start_date_time < start_date_time2 && orderByDateHour == true)
+        else if (start_date_time > start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0 && orderByDateHour == true)
             return -1;
-        else if (start_date_time > start_date_time2 && orderByDateHour == true)
+        else if (start_date_time < start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0 && orderByDateHour == true)
+            return 1;
+        else if (start_date_time < start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0 && orderByDateHour == true)
+            return -1;
+        else if (start_date_time > start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0 && orderByDateHour == true)
             return 1;
         else if (rank_points > rank_points2)
             return -1;

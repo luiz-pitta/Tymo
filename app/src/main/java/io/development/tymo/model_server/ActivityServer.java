@@ -9,8 +9,7 @@ public class ActivityServer implements Serializable {
     private static final long serialVersionUID = 4L;
 
     private double rank_points_ue, rank_points_we, rank_points_de;
-    private double rank_points_range_base;
-    private String rank_points_range_op;
+    private double rank_points_distance_zero, rank_points_distance_null;
     private double popularity_points;
 
     private String email_invited;
@@ -146,8 +145,8 @@ public class ActivityServer implements Serializable {
         this.rank_points_ue = activityServer.getRankPointsUe();
         this.rank_points_we = activityServer.getRankPointsWe();
         this.rank_points_de = activityServer.getRankPointsDe();
-        this.rank_points_range_base = activityServer.getRankPointsRangeBase();
-        this.rank_points_range_op = activityServer.getRankPointsRangeOp();
+        this.rank_points_distance_zero = activityServer.getRankPointsDistanceZero();
+        this.rank_points_distance_null = activityServer.getRankPointsDistanceNull();
         this.popularity_points = activityServer.getPopularityPoints();
 
         this.date_time_now = activityServer.getDateTimeNow();
@@ -177,20 +176,20 @@ public class ActivityServer implements Serializable {
         this.rank_points_de = rank_points_de;
     }
 
-    public double getRankPointsRangeBase() {
-        return rank_points_range_base;
+    public double getRankPointsDistanceZero() {
+        return rank_points_distance_zero;
     }
 
-    public void setRankPointsRangeBase(double rank_points_range_base) {
-        this.rank_points_range_base = rank_points_range_base;
+    public void setRankPointsDistanceZero(double rank_points_distance_zero) {
+        this.rank_points_distance_zero = rank_points_distance_zero;
     }
 
-    public String getRankPointsRangeOp() {
-        return rank_points_range_op;
+    public double getRankPointsDistanceNull() {
+        return rank_points_distance_null;
     }
 
-    public void setRankPointsRangeOp(String rank_points_range_op) {
-        this.rank_points_range_op = rank_points_range_op;
+    public void setRankPointsDistanceNull(double rank_points_distance_null) {
+        this.rank_points_distance_null = rank_points_distance_null;
     }
 
     public double getPopularityPoints() {
