@@ -23,19 +23,12 @@ public class AlgorithmFeedSearch {
         long end_date_time = 0, end_date_time2 = 0;
         long time_left_to_end = 0, time_left_to_end2 = 0;
 
-        double distance = -1, distance2 = -1;
-        double lat = -500, lng = -500, lat2 = -500, lng2 = -500;
-
-        double rank_points = 0, rank_points_ue = 0, rank_points_we = 0, rank_points_de = 0, rank_points_distance = 0;
-        double rank_points2 = 0, rank_points_ue2 = 0, rank_points_we2 = 0, rank_points_de2 = 0, rank_points_distance2 = 0;
-        double rank_points_distance_zero = 0, rank_points_distance_null = 0;
-        double rank_points_distance_zero2 = 0, rank_points_distance_null2 = 0;
+        double rank_points = 0, rank_points2 = 0;
         double popularity_points = 0, popularity_points2 = 0;
+        double distance = -1, distance2 = -1;
 
         Calendar calendar = Calendar.getInstance();
         long nowTime = calendar.getTimeInMillis();
-
-        LocationManager manager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 
         if (c1 instanceof ActivityServer || c1 instanceof ActivitySearch) {
             if (c1 instanceof ActivityServer)
@@ -48,30 +41,9 @@ public class AlgorithmFeedSearch {
             end_date_time = activityServer.getDateTimeEnd();
             time_left_to_end = end_date_time - nowTime;
 
-            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !(activityServer.getLat() == -500 || (activityServer.getLat() == 0 && activityServer.getLng() == 0))) {
-                lat = TymoApplication.getInstance().getLatLng().get(0);
-                lng = TymoApplication.getInstance().getLatLng().get(1);
-                distance = Utilities.distance(activityServer.getLat(), activityServer.getLng(), lat, lng);
-            }
-
             popularity_points = activityServer.getPopularityPoints();
-
-            rank_points_ue = activityServer.getRankPointsUe();
-            rank_points_we = activityServer.getRankPointsWe();
-            rank_points_de = activityServer.getRankPointsDe();
-            rank_points_distance_zero = activityServer.getRankPointsDistanceZero();
-            rank_points_distance_null = activityServer.getRankPointsDistanceNull();
-
-            if (activityServer.getRankPointsDistanceActivated()){
-                if (distance == -1)
-                    rank_points_we /= rank_points_distance_null;
-                else if (distance == 0)
-                    rank_points_we /= rank_points_distance_zero;
-                else
-                    rank_points_we /= distance;
-            }
-
-            rank_points = rank_points_ue * rank_points_we * rank_points_de;
+            rank_points = activityServer.getRankPoints();
+            distance = activityServer.getDistance();
 
         }
         else if (c1 instanceof FlagServer || c1 instanceof FlagSearch) {
@@ -86,12 +58,7 @@ public class AlgorithmFeedSearch {
             time_left_to_end = end_date_time - nowTime;
 
             popularity_points = flagServer.getPopularityPoints();
-
-            rank_points_ue = flagServer.getRankPointsUe();
-            rank_points_we = flagServer.getRankPointsWe();
-            rank_points_de = flagServer.getRankPointsDe();
-
-            rank_points = rank_points_ue * rank_points_we * rank_points_de;
+            rank_points = flagServer.getRankPoints();
 
         }
 
@@ -106,30 +73,9 @@ public class AlgorithmFeedSearch {
             end_date_time2 = activityServer.getDateTimeEnd();
             time_left_to_end2 = end_date_time2 - nowTime;
 
-            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER) && !(activityServer.getLat() == -500 || (activityServer.getLat() == 0 && activityServer.getLng() == 0))) {
-                lat2 = TymoApplication.getInstance().getLatLng().get(0);
-                lng2 = TymoApplication.getInstance().getLatLng().get(1);
-                distance2 = Utilities.distance(activityServer.getLat(), activityServer.getLng(), lat2, lng2);
-            }
-
             popularity_points2 = activityServer.getPopularityPoints();
-
-            rank_points_ue2 = activityServer.getRankPointsUe();
-            rank_points_we2 = activityServer.getRankPointsWe();
-            rank_points_de2 = activityServer.getRankPointsDe();
-            rank_points_distance_zero2 = activityServer.getRankPointsDistanceZero();
-            rank_points_distance_null2 = activityServer.getRankPointsDistanceNull();
-
-            if (activityServer.getRankPointsDistanceActivated()){
-                if (distance2 == -1)
-                    rank_points_we2 /= rank_points_distance_null2;
-                else if (distance2 == 0)
-                    rank_points_we2 /= rank_points_distance_zero2;
-                else
-                    rank_points_we2 /= distance2;
-            }
-
-            rank_points2 = rank_points_ue2 * rank_points_we2 * rank_points_de2;
+            rank_points2 = activityServer.getRankPoints();
+            distance2 = activityServer.getDistance();
 
         }
         else if (c2 instanceof FlagServer || c2 instanceof FlagSearch) {
@@ -144,12 +90,7 @@ public class AlgorithmFeedSearch {
             time_left_to_end2 = end_date_time2 - nowTime;
 
             popularity_points2 = flagServer.getPopularityPoints();
-
-            rank_points_ue2 = flagServer.getRankPointsUe();
-            rank_points_we2 = flagServer.getRankPointsWe();
-            rank_points_de2 = flagServer.getRankPointsDe();
-
-            rank_points2 = rank_points_ue2 * rank_points_we2 * rank_points_de2;
+            rank_points2 = flagServer.getRankPoints();
 
         }
 

@@ -8,10 +8,7 @@ import java.util.List;
 public class ActivityServer implements Serializable {
     private static final long serialVersionUID = 4L;
 
-    private double rank_points_ue, rank_points_we, rank_points_de;
-    private double rank_points_distance_zero, rank_points_distance_null;
-    private boolean rank_points_distance_activated;
-    private double popularity_points;
+    private double rank_points, popularity_points, distance;
 
     private String email_invited;
     private String creator;
@@ -143,43 +140,23 @@ public class ActivityServer implements Serializable {
         this.id_google = activityServer.getIdGoogle();
         this.id_facebook = activityServer.getIdFacebook();
 
-        this.rank_points_ue = activityServer.getRankPointsUe();
-        this.rank_points_we = activityServer.getRankPointsWe();
-        this.rank_points_de = activityServer.getRankPointsDe();
-        this.rank_points_distance_zero = activityServer.getRankPointsDistanceZero();
-        this.rank_points_distance_null = activityServer.getRankPointsDistanceNull();
-        this.rank_points_distance_activated = activityServer.getRankPointsDistanceActivated();
+        this.rank_points = activityServer.getRankPoints();
         this.popularity_points = activityServer.getPopularityPoints();
+        this.distance = activityServer.getDistance();
 
         this.date_time_now = activityServer.getDateTimeNow();
     }
 
-    public double getRankPointsUe() {
-        return rank_points_ue;
-    }
-
-    public double getRankPointsWe() {
-        return rank_points_we;
-    }
-
-    public double getRankPointsDe() {
-        return rank_points_de;
-    }
-
-    public double getRankPointsDistanceZero() {
-        return rank_points_distance_zero;
-    }
-
-    public double getRankPointsDistanceNull() {
-        return rank_points_distance_null;
-    }
-
-    public boolean getRankPointsDistanceActivated() {
-        return rank_points_distance_activated;
+    public double getRankPoints() {
+        return rank_points;
     }
 
     public double getPopularityPoints() {
         return popularity_points;
+    }
+
+    public double getDistance() {
+        return distance;
     }
 
     public void setDateTimeNow(long date_time_now) {

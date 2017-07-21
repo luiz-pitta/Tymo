@@ -60,12 +60,12 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
         photoCreatorRingBox = $(R.id.photoCreatorRingBox);
         this.context = context;
 
-        animation = new TranslateAnimation(0.0f, 0.0f,-Utilities.convertDpToPixel(2, context), Utilities.convertDpToPixel(2, context));
+        animation = new TranslateAnimation(0.0f, 0.0f, -Utilities.convertDpToPixel(2, context), Utilities.convertDpToPixel(2, context));
         animation.setDuration(1200);
         animation.setRepeatCount(Animation.INFINITE);
         animation.setRepeatMode(Animation.REVERSE);
 
-        animation2 = new TranslateAnimation(0.0f, 0.0f,Utilities.convertDpToPixel(2, context), -Utilities.convertDpToPixel(2, context));
+        animation2 = new TranslateAnimation(0.0f, 0.0f, Utilities.convertDpToPixel(2, context), -Utilities.convertDpToPixel(2, context));
         animation2.setDuration(800);
         animation2.setRepeatCount(Animation.INFINITE);
         animation2.setRepeatMode(Animation.REVERSE);
@@ -78,14 +78,14 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
         rotation.setRepeatMode(Animation.REVERSE);
     }
 
-    public void setAnimation(){
+    public void setAnimation() {
         pieceBox.startAnimation(animation2);
         textBox.startAnimation(animation);
         triangle.startAnimation(animation);
     }
 
     @Override
-    public void setData(ActivityServer cube){
+    public void setData(ActivityServer cube) {
         itemView.setAlpha(1);
 
         cubeUpperBoxIcon.setColorFilter(cube.getCubeColorUpper());
@@ -98,7 +98,7 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(pieceIcon);
 
-        if(!cube.getUser().getPhoto().matches("")) {
+        if (!cube.getUser().getPhoto().matches("")) {
             Glide.clear(photoCreator);
             Glide.with(context)
                     .load(cube.getUser().getPhoto())
@@ -114,8 +114,7 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
                             photoCreator.setImageDrawable(circularBitmapDrawable);
                         }
                     });
-        }
-        else
+        } else
             photoCreator.setImageResource(R.drawable.ic_profile_photo_empty);
 
         textViewTitle.setText(cube.getTitle());
@@ -126,19 +125,16 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
         else
             textViewDescription.setVisibility(View.GONE);
 
-        if(cube.getFavoriteCreator() > 0){
+        if (cube.getFavoriteCreator() > 0) {
             photoCreatorRingBox.setVisibility(View.VISIBLE);
             photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_favorite_zoom_less);
-        }
-        else if(cube.getKnowCreator() > 0){
+        } else if (cube.getKnowCreator() > 0) {
             photoCreatorRingBox.setVisibility(View.VISIBLE);
             photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_my_contact_zoom_less);
-        }
-        else if(cube.getUser().getEmail().equals(email)){
+        } else if (cube.getUser().getEmail().equals(email)) {
             photoCreatorRingBox.setVisibility(View.VISIBLE);
             photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_you_zoom_less);
-        }
-        else{
+        } else {
             photoCreatorRingBox.setVisibility(View.INVISIBLE);
         }
 

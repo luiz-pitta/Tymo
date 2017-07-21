@@ -7,8 +7,7 @@ import java.util.List;
 public class FlagServer implements Serializable {
     private static final long serialVersionUID = 3L;
 
-    private double rank_points_ue, rank_points_we, rank_points_de;
-    private double popularity_points;
+    private double rank_points, popularity_points;
 
     private String email_invited;
     private String creator;
@@ -114,24 +113,14 @@ public class FlagServer implements Serializable {
         this.participates = flagServer.getParticipates();
         this.know_creator = flagServer.getKnowCreator();
 
-        this.rank_points_ue = flagServer.getRankPointsUe();
-        this.rank_points_we = flagServer.getRankPointsWe();
-        this.rank_points_de = flagServer.getRankPointsDe();
+        this.rank_points = flagServer.getRankPoints();
         this.popularity_points = flagServer.getPopularityPoints();
 
         this.date_time_now = flagServer.getDateTimeNow();
     }
 
-    public double getRankPointsUe() {
-        return rank_points_ue;
-    }
-
-    public double getRankPointsWe() {
-        return rank_points_we;
-    }
-
-    public double getRankPointsDe() {
-        return rank_points_de;
+    public double getRankPoints() {
+        return rank_points;
     }
 
     public double getPopularityPoints() {
