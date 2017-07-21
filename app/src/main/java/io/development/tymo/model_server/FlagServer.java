@@ -126,32 +126,16 @@ public class FlagServer implements Serializable {
         return rank_points_ue;
     }
 
-    public void setRankPointsUe(double rank_points_ue) {
-        this.rank_points_ue = rank_points_ue;
-    }
-
     public double getRankPointsWe() {
         return rank_points_we;
-    }
-
-    public void setRankPointsWe(double rank_points_we) {
-        this.rank_points_we = rank_points_we;
     }
 
     public double getRankPointsDe() {
         return rank_points_de;
     }
 
-    public void setRankPointsDe(double rank_points_de) {
-        this.rank_points_de = rank_points_de;
-    }
-
     public double getPopularityPoints() {
         return popularity_points;
-    }
-
-    public void setPopularityPoints(double popularity_points) {
-        this.popularity_points = popularity_points;
     }
 
     public void setDateTimeNow(long date_time_now) {

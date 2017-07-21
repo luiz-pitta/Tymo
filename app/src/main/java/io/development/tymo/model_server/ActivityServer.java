@@ -10,6 +10,7 @@ public class ActivityServer implements Serializable {
 
     private double rank_points_ue, rank_points_we, rank_points_de;
     private double rank_points_distance_zero, rank_points_distance_null;
+    private boolean rank_points_distance_activated;
     private double popularity_points;
 
     private String email_invited;
@@ -147,6 +148,7 @@ public class ActivityServer implements Serializable {
         this.rank_points_de = activityServer.getRankPointsDe();
         this.rank_points_distance_zero = activityServer.getRankPointsDistanceZero();
         this.rank_points_distance_null = activityServer.getRankPointsDistanceNull();
+        this.rank_points_distance_activated = activityServer.getRankPointsDistanceActivated();
         this.popularity_points = activityServer.getPopularityPoints();
 
         this.date_time_now = activityServer.getDateTimeNow();
@@ -156,48 +158,28 @@ public class ActivityServer implements Serializable {
         return rank_points_ue;
     }
 
-    public void setRankPointsUe(double rank_points_ue) {
-        this.rank_points_ue = rank_points_ue;
-    }
-
     public double getRankPointsWe() {
         return rank_points_we;
-    }
-
-    public void setRankPointsWe(double rank_points_we) {
-        this.rank_points_we = rank_points_we;
     }
 
     public double getRankPointsDe() {
         return rank_points_de;
     }
 
-    public void setRankPointsDe(double rank_points_de) {
-        this.rank_points_de = rank_points_de;
-    }
-
     public double getRankPointsDistanceZero() {
         return rank_points_distance_zero;
-    }
-
-    public void setRankPointsDistanceZero(double rank_points_distance_zero) {
-        this.rank_points_distance_zero = rank_points_distance_zero;
     }
 
     public double getRankPointsDistanceNull() {
         return rank_points_distance_null;
     }
 
-    public void setRankPointsDistanceNull(double rank_points_distance_null) {
-        this.rank_points_distance_null = rank_points_distance_null;
+    public boolean getRankPointsDistanceActivated() {
+        return rank_points_distance_activated;
     }
 
     public double getPopularityPoints() {
         return popularity_points;
-    }
-
-    public void setPopularityPoints(double popularity_points) {
-        this.popularity_points = popularity_points;
     }
 
     public void setDateTimeNow(long date_time_now) {

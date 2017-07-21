@@ -62,12 +62,14 @@ public class AlgorithmFeedSearch {
             rank_points_distance_zero = activityServer.getRankPointsDistanceZero();
             rank_points_distance_null = activityServer.getRankPointsDistanceNull();
 
-            if (distance == -1)
-                rank_points_we /= rank_points_distance_null;
-            else if (distance == 0)
-                rank_points_we /= rank_points_distance_zero;
-            else
-                rank_points_we /= distance;
+            if (activityServer.getRankPointsDistanceActivated()){
+                if (distance == -1)
+                    rank_points_we /= rank_points_distance_null;
+                else if (distance == 0)
+                    rank_points_we /= rank_points_distance_zero;
+                else
+                    rank_points_we /= distance;
+            }
 
             rank_points = rank_points_ue * rank_points_we * rank_points_de;
 
@@ -118,12 +120,14 @@ public class AlgorithmFeedSearch {
             rank_points_distance_zero2 = activityServer.getRankPointsDistanceZero();
             rank_points_distance_null2 = activityServer.getRankPointsDistanceNull();
 
-            if (distance2 == -1)
-                rank_points_we2 /= rank_points_distance_null2;
-            else if (distance2 == 0)
-                rank_points_we2 /= rank_points_distance_zero2;
-            else
-                rank_points_we2 /= distance2;
+            if (activityServer.getRankPointsDistanceActivated()){
+                if (distance2 == -1)
+                    rank_points_we2 /= rank_points_distance_null2;
+                else if (distance2 == 0)
+                    rank_points_we2 /= rank_points_distance_zero2;
+                else
+                    rank_points_we2 /= distance2;
+            }
 
             rank_points2 = rank_points_ue2 * rank_points_we2 * rank_points_de2;
 

@@ -126,7 +126,6 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> {
         else
             textViewDescription.setVisibility(View.GONE);
 
-
         if(cube.getFavoriteCreator() > 0){
             photoCreatorRingBox.setVisibility(View.VISIBLE);
             photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_favorite_zoom_less);
