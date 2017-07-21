@@ -9,6 +9,7 @@ import io.development.tymo.TymoApplication;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.ReminderServer;
+import io.development.tymo.model_server.User;
 import io.development.tymo.models.search.ActivitySearch;
 import io.development.tymo.models.search.FlagSearch;
 import io.development.tymo.models.search.ReminderSearch;
@@ -224,6 +225,33 @@ public class AlgorithmFeedSearch {
         else if (start_date_time < start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0)
             return -1;
         else if (start_date_time > start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0)
+            return 1;
+        else
+            return 0;
+    }
+
+    public static int algorithmSearchPeople(Object c1, Object c2) {
+        User user, user2;
+
+        int priority = 0, priority2 = 0;
+        double people_points = 0, people_points2 = 0;
+
+        user = (User) c1;
+        user2 = (User) c2;
+
+        priority = user.getCountFavorite() + user.getCountKnows();
+        priority2 = user2.getCountFavorite() + user2.getCountKnows();
+
+        people_points = user.getPeoplePoints();
+        people_points2 = user2.getPeoplePoints();
+
+        if (priority > priority2)
+            return -1;
+        else if (priority < priority2)
+            return 1;
+        else if (people_points > people_points2)
+            return -1;
+        else if (people_points < people_points2)
             return 1;
         else
             return 0;

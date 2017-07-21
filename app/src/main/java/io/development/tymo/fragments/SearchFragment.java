@@ -46,6 +46,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.Context.MODE_PRIVATE;
 import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmFeedSearchWhats;
 import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmSearchMyCommitments;
+import static io.development.tymo.utils.AlgorithmFeedSearch.algorithmSearchPeople;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -359,6 +360,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             listPeople.add(user);
         }
 
+        Collections.sort(listPeople, new Comparator<Object>() {
+            @Override
+            public int compare(Object c1, Object c2) {
+                return algorithmSearchPeople(c1, c2);
+            }
+        });
+
         SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment)adapter.getItem(PEOPLE);
         searchPeopleFragment.setAdapterItens(listPeople);
 
@@ -508,6 +516,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         searchMyCommitmentFragment.setAdapterItens(listMyCommitment);
 
         listPeople.addAll(people);
+
+        Collections.sort(listPeople, new Comparator<Object>() {
+            @Override
+            public int compare(Object c1, Object c2) {
+                return algorithmSearchPeople(c1, c2);
+            }
+        });
 
         SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment)adapter.getItem(PEOPLE);
         searchPeopleFragment.setAdapterItens(listPeople);

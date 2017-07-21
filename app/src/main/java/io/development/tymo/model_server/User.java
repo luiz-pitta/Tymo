@@ -8,6 +8,8 @@ import java.util.List;
 public class User implements Serializable {
     private static final long serialVersionUID = 2L;
 
+    private double people_points;
+
     private int count_common;
     private int count_ask_add;
     private int count_knows;
@@ -59,6 +61,10 @@ public class User implements Serializable {
     private boolean delete = true;
 
     private List<String> emails = new ArrayList<>();
+
+    public double getPeoplePoints() {
+        return people_points;
+    }
 
     public void setDateTimeNow(long date_time_now) {
         this.date_time_now = date_time_now;
