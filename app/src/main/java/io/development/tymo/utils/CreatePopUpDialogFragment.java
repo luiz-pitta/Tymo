@@ -162,6 +162,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             }
 
             private void deleteFlagActReminder(long id, ActivityServer activity) {
+                if(screen == Utilities.TYPE_PLANS)
+                    refreshScreen(mContext);
 
                 mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activity)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -974,6 +976,11 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
     private static void updateNotificationStartToday(Context context) {
         Intent intent = new Intent("notification_update");
+        LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
+    }
+
+    private static void refreshScreen(Context context) {
+        Intent intent = new Intent("refresh_screen_delete");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
     }
 

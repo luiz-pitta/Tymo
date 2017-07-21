@@ -691,8 +691,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                     setProgress(true);
                     LoginManager.getInstance().logInWithReadPermissions(SettingsActivity.this, Arrays.asList("email", "public_profile", "user_events"));
-                }else
+                }else {
+                    setProgress(true);
                     importFromFacebookRequest();
+                }
                 dialog.dismiss();
             }
         });

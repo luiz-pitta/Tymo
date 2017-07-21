@@ -2,7 +2,10 @@ package io.development.tymo.fragments;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Build;
@@ -12,6 +15,7 @@ import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.GestureDetector;
@@ -88,6 +92,13 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
+
+    private BroadcastReceiver mMessageReceiverRefresh = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            mSwipeRefreshLayout.setRefreshing(true);
+        }
+    };
 
     public static Fragment newInstance(String text) {
         PlansFragment fragment = new PlansFragment();
@@ -233,7 +244,11 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             TymoApplication.getInstance().setDate(null);
             TymoApplication.getInstance().setCreatedActivity(false);
         }
+
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiverRefresh, new IntentFilter("refresh_screen_delete"));
     }
+
+
 
     void refreshItems() {
 
@@ -1017,6 +1032,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     @Override
     public void refreshLayout(boolean showRefresh) {
+        mSwipeRefreshLayout.setRefreshing(false);
         updateLayout(day_start, month_start - 1, year_start, showRefresh);
     }
 }
