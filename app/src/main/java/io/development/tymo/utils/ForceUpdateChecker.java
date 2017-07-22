@@ -100,10 +100,13 @@ public class ForceUpdateChecker {
 
         if (required) {
             if(onUpdateNeededListener != null) {
-                if (!TextUtils.equals(currentVersion, appVersion))
+                if (appVersion.compareTo(currentVersion) < 0)
                     onUpdateNeededListener.onUpdateNeeded(updateUrl, currentVersion);
                 else
                     onUpdateNeededListener.onUpdateNotNeeded();
+            }
+            else{
+                onUpdateNeededListener.onUpdateNotNeeded();
             }
         }
     }
@@ -131,11 +134,14 @@ public class ForceUpdateChecker {
 
         if (required) {
             if(onUpdateNeededListener != null) {
-                if (!TextUtils.equals(currentVersion, appVersion) && isNetworkAvailable())
+                if (appVersion.compareTo(currentVersion) < 0 && isNetworkAvailable())
                     onUpdateNeededListener.onUpdateNeeded(updateUrl, currentVersion);
                 else
                     onUpdateNeededListener.onUpdateNotNeeded();
             }
+        }
+        else{
+            onUpdateNeededListener.onUpdateNotNeeded();
         }
     }
 
