@@ -91,6 +91,27 @@ public class ReminderEditFragment extends Fragment implements DatePickerDialog.O
 
         repeatNumberBox.setVisibility(View.GONE);
 
+        repeatEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String number = String.valueOf(s);
+                if(number.length() > 2)
+                    repeatEditText.setText("30");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+
+
         spinner = (MaterialSpinner) view.findViewById(R.id.repeatPicker);
         spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {

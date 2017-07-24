@@ -9,6 +9,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -187,6 +189,25 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         timeStart.setOnClickListener(this);
         timeEnd.setOnClickListener(this);
         addPersonButton.setOnClickListener(this);
+
+        repeatEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String number = String.valueOf(s);
+                if(number.length() > 2)
+                    repeatEditText.setText("30");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setItemAnimator(new LandingAnimator());

@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -117,6 +119,25 @@ public class WhenEditFragment extends Fragment implements
         hour_end = -1;
 
         repeatNumberBox.setVisibility(View.GONE);
+
+        repeatEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String number = String.valueOf(s);
+                if(number.length() > 2)
+                    repeatEditText.setText("30");
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         spinner = (MaterialSpinner) view.findViewById(R.id.repeatPicker);
         spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
