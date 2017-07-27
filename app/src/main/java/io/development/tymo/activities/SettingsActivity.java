@@ -932,6 +932,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                             if(list_activities_to_import.size() > 0)
                                 importFromFacebook(list_activities_to_import);
+                            else {
+                                setProgress(false);
+                                Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_facebook_no_events), Toast.LENGTH_LONG).show();
+                            }
                         }
                         catch (Exception  e){
                             Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_facebook_no_events), Toast.LENGTH_LONG).show();
