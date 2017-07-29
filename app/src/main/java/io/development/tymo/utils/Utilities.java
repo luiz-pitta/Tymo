@@ -284,7 +284,7 @@ public class Utilities {
         return actInWeek;
     }
 
-    public static boolean isActivityInRange(int ds, int ms, int df, int mf, int d){
+    public static boolean isActivityInRange(int ys, int yf, int ds, int ms, int df, int mf, int d){
         if(ms == mf) {
             if (ds > d || df < d)
                 return false;
@@ -292,7 +292,7 @@ public class Utilities {
                 return true;
         }
         else{
-            if(d >= ds || d <= df)
+            if((d >= ds || d <= df) && yf >= ys)
                 return true;
             else
                 return false;

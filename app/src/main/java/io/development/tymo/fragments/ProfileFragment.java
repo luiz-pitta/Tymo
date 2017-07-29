@@ -395,7 +395,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if(Utilities.isActivityInRange(activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
+        if(Utilities.isActivityInRange(activityServer.getYearStart(), activityServer.getYearEnd(),activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
             start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
             finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
         }
@@ -412,7 +412,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-        if(Utilities.isActivityInRange(flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
+        if(Utilities.isActivityInRange(flagServer.getYearStart(), flagServer.getYearEnd(),flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
             start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
             finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
         }

@@ -895,7 +895,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         for(int i=0;i<listPerson.size();i++)
             plans.addEmails(listPerson.get(i).getEmail());
 
-        plans.setA(year);
+        plans.setA(year1);
         plans.setA2(year2);
         plans.setD1(day1);
         plans.setD2(day2);
@@ -962,7 +962,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         for(int i=0;i<listPerson.size();i++)
             plans.addEmails(listPerson.get(i).getEmail());
 
-        plans.setA(year);
+        plans.setA(year1);
         plans.setA2(year2);
         plans.setD1(day1);
         plans.setD2(day2);
