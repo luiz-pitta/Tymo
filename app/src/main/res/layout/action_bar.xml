@@ -6,46 +6,65 @@
 
     <ImageView
         android:id="@+id/actionBackIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
-        android:padding="3dp"
+        android:padding="8dp"
         android:src="@drawable/ic_action_back"
         android:tint="@color/grey_600" />
 
-    <TextView
-        android:id="@+id/text"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toLeftOf="@+id/icon1"
         android:layout_toRightOf="@+id/actionBackIcon"
-        android:ellipsize="end"
         android:gravity="center"
-        android:lines="1"
-        android:text="Text"
-        android:textAllCaps="true"
-        android:textColor="@color/grey_600"
-        android:textSize="16sp"
-        android:textStyle="bold" />
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="Text"
+            android:textAllCaps="true"
+            android:textColor="@color/grey_600"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:text="Text"
+            android:textColor="@color/grey_600"
+            android:textSize="12sp" />
+
+    </LinearLayout>
 
     <ImageView
         android:id="@+id/icon1"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/icon2"
-        android:padding="3dp"
+        android:padding="8dp"
         android:src="@drawable/ic_person"
         android:tint="@color/grey_600"
         android:visibility="visible" />
 
     <ImageView
         android:id="@+id/icon2"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:padding="3dp"
+        android:padding="8dp"
         android:src="@drawable/ic_person"
         android:tint="@color/grey_600"
         android:visibility="visible" />

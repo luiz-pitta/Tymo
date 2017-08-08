@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -51,7 +52,7 @@ import io.reactivex.schedulers.Schedulers;
 import static io.development.tymo.utils.Validation.validateEmail;
 import static io.development.tymo.utils.Validation.validateFields;
 
-public class Login2Activity extends AppCompatActivity implements View.OnClickListener {
+public class Login2Activity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private TextView forgot, loginButton, facebookLoginButton;
     private TextView signinButton;
@@ -96,6 +97,10 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
         signinButton.setOnClickListener(this);
         loginButton.setOnClickListener(this);
         facebookLoginButton.setOnClickListener(this);
+        forgot.setOnTouchListener(this);
+        signinButton.setOnTouchListener(this);
+        loginButton.setOnTouchListener(this);
+        facebookLoginButton.setOnTouchListener(this);
 
         initSharedPreferences();
 
@@ -460,6 +465,41 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             progressBox.setVisibility(View.VISIBLE);
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_birthday", "user_events"));
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == loginButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                loginButton.setTextColor(ContextCompat.getColor(this, R.color.white));
+                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                loginButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+            }
+        }
+        else if (view == forgot) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                forgot.setTextColor(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                forgot.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+            }
+        }
+        else if (view == signinButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                signinButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_signin));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                signinButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_signin_pressed));
+            }
+        }
+        else if (view == facebookLoginButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                facebookLoginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_facebook));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                facebookLoginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_facebook_pressed));
+            }
+        }
+        return false;
     }
 
     @Override

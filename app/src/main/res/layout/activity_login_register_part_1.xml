@@ -100,6 +100,7 @@
                 android:layout_marginTop="30dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_full_name"
+                android:imeOptions="actionNext"
                 android:inputType="text"
                 android:lines="1"
                 android:paddingLeft="20dp"
@@ -115,6 +116,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_email"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:lines="1"
                 android:paddingLeft="20dp"
@@ -130,6 +132,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_password"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:lines="1"
                 android:paddingLeft="20dp"
@@ -137,22 +140,6 @@
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
                 android:textSize="18sp" />
-
-            <EditText
-                android:id="@+id/locationWhereLives"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="20dp"
-                android:background="@color/white_opacity_10"
-                android:hint="@string/about_where_lives"
-                android:inputType="text"
-                android:lines="1"
-                android:paddingLeft="20dp"
-                android:paddingRight="20dp"
-                android:textColor="@color/white"
-                android:textColorHint="@color/white"
-                android:textSize="18sp"
-                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/birthDateText"
@@ -236,39 +223,23 @@
                 android:textSize="18sp"
                 android:textStyle="bold" />
 
-            <RadioGroup
-                android:id="@+id/radioGroup"
+            <com.jaredrummler.materialspinner.MaterialSpinner
+                android:id="@+id/genderPicker"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="50dp"
                 android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <android.support.v7.widget.AppCompatRadioButton
-                    android:id="@+id/maleRadioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:checked="false"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:text="@string/register_male"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    app:buttonTint="@color/white" />
-
-                <android.support.v7.widget.AppCompatRadioButton
-                    android:id="@+id/femaleRadioButton"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:text="@string/register_female"
-                    android:textColor="@color/white"
-                    android:textSize="18sp"
-                    app:buttonTint="@color/white" />
-
-            </RadioGroup>
+                android:background="@color/white_opacity_10"
+                android:clickable="true"
+                android:gravity="center_vertical"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:textSize="18sp"
+                android:textStyle="normal"
+                app:ms_arrow_tint="@color/white"
+                app:ms_background_color="@color/deep_purple_400_light"
+                app:ms_dropdown_height="wrap_content"
+                app:ms_dropdown_max_height="120dp"
+                app:ms_text_color="@color/white" />
 
             <TextView
                 android:id="@+id/advanceButton"

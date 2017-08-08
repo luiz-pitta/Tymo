@@ -3,7 +3,9 @@ package io.development.tymo;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +18,8 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
+import io.development.tymo.activities.CompareActivity;
+import io.development.tymo.activities.MainActivity;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
@@ -27,7 +31,7 @@ import io.reactivex.schedulers.Schedulers;
 import static io.development.tymo.utils.Validation.validateEmail;
 
 
-public class LoginForgotActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginForgotActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private TextView m_title, sendButton, text2;
@@ -55,17 +59,19 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
 
         mBackButton.setOnClickListener(this);
         sendButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
+        sendButton.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.help));
 
         mSubscriptions = new CompositeDisposable();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
     }
 
     public void setProgress(boolean progress) {
-        if(progress)
+        if (progress)
             findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
         else
             findViewById(R.id.progressBox).setVisibility(View.GONE);
@@ -76,7 +82,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
         mSubscriptions.add(NetworkUtil.getRetrofit().resetPasswordInit(mEmail)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void handleResponse(Response response) {
@@ -92,7 +98,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
             try {
 
                 String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
+                Response response = gson.fromJson(errorBody, Response.class);
                 setProgress(false);
                 Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
             } catch (IOException e) {
@@ -110,24 +116,48 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
     }
 
     @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_100));
+            }
+        }
+        else if (view == sendButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                sendButton.setTextColor(ContextCompat.getColor(this, R.color.white));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+            }
+        }
+
+        return false;
+    }
+
+
+
+    @Override
     public void onClick(View view) {
-        if(view == mBackButton) {
+        if (view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
-        }else if(view == sendButton) {
+        } else if (view == sendButton) {
             editor.putString(Constants.FORGOT_PASS, email.getText().toString());
             editor.commit();
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(validateEmail(email.getText().toString()))
+            if (validateEmail(email.getText().toString()))
                 passwordResetInit(email.getText().toString());
             else
                 Toast.makeText(this, getResources().getString(R.string.validation_field_email_required), Toast.LENGTH_LONG).show();

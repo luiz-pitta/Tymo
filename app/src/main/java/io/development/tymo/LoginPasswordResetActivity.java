@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -29,7 +31,7 @@ import static io.development.tymo.utils.Validation.validateFields;
 import static io.development.tymo.utils.Validation.validatePasswordSize;
 
 
-public class LoginPasswordResetActivity extends AppCompatActivity implements View.OnClickListener {
+public class LoginPasswordResetActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private TextView sendButton;
     private EditText password, token;
@@ -48,6 +50,7 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
         sendButton = (TextView) findViewById(R.id.sendButton);
 
         sendButton.setOnClickListener(this);
+        sendButton.setOnTouchListener(this);
 
         mSubscriptions = new CompositeDisposable();
 
@@ -148,6 +151,20 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
         }
         else
             token.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == sendButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                sendButton.setTextColor(ContextCompat.getColor(this, R.color.white));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                sendButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+            }
+        }
+        return false;
     }
 
     @Override

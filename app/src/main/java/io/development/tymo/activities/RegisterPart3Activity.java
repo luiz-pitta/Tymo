@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -49,7 +50,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class RegisterPart3Activity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterPart3Activity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private TextView m_title, m_title2, advanceButton;
@@ -101,6 +102,8 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         addTagBox.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
+        advanceButton.setOnTouchListener(this);
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
@@ -343,6 +346,29 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.dispose();
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == advanceButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                advanceButton.setTextColor(ContextCompat.getColor(this, R.color.white));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                advanceButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+            }
+        }
+
+        return false;
     }
 
 }

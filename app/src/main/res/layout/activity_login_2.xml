@@ -5,9 +5,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bg_login"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:background="@drawable/bg_login"
     tools:context=".Login2Activity">
 
     <android.support.v4.widget.NestedScrollView
@@ -29,7 +29,6 @@
                 android:id="@+id/logo"
                 android:layout_width="160dp"
                 android:layout_height="80dp"
-                android:layout_marginTop="30dp"
                 android:src="@drawable/ic_login_logo" />
 
             <EditText
@@ -39,6 +38,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_email"
+                android:imeOptions="actionNext"
                 android:inputType="textEmailAddress"
                 android:lines="1"
                 android:paddingLeft="20dp"
@@ -54,6 +54,7 @@
                 android:layout_marginTop="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_password"
+                android:imeOptions="actionDone"
                 android:inputType="textPassword"
                 android:lines="1"
                 android:paddingLeft="20dp"
@@ -82,10 +83,11 @@
             <TextView
                 android:id="@+id/forgot"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_height="40dp"
                 android:ellipsize="end"
                 android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="30dp"
                 android:lines="1"
                 android:text="@string/login_forgot_text_1"
                 android:textColor="@color/white"
@@ -96,7 +98,6 @@
                 android:id="@+id/facebookLoginButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
                 android:background="@drawable/btn_facebook"
                 android:ellipsize="end"
                 android:gravity="center"
@@ -113,8 +114,7 @@
                 android:id="@+id/signinButton"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="30dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/btn_signin"
                 android:ellipsize="end"
                 android:gravity="center"

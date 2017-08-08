@@ -2,7 +2,9 @@ package io.development.tymo.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -13,7 +15,7 @@ import com.jaredrummler.materialspinner.MaterialSpinner;
 import io.development.tymo.R;
 import io.development.tymo.model_server.UserWrapper;
 
-public class RegisterPart2Activity extends AppCompatActivity implements View.OnClickListener {
+public class RegisterPart2Activity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private TextView m_title, m_title2, advanceButton;
@@ -35,6 +37,8 @@ public class RegisterPart2Activity extends AppCompatActivity implements View.OnC
 
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
+        advanceButton.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.register));
         m_title2.setText(getResources().getString(R.string.register_steps, 2, 3));
@@ -97,6 +101,29 @@ public class RegisterPart2Activity extends AppCompatActivity implements View.OnC
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == advanceButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                advanceButton.setTextColor(ContextCompat.getColor(this, R.color.white));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                advanceButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+            }
+        }
+
+        return false;
     }
 
 }

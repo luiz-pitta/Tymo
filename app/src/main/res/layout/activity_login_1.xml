@@ -22,10 +22,10 @@
 
             <ImageView
                 android:id="@+id/logo"
-                android:layout_marginTop="10dp"
                 android:layout_width="160dp"
                 android:layout_height="80dp"
                 android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
                 android:src="@drawable/ic_login_logo"
                 android:tint="@color/deep_purple_400" />
 
@@ -46,23 +46,22 @@
                 android:textSize="16sp" />
 
             <RelativeLayout
-                android:visibility="gone"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_above="@+id/customIndicator"
                 android:layout_below="@+id/text"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content">
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/daimajia_slider_image"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:adjustViewBounds="true"
-                    android:background="@drawable/bg_slideshow_1"/>
+                    android:background="@drawable/bg_slideshow_1" />
 
             </RelativeLayout>
 
             <com.daimajia.slider.library.SliderLayout
-                android:visibility="visible"
                 android:id="@+id/slider"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -70,10 +69,11 @@
                 android:layout_below="@+id/text"
                 android:layout_centerHorizontal="true"
                 android:layout_centerVertical="true"
+                android:visibility="visible"
                 custom:auto_cycle="true"
                 custom:indicator_visibility="visible"
                 custom:pager_animation="Accordion"
-                custom:pager_animation_span="1100"/>
+                custom:pager_animation_span="1100" />
 
             <com.daimajia.slider.library.Indicators.PagerIndicator
                 android:id="@+id/customIndicator"

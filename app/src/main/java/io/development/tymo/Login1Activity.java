@@ -11,6 +11,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -64,7 +65,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateEmail;
 
-public class Login1Activity extends AppCompatActivity implements View.OnClickListener, BaseSliderView.OnSliderClickListener,
+public class Login1Activity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener,
         ForceUpdateChecker.OnUpdateNeededListener{
 
@@ -100,6 +101,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
         loginButton.setOnClickListener(this);
         facebookLoginButton.setOnClickListener(this);
+        loginButton.setOnTouchListener(this);
+        facebookLoginButton.setOnTouchListener(this);
 
         list1.add(R.drawable.bg_slideshow_1);
         list1.add(R.drawable.bg_slideshow_2);
@@ -514,6 +517,25 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
         super.onDestroy();
         if(mSubscriptions != null)
             mSubscriptions.dispose();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == loginButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_1));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_1_pressed));
+            }
+        }
+        else if (view == facebookLoginButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                facebookLoginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_facebook));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                facebookLoginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_facebook_pressed));
+            }
+        }
+        return false;
     }
 }
 

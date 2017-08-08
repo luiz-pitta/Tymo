@@ -174,8 +174,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
     private String getGender(String gender){
         if(gender.matches("male"))
             return getResources().getString(R.string.register_male);
-        else
+        else if(gender.matches("not specified"))
             return getResources().getString(R.string.register_female);
+        else
+            return getResources().getString(R.string.register_not_specified);
     }
 
     public void setLayoutFacebook(){

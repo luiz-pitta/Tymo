@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -26,7 +28,9 @@ import org.joda.time.PeriodType;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
@@ -38,25 +42,23 @@ import static io.development.tymo.utils.Validation.validateEmail;
 import static io.development.tymo.utils.Validation.validateFields;
 import static io.development.tymo.utils.Validation.validatePasswordSize;
 
-public class RegisterPart1Activity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener {
+public class RegisterPart1Activity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton, photo;
     private TextView m_title, m_title2;
 
     private int day_start, month_start, year_start, age;
 
-    private android.support.v7.widget.AppCompatRadioButton radioButton1, radioButton2;
-
     private DateFormat dateFormat;
     private UserWrapper wrap;
 
     private EditText name;
     private EditText email;
-    private EditText locationWhereLives;
     private EditText password;
     private TextView birthDay, birthMonth, birthYear, advanceButton;
     private LinearLayout birthdayBox;
-    private RadioGroup radioGroup;
+
+    private int gender = 0;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -76,15 +78,11 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         photo = (ImageView) findViewById(R.id.photo);
         email = (EditText) findViewById(R.id.email);
         password = (EditText) findViewById(R.id.password);
-        locationWhereLives = (EditText) findViewById(R.id.locationWhereLives);
         birthDay = (TextView) findViewById(R.id.birthDay);
         birthMonth = (TextView) findViewById(R.id.birthMonth);
         birthYear = (TextView) findViewById(R.id.birthYear);
         birthdayBox = (LinearLayout) findViewById(R.id.birthdayBox);
-        radioGroup = (RadioGroup) findViewById(R.id.radioGroup);
         advanceButton = (TextView) findViewById(R.id.advanceButton);
-        radioButton1 = (android.support.v7.widget.AppCompatRadioButton) findViewById(R.id.maleRadioButton);
-        radioButton2 = (android.support.v7.widget.AppCompatRadioButton) findViewById(R.id.femaleRadioButton);
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
@@ -97,6 +95,8 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         birthMonth.setOnClickListener(this);
         birthYear.setOnClickListener(this);
         photo.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
+        advanceButton.setOnTouchListener(this);
 
         wrap = (UserWrapper) getIntent().getSerializableExtra("user_wrapper");
         if(wrap!=null)
@@ -104,6 +104,23 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
 
         m_title.setText(getResources().getString(R.string.register));
         m_title2.setText(getResources().getString(R.string.register_steps, 1, 3));
+
+        final List<String> list = new ArrayList<String>();
+        list.add(getResources().getString(R.string.register_not_specified));
+        list.add(getResources().getString(R.string.register_male));
+        list.add(getResources().getString(R.string.register_female));
+        MaterialSpinner spinner = (MaterialSpinner) findViewById(R.id.genderPicker);
+        spinner.setItems(list);
+        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                gender = position;
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "genderPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            }
+        });
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -126,7 +143,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
 
         if(!user.getGender().matches("")) {
             findViewById(R.id.genderText).setVisibility(View.GONE);
-            findViewById(R.id.radioGroup).setVisibility(View.GONE);
+            findViewById(R.id.genderPicker).setVisibility(View.GONE);
         }
 
         if(user.getDayBorn() != 0) {
@@ -142,12 +159,13 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
 
         String et_name = name.getText().toString();
         String et_email = email.getText().toString();
+        String genderStr;
 
-        int radioButtonID = radioGroup.getCheckedRadioButtonId();
-        View radioButton = radioGroup.findViewById(radioButtonID);
-        int idx = radioGroup.indexOfChild(radioButton);
-
-        String gender = idx == 0 ? "male" : "female";
+        switch (gender){
+            case 1: genderStr = "male"; break;
+            case 2: genderStr = "female"; break;
+            default: genderStr = "not specified"; break;
+        }
 
         LocalDate birthdate;
         LocalDate now = new LocalDate();
@@ -181,9 +199,6 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
                 err++;
                 Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
             }
-        }else if (!radioButton1.isChecked() && !radioButton2.isChecked() && user.getGender().matches("")) {
-            err++;
-            Toast.makeText(this, getResources().getString(R.string.validation_field_gender_required), Toast.LENGTH_LONG).show();
         }
 
         if (err == 0) {
@@ -199,7 +214,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             }
 
             if(user.getGender().matches(""))
-                user.setGender(gender);
+                user.setGender(genderStr);
 
             if(user.getDayBorn() == 0) {
                 user.setDayBorn(day_start);
@@ -225,13 +240,13 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         String et_name = name.getText().toString();
         String et_email = email.getText().toString();
         String et_password = password.getText().toString();
-        String location = locationWhereLives.getText().toString();
+        String genderStr;
 
-        int radioButtonID = radioGroup.getCheckedRadioButtonId();
-        View radioButton = radioGroup.findViewById(radioButtonID);
-        int idx = radioGroup.indexOfChild(radioButton);
-
-        String gender = idx == 0 ? "male" : "female";
+        switch (gender){
+            case 1: genderStr = "male"; break;
+            case 2: genderStr = "female"; break;
+            default: genderStr = "not specified"; break;
+        }
 
         LocalDate birthdate;
         LocalDate now = new LocalDate();
@@ -276,10 +291,6 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             err++;
             Toast.makeText(this, getResources().getString(R.string.validation_field_register_minimum_age), Toast.LENGTH_LONG).show();
         }
-        else if (!radioButton1.isChecked() && !radioButton2.isChecked()) {
-            err++;
-            Toast.makeText(this, getResources().getString(R.string.validation_field_gender_required), Toast.LENGTH_LONG).show();
-        }
 
         if (err == 0) {
 
@@ -289,7 +300,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             user.setPassword(et_password);
             user.setLivesIn("");
-            user.setGender(gender);
+            user.setGender(genderStr);
             user.setDayBorn(day_start);
             user.setMonthBorn(month_start+1);
             user.setYearBorn(year_start);
@@ -431,6 +442,29 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
                 .setFixAspectRatio(true)
                 .setMaxZoom(8)
                 .start(this);
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == advanceButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                advanceButton.setTextColor(ContextCompat.getColor(this, R.color.white));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                advanceButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+            }
+        }
+
+        return false;
     }
 
     @Override

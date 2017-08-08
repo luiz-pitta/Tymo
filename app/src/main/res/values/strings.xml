@@ -40,15 +40,15 @@
     </string-array>
 
     <string-array name="array_privacy">
-        <item>Qualquer um (Pública)</item>
-        <item>Somente meus contatos (Privada)</item>
+        <item>Todos</item>
+        <item>Somente meus contatos</item>
     </string-array>
 
     <string-array name="array_repeat_type">
         <item>Não se repete</item>
-        <item>Diariamente</item>
-        <item>Semanalmente</item>
-        <item>Mensalmente</item>
+        <item>Repetir diariamente</item>
+        <item>Repetir semanalmente</item>
+        <item>Repetir mensalmente</item>
     </string-array>
 
     <string-array name="array_contact_delete">
@@ -158,7 +158,7 @@
     <string name="create_activity_recover_with_repeat_text">Atividade resgatada possui repetições. Deseja criar com as repetições da original?</string>
     <string name="create_activity">Criar atividade</string>
     <string name="create_flag">Criar sinalizador</string>
-    <string name="create_reminder">Criar lembrete</string>
+    <string name="create_reminder">Criar lembretes e notas</string>
     <string name="created_by_me">Criado por mim</string>
     <string name="created_by">Criado por %1$s</string>
     <string name="creator">Criador</string>
@@ -356,6 +356,7 @@
     <string name="register_day">Dia</string>
     <string name="register_email">Email</string>
     <string name="register_female">Feminino</string>
+    <string name="register_not_specified">Não Especificado</string>
     <string name="register_full_name">Nome Completo</string>
     <string name="register_gender">Gênero</string>
     <string name="register_male">Masculino</string>
@@ -365,13 +366,16 @@
     <string name="register_privacy_always_friends">Somente Amigos</string>
     <string name="register_privacy_privated">Privado</string>
     <string name="register_privacy_public">Pública</string>
-    <string name="register_steps">(passo %1$d de %2$d)</string>
+    <string name="register_steps">passo %1$d de %2$d</string>
     <string name="register_year">Ano</string>
     <string name="register">Cadastro</string>
     <string name="reminder_date">Data</string>
     <string name="reminder_hour">Hora</string>
     <string name="reminder_privacy">Privada</string>
+    <string name="reminder_btn_add">Lembretes e\nNotas</string>
     <string name="reminder">Lembrete</string>
+    <string name="notes">Notas</string>
+    <string name="note">Nota</string>
     <string name="remove">Remover</string>
     <string name="repeat_daily">diariamente</string>
     <string name="repeat_how_many_times">Repetir quantas vezes? (máx. 30)</string>
@@ -466,7 +470,7 @@
     <string name="try_again">Tente Novamente</string>
     <string name="tutorial_1_text_1">Atividade</string>
     <string name="tutorial_1_text_2">Monte desde pequenos momentos a grandes eventos.</string>
-    <string name="tutorial_1_text_3">Lembrete</string>
+    <string name="tutorial_1_text_3">Lembretes e Notas</string>
     <string name="tutorial_1_text_4">Sem esquecimento! Registre qualquer informação rapidamente.</string>
     <string name="tutorial_1_text_5">Sinalizador</string>
     <string name="tutorial_1_text_6">Informe de forma direta e simples se você está OCUPADO ou LIVRE para fazer algo.</string>
