@@ -98,6 +98,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         reminderCardText = (TextView) findViewById(R.id.reminderCardText);
         editButton = (TextView) findViewById(R.id.editButton);
 
+        findViewById(R.id.space).setVisibility(View.VISIBLE);
+        editButton.setVisibility(View.VISIBLE);
 
         reminderCardText.setText("");
         reminderCardTime.setText("");

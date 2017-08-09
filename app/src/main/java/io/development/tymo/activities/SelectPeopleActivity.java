@@ -84,10 +84,10 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
 
 
         //search bar
-        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView magImage = (ImageView) searchView.findViewById(magId);
-        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        magImage.setVisibility(GONE);
+        //int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        //ImageView magImage = (ImageView) searchView.findViewById(magId);
+        //magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        //magImage.setVisibility(GONE);
 
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(275);

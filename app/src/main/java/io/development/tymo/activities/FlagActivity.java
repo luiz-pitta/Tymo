@@ -491,6 +491,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 icon2.setImageResource(R.drawable.ic_edit);
                 icon2.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
+                findViewById(R.id.space).setVisibility(View.VISIBLE);
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
                 unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
                 unavailableButton.clearColorFilter();
@@ -498,6 +499,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 icon2.setImageResource(R.drawable.ic_edit);
                 icon2.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
+                findViewById(R.id.space).setVisibility(View.VISIBLE);
             }else{
                 icon2.setVisibility(View.INVISIBLE);
                 icon2.setOnClickListener(null);

@@ -103,10 +103,10 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         mBackButton.setOnTouchListener(this);
 
         //search bar
-        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView magImage = (ImageView) searchView.findViewById(magId);
-        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        magImage.setVisibility(GONE);
+        //int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        //ImageView magImage = (ImageView) searchView.findViewById(magId);
+        //magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        //magImage.setVisibility(GONE);
 
         email = getIntent().getStringExtra("email_contacts");
         full_name = getIntent().getStringExtra("contact_full_name");

@@ -566,6 +566,41 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             dateText.setText(mContext.getResources().getString(R.string.date_format_9, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
                         }
 
+                        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent event) {
+                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                                }
+
+                                return false;
+                            }
+                        });
+
+                        button2.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent event) {
+                                int color = ContextCompat.getColor(dialog.getContext(), R.color.green_600);
+                                int color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.green_400);
+
+                                if (!buttonText2.getText().toString().matches(mContext.getResources().getString(R.string.fit))){
+                                    color = ContextCompat.getColor(dialog.getContext(), R.color.red_600);
+                                    color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.red_400);
+                                }
+                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                    buttonText2.setTextColor(color);
+                                    buttonIcon2.setColorFilter(color);
+                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    buttonText2.setTextColor(color_pressed);
+                                    buttonIcon2.setColorFilter(color_pressed);
+                                }
+
+                                return false;
+                            }
+                        });
+
                         buttonText1.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View v) {
@@ -634,6 +669,41 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
 
                         dateText.setText(mContext.getResources().getString(R.string.date_format_7, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+
+                        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent event) {
+                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                                }
+
+                                return false;
+                            }
+                        });
+
+                        button2.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent event) {
+                                int color = ContextCompat.getColor(dialog.getContext(), R.color.green_600);
+                                int color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.green_400);
+
+                                if (!buttonText2.getText().toString().matches(mContext.getResources().getString(R.string.fit))){
+                                    color = ContextCompat.getColor(dialog.getContext(), R.color.red_600);
+                                    color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.red_400);
+                                }
+                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                    buttonText2.setTextColor(color);
+                                    buttonIcon2.setColorFilter(color);
+                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    buttonText2.setTextColor(color_pressed);
+                                    buttonIcon2.setColorFilter(color_pressed);
+                                }
+
+                                return false;
+                            }
+                        });
 
                         button1.setOnClickListener(new View.OnClickListener() {
                             @Override
@@ -739,6 +809,41 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         } else {
                             dateText.setText(mContext.getResources().getString(R.string.date_format_9, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
                         }
+
+                        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent event) {
+                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                                }
+
+                                return false;
+                            }
+                        });
+
+                        button2.setOnTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View view, MotionEvent event) {
+                                int color = ContextCompat.getColor(dialog.getContext(), R.color.green_600);
+                                int color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.green_400);
+
+                                if (!buttonText2.getText().toString().matches(mContext.getResources().getString(R.string.fit))){
+                                    color = ContextCompat.getColor(dialog.getContext(), R.color.red_600);
+                                    color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.red_400);
+                                }
+                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                    buttonText2.setTextColor(color);
+                                    buttonIcon2.setColorFilter(color);
+                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                    buttonText2.setTextColor(color_pressed);
+                                    buttonIcon2.setColorFilter(color_pressed);
+                                }
+
+                                return false;
+                            }
+                        });
 
                         buttonText1.setOnClickListener(new View.OnClickListener() {
                             @Override

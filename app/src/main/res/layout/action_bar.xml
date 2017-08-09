@@ -13,11 +13,18 @@
         android:src="@drawable/ic_action_back"
         android:tint="@color/grey_600" />
 
+    <Space
+        android:id="@+id/space"
+        android:visibility="gone"
+        android:layout_toRightOf="@+id/actionBackIcon"
+        android:layout_width="30dp"
+        android:layout_height="match_parent" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_toLeftOf="@+id/icons"
-        android:layout_toRightOf="@+id/actionBackIcon"
+        android:layout_toRightOf="@+id/space"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -57,14 +64,12 @@
 
         <TextView
             android:id="@+id/editButton"
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="20dp"
+            android:layout_marginLeft="10dp"
             android:ellipsize="end"
             android:gravity="center"
             android:lines="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
             android:text="@string/edit"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"

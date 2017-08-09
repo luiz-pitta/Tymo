@@ -1833,6 +1833,15 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         ImageView checkBoxActivated1 = (ImageView) customView.findViewById(R.id.checkBoxActivated1);
         ImageView checkBoxActivated2 = (ImageView) customView.findViewById(R.id.checkBoxActivated2);
         ImageView checkBoxActivated3 = (ImageView) customView.findViewById(R.id.checkBoxActivated3);
+        ImageView optionIcon1 = (ImageView) customView.findViewById(R.id.optionIcon1);
+        ImageView optionIcon2 = (ImageView) customView.findViewById(R.id.optionIcon2);
+        ImageView optionIcon3 = (ImageView) customView.findViewById(R.id.optionIcon3);
+        TextView optionTitle1 = (TextView) customView.findViewById(R.id.optionTitle1);
+        TextView optionTitle2 = (TextView) customView.findViewById(R.id.optionTitle2);
+        TextView optionTitle3 = (TextView) customView.findViewById(R.id.optionTitle3);
+        TextView optionText1 = (TextView) customView.findViewById(R.id.optionText1);
+        TextView optionText2 = (TextView) customView.findViewById(R.id.optionText2);
+        TextView optionText3 = (TextView) customView.findViewById(R.id.optionText3);
 
         int color_selected = this.getResources().getColor(R.color.select);
         int color_transparent = this.getResources().getColor(R.color.transparent);
@@ -1849,30 +1858,72 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         switch (selected) {
             case 1:
-                //optionBox1.setBackgroundColor(color_transparent);
-                //optionBox2.setBackgroundColor(color_selected);
-                //optionBox3.setBackgroundColor(color_transparent);
-                checkBoxActivated1.setVisibility(View.GONE);
-                checkBoxActivated2.setVisibility(View.VISIBLE);
-                checkBoxActivated3.setVisibility(View.GONE);
+                optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
                 break;
             case 2:
-                //optionBox1.setBackgroundColor(color_transparent);
-                //optionBox2.setBackgroundColor(color_transparent);
-                //optionBox3.setBackgroundColor(color_selected);
-                checkBoxActivated1.setVisibility(View.GONE);
-                checkBoxActivated2.setVisibility(View.GONE);
-                checkBoxActivated3.setVisibility(View.VISIBLE);
+                optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
                 break;
             default:
-                //optionBox1.setBackgroundColor(color_selected);
-                //optionBox2.setBackgroundColor(color_transparent);
-                //optionBox3.setBackgroundColor(color_transparent);
-                checkBoxActivated1.setVisibility(View.VISIBLE);
-                checkBoxActivated2.setVisibility(View.GONE);
-                checkBoxActivated3.setVisibility(View.GONE);
+                optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
                 break;
         }
+
+        optionBox1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                }
+
+                return false;
+            }
+        });
+
+        optionBox2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                }
+
+                return false;
+            }
+        });
+
+        optionBox3.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                }
+
+                return false;
+            }
+        });
 
         optionBox1.setOnClickListener(new View.OnClickListener() {
             @Override

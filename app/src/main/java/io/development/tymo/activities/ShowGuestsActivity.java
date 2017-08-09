@@ -89,10 +89,10 @@ public class ShowGuestsActivity extends AppCompatActivity implements View.OnTouc
         m_title = (TextView) findViewById(R.id.text);
 
         //search bar
-        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView magImage = (ImageView) searchView.findViewById(magId);
-        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        magImage.setVisibility(GONE);
+        //int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        //ImageView magImage = (ImageView) searchView.findViewById(magId);
+        //magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        //magImage.setVisibility(GONE);
 
         m_title.setText(getResources().getString(R.string.guests));
 

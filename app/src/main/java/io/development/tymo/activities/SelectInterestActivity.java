@@ -94,10 +94,10 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         cleanButton.setOnClickListener(this);
 
         //search bar
-        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        ImageView magImage = (ImageView) searchView.findViewById(magId);
-        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        magImage.setVisibility(GONE);
+        //int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        //ImageView magImage = (ImageView) searchView.findViewById(magId);
+        //magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        //magImage.setVisibility(GONE);
 
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         //search bar end
