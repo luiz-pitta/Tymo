@@ -6,9 +6,11 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,10 +53,10 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
-public class ReminderActivity extends AppCompatActivity implements View.OnClickListener {
+public class ReminderActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton, icon2, icon1, deleteIcon;
-    private TextView m_title, reminderCardText, reminderCardTime;
+    private TextView m_title, reminderCardText, reminderCardTime, editButton;
     private RelativeLayout bottomBarBox;
     private TextView confirmationButton;
     private LinearLayout buttonsBar;
@@ -94,6 +96,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         confirmationButton = (TextView) findViewById(R.id.confirmationButton);
         reminderCardTime = (TextView) findViewById(R.id.reminderCardTime);
         reminderCardText = (TextView) findViewById(R.id.reminderCardText);
+        editButton = (TextView) findViewById(R.id.editButton);
+
 
         reminderCardText.setText("");
         reminderCardTime.setText("");
@@ -164,9 +168,12 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         }
 
         mBackButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
         confirmationButton.setOnClickListener(this);
         //icon1.setOnClickListener(this);
         icon2.setOnClickListener(this);
+        editButton.setOnClickListener(this);
+        editButton.setOnTouchListener(this);
         deleteIcon.setOnClickListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -232,9 +239,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 } else
                     edit_reminder(false);
             }
-        } else if (v == icon2) {
+        } else if (v == editButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1064,5 +1071,25 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleErrorToday(Throwable error) {
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+        else if (view == editButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+
+        return false;
     }
 }

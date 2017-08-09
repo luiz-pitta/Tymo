@@ -3,7 +3,9 @@ package io.development.tymo.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,7 +35,7 @@ import io.reactivex.schedulers.Schedulers;
 import static io.development.tymo.utils.Validation.validateFields;
 import static io.development.tymo.utils.Validation.validatePasswordSize;
 
-public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class ChangePasswordActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private TextView m_title, updatingButton, cancelButton, forgot;
@@ -70,6 +72,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         updatingButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
         forgot.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.password_reset_text_1));
         progressBox.setVisibility(View.GONE);
@@ -200,5 +203,18 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.dispose();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 }

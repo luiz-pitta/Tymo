@@ -53,7 +53,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class CompareActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
+public class CompareActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
     private ImageView mBackButton, addPersonButton;
     private ImageView previousWeek, nextWeek;
@@ -139,6 +139,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         previousWeek.setOnClickListener(this);
         nextWeek.setOnClickListener(this);
         deselectAll.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         mNavigator = new FragmentNavigator(getFragmentManager(), new CompareFragmentAdapter(), R.id.contentBox);
         mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
@@ -992,6 +993,19 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     @Override
     public void refreshLayout(boolean showRefresh) {
         updateLayout(day_start, month_start - 1,year_start);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

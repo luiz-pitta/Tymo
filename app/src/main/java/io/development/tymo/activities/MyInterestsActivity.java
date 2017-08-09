@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -39,7 +40,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MyInterestsActivity extends AppCompatActivity implements View.OnClickListener {
+public class MyInterestsActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private TextView m_title, updateButton, cancelButton;
@@ -83,6 +84,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
         mBackButton.setOnClickListener(this);
         updateButton.setOnClickListener(this);
         cancelButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
@@ -308,6 +310,19 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.dispose();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

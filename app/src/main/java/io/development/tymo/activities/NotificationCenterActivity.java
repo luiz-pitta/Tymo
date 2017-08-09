@@ -4,7 +4,9 @@ package io.development.tymo.activities;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
@@ -24,7 +26,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 
-public class NotificationCenterActivity extends AppCompatActivity implements View.OnClickListener {
+public class NotificationCenterActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private TextView mTitle;
@@ -58,6 +60,7 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
         mTitle.setText(getResources().getString(R.string.settings_notification_center));
 
         mBackButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         activityNotificationSwitch.setChecked(user.isNotificationActivity());
         flagNotificationSwitch.setChecked(user.isNotificationFlag());
@@ -163,6 +166,19 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
     public void onDestroy() {
         super.onDestroy();
         mSubscriptions.dispose();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

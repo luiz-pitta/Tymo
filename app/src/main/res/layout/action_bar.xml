@@ -16,7 +16,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_toLeftOf="@+id/icon1"
+        android:layout_toLeftOf="@+id/icons"
         android:layout_toRightOf="@+id/actionBackIcon"
         android:gravity="center"
         android:orientation="vertical">
@@ -43,31 +43,54 @@
             android:lines="1"
             android:text="Text"
             android:textColor="@color/grey_600"
-            android:textSize="12sp" />
+            android:textSize="12sp"
+            android:visibility="gone" />
 
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/icon1"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_centerVertical="true"
-        android:layout_toLeftOf="@+id/icon2"
-        android:padding="8dp"
-        android:src="@drawable/ic_person"
-        android:tint="@color/grey_600"
-        android:visibility="visible" />
-
-    <ImageView
-        android:id="@+id/icon2"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+    <LinearLayout
+        android:id="@+id/icons"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:padding="8dp"
-        android:src="@drawable/ic_person"
-        android:tint="@color/grey_600"
-        android:visibility="visible" />
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/editButton"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_marginLeft="20dp"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:lines="1"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/edit"
+            android:textAllCaps="true"
+            android:textColor="@color/deep_purple_400"
+            android:textSize="14sp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/icon1"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_person"
+            android:tint="@color/grey_600"
+            android:visibility="visible" />
+
+        <ImageView
+            android:id="@+id/icon2"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:padding="8dp"
+            android:src="@drawable/ic_person"
+            android:tint="@color/grey_600"
+            android:visibility="visible" />
+
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"

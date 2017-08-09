@@ -74,12 +74,12 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     private Handler handler = new Handler();
     private DateFormat dateFormat;
 
-    private TextView commitmentsButton;
+    private TextView commitmentsButton, btnCompare;
     private TextView freeTimeButton;
     private TextView dateTextWeek, dateTextMonth;
 
-    private TextView compareButton;
-    private ImageView previousWeek, nextWeek;
+    private LinearLayout compareButton;
+    private ImageView previousWeek, nextWeek, calendarIcon;
 
     private String email;
     private int linePaint = -1;
@@ -144,8 +144,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         commitmentsButton = (TextView) view.findViewById(R.id.commitmentsButton);
         freeTimeButton = (TextView) view.findViewById(R.id.freeTimeButton);
-        compareButton = (TextView) view.findViewById(R.id.btnCompare);
+        compareButton = (LinearLayout) view.findViewById(R.id.compareButton);
+        btnCompare = (TextView) view.findViewById(R.id.btnCompare);
         dateTextMonth = (TextView) view.findViewById(R.id.dateMonthYear);
+        calendarIcon = (ImageView) view.findViewById(R.id.calendarIcon);
         dateTextWeek = (TextView) view.findViewById(R.id.dateWeek);
         mDateBox = (LinearLayout) view.findViewById(R.id.dateBox);
         scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
@@ -173,6 +175,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         previousWeek.setOnClickListener(this);
         nextWeek.setOnClickListener(this);
         compareButton.setOnTouchListener(this);
+        mDateBox.setOnTouchListener(this);
+        previousWeek.setOnTouchListener(this);
+        nextWeek.setOnTouchListener(this);
+        dateTextWeek.setOnTouchListener(this);
 
         setCurrentTab(mNavigator.getCurrentPosition());
 
@@ -899,26 +905,53 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (view == compareButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                btnCompare.setBackgroundResource(R.drawable.btn_compare);
+                btnCompare.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                btnCompare.setBackgroundResource(R.drawable.btn_compare_pressed);
+                btnCompare.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
+            }
+
             if (gestureDetector.onTouchEvent(event)) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "compareButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "compareButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 startActivity(new Intent(getActivity(), CompareActivity.class));
-                compareButton.setBackgroundResource(R.drawable.btn_compare);
-                compareButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
-                return true;
-            } else {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    compareButton.setBackgroundResource(R.drawable.btn_compare);
-                    compareButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    if (view == compareButton) {
-                        compareButton.setBackgroundResource(R.drawable.btn_compare_pressed);
-                        compareButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
-                    }
-                }
+                btnCompare.setBackgroundResource(R.drawable.btn_compare);
+                btnCompare.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+            }
+        }
+        else if (view == mDateBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                dateTextMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_900));
+                calendarIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_900));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                dateTextMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                calendarIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_600));
+            }
+        }
+        else if (view == nextWeek) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                nextWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                nextWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_200));
+            }
+        }
+        else if (view == previousWeek) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                previousWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                previousWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_200));
+            }
+        }
+        else if (view == dateTextWeek) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                dateTextWeek.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_500));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                dateTextWeek.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_300));
             }
         }
 

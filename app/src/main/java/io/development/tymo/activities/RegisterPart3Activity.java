@@ -355,7 +355,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_100));
             }
         }
         else if (view == advanceButton) {

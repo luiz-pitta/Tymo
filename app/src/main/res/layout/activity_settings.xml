@@ -25,6 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                android:background="@drawable/bg_settings_item"
+                android:clickable="true"
                 android:orientation="vertical">
 
                 <View
@@ -35,7 +37,6 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:padding="10dp">
@@ -104,6 +105,8 @@
                     android:id="@+id/account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <View
@@ -114,7 +117,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -151,12 +153,13 @@
                     android:id="@+id/importFromFacebook"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -191,12 +194,13 @@
                     android:id="@+id/importFromGoogleAgenda"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -238,6 +242,8 @@
                     android:id="@+id/tutorial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <View
@@ -248,7 +254,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -285,12 +290,13 @@
                     android:id="@+id/myInterests"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -334,6 +340,8 @@
                     android:id="@+id/privacy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <View
@@ -344,7 +352,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -381,12 +388,13 @@
                     android:id="@+id/blockedUserList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -430,6 +438,8 @@
                     android:id="@+id/notificationCenter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <View
@@ -440,7 +450,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -476,7 +485,7 @@
                                 android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
                                 android:layout_marginLeft="10dp"
-                                android:visibility="gone"/>
+                                android:visibility="gone" />
 
                         </RelativeLayout>
 
@@ -494,12 +503,12 @@
                     android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -559,6 +568,8 @@
                     android:id="@+id/contactUs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <View
@@ -569,7 +580,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -606,12 +616,13 @@
                     android:id="@+id/useTerms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -649,12 +660,13 @@
                     android:id="@+id/privacyPolicy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@drawable/bg_settings_item"
+                    android:clickable="true"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         android:padding="10dp">
@@ -693,7 +705,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@color/white"
+                android:background="@drawable/bg_settings_item"
+                android:clickable="true"
                 android:orientation="vertical">
 
                 <View

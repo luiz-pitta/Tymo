@@ -75,7 +75,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
-public class AddActivity extends AppCompatActivity implements View.OnClickListener {
+public class AddActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
     private RelativeLayout mPieceCustom;
@@ -203,6 +203,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         icon2.setVisibility(View.INVISIBLE);
         icon2.setOnClickListener(null);
+        mBackButton.setOnTouchListener(this);
 
         //set button controller
         controller = new UpdateButtonController(this);
@@ -254,6 +255,20 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
     @Override

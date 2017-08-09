@@ -20,13 +20,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginTop="20dp">
 
                 <LinearLayout
                     android:id="@+id/dateBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="40dp"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/compareButton"
@@ -56,8 +56,8 @@
                 </LinearLayout>
 
                 <include
-                    android:id="@+id/compareButton"
                     layout="@layout/btn_compare"
+                    android:id="@+id/compareButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -78,9 +78,9 @@
 
                 <ImageView
                     android:id="@+id/previousWeek"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_action_back"
                     android:tint="@color/grey_400" />
 
@@ -97,9 +97,9 @@
 
                 <ImageView
                     android:id="@+id/nextWeek"
-                    android:layout_width="40dp"
+                    android:layout_width="50dp"
                     android:layout_height="40dp"
-                    android:padding="7dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_action_forward"
                     android:tint="@color/grey_400" />
 

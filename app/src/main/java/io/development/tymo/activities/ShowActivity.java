@@ -12,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -58,13 +59,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class ShowActivity extends AppCompatActivity implements View.OnClickListener {
+public class ShowActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
 
     private FragmentNavigator mNavigator;
 
-    private TextView m_title, privacyText;
+    private TextView m_title, privacyText, editButton;
     private ImageView m_ic_edit;
     private ImageView icon1;
     private ImageView privacyIcon;
@@ -129,6 +130,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         checkText = (TextView) findViewById(R.id.checkText);
         deleteText = (TextView) findViewById(R.id.deleteText);
         requiredText = (TextView) findViewById(R.id.requiredText);
+        editButton = (TextView) findViewById(R.id.editButton);
 
         cubeLowerBoxIcon = (ImageView) findViewById(R.id.cubeLowerBoxIcon);
         cubeUpperBoxIcon = (ImageView) findViewById(R.id.cubeUpperBoxIcon);
@@ -208,6 +210,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         mNavigator.onCreate(savedInstanceState);
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
+        mBackButton.setOnTouchListener(this);
+        editButton.setOnTouchListener(this);
+        editButton.setOnClickListener(this);
         mBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -528,7 +533,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                 if (checkIfAdm(response.getAdms(), email)) {
-                    m_ic_edit.setVisibility(View.VISIBLE);
+                    m_ic_edit.setVisibility(View.GONE);
+                    editButton.setVisibility(View.VISIBLE);
                 } else
                     m_ic_edit.setVisibility(View.INVISIBLE);
 
@@ -693,9 +699,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
             controller.updateAll(2, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
             setCurrentTab(2);
-        } else if (id == R.id.icon2) {
+        } else if (id == R.id.editButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1305,6 +1311,26 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleErrorToday(Throwable error) {
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+        else if (view == editButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+
+        return false;
     }
 
 

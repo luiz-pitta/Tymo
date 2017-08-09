@@ -57,7 +57,7 @@ import io.development.tymo.utils.Utilities;
 import io.development.tymo.R;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
-public class FilterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener,
+public class FilterActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnTouchListener,
         View.OnClickListener, TimePickerDialog.OnTimeSetListener {
 
     private UpdateButtonController controller;
@@ -201,6 +201,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         mBackButton.setOnClickListener(this);
         applyButton.setOnClickListener(this);
         cleanButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         //set button controller
         controller = new UpdateButtonController(this);
@@ -1255,6 +1256,19 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         animator.setDuration(300);
         animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));
         return animator;
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

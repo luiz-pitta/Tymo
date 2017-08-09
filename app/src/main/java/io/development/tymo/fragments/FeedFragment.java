@@ -100,7 +100,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
     private FragmentNavigator mNavigator;
     private ImageView filter, detail;
-    private LinearLayout feedIgnoreButton, feedCheckButton, buttonsBar;
+    private LinearLayout feedIgnoreButton, feedCheckButton, buttonsBar, filterButtonBox, zoomButtonBox;
     private ImageView cancelButtonImage, checkButtonImage;
     private Rect rect;
     private FilterServer filterServer = null;
@@ -164,6 +164,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         view.findViewById(R.id.checkText).setVisibility(View.GONE);
         view.findViewById(R.id.ignoreText).setVisibility(View.GONE);
 
+        filterButtonBox = (LinearLayout) view.findViewById(R.id.filterButtonBox);
+        zoomButtonBox = (LinearLayout) view.findViewById(R.id.zoomButtonBox);
         filter = (ImageView) view.findViewById(R.id.filterButton);
         detail = (ImageView) view.findViewById(R.id.zoomButton);
         filterText = (TextView) view.findViewById(R.id.filterText);
@@ -177,8 +179,8 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         backgroundCloud2 = (ImageView) view.findViewById(R.id.backgroundCloud2);
         buttonsBar = (LinearLayout) view.findViewById(R.id.buttonsBar);
 
-        filter.setOnClickListener(this);
-        detail.setOnClickListener(this);
+        filterButtonBox.setOnClickListener(this);
+        zoomButtonBox.setOnClickListener(this);
         feedIgnoreButton.setVisibility(View.INVISIBLE);
         feedCheckButton.setVisibility(View.INVISIBLE);
 
@@ -715,7 +717,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 .build();
 
 
-        new Actor.Builder(SpringSystem.create(), filter)
+        new Actor.Builder(SpringSystem.create(), filterButtonBox)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
                 .onTouchListener(new View.OnTouchListener() {
                     @Override
@@ -747,7 +749,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 })
                 .build();
 
-        new Actor.Builder(SpringSystem.create(), detail)
+        new Actor.Builder(SpringSystem.create(), zoomButtonBox)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
                 .onTouchListener(new View.OnTouchListener() {
                     @Override

@@ -2,6 +2,7 @@ package io.development.tymo.view_holder;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,15 +25,19 @@ import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.R;
+import io.development.tymo.activities.FlagActivity;
+import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.adapters.PlansAdapter;
 import io.development.tymo.adapters.PlansCardsAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.Birthday;
 import io.development.tymo.model_server.DateTymo;
 import io.development.tymo.model_server.FlagServer;
+import io.development.tymo.model_server.FlagWrapper;
 import io.development.tymo.model_server.FreeTimeServer;
 import io.development.tymo.model_server.Holiday;
 import io.development.tymo.model_server.ReminderServer;
+import io.development.tymo.model_server.ReminderWrapper;
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.WeekModel;
 import io.development.tymo.models.cards.ActivityCard;
@@ -55,6 +60,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private PlansCardsAdapter adapter;
     private CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback;
     private LinearLayout dayBox;
+    private FlagServer flagServer;
+    private ReminderServer reminderServer;
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private User friend;
@@ -107,9 +114,45 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                if (!free)
-                    createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
-                            CreatePopUpDialogFragment.Type.CUSTOM, obj, screen, null);
+                if (!free) {
+                    if (obj instanceof Reminder){
+                        reminderServer = ((Reminder) obj).getReminderServer();
+
+                        Intent myIntent = new Intent(context, ReminderActivity.class);
+                        myIntent.putExtra("type_reminder", 1);
+                        myIntent.putExtra("reminder_show", new ReminderWrapper(reminderServer));
+                        context.startActivity(myIntent);
+
+                        bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                    }
+                    else if (obj instanceof Flag){
+                        flagServer = ((Flag) obj).getFlagServer();
+
+                        Intent myIntent = new Intent(context, FlagActivity.class);
+                        myIntent.putExtra("type_flag", 1);
+                        myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
+                        context.startActivity(myIntent);
+
+                        bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                    }
+                    else {
+                        createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
+                                CreatePopUpDialogFragment.Type.CUSTOM, obj, screen, null);
+
+                        if(show) {
+                            createPopUpDialogFragment.setCallback(callback);
+                            createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                        }
+                    }
+                }
                 else {
                     FreeTime freeTime = (FreeTime) obj;
                     PlansAdapter plansAdapter = getOwnerAdapter();
@@ -135,11 +178,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
                                 screen, friend);
-                }
 
-                if(show) {
-                    createPopUpDialogFragment.setCallback(callback);
-                    createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                    if(show) {
+                        createPopUpDialogFragment.setCallback(callback);
+                        createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                    }
                 }
 
             }

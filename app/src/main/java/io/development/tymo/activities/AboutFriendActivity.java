@@ -2,9 +2,11 @@ package io.development.tymo.activities;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,7 +28,7 @@ import io.development.tymo.R;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 
-public class AboutFriendActivity extends AppCompatActivity implements View.OnClickListener {
+public class AboutFriendActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton, profilePhoto;
     private TextView mTitle, age;
@@ -90,6 +92,7 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
             profilePhoto.setImageResource(R.drawable.ic_profile_photo_empty);
 
         mBackButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         mTitle.setText(getResources().getString(R.string.about)+" "+user.getName());
 
@@ -156,6 +159,20 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
             onBackPressed();
         }
 
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

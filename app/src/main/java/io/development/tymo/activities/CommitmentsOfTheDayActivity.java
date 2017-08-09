@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -44,7 +45,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class CommitmentsOfTheDayActivity extends AppCompatActivity implements View.OnClickListener {
+public class CommitmentsOfTheDayActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private EasyRecyclerView recyclerView;
     private NotificationAdapter adapter;
@@ -77,6 +78,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
         recyclerView = (EasyRecyclerView) findViewById(R.id.recycler_view);
 
         mBackButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.commitments_of_the_day));
 
@@ -714,6 +716,19 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
         query.setYear(year);
 
         setNotifications(query);
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

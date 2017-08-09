@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -31,7 +32,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class BlockedUsersActivity extends AppCompatActivity implements View.OnClickListener {
+public class BlockedUsersActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton, addIcon;
     private TextView m_title;
@@ -79,6 +80,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
 
         mBackButton.setOnClickListener(this);
         addBox.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.blocked_users));
 
@@ -168,6 +170,20 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
                 sendBlockPeopleRequest(email, user);
             }
         }
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

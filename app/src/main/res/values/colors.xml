@@ -323,6 +323,7 @@
     <color name="black_opacity_0">#00000000</color>
     <color name="black_opacity_40">#66000000</color>
     <color name="black_opacity_50">#80000000</color>
+    <color name="black_opacity_60">#99000000</color>
     <color name="black_opacity_70">#B3000000</color>
     <color name="white_opacity_10">#1Affffff</color>
     <color name="white_opacity_20">#33ffffff</color>

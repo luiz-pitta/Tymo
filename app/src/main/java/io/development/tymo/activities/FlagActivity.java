@@ -14,6 +14,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -66,7 +67,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
-public class FlagActivity extends AppCompatActivity implements View.OnClickListener {
+public class FlagActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private FragmentNavigator mNavigator;
     private UpdateButtonController controller;
@@ -76,7 +77,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
     private int d,m,y;
 
-    private TextView m_title, privacyText;
+    private TextView m_title, privacyText, editButton;
     private ImageView mBackButton, icon2, privacyIcon;
     private TextView availableText;
     private TextView unavailableText;
@@ -137,6 +138,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         space = (Space) findViewById(R.id.space);
         privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
         privacyText = (TextView) findViewById(R.id.privacyText);
+        editButton = (TextView) findViewById(R.id.editButton);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
@@ -245,9 +247,12 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         unavailableButton.setOnClickListener(this);
         confirmationButton.setOnClickListener(this);
         icon2.setOnClickListener(this);
+        editButton.setOnClickListener(this);
+        editButton.setOnTouchListener(this);
 
         checkButtonBox.setOnClickListener(this);
         deleteButtonBox.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         //set button controller
         controller = new UpdateButtonController(this);
@@ -484,13 +489,15 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 //icon2.setVisibility(View.INVISIBLE);
                 //icon2.setOnClickListener(null);
                 icon2.setImageResource(R.drawable.ic_edit);
-                icon2.setVisibility(View.VISIBLE);
+                icon2.setVisibility(View.GONE);
+                editButton.setVisibility(View.VISIBLE);
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
                 unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
                 unavailableButton.clearColorFilter();
             }else if(permissionInvite) {
                 icon2.setImageResource(R.drawable.ic_edit);
-                icon2.setVisibility(View.VISIBLE);
+                icon2.setVisibility(View.GONE);
+                editButton.setVisibility(View.VISIBLE);
             }else{
                 icon2.setVisibility(View.INVISIBLE);
                 icon2.setOnClickListener(null);
@@ -1046,9 +1053,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             else
                 edit_flag();
         }
-        else if(v == icon2){
+        else if(v == editButton){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1502,6 +1509,26 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleErrorToday(Throwable error) {
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+        else if (view == editButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+
+        return false;
     }
 
 }
