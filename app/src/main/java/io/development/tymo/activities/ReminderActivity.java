@@ -296,6 +296,32 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         dg.setContentView(customView);
         dg.setCanceledOnTouchOutside(true);
 
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
+
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -753,6 +779,32 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         dg.setContentView(customView);
         dg.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
 
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override

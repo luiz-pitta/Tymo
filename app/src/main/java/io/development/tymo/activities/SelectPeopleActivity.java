@@ -10,6 +10,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -79,6 +81,14 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         applyButton = (TextView) findViewById(R.id.applyButton);
         cleanButton = (TextView) findViewById(R.id.cleanButton);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+
+        //search bar
+        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        ImageView magImage = (ImageView) searchView.findViewById(magId);
+        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        magImage.setVisibility(GONE);
+
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(275);
 

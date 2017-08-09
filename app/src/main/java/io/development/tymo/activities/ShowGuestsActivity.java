@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +32,8 @@ import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.view.View.GONE;
 
 public class ShowGuestsActivity extends AppCompatActivity implements View.OnTouchListener {
 
@@ -84,6 +87,12 @@ public class ShowGuestsActivity extends AppCompatActivity implements View.OnTouc
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
+
+        //search bar
+        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        ImageView magImage = (ImageView) searchView.findViewById(magId);
+        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        magImage.setVisibility(GONE);
 
         m_title.setText(getResources().getString(R.string.guests));
 

@@ -79,8 +79,9 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
         mRecyclerView.setAdapterWithProgress(adapter);
 
         mBackButton.setOnClickListener(this);
-        addBox.setOnClickListener(this);
+        addIcon.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
+        addIcon.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.blocked_users));
 
@@ -139,9 +140,9 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
         }
-        else if(view == addBox) {
+        else if(view == addIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivityForResult(new Intent(this, SelectPeopleActivity.class), 133);
@@ -180,6 +181,13 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+        else if (view == addIcon) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                addIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                addIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
 

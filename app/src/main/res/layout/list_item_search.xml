@@ -3,7 +3,7 @@
     android:id="@+id/ItemBox"
     android:layout_width="match_parent"
     android:layout_height="90dp"
-    android:background="@drawable/bg_settings_item"
+    android:background="@drawable/bg_select_item_white"
     android:clickable="true"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">

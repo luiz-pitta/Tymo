@@ -99,7 +99,6 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
         magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         magImage.setVisibility(GONE);
 
-        searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         //search bar end
 

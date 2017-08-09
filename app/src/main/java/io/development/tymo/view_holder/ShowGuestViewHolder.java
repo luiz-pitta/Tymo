@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -46,7 +47,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.OnClickListener {
+public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.OnClickListener, View.OnTouchListener {
     private ImageView profilePhoto;
     private ImageView actionIcon, moreVerticalIcon;
     private TextView text1, text2, text3, text4;
@@ -100,6 +101,7 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         itemBox.setOnClickListener(this);
         actionIcon.setOnClickListener(this);
         moreVerticalIcon.setOnClickListener(this);
+        moreVerticalIcon.setOnTouchListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
@@ -114,11 +116,13 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             itemBox.setOnClickListener(this);
             actionIcon.setOnClickListener(this);
             moreVerticalIcon.setOnClickListener(this);
+            moreVerticalIcon.setOnTouchListener(this);
         } else {
             actionIcon.setOnClickListener(null);
             itemBox.setOnClickListener(null);
             actionIcon.setOnClickListener(null);
             moreVerticalIcon.setOnClickListener(null);
+            moreVerticalIcon.setOnTouchListener(this);
         }
     }
 
@@ -387,6 +391,32 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         dialog.setContentView(customView);
         dialog.setCanceledOnTouchOutside(true);
 
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
+
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -523,6 +553,32 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
 
         dialog.setContentView(customView);
         dialog.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
 
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -687,5 +743,18 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();*/
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == moreVerticalIcon) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                moreVerticalIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                moreVerticalIcon.setColorFilter(ContextCompat.getColor(mContext, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 }

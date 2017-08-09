@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -42,7 +43,7 @@ import io.reactivex.schedulers.Schedulers;
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class ContactViewHolder extends BaseViewHolder<User> implements View.OnClickListener {
+public class ContactViewHolder extends BaseViewHolder<User> implements View.OnClickListener, View.OnTouchListener {
     private TextView text1, text2;
     private ProgressBar progressIcon;
     private ImageView profilePhoto, actionIcon, moreVerticalIcon;
@@ -73,7 +74,12 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         this.myContacts = myContacts;
         this.blocked = blocked;
 
+        if (blocked) {
+            $(R.id.listItemBox).setClickable(false);
+        }
+
         moreVerticalIcon.setOnClickListener(this);
+        moreVerticalIcon.setOnTouchListener(this);
         actionIcon.setOnClickListener(this);
 
         mSubscriptions = new CompositeDisposable();
@@ -108,7 +114,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         if (favorite > 0) {
             actionIcon.setImageResource(R.drawable.ic_star_activated);
             actionIcon.setColorFilter(ContextCompat.getColor(context, R.color.yellow_700));
-        }else {
+        } else {
             actionIcon.setImageResource(R.drawable.ic_star_deactivated);
             actionIcon.setColorFilter(ContextCompat.getColor(context, R.color.grey_600));
         }
@@ -131,10 +137,10 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         } else
             profilePhoto.setImageResource(R.drawable.ic_profile_photo_empty);
 
-        if (blocked){
+        if (blocked) {
             actionIcon.setVisibility(View.GONE);
             moreVerticalIcon.setVisibility(View.VISIBLE);
-        }else if(!myContacts){
+        } else if (!myContacts) {
             text2.setVisibility(View.GONE);
             actionIcon.setVisibility(View.GONE);
             moreVerticalIcon.setVisibility(View.GONE);
@@ -147,17 +153,16 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         if (v == moreVerticalIcon) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "moreVerticalIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             CharSequence[] items;
 
-            if(blocked){
+            if (blocked) {
                 items = new String[1];
                 items[0] = context.getResources().getString(R.string.my_contacts_unblock, fullNameToShortName(contactName));
-            }
-            else{
+            } else {
                 items = new String[3];
                 items[0] = context.getResources().getString(R.string.my_contacts_view, fullNameToShortName(contactName));
                 items[1] = context.getResources().getString(R.string.my_contacts_block, fullNameToShortName(contactName));
@@ -181,8 +186,8 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
             builder.show();
         } else if (v == actionIcon) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actionIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -210,11 +215,9 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
         if (item == 1) {
             text1.setText(context.getResources().getString(R.string.contact_confirmation_question_block, contactName));
-        }
-        else if(item == 2) {
+        } else if (item == 2) {
             text1.setText(context.getResources().getString(R.string.contact_confirmation_question_delete, contactName));
-        }
-        else{
+        } else {
             text1.setText(context.getResources().getString(R.string.contact_confirmation_question_unblock, contactName));
         }
 
@@ -226,6 +229,32 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
         dialog.setContentView(customView);
         dialog.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
 
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -244,24 +273,22 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
                 Bundle bundle = new Bundle();
 
                 if (item == 1) {
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "BLOCK"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "BLOCK" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                     deleteBlock = Constants.BLOCK;
                     user.setPrivacy(Constants.BLOCK);
                     sendBlockRequest(email_friend, user);
-                }
-                else if(item == 2) {
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "DELETE"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                } else if (item == 2) {
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "DELETE" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                     deleteBlock = Constants.DELETE;
                     sendDeleteRequest(email_friend, user);
-                }
-                else{
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "UNBLOCK"+ "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                } else {
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "UNBLOCK" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                     deleteBlock = Constants.UNBLOCK;
                     user.setPrivacy(Constants.UNBLOCK);
                     sendUnBlockRequest(email_friend, user);
                 }
 
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 dialog.dismiss();
@@ -271,13 +298,12 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         dialog.show();
     }
 
-    private String fullNameToShortName(String fullName){
+    private String fullNameToShortName(String fullName) {
         String[] fullNameSplited = fullName.split(" ");
 
-        if (fullNameSplited.length > 1){
-            return fullNameSplited[0] + " " + fullNameSplited[fullNameSplited.length-1];
-        }
-        else {
+        if (fullNameSplited.length > 1) {
+            return fullNameSplited[0] + " " + fullNameSplited[fullNameSplited.length - 1];
+        } else {
             return fullNameSplited[0];
         }
     }
@@ -323,13 +349,13 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
         mSubscriptions.add(NetworkUtil.getRetrofit().registerBlockRequest(email, user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseUnblockRequest,this::handleError));
+                .subscribe(this::handleResponseUnblockRequest, this::handleError));
     }
 
     private void handleResponseUnblockRequest(Response response) {
         ContactsAdapter adapter = getOwnerAdapter();
         adapter.remove(getAdapterPosition());
-        if(callback != null)
+        if (callback != null)
             callback.refreshLayout();
         Toast.makeText(context, context.getResources().getString(R.string.user_unblocked), Toast.LENGTH_LONG).show();
     }
@@ -337,7 +363,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
     private void handleResponseBlockDeleteRequest(Response response) {
         ContactsAdapter adapter = getOwnerAdapter();
         adapter.remove(getAdapterPosition());
-        if(callback != null)
+        if (callback != null)
             callback.refreshLayout();
         if (deleteBlock == Constants.BLOCK)
             Toast.makeText(context, context.getResources().getString(R.string.user_blocked_one), Toast.LENGTH_LONG).show();
@@ -372,6 +398,19 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
     public interface RefreshLayoutPlansCallback {
 
         void refreshLayout();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == moreVerticalIcon) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                moreVerticalIcon.setColorFilter(ContextCompat.getColor(context, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                moreVerticalIcon.setColorFilter(ContextCompat.getColor(context, R.color.grey_400));
+            }
+        }
+
+        return false;
     }
 
 }

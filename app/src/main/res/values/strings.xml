@@ -532,10 +532,9 @@
     <string name="visibility_text">Escolha o nível de visibilidade da atividade na sua agenda:</string>
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
-
-    <string name="version_new_update_needed">Versão %1$s disponível</string>
-    <string name="version_new_update_no_tks">Não, Obrigado</string>
-    <string name="version_new_update">Atualizar</string>
-    <string name="version_new_update_text">Por favor, atualize o app para poder continuar usando</string>
+    <string name="version_new_update_title">Nova versão disponível\n%1$s</string>
+    <string name="version_new_update_text">É necessária a atualização do app para continuar utilizando o Tymo</string>
+    <string name="version_new_update_no">Fechar</string>
+    <string name="version_new_update_yes">Atualizar</string>
 
 </resources>

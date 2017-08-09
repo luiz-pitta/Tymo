@@ -4,8 +4,10 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.support.v4.content.ContextCompat;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -175,6 +177,32 @@ public class Utilities {
 
         dialog.setContentView(customView);
         dialog.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
 
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override

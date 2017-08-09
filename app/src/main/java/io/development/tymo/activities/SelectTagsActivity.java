@@ -96,7 +96,6 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
         magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
         magImage.setVisibility(GONE);
 
-        searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         //search bar end
 

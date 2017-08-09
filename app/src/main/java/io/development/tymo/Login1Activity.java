@@ -1,7 +1,7 @@
 package io.development.tymo;
 
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -9,8 +9,8 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -148,23 +148,67 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     @Override
     public void onUpdateNeeded(String updateUrl, String version) {
         progressBox.setVisibility(View.GONE);
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.version_new_update_needed, version))
-                .setCancelable(false)
-                .setMessage(getResources().getString(R.string.version_new_update_text))
-                .setPositiveButton(getResources().getString(R.string.version_new_update),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                redirectStore(updateUrl);
-                            }
-                        }).setNegativeButton(getResources().getString(R.string.version_new_update_no_tks),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        }).create();
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+
+        customView.findViewById(R.id.editText).setVisibility(View.GONE);
+
+        text1.setText(getResources().getString(R.string.version_new_update_title, version));
+        text2.setText(getResources().getString(R.string.version_new_update_text));
+        buttonText1.setText(getResources().getString(R.string.version_new_update_no));
+        buttonText2.setText(getResources().getString(R.string.version_new_update_yes));
+
+        Dialog dialog = new Dialog(this, R.style.NewDialog);
+
+        dialog.setContentView(customView);
+        dialog.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectStore(updateUrl);
+            }
+        });
+
         dialog.show();
     }
 

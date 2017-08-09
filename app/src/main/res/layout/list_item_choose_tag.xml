@@ -3,7 +3,7 @@
     android:id="@+id/tagBox"
     android:layout_width="match_parent"
     android:layout_height="50dp"
-    android:background="@color/transparent"
+    android:background="@color/white"
     android:paddingLeft="10dp"
     android:paddingRight="10dp">
 

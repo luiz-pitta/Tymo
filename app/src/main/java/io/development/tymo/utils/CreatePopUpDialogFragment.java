@@ -14,6 +14,7 @@ import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -361,6 +362,32 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                 dg.setContentView(customView);
                 dg.setCanceledOnTouchOutside(true);
+
+                button1.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                            button1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            button1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                        }
+
+                        return false;
+                    }
+                });
+
+                button2.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent event) {
+                        if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                            button2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                            button2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                        }
+
+                        return false;
+                    }
+                });
 
                 button1.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -808,6 +835,20 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     dialog.setCanceledOnTouchOutside(true);
 
                     close = (ImageView) customView.findViewById(R.id.closeButton);
+
+                    close.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                close.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.white));
+                            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                close.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_200));
+                            }
+
+                            return false;
+                        }
+                    });
+
                     close.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
@@ -820,11 +861,62 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     LinearLayout activityBox = (LinearLayout) customView.findViewById(R.id.activityBox);
                     LinearLayout reminderBox = (LinearLayout) customView.findViewById(R.id.reminderBox);
                     LinearLayout flagBox = (LinearLayout) customView.findViewById(R.id.flagBox);
+                    TextView activityText = (TextView) customView.findViewById(R.id.activityText);
+                    ImageView activityIcon = (ImageView) customView.findViewById(R.id.activityIcon);
+                    TextView reminderText = (TextView) customView.findViewById(R.id.reminderText);
+                    ImageView reminderIcon = (ImageView) customView.findViewById(R.id.reminderIcon);
+                    TextView flagText = (TextView) customView.findViewById(R.id.flagText);
+                    ImageView flagIcon = (ImageView) customView.findViewById(R.id.flagIcon);
 
                     if (screen != Utilities.TYPE_PLANS) {
                         reminderBox.setVisibility(View.GONE);
                         customView.findViewById(R.id.reminderLine).setVisibility(View.GONE);
                     }
+
+                    activityBox.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                activityText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_900));
+                                activityIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                activityText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                                activityIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_200));
+                            }
+
+                            return false;
+                        }
+                    });
+
+                    reminderBox.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                reminderText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_900));
+                                reminderIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                reminderText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                                reminderIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_200));
+                            }
+
+                            return false;
+                        }
+                    });
+
+                    flagBox.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View view, MotionEvent event) {
+                            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                                flagText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_900));
+                                flagIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                                flagText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                                flagIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_200));
+                            }
+
+                            return false;
+                        }
+                    });
 
                     activityBox.setOnClickListener(new View.OnClickListener() {
                         @Override

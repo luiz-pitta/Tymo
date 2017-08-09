@@ -52,7 +52,6 @@
                 android:background="@drawable/bg_act_edit_box"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
-                android:hint="@string/location"
                 android:inputType="textMultiLine"
                 android:maxLines="4"
                 android:padding="10dp"

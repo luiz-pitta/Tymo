@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_settings_item"
+                android:background="@drawable/bg_select_item_white"
                 android:clickable="true"
                 android:orientation="vertical">
 
@@ -105,7 +105,7 @@
                     android:id="@+id/account"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -153,7 +153,7 @@
                     android:id="@+id/importFromFacebook"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -194,7 +194,7 @@
                     android:id="@+id/importFromGoogleAgenda"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -242,7 +242,7 @@
                     android:id="@+id/tutorial"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -290,7 +290,7 @@
                     android:id="@+id/myInterests"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -340,7 +340,7 @@
                     android:id="@+id/privacy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -388,7 +388,7 @@
                     android:id="@+id/blockedUserList"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -438,7 +438,7 @@
                     android:id="@+id/notificationCenter"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -503,7 +503,7 @@
                     android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:orientation="vertical">
 
                     <LinearLayout
@@ -568,7 +568,7 @@
                     android:id="@+id/contactUs"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -616,7 +616,7 @@
                     android:id="@+id/useTerms"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -660,7 +660,7 @@
                     android:id="@+id/privacyPolicy"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_settings_item"
+                    android:background="@drawable/bg_select_item_white"
                     android:clickable="true"
                     android:orientation="vertical">
 
@@ -705,7 +705,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@drawable/bg_settings_item"
+                android:background="@drawable/bg_select_item_white"
                 android:clickable="true"
                 android:orientation="vertical">
 

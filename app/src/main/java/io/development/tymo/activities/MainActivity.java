@@ -1,5 +1,6 @@
 package io.development.tymo.activities;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,15 +13,18 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
@@ -88,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView reminderButton;
     private ImageView flagButton;
     private ImageView closeButton;
+    private RelativeLayout icon1Box, icon2Box, icon3Box, icon4Box;
 
     private String email;
     private View notificationView;
@@ -142,23 +147,67 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onUpdateNeeded(String updateUrl, String version) {
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(getResources().getString(R.string.version_new_update_needed, version))
-                .setCancelable(false)
-                .setMessage(getResources().getString(R.string.version_new_update_text))
-                .setPositiveButton(getResources().getString(R.string.version_new_update),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                redirectStore(updateUrl);
-                            }
-                        }).setNegativeButton(getResources().getString(R.string.version_new_update_no_tks),
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                finish();
-                            }
-                        }).create();
+
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+
+        customView.findViewById(R.id.editText).setVisibility(View.GONE);
+
+        text1.setText(getResources().getString(R.string.version_new_update_title, version));
+        text2.setText(getResources().getString(R.string.version_new_update_text));
+        buttonText1.setText(getResources().getString(R.string.version_new_update_no));
+        buttonText2.setText(getResources().getString(R.string.version_new_update_yes));
+
+        Dialog dialog = new Dialog(this, R.style.NewDialog);
+
+        dialog.setContentView(customView);
+        dialog.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                redirectStore(updateUrl);
+            }
+        });
+
         dialog.show();
     }
 
@@ -255,6 +304,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         icon2 = (ImageView) findViewById(R.id.icon2);
         icon3 = (ImageView) findViewById(R.id.icon3);
         icon4 = (ImageView) findViewById(R.id.icon4);
+        icon1Box = (RelativeLayout) findViewById(R.id.icon1Box);
+        icon2Box = (RelativeLayout) findViewById(R.id.icon2Box);
+        icon3Box = (RelativeLayout) findViewById(R.id.icon3Box);
+        icon4Box = (RelativeLayout) findViewById(R.id.icon4Box);
         actButton = (ImageView) findViewById(R.id.actButton);
         reminderButton = (ImageView) findViewById(R.id.reminderButton);
         flagButton = (ImageView) findViewById(R.id.flagIcon);
@@ -273,10 +326,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         searchView.bringToFront();
 
-        icon1.setOnClickListener(this);
-        icon2.setOnClickListener(this);
-        icon3.setOnClickListener(this);
-        icon4.setOnClickListener(this);
+        icon1Box.setOnClickListener(this);
+        icon2Box.setOnClickListener(this);
+        icon3Box.setOnClickListener(this);
+        icon4Box.setOnClickListener(this);
         actButton.setOnClickListener(this);
         reminderButton.setOnClickListener(this);
         flagButton.setOnClickListener(this);
@@ -466,7 +519,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v == icon1) {
+        if(v == icon1Box) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon1" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -480,7 +533,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             setCurrentTab(FEED);
         }
-        else if(v == icon2) {
+        else if(v == icon2Box) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -495,7 +548,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             setCurrentTab(PLANS);
         }
-        else if(v == icon3) {
+        else if(v == icon3Box) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon3" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -509,7 +562,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             setCurrentTab(ABOUT);
         }
-        else if(v == icon4){
+        else if(v == icon4Box){
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon4" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));

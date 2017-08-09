@@ -15,6 +15,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -72,7 +73,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private View topHorizontalLineDate;
     private View topHorizontalLineSchedule;
 
-    private TextView cleanButton, applyButton;
+    private TextView cleanButton, applyButton, addTagText;
 
     private TextView proximityText;
     private TextView popularText;
@@ -90,8 +91,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
     private RelativeLayout itemBoxInterests;
     private TextView cleanInterests;
-    private ImageView filterIconInterests, expandMoreIconInterests;
-    private RelativeLayout addTagBox;
+    private ImageView filterIconInterests, expandMoreIconInterests, addTagIcon;
+    private LinearLayout addTagBox;
     private ExpandableLinearLayout expandableLayoutInterests;
     private TagView tagGroup;
     private OnTagDeleteListener mOnTagDeleteListener = new OnTagDeleteListener() {
@@ -121,7 +122,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private boolean locationNotWorking = false;
     private ImageView filterIconLocation, expandMoreIconLocation;
     private ExpandableLinearLayout expandableLayoutLocation;
-    private TextView locationText, mapText;
+    private TextView locationText;
     private double lat = -500;
     private double lng = -500;
     private static final int PLACE_PICKER_REQUEST = 1020;
@@ -201,7 +202,16 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         mBackButton.setOnClickListener(this);
         applyButton.setOnClickListener(this);
         cleanButton.setOnClickListener(this);
+
+        proximityText.setOnTouchListener(this);
+        popularText.setOnTouchListener(this);
+        dateTimeText.setOnTouchListener(this);
+        proximityButton.setOnTouchListener(this);
+        popularButton.setOnTouchListener(this);
+        dateTimeButton.setOnTouchListener(this);
         mBackButton.setOnTouchListener(this);
+        applyButton.setOnTouchListener(this);
+        cleanButton.setOnTouchListener(this);
 
         //set button controller
         controller = new UpdateButtonController(this);
@@ -361,6 +371,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandableLayoutWeekDays = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutWeekDays);
         multichoiceRecyclerviewWeekDays = (RecyclerView) findViewById(R.id.multichoiceRecyclerviewWeekDays);
 
+        cleanWeekDays.setOnTouchListener(this);
+
         filterIconWeekDays.setColorFilter(getResources().getColor(R.color.grey_600));
         filterTextWeekDays.setTextColor(getResources().getColor(R.color.grey_600));
         cleanWeekDays.setVisibility(View.INVISIBLE);
@@ -439,6 +451,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         timeStart = (TextView) findViewById(R.id.timeStart);
         timeEnd = (TextView) findViewById(R.id.timeEnd);
 
+        cleanSchedule.setOnTouchListener(this);
+
         filterIconSchedule.setColorFilter(getResources().getColor(R.color.grey_600));
         filterTextSchedule.setTextColor(getResources().getColor(R.color.grey_600));
         cleanSchedule.setVisibility(View.INVISIBLE);
@@ -497,6 +511,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandableLayoutDate = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutDate);
         dateStart = (TextView) findViewById(R.id.dateStart);
         dateEnd = (TextView) findViewById(R.id.dateEnd);
+
+        cleanDate.setOnTouchListener(this);
 
         filterIconDate.setColorFilter(getResources().getColor(R.color.grey_600));
         filterTextDate.setTextColor(getResources().getColor(R.color.grey_600));
@@ -560,7 +576,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandMoreIconLocation = (ImageView) findViewById(R.id.expandMoreIconLocation);
         expandableLayoutLocation = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutLocation);
         locationText = (TextView) findViewById(R.id.locationText);
-        mapText = (TextView) findViewById(R.id.mapText);
+
+        cleanLocation.setOnTouchListener(this);
 
         filterIconLocation.setColorFilter(getResources().getColor(R.color.grey_600));
         filterTextLocation.setTextColor(getResources().getColor(R.color.grey_600));
@@ -584,7 +601,6 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         builder = new PlacePicker.IntentBuilder();
 
         itemBoxLocation.setOnClickListener(this);
-        mapText.setOnClickListener(this);
         locationText.setOnClickListener(this);
         cleanLocation.setOnClickListener(this);
 
@@ -621,6 +637,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandableLayoutFriends = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutFriends);
         recyclerView = (RecyclerView) findViewById(R.id.guestRow);
         addPersonButton = (ImageView) findViewById(R.id.addGuestButton);
+
+        cleanFriends.setOnTouchListener(this);
 
         filterIconFriends.setColorFilter(getResources().getColor(R.color.grey_600));
         filterTextFriends.setTextColor(getResources().getColor(R.color.grey_600));
@@ -698,7 +716,11 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandMoreIconInterests = (ImageView) findViewById(R.id.expandMoreIconInterests);
         expandableLayoutInterests = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutInterests);
         tagGroup = (TagView) findViewById(R.id.tag_group);
-        addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
+        addTagBox = (LinearLayout) findViewById(R.id.addTagBox);
+        addTagIcon = (ImageView) findViewById(R.id.addTagIcon);
+        addTagText = (TextView) findViewById(R.id.addTagText);
+
+        cleanInterests.setOnTouchListener(this);
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
@@ -722,7 +744,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         });
 
         itemBoxInterests.setOnClickListener(this);
-        addTagBox.setOnClickListener(this);
+        addTagIcon.setOnClickListener(this);
+        addTagIcon.setOnTouchListener(this);
         cleanInterests.setOnClickListener(this);
 
         if(filterWrapper != null){
@@ -835,7 +858,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     @Override
     public void onClick(View v){
         boolean location = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOCATION, false);
-        if((v == mapText || v == locationText) && !locationNotWorking) {
+        if(v == locationText && !locationNotWorking) {
 
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mapText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1022,9 +1045,9 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             intent.putStringArrayListExtra("guest_list", list);
 
             startActivityForResult(intent, 133);
-        }else if(v == addTagBox){
+        }else if(v == addTagIcon){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
@@ -1267,8 +1290,58 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
+        else if (view == addTagIcon) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == cleanDate) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cleanDate.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cleanDate.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == cleanFriends) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cleanFriends.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cleanFriends.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == cleanInterests) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cleanInterests.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cleanInterests.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == cleanLocation) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cleanLocation.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cleanLocation.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == cleanSchedule) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cleanSchedule.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cleanSchedule.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == cleanWeekDays) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                cleanWeekDays.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                cleanWeekDays.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
 
         return false;
     }
 
 }
+//controller.updateAll(0, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);

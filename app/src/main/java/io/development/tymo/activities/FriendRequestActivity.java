@@ -66,13 +66,13 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
         findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
-        mBackButton.setOnTouchListener(this);
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
         recyclerView = (EasyRecyclerView) findViewById(R.id.recycler_view);
 
         mBackButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.profile_menu_pending_requests));
 

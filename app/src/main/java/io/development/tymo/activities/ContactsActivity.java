@@ -14,6 +14,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -38,6 +39,8 @@ import io.development.tymo.view_holder.ContactViewHolder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+
+import static android.view.View.GONE;
 
 public class ContactsActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, SwipeRefreshLayout.OnRefreshListener, ContactViewHolder.RefreshLayoutPlansCallback {
 
@@ -96,9 +99,14 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.searchSelection).setVisibility(View.GONE);
 
         mBackButton.setOnClickListener(this);
-        searchView.setIconifiedByDefault(false);
         searchView.setOnQueryTextListener(mOnQueryTextListener);
         mBackButton.setOnTouchListener(this);
+
+        //search bar
+        int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
+        ImageView magImage = (ImageView) searchView.findViewById(magId);
+        magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
+        magImage.setVisibility(GONE);
 
         email = getIntent().getStringExtra("email_contacts");
         full_name = getIntent().getStringExtra("contact_full_name");

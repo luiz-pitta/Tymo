@@ -19,9 +19,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="20dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginRight="30dp"
             android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -37,6 +37,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_toLeftOf="@+id/mapText"
                     android:background="@drawable/bg_act_edit_box"
+                    android:clickable="true"
                     android:hint="@string/hint_local_filter"
                     android:inputType="text"
                     android:lines="1"
@@ -44,18 +45,6 @@
                     android:textColor="@color/grey_600"
                     android:textColorHint="@color/grey_400"
                     android:textSize="14sp" />
-
-                <TextView
-                    android:id="@+id/mapText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:text="@string/map"
-                    android:textAllCaps="true"
-                    android:textColor="@color/deep_purple_400"
-                    android:textSize="14sp"
-                    android:textStyle="normal" />
 
             </RelativeLayout>
 
@@ -67,7 +56,8 @@
         android:id="@+id/itemBoxLocation"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="@color/grey_50"
+        android:background="@drawable/bg_select_item_grey_50"
+        android:clickable="true"
         android:orientation="vertical"
         android:paddingLeft="20dp"
         android:paddingRight="20dp">
@@ -102,11 +92,12 @@
         <TextView
             android:id="@+id/cleanLocation"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
+            android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
             android:layout_toLeftOf="@+id/expandMoreIconLocation"
             android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/clean"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"
