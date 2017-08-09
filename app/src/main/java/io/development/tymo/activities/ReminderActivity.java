@@ -76,7 +76,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     private ReminderWrapper reminderWrapper;
 
     private boolean error;
-    private TextView requiredText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +91,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         bottomBarBox = (RelativeLayout) findViewById(R.id.confirmationButtonBar);
         m_title = (TextView) findViewById(R.id.text);
-        requiredText = (TextView) findViewById(R.id.requiredText);
         confirmationButton = (TextView) findViewById(R.id.confirmationButton);
         reminderCardTime = (TextView) findViewById(R.id.reminderCardTime);
         reminderCardText = (TextView) findViewById(R.id.reminderCardText);
@@ -105,8 +103,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         reminderCardTime.setText("");
 
         error = false;
-
-        requiredText.setVisibility(View.GONE);
 
         type = getIntent().getIntExtra("type_reminder", 0);
 

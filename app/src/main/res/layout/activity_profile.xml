@@ -29,6 +29,31 @@
                     android:layout_height="match_parent"
                     android:background="@drawable/bg_profile_morning" />
 
+                <LinearLayout
+                    android:id="@+id/editProfile"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/editProfileText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/btn_profile_edit"
+                        android:gravity="center"
+                        android:paddingBottom="3dp"
+                        android:paddingLeft="6dp"
+                        android:paddingRight="6dp"
+                        android:paddingTop="3dp"
+                        android:text="@string/edit_profile"
+                        android:textAllCaps="true"
+                        android:textColor="@color/white"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
                 <RelativeLayout
                     android:id="@+id/profileAboutBox"
                     android:layout_width="match_parent"
@@ -36,43 +61,25 @@
                     android:layout_marginBottom="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp">
+                    android:layout_marginTop="40dp">
 
                     <RelativeLayout
                         android:id="@+id/profilePhotoBox"
                         android:layout_width="100dp"
-                        android:layout_height="110dp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_marginTop="20dp">
-
-                        <RelativeLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/profilePhoto"
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:layout_centerHorizontal="true"
-                                android:src="@drawable/ic_profile_photo_empty" />
-
-                            <View
-                                android:layout_width="100dp"
-                                android:layout_height="100dp"
-                                android:background="@drawable/bg_shape_oval_white_corners" />
-
-                        </RelativeLayout>
+                        android:layout_height="100dp"
+                        android:layout_centerHorizontal="true">
 
                         <ImageView
-                            android:id="@+id/editIcon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_alignParentBottom="true"
-                            android:layout_alignParentRight="true"
-                            android:background="@drawable/btn_profile_edit"
-                            android:padding="3dp"
-                            android:src="@drawable/ic_edit"
-                            android:tint="@color/white" />
+                            android:id="@+id/profilePhoto"
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:layout_centerHorizontal="true"
+                            android:src="@drawable/ic_profile_photo_empty" />
+
+                        <View
+                            android:layout_width="100dp"
+                            android:layout_height="100dp"
+                            android:background="@drawable/bg_shape_oval_white_corners" />
 
                     </RelativeLayout>
 

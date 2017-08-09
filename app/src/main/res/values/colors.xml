@@ -328,6 +328,7 @@
     <color name="white_opacity_10">#1Affffff</color>
     <color name="white_opacity_20">#33ffffff</color>
     <color name="white_opacity_50">#82ffffff</color>
+    <color name="white_opacity_70">#B3ffffff</color>
     <color name="white_opacity_80">#ccffffff</color>
     <color name="white_opacity_95">#f2ffffff</color>
     <color name="deep_purple_100_opacity_95">#F2D1C4E9</color>

@@ -48,7 +48,7 @@ public class SelectionWeekDaysAdapter extends MultiChoiceAdapter<SelectionWeekDa
 
         if(textViewActivated != null){
             if(state) {
-                textViewActivated.setBackgroundResource(R.drawable.btn_profile_edit);
+                textViewActivated.setBackgroundResource(R.drawable.btn_select_week_day);
                 textViewActivated.setTextColor(ContextCompat.getColor(context, R.color.white));
             }
             else {

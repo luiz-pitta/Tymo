@@ -372,6 +372,7 @@
     <string name="reminder_date">Data</string>
     <string name="reminder_hour">Hora</string>
     <string name="edit">Editar</string>
+    <string name="edit_profile">Editar perfil</string>
     <string name="reminder_privacy">Privada</string>
     <string name="reminder_btn_add">Lembretes e\nNotas</string>
     <string name="reminder">Lembrete</string>

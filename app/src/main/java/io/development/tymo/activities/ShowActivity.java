@@ -92,7 +92,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private View checkButtonBox, deleteButtonBox;
     private ImageView checkButton, deleteButton;
-    private TextView checkText, deleteText, requiredText;
+    private TextView checkText, deleteText;
 
     private ActivityWrapper activityWrapper;
     private int selected = 0;
@@ -129,7 +129,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         deleteButton = (ImageView) findViewById(R.id.deleteButton);
         checkText = (TextView) findViewById(R.id.checkText);
         deleteText = (TextView) findViewById(R.id.deleteText);
-        requiredText = (TextView) findViewById(R.id.requiredText);
         editButton = (TextView) findViewById(R.id.editButton);
 
         cubeLowerBoxIcon = (ImageView) findViewById(R.id.cubeLowerBoxIcon);
@@ -161,8 +160,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         whoCorners.setOnClickListener(this);
 
         privacyBox.setOnClickListener(this);
-
-        requiredText.setVisibility(View.GONE);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 

@@ -137,7 +137,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private CompositeDisposable mSubscriptions;
 
-    private TextView requiredText;
     private FirebaseAnalytics mFirebaseAnalytics;
 
     private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
@@ -176,12 +175,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         privacyText = (TextView) findViewById(R.id.privacyText);
         privacyBox = (LinearLayout) findViewById(R.id.privacyBox);
         space = (Space) findViewById(R.id.space);
-        requiredText = (TextView) findViewById(R.id.requiredText);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         mSwipeRefreshLayout.setEnabled(false);
-
-        requiredText.setVisibility(View.GONE);
 
         space.getLayoutParams().height = (int) Utilities.convertDpToPixel(60, getApplicationContext());
 

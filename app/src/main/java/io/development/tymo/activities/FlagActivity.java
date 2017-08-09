@@ -100,7 +100,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private CompositeDisposable mSubscriptions;
 
     private boolean error;
-    private TextView requiredText;
 
     private User creator_flag, user_friend = null;
     private ArrayList<User> userList = new ArrayList<>();
@@ -159,11 +158,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         deleteButton = (ImageView)findViewById(R.id.deleteButton);
         checkText = (TextView)findViewById(R.id.checkText);
         deleteText = (TextView)findViewById(R.id.deleteText);
-        requiredText = (TextView) findViewById(R.id.requiredText);
 
         error = false;
-
-        requiredText.setVisibility(View.GONE);
 
         type = getIntent().getIntExtra("type_flag",0);
         icon2.setVisibility(View.INVISIBLE);

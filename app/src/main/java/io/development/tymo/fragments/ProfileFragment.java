@@ -77,15 +77,15 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ProfileFragment extends Fragment implements View.OnClickListener {
+public class ProfileFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
     private LinearLayout settingsBox, pendingRequestsBox, invitationsBox, timerBox;
-    private RelativeLayout contactsBox;
+    private RelativeLayout contactsBox, profilePhotoBox;
     private ImageView profilePhoto, timerIcon;
-    private ImageView editIcon;
+    private LinearLayout editProfile;
     private CircularMusicProgressBar progressBar;
     private Rect rect;
-    private TextView profileName, profileDescription, pendingRequestsQty, invitationsQty;
+    private TextView profileName, profileDescription, pendingRequestsQty, invitationsQty, editProfileText;
     private TextView commitmentStartTime, commitmentTitle, timer, todayDate, numberContacts;
     private View progressBox;
     private User user;
@@ -144,8 +144,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         timerBox = (LinearLayout) view.findViewById(R.id.timerBox);
         profilePhoto = (ImageView) view.findViewById(R.id.profilePhoto);
         timerIcon = (ImageView) view.findViewById(R.id.timerIcon);
-        editIcon = (ImageView) view.findViewById(R.id.editIcon);
+        editProfile = (LinearLayout) view.findViewById(R.id.editProfile);
         todayDate = (TextView) view.findViewById(R.id.todayDate);
+        editProfileText = (TextView) view.findViewById(R.id.editProfileText);
         progressBox = view.findViewById(R.id.progressBox);
 
         backgroundProfile = (ImageView) view.findViewById(R.id.backgroundProfile);
@@ -156,8 +157,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         commitmentStartTime = (TextView) view.findViewById(R.id.commitmentStartTime);
         commitmentTitle = (TextView) view.findViewById(R.id.commitmentTitle);
         numberContacts = (TextView) view.findViewById(R.id.myContactsQty);
+        profilePhotoBox = (RelativeLayout) view.findViewById(R.id.profilePhotoBox);
         timer = (TextView) view.findViewById(R.id.timer);
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
+
+        editProfile.setOnTouchListener(this);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -174,7 +178,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         settingsBox.setOnClickListener(this);
         pendingRequestsBox.setOnClickListener(this);
         invitationsBox.setOnClickListener(this);
-        profilePhoto.setOnClickListener(this);
+        profilePhotoBox.setOnClickListener(this);
+        editProfile.setOnClickListener(this);
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(225);
 
@@ -189,7 +194,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
-        new Actor.Builder(SpringSystem.create(), editIcon)
+        new Actor.Builder(SpringSystem.create(), profilePhotoBox)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
                 .onTouchListener(new View.OnTouchListener() {
                     @Override
@@ -197,15 +202,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_UP:
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-                                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                                    intent.putExtra("user_about", new UserWrapper(user));
 
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "user_about" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                                    startActivity(intent);
                                 }
                                 break;
                             case MotionEvent.ACTION_DOWN:
@@ -1220,7 +1217,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(intent);
-        } else if (v == profilePhoto && !noInternet) {
+        } else if (v == editProfile && !noInternet) {
             Intent intent = new Intent(getActivity(), AboutActivity.class);
             intent.putExtra("user_about", new UserWrapper(user));
 
@@ -1260,5 +1257,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             mSubscriptions.dispose();
 
         Glide.get(getActivity()).clearMemory();
+    }
+
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == editProfile) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_pressed));
+            }
+        }
+
+        return false;
     }
 }
