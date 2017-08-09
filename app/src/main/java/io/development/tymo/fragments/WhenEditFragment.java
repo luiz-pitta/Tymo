@@ -50,6 +50,8 @@ public class WhenEditFragment extends Fragment implements
     private int minutes_start, hour_start;
     private int minutes_end, hour_end;
 
+    private Calendar calendarStart;
+
     private int repeat_type = 0;
     private int repeat_qty = -1;
     private double lat = -500;
@@ -107,6 +109,8 @@ public class WhenEditFragment extends Fragment implements
         mapText.setOnClickListener(this);
         locationText.setOnClickListener(this);
         locationText.setOnLongClickListener(this);
+
+        calendarStart = Calendar.getInstance();
 
         day_start = -1;
         month_start = -1;
@@ -301,6 +305,7 @@ public class WhenEditFragment extends Fragment implements
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(year,monthOfYear,dayOfMonth);
+        calendarStart.set(year,monthOfYear,dayOfMonth);
         String day= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
         String month= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
         calendar.set(yearEnd,monthOfYearEnd,dayOfMonthEnd);
@@ -528,6 +533,7 @@ public class WhenEditFragment extends Fragment implements
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(now);
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -546,15 +552,15 @@ public class WhenEditFragment extends Fragment implements
             dpd.setCurrentTab(0);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
-            Calendar now = Calendar.getInstance();
 
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     WhenEditFragment.this,
-                    now.get(Calendar.YEAR),
-                    now.get(Calendar.MONTH),
-                    now.get(Calendar.DAY_OF_MONTH)
+                    calendarStart.get(Calendar.YEAR),
+                    calendarStart.get(Calendar.MONTH),
+                    calendarStart.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(calendarStart);
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
