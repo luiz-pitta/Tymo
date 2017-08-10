@@ -1,9 +1,7 @@
 package io.development.tymo;
 
-import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -472,10 +470,10 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
         if (view == loginButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 loginButton.setTextColor(ContextCompat.getColor(this, R.color.white));
-                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 loginButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
-                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+                loginButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
             }
         }
         else if (view == forgot) {

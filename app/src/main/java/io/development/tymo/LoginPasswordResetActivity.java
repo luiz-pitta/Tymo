@@ -158,10 +158,10 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
         if (view == sendButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 sendButton.setTextColor(ContextCompat.getColor(this, R.color.white));
-                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
-                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
             }
         }
         return false;

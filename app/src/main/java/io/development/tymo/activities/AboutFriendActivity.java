@@ -105,7 +105,7 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
     private String getGender(String gender){
         if(gender.matches("male"))
             return getResources().getString(R.string.register_male);
-        else if(gender.matches("not specified"))
+        else if(gender.matches("female"))
             return getResources().getString(R.string.register_female);
         else
             return getResources().getString(R.string.register_not_specified);

@@ -397,7 +397,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            startActivity(new Intent(this, MainActivity.class));
+            onBackPressed();
         }
     }
 

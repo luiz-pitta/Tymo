@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -36,7 +37,10 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.ParseException;
@@ -76,14 +80,15 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
     private ImageView mBackButton;
-    private TextView mText, friendshipRequestsText, progressText, btnCompare;
+    private TextView mText, friendshipRequestsText, progressText, btnCompare, aboutText, contactsText;
     private ImageView icon2, calendarIcon;
-    private ImageView profilePhoto, friendshipRequestsIcon;
-    private LinearLayout mDateBox;
-    private RelativeLayout friendshipRequestsBox, contactsBox, dateCompareBox;
+    private ImageView profilePhoto, friendshipRequestsIcon, aboutIcon, contactsIcon;
+    private LinearLayout mDateBox, friendshipRequestsBox, contactsBox, aboutBox;
+    private RelativeLayout dateCompareBox, profilePhotoBox;
     private NestedScrollView scrollView;
     private ProgressBar progressIcon;
     private DateFormat dateFormat;
+    private Rect rect;
 
     private Calendar currentTime;
     private static int currentSecond, currentMinute, currentHour;
@@ -147,12 +152,17 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         icon2 = (ImageView) findViewById(R.id.icon2);
         mText = (TextView) findViewById(R.id.text);
         profilePhoto = (ImageView) findViewById(R.id.profilePhoto);
-        friendshipRequestsBox = (RelativeLayout) findViewById(R.id.friendshipRequestsBox);
+        friendshipRequestsBox = (LinearLayout) findViewById(R.id.friendshipRequestsBox);
         friendshipRequestsText = (TextView) findViewById(R.id.friendshipRequestsText);
         friendshipRequestsIcon = (ImageView) findViewById(R.id.friendshipRequestsIcon);
         progressText = (TextView) findViewById(R.id.progressText);
         progressIcon = (ProgressBar) findViewById(R.id.progressIcon);
-        contactsBox = (RelativeLayout) findViewById(R.id.contactsBox);
+        contactsBox = (LinearLayout) findViewById(R.id.contactsBox);
+        contactsText = (TextView) findViewById(R.id.contactsText);
+        contactsIcon = (ImageView) findViewById(R.id.contactsIcon);
+        aboutBox = (LinearLayout) findViewById(R.id.aboutBox);
+        aboutText = (TextView) findViewById(R.id.aboutText);
+        aboutIcon = (ImageView) findViewById(R.id.aboutIcon);
         dateTextMonth = (TextView) findViewById(R.id.dateMonthYear);
         dateTextWeek = (TextView) findViewById(R.id.dateWeek);
         previousWeek = (ImageView) findViewById(R.id.previousWeek);
@@ -160,6 +170,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
         dateCompareBox = (RelativeLayout) findViewById(R.id.dateCompareBox);
         calendarIcon = (ImageView) findViewById(R.id.calendarIcon);
+        profilePhotoBox = (RelativeLayout) findViewById(R.id.profilePhotoBox);
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(275);
 
@@ -181,10 +192,11 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         commitmentsButton.setOnClickListener(this);
         freeTimeButton.setOnClickListener(this);
         compareButton.setOnClickListener(this);
-        profilePhoto.setOnClickListener(this);
+        profilePhotoBox.setOnClickListener(this);
         compareButton.setOnTouchListener(this);
         friendshipRequestsBox.setOnClickListener(this);
         contactsBox.setOnClickListener(this);
+        aboutBox.setOnClickListener(this);
         dateTextWeek.setOnClickListener(this);
         previousWeek.setOnClickListener(this);
         nextWeek.setOnClickListener(this);
@@ -193,6 +205,9 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         previousWeek.setOnTouchListener(this);
         nextWeek.setOnTouchListener(this);
         dateTextWeek.setOnTouchListener(this);
+        friendshipRequestsBox.setOnTouchListener(this);
+        contactsBox.setOnTouchListener(this);
+        aboutBox.setOnTouchListener(this);
 
         mNavigator = new FragmentNavigator(getFragmentManager(), new PlansFragmentAdapter(), R.id.container);
         mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
@@ -205,6 +220,33 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         freeTimeButton.setBackgroundResource(R.drawable.btn_commitments_free_time_right);
         commitmentsButton.setTextColor(ContextCompat.getColor(this, R.color.white));
         freeTimeButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+
+        new Actor.Builder(SpringSystem.create(), profilePhotoBox)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profilePhoto" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                                    Intent friend = new Intent(FriendProfileActivity.this, AboutFriendActivity.class);
+                                    friend.putExtra("user_about_friend", new UserWrapper(user));
+                                    startActivity(friend);
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         // get today and clear time of day
         Calendar cal = Calendar.getInstance();
@@ -452,6 +494,30 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 dateTextWeek.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
             }
+        } else if (view == friendshipRequestsBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                friendshipRequestsText.setTextColor(ContextCompat.getColor(this, R.color.white));
+                friendshipRequestsIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                friendshipRequestsText.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
+                friendshipRequestsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_300));
+            }
+        } else if (view == contactsBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                contactsText.setTextColor(ContextCompat.getColor(this, R.color.white));
+                contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                contactsText.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
+                contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_300));
+            }
+        } else if (view == aboutBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                aboutText.setTextColor(ContextCompat.getColor(this, R.color.white));
+                aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                aboutText.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
+                aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_300));
+            }
         }
 
         return false;
@@ -584,12 +650,30 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             dateCompareBox.setVisibility(View.GONE);
             findViewById(R.id.nextPreviousBox).setVisibility(View.GONE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.GONE);
-            profilePhoto.setOnClickListener(null);
+            profilePhotoBox.setOnClickListener(null);
+            profilePhotoBox.setOnTouchListener(null);
+            contactsBox.setOnClickListener(null);
+            contactsBox.setOnTouchListener(null);
+            aboutBox.setOnClickListener(null);
+            aboutBox.setOnTouchListener(null);
+            contactsText.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+            contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_500));
+            aboutText.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
+            aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_500));
         } else {
             prived = false;
             findViewById(R.id.nextPreviousBox).setVisibility(View.VISIBLE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.VISIBLE);
-            profilePhoto.setOnClickListener(this);
+            profilePhotoBox.setOnClickListener(this);
+            profilePhotoBox.setOnTouchListener(this);
+            contactsBox.setOnClickListener(this);
+            contactsBox.setOnTouchListener(this);
+            aboutBox.setOnClickListener(this);
+            aboutBox.setOnTouchListener(this);
+            contactsText.setTextColor(ContextCompat.getColor(this, R.color.white));
+            contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            aboutText.setTextColor(ContextCompat.getColor(this, R.color.white));
+            aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
         }
 
         if (!user.getPhoto().matches("")) {
@@ -952,7 +1036,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             commitmentsButton.setTextColor(ContextCompat.getColor(FriendProfileActivity.this, R.color.white));
             freeTimeButton.setTextColor(ContextCompat.getColor(FriendProfileActivity.this, R.color.deep_purple_400));
             setCurrentTab(0);
-        } else if (view == profilePhoto) {
+        } else if (view == profilePhotoBox || view == aboutBox) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profilePhoto" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));

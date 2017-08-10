@@ -31,7 +31,7 @@
             android:lines="1"
             android:text="Date"
             android:textColor="@color/grey_500"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 
@@ -82,7 +82,7 @@
             android:ellipsize="end"
             android:lines="1"
             android:textColor="@color/grey_500"
-            android:textSize="16sp" />
+            android:textSize="14sp" />
 
     </LinearLayout>
 

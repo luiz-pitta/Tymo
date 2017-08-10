@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -457,10 +456,10 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         else if (view == advanceButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 advanceButton.setTextColor(ContextCompat.getColor(this, R.color.white));
-                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 advanceButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
-                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+                advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
             }
         }
 

@@ -115,7 +115,7 @@
                 android:layout_height="50dp"
                 android:layout_marginBottom="30dp"
                 android:layout_marginTop="30dp"
-                android:background="@drawable/btn_login_2"
+                android:background="@drawable/btn_login_advance"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"

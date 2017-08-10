@@ -18,8 +18,6 @@ import com.google.gson.GsonBuilder;
 
 import java.io.IOException;
 
-import io.development.tymo.activities.CompareActivity;
-import io.development.tymo.activities.MainActivity;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
@@ -127,10 +125,10 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
         else if (view == sendButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 sendButton.setTextColor(ContextCompat.getColor(this, R.color.white));
-                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
-                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_2_pressed));
+                sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
             }
         }
 

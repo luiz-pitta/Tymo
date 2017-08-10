@@ -90,6 +90,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
     private View progressBox;
     private User user;
 
+    private int period;
+
     private boolean commitments = false;
 
     private Calendar currentTime;
@@ -131,6 +133,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        period = 0;
 
         mSubscriptions = new CompositeDisposable();
 
@@ -202,7 +206,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_UP:
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+                                    Intent intent = new Intent(getActivity(), AboutActivity.class);
+                                    intent.putExtra("user_about", new UserWrapper(user));
 
+                                    Bundle bundle = new Bundle();
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "user_about" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                                    startActivity(intent);
                                 }
                                 break;
                             case MotionEvent.ACTION_DOWN:
@@ -247,8 +259,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
     private void setBackgroundProfile() {
         String timeStart, timeEnd;
         String currentTime = String.format("%02d", currentHour) + ":" + String.format("%02d", currentMinute);
-        int period = 0;
         String urlBg = "";
+        period = 0;
 
         for (int i = 0; i < bgProfile.size(); i++) {
             timeStart = String.format("%02d", bgProfile.get(i).getHourStart()) + ":" + String.format("%02d", bgProfile.get(i).getMinuteStart());
@@ -265,12 +277,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             if (period == 3) {
                 profileName.setTextColor(getResources().getColor(R.color.grey_900));
                 profileDescription.setTextColor(getResources().getColor(R.color.grey_900));
-            } else if (period == 2 || period == 4) {
-                profileName.setTextColor(getResources().getColor(R.color.white));
-                profileDescription.setTextColor(getResources().getColor(R.color.white));
+                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
             } else {
                 profileName.setTextColor(getResources().getColor(R.color.white));
                 profileDescription.setTextColor(getResources().getColor(R.color.white));
+                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_night));
             }
 
             Glide.clear(backgroundProfile);
@@ -1264,9 +1275,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
     public boolean onTouch(View view, MotionEvent event) {
         if (view == editProfile) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
+                if (period == 3) {
+                    editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
+                } else {
+                    editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_night));
+                }
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_pressed));
+                if (period == 3) {
+                    editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_pressed));
+                } else {
+                    editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_night_pressed));
+                }
             }
         }
 

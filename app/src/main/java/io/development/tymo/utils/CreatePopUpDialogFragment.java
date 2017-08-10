@@ -947,7 +947,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                                 close.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.white));
                             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                close.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_200));
+                                close.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
                             }
 
                             return false;
