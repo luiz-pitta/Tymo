@@ -1015,7 +1015,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                         optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
                         break;
                 }
-
                 return false;
             }
         });
