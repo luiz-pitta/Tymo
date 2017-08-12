@@ -208,7 +208,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     int m;
                     int y;
 
-                    callback.refreshLayout(true);
+                    if(screen == Utilities.TYPE_PLANS)
+                        callback.refreshLayout(true);
+
                     updateFeedMessageToActivity(mContext);
 
                     if(activityServer != null){
