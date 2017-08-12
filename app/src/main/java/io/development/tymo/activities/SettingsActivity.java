@@ -714,7 +714,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
 
                 if(!login_type) {
-                    if (AccessToken.getCurrentAccessToken() != null)
+                    if(AccessToken.getCurrentAccessToken() != null)
                         LoginManager.getInstance().logOut();
 
                     setProgress(true);

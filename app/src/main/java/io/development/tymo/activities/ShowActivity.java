@@ -928,6 +928,24 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                     optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
                 }
 
+                switch (selected) {
+                    case 1:
+                        optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                    case 2:
+                        optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                    default:
+                        optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                }
+
                 return false;
             }
         });
@@ -945,6 +963,24 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                     optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
                 }
 
+                switch (selected) {
+                    case 1:
+                        optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                    case 2:
+                        optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                    default:
+                        optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                }
+
                 return false;
             }
         });
@@ -960,6 +996,24 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                     optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
                     optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
                     optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                }
+
+                switch (selected) {
+                    case 1:
+                        optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                    case 2:
+                        optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
+                    default:
+                        optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                        break;
                 }
 
                 return false;

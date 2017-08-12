@@ -184,6 +184,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 Intent intent = new Intent(this, IntroActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
+                progressBox.setVisibility(View.GONE);
             } else {
                 editor.putString(Constants.EMAIL,"");
                 editor.putBoolean(Constants.LOGIN_TYPE, false);
@@ -196,6 +197,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 editor.putBoolean(Constants.INTRO, false);
                 editor.apply();
                 Toast.makeText(this, getResources().getString(R.string.register_account_not_linked_with_facebook), Toast.LENGTH_LONG).show();
+                progressBox.setVisibility(View.GONE);
             }
         }else{
             editUser.setText(null);
@@ -207,9 +209,8 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             Intent intent = new Intent(this, IntroActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
+            progressBox.setVisibility(View.GONE);
         }
-
-        progressBox.setVisibility(View.GONE);
     }
 
     private void handleError(Throwable error) {
@@ -393,7 +394,6 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onCancel() {
-                progressBox.setVisibility(View.GONE);
             }
 
             @Override

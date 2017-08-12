@@ -82,6 +82,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
     private User user;
 
+    private boolean clickFacebook = false;
+
     //teste
     private List<Integer> list1 = new ArrayList<>();
 
@@ -141,7 +143,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
             mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
-            progressBox.setVisibility(View.GONE);
+            if(!clickFacebook)
+                progressBox.setVisibility(View.GONE);
         }
     }
 
@@ -291,10 +294,11 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             Intent intent = new Intent(this, IntroActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
-        }else
+            progressBox.setVisibility(View.GONE);
+        }else {
             Toast.makeText(this, getResources().getString(R.string.register_account_not_linked_with_facebook), Toast.LENGTH_LONG).show();
-
-        progressBox.setVisibility(View.GONE);
+            progressBox.setVisibility(View.GONE);
+        }
     }
 
     private void handleError(Throwable error) {
@@ -355,6 +359,8 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                         new GraphRequest.GraphJSONObjectCallback() {
                             @Override
                             public void onCompleted(JSONObject object, GraphResponse response) {
+
+                                progressBox.setVisibility(View.VISIBLE);
 
                                 try {
                                     SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
@@ -426,6 +432,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                     user.setUrl("");
 
                                     loginProcessFacebook(user);
+                                    clickFacebook = false;
                                 }
                                 catch (Exception  e){
                                     showSnackbarFacebookError();
@@ -441,7 +448,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
             @Override
             public void onCancel() {
-                progressBox.setVisibility(View.GONE);
+
             }
 
             @Override
@@ -516,6 +523,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
             if(AccessToken.getCurrentAccessToken() != null)
                 LoginManager.getInstance().logOut();
             progressBox.setVisibility(View.VISIBLE);
+            clickFacebook = true;
             LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("email", "public_profile", "user_birthday", "user_events"));
 
             Bundle bundle = new Bundle();
