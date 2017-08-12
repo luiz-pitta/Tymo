@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
+import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -60,6 +61,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     private RelativeLayout bottomBarBox;
     private TextView confirmationButton;
     private LinearLayout buttonsBar;
+    private Space space;
 
     private ArrayList<ReminderServer> reminderServers;
 
@@ -84,6 +86,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         mSubscriptions = new CompositeDisposable();
 
+        space = (Space) findViewById(R.id.space);
         buttonsBar = (LinearLayout) findViewById(R.id.buttonsBar);
         icon2 = (ImageView) findViewById(R.id.icon2);
         icon1 = (ImageView) findViewById(R.id.icon1);
@@ -95,9 +98,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         reminderCardTime = (TextView) findViewById(R.id.reminderCardTime);
         reminderCardText = (TextView) findViewById(R.id.reminderCardText);
         editButton = (TextView) findViewById(R.id.editButton);
-
-        findViewById(R.id.space).setVisibility(View.VISIBLE);
-        editButton.setVisibility(View.VISIBLE);
 
         reminderCardText.setText("");
         reminderCardTime.setText("");
@@ -113,6 +113,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         if (type == 0) {
             m_title.setText(getResources().getString(R.string.create_reminder));
+            mBackButton.setImageResource(R.drawable.ic_add);
+            mBackButton.setRotation(45);
             confirmationButton.setText(R.string.confirm);
             buttonsBar.setVisibility(View.GONE);
             icon2.setVisibility(View.INVISIBLE);
@@ -122,6 +124,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_free_time");
             else {
                 edit = true;
+                mBackButton.setImageResource(R.drawable.ic_add);
+                mBackButton.setRotation(45);
                 m_title.setText(getResources().getString(R.string.edit_reminder));
                 confirmationButton.setText(R.string.save_updates);
             }
@@ -162,7 +166,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             }
             bottomBarBox.setVisibility(View.GONE);
             icon1.setVisibility(View.GONE);
-            icon2.setImageResource(R.drawable.ic_edit);
+            icon2.setVisibility(View.GONE);
+            editButton.setVisibility(View.VISIBLE);
+            space.setVisibility(View.VISIBLE);
         }
 
         mBackButton.setOnClickListener(this);
@@ -298,9 +304,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_500));
+                    buttonText1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_300));
+                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
                 }
 
                 return false;
@@ -311,9 +317,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_300));
+                    buttonText2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_100));
+                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
                 }
 
                 return false;
@@ -782,9 +788,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_500));
+                    buttonText1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.grey_300));
+                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
                 }
 
                 return false;
@@ -795,9 +801,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_300));
+                    buttonText2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dg.getContext(), R.color.deep_purple_100));
+                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
                 }
 
                 return false;
@@ -1134,9 +1140,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         }
         else if (view == editButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
 

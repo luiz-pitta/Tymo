@@ -395,9 +395,9 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                    buttonText1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
                 }
 
                 return false;
@@ -408,9 +408,9 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                    buttonText2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                    buttonText2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
                 }
 
                 return false;
@@ -558,9 +558,9 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                    buttonText1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
                 }
 
                 return false;
@@ -571,9 +571,9 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                    buttonText2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                    buttonText2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
                 }
 
                 return false;

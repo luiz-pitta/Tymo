@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,6 +26,7 @@ import com.cunoraz.tagview.OnTagDeleteListener;
 import com.cunoraz.tagview.Tag;
 import com.cunoraz.tagview.TagView;
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
+import com.facebook.rebound.SpringSystem;
 import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
 import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.Utils;
@@ -34,6 +36,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
@@ -63,6 +67,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
     private UpdateButtonController controller;
     private FilterWrapper filterWrapper;
+    private Rect rect;
 
     private TextView filterTextDate, filterTextFriends, filterTextLocation;
     private TextView filterTextSchedule, filterTextInterests, filterTextWeekDays;
@@ -112,7 +117,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private ImageView filterIconFriends, expandMoreIconFriends;
     private ExpandableLinearLayout expandableLayoutFriends;
     private TextView cleanFriends;
-    private ImageView addPersonButton;
+    private RelativeLayout addPersonButton;
     private RecyclerView recyclerView;
     private List<User> listPerson = new ArrayList<>();
     private PersonAdapter adapter;
@@ -231,6 +236,26 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         minutes_end = -1;
         hour_start = -1;
         hour_end = -1;
+
+        new Actor.Builder(SpringSystem.create(), addPersonButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         m_title.setText(getResources().getString(R.string.filter_and_sort));
 
@@ -636,7 +661,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandMoreIconFriends = (ImageView) findViewById(R.id.expandMoreIconFriends);
         expandableLayoutFriends = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutFriends);
         recyclerView = (RecyclerView) findViewById(R.id.guestRow);
-        addPersonButton = (ImageView) findViewById(R.id.addGuestButton);
+        addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
 
         cleanFriends.setOnTouchListener(this);
 

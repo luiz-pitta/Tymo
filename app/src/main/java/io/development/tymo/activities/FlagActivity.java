@@ -169,12 +169,16 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             confirmationButton.setText(R.string.confirm);
             friend_free = getIntent().getBooleanExtra("flag_free_friend", false);
             m_title.setText(getResources().getString(R.string.create_flag));
+            mBackButton.setImageResource(R.drawable.ic_add);
+            mBackButton.setRotation(45);
             findViewById(R.id.buttonsBar).setVisibility(View.GONE);
             space.getLayoutParams().height = (int) Utilities.convertDpToPixel(60, getApplicationContext());
 
             flagWrapper = (FlagWrapper)getIntent().getSerializableExtra("flag_edit");
             if(flagWrapper != null) {
                 m_title.setText(getResources().getString(R.string.edit_flag));
+                mBackButton.setImageResource(R.drawable.ic_add);
+                mBackButton.setRotation(45);
                 edit = true;
                 confirmationButton.setText(R.string.save_updates);
             }else {
@@ -1178,6 +1182,32 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         dg.setContentView(customView);
         dg.setCanceledOnTouchOutside(true);
 
+        button1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    button1.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    button1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
+                }
+
+                return false;
+            }
+        });
+
+        button2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    button2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    button2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
+                }
+
+                return false;
+            }
+        });
+
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1520,9 +1550,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         }
         else if (view == editButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
 

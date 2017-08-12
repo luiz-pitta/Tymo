@@ -83,7 +83,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
     public static class SimpleViewHolder extends RecyclerView.ViewHolder {
         private final Context mContext;
 
-        private ImageView triangle, flagButton, cubeUpperBoxIcon, photoCreator, addGuestButton, pieceIcon, cubeLowerBoxIcon;
+        private ImageView triangle, flagButton, cubeUpperBoxIcon, photoCreator, pieceIcon, cubeLowerBoxIcon;
         private RelativeLayout pieceBox, cubeLowerBox;
         private LinearLayout textBox, locationBox;
         private TextView textTitle, textDescription, location, date;
@@ -91,6 +91,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
         private PersonSmallAdapter adapter;
         private View photoCreatorRing;
         private RelativeLayout photoCreatorRingBox;
+        private RelativeLayout addGuestButton;
 
         public SimpleViewHolder(View view, Context context) {
             super(view);
@@ -110,7 +111,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
             cubeLowerBoxIcon = (ImageView) view.findViewById(R.id.cubeLowerBoxIcon);
             pieceIcon = (ImageView) view.findViewById(R.id.pieceIcon);
             photoCreator = (ImageView) view.findViewById(R.id.photoCreator);
-            addGuestButton = (ImageView) view.findViewById(R.id.addGuestButton);
+            addGuestButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
             flagButton = (ImageView) view.findViewById(R.id.flagIcon);
             cubeLowerBox = (RelativeLayout) view.findViewById(R.id.cubeLowerBox);
             locationBox = (LinearLayout) view.findViewById(R.id.locationBox);
@@ -123,6 +124,7 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
             recyclerView.setNestedScrollingEnabled(false);
 
             addGuestButton.setVisibility(View.GONE);
+            view.findViewById(R.id.addGuestButtonDivider).setVisibility(View.GONE);
         }
     }
 

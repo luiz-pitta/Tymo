@@ -4,6 +4,7 @@ package io.development.tymo.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -18,14 +19,18 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.borax12.materialdaterangepicker.date.DatePickerDialog;
 import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
 import com.borax12.materialdaterangepicker.time.TimePickerDialog;
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -60,8 +65,10 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener, View.OnClickListener {
 
-    private ImageView addPersonButton;
-    private TextView guestsNumber;
+    private RelativeLayout addPersonButton;
+    private TextView guestsNumber, addGuestText;
+    private View addGuestButtonDivider;
+    private Rect rect;
 
     private RecyclerView recyclerView;
     private PersonAdapter adapter;
@@ -92,6 +99,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private MaterialSpinner spinner, sendPicker;
 
     private CompositeDisposable mSubscriptions;
+
+    private ImageView addPersonIcon;
 
     public static Fragment newInstance(String text) {
         FlagEditFragment fragment = new FlagEditFragment();
@@ -130,7 +139,32 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         sendBox = (LinearLayout) view.findViewById(R.id.sendBox);
         repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
-        addPersonButton = (ImageView) view.findViewById(R.id.addGuestButton);
+        addPersonButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
+        addPersonIcon = (ImageView) view.findViewById(R.id.addGuestIcon);
+        addGuestText = (TextView) view.findViewById(R.id.addGuestText);
+        addGuestButtonDivider = (View) view.findViewById(R.id.addGuestButtonDivider);
+
+        addGuestText.setText(getString(R.string.invite_guest_btn));
+
+        new Actor.Builder(SpringSystem.create(), addPersonButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         day_start = -1;
         month_start = -1;
@@ -646,11 +680,12 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             titleEditText.setText(flagServer.getTitle());
 
             if (!isFlagInPast(flagServer)) {
-                addPersonButton.setImageResource(R.drawable.btn_add_person);
+                addPersonIcon.setImageResource(R.drawable.btn_add_person);
                 addPersonButton.setOnClickListener(this);
             } else {
                 addPersonButton.setOnClickListener(null);
                 addPersonButton.setVisibility(View.GONE);
+                addGuestButtonDivider.setVisibility(View.GONE);
             }
 
             if (edit) {

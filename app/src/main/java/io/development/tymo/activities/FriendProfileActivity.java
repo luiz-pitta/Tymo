@@ -656,10 +656,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             contactsBox.setOnTouchListener(null);
             aboutBox.setOnClickListener(null);
             aboutBox.setOnTouchListener(null);
-            contactsText.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-            contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_500));
-            aboutText.setTextColor(ContextCompat.getColor(this, R.color.grey_500));
-            aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_500));
+            contactsText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+            contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            aboutText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+            aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
         } else {
             prived = false;
             findViewById(R.id.nextPreviousBox).setVisibility(View.VISIBLE);
@@ -1172,9 +1172,9 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                    buttonText1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
                 }
 
                 return false;
@@ -1185,9 +1185,9 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                    buttonText2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                    buttonText2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
                 }
 
                 return false;

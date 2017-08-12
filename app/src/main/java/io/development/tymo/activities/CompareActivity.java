@@ -3,6 +3,8 @@ package io.development.tymo.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
+import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -14,11 +16,15 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
 import java.text.SimpleDateFormat;
@@ -55,13 +61,15 @@ import io.reactivex.schedulers.Schedulers;
 
 public class CompareActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener, View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
-    private ImageView mBackButton, addPersonButton;
+    private ImageView mBackButton, icon2;
     private ImageView previousWeek, nextWeek;
     private TextView mText;
     private TextView mDateText, contactsQty;
     private RecyclerView recyclerView;
     private PersonAdapter adapter;
     private DateFormat dateFormat;
+    private RelativeLayout addPersonButton;
+    private Rect rect;
 
     private TextView commitmentsButton;
     private TextView freeTimeButton;
@@ -100,10 +108,10 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             user_friend = wrap.getUser();
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
-        findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
 
         dateFormat = new DateFormat(this);
 
+        icon2 = (ImageView) findViewById(R.id.icon2);
         commitmentsButton = (TextView) findViewById(R.id.commitmentsButton);
         freeTimeButton = (TextView) findViewById(R.id.freeTimeButton);
         recyclerView = (RecyclerView) findViewById(R.id.guestRow);
@@ -111,11 +119,20 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         mText = (TextView) findViewById(R.id.text);
         mDateText = (TextView) findViewById(R.id.dateComplete);
         contactsQty = (TextView) findViewById(R.id.contactsQty);
-        addPersonButton = (ImageView) findViewById(R.id.addGuestButton);
+        addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
         previousWeek = (ImageView) findViewById(R.id.previousWeek);
         nextWeek = (ImageView) findViewById(R.id.nextWeek);
         deselectAll = (TextView) findViewById(R.id.deselectAll);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+
+        icon2.setImageResource(R.drawable.ic_add);
+
+        icon2.setOnClickListener(this);
+        icon2.setOnTouchListener(this);
+        deselectAll.setOnTouchListener(this);
+        previousWeek.setOnTouchListener(this);
+        nextWeek.setOnTouchListener(this);
+        mDateText.setOnTouchListener(this);
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(250);
 
@@ -129,7 +146,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this,R.color.deep_purple_400));
 
-        mText.setText(getResources().getString(R.string.compare));
+        mText.setText(getResources().getString(R.string.compare_agendas));
 
         mBackButton.setOnClickListener(this);
         mDateText.setOnClickListener(this);
@@ -190,6 +207,26 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             public void onLongItemClick(View view, int position, MotionEvent e) {
             }
         }));
+
+        new Actor.Builder(SpringSystem.create(), addPersonButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         setCurrentTab(mNavigator.getCurrentPosition());
 
@@ -1002,6 +1039,41 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+        else if (view == icon2) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                icon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                icon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }
+        else if (view == deselectAll) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                deselectAll.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                deselectAll.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }
+        else if (view == mDateText) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mDateText.setTextColor(ContextCompat.getColor(this, R.color.grey_900));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mDateText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+            }
+        }
+        else if (view == nextWeek) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                nextWeek.setColorFilter(ContextCompat.getColor(this, R.color.grey_900));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                nextWeek.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            }
+        }
+        else if (view == previousWeek) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                previousWeek.setColorFilter(ContextCompat.getColor(this, R.color.grey_900));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                previousWeek.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             }
         }
 

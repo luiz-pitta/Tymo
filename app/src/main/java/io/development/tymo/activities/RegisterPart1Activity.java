@@ -88,7 +88,6 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
         m_title2 = (TextView) findViewById(R.id.text2);
 
         mBackButton.setOnClickListener(this);
-        birthdayBox.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
         birthDay.setOnClickListener(this);
         birthMonth.setOnClickListener(this);
@@ -378,7 +377,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startCropImageActivity(null);
         }
-        else if(view == birthdayBox || view == birthDay || view == birthMonth || view == birthYear) {
+        else if(view == birthDay || view == birthMonth || view == birthYear) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "birthdayBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));

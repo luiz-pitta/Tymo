@@ -72,7 +72,7 @@
             android:lines="1"
             android:text="Profile Name"
             android:textColor="@color/grey_600"
-            android:textSize="14sp" />
+            android:textSize="12sp" />
 
     </RelativeLayout>
 

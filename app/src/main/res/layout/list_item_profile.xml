@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/profileItem"
     android:layout_width="70dp"
-    android:layout_height="wrap_content"
-    android:layout_marginRight="5dp">
+    android:layout_height="wrap_content">
 
     <RelativeLayout
         android:id="@+id/profilePhotoBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="5dp">
 
         <ImageView
             android:id="@+id/profilePhoto"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@drawable/ic_profile_photo_empty"/>
+            android:src="@drawable/ic_profile_photo_empty" />
 
     </RelativeLayout>
 
@@ -29,9 +30,11 @@
         android:ellipsize="end"
         android:gravity="center_horizontal"
         android:lines="2"
+        android:paddingLeft="4dp"
+        android:paddingRight="4dp"
         android:text="Profile Name"
         android:textColor="@color/grey_600"
-        android:textSize="14sp" />
+        android:textSize="12sp" />
 
     <ImageView
         android:id="@+id/deleteButton"
@@ -64,19 +67,6 @@
         android:background="@drawable/btn_profile_creator"
         android:gravity="center"
         android:text="C"
-        android:textColor="@color/white"
-        android:textSize="12sp"
-        android:textStyle="bold"
-        android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/adminButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_alignParentRight="true"
-        android:background="@drawable/btn_profile_admin"
-        android:gravity="center"
-        android:text="A"
         android:textColor="@color/deep_purple_400"
         android:textSize="12sp"
         android:textStyle="bold"

@@ -367,9 +367,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     @Override
                     public boolean onTouch(View view, MotionEvent event) {
                         if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                            button1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_500));
+                            button1.setBackground(null);
                         } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            button1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_300));
+                            button1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
                         }
 
                         return false;
@@ -380,9 +380,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     @Override
                     public boolean onTouch(View view, MotionEvent event) {
                         if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                            button2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                            button2.setBackground(null);
                         } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                            button2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                            button2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
                         }
 
                         return false;
@@ -515,6 +515,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         recyclerView.setNestedScrollingEnabled(false);
 
                         customView.findViewById(R.id.addGuestButton).setVisibility(View.GONE);
+                        customView.findViewById(R.id.addGuestButtonDivider).setVisibility(View.GONE);
 
                         buttonText1.setText(context.getResources().getString(R.string.open));
 
@@ -570,9 +571,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
                                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                                    buttonText1.setBackground(null);
                                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_left_radius));
                                 }
 
                                 return false;
@@ -582,19 +583,10 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         button2.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
-                                int color = ContextCompat.getColor(dialog.getContext(), R.color.green_600);
-                                int color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.green_400);
-
-                                if (!buttonText2.getText().toString().matches(mContext.getResources().getString(R.string.fit))){
-                                    color = ContextCompat.getColor(dialog.getContext(), R.color.red_600);
-                                    color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.red_400);
-                                }
                                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText2.setTextColor(color);
-                                    buttonIcon2.setColorFilter(color);
+                                    button2.setBackground(null);
                                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText2.setTextColor(color_pressed);
-                                    buttonIcon2.setColorFilter(color_pressed);
+                                    button2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_right_radius));
                                 }
 
                                 return false;
@@ -674,9 +666,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
                                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                                    buttonText1.setBackground(null);
                                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_left_radius));
                                 }
 
                                 return false;
@@ -686,19 +678,10 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         button2.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
-                                int color = ContextCompat.getColor(dialog.getContext(), R.color.green_600);
-                                int color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.green_400);
-
-                                if (!buttonText2.getText().toString().matches(mContext.getResources().getString(R.string.fit))){
-                                    color = ContextCompat.getColor(dialog.getContext(), R.color.red_600);
-                                    color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.red_400);
-                                }
                                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText2.setTextColor(color);
-                                    buttonIcon2.setColorFilter(color);
+                                    button2.setBackground(null);
                                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText2.setTextColor(color_pressed);
-                                    buttonIcon2.setColorFilter(color_pressed);
+                                    button2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_right_radius));
                                 }
 
                                 return false;
@@ -762,6 +745,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         recyclerView.setNestedScrollingEnabled(false);
 
                         customView.findViewById(R.id.addGuestButton).setVisibility(View.GONE);
+                        customView.findViewById(R.id.addGuestButtonDivider).setVisibility(View.GONE);
 
                         Glide.clear(pieceIcon);
                         Glide.with(context)
@@ -814,9 +798,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
                                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_300));
+                                    buttonText1.setBackground(null);
                                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_100));
+                                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_left_radius));
                                 }
 
                                 return false;
@@ -826,19 +810,10 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         button2.setOnTouchListener(new View.OnTouchListener() {
                             @Override
                             public boolean onTouch(View view, MotionEvent event) {
-                                int color = ContextCompat.getColor(dialog.getContext(), R.color.green_600);
-                                int color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.green_400);
-
-                                if (!buttonText2.getText().toString().matches(mContext.getResources().getString(R.string.fit))){
-                                    color = ContextCompat.getColor(dialog.getContext(), R.color.red_600);
-                                    color_pressed = ContextCompat.getColor(dialog.getContext(), R.color.red_400);
-                                }
                                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText2.setTextColor(color);
-                                    buttonIcon2.setColorFilter(color);
+                                    button2.setBackground(null);
                                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText2.setTextColor(color_pressed);
-                                    buttonIcon2.setColorFilter(color_pressed);
+                                    button2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_right_radius));
                                 }
 
                                 return false;
@@ -922,6 +897,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         recyclerView.setNestedScrollingEnabled(false);
 
                         customView.findViewById(R.id.addGuestButton).setVisibility(View.GONE);
+                        customView.findViewById(R.id.addGuestButtonDivider).setVisibility(View.GONE);
 
                         PersonSmallAdapter adapter = new PersonSmallAdapter(birthday.getUsersBirthday(), mContext);
                         recyclerView.setAdapter(adapter);
@@ -982,11 +958,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         @Override
                         public boolean onTouch(View view, MotionEvent event) {
                             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                activityText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_900));
-                                activityIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                                activityBox.setBackground(null);
                             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                activityText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                                activityIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_200));
+                                activityBox.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_no_radius));
                             }
 
                             return false;
@@ -997,11 +971,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         @Override
                         public boolean onTouch(View view, MotionEvent event) {
                             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                reminderText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_900));
-                                reminderIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                                reminderBox.setBackground(null);
                             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                reminderText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                                reminderIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_200));
+                                reminderBox.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_no_radius));
                             }
 
                             return false;
@@ -1012,11 +984,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         @Override
                         public boolean onTouch(View view, MotionEvent event) {
                             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                flagText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_900));
-                                flagIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
+                                flagBox.setBackground(null);
                             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                flagText.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                                flagIcon.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_200));
+                                flagBox.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_radius));
                             }
 
                             return false;

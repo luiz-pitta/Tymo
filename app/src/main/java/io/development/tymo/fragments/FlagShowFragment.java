@@ -4,6 +4,7 @@ package io.development.tymo.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,9 +15,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -48,9 +53,12 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FlagShowFragment extends Fragment implements View.OnClickListener {
 
-    private TextView tittleText, guestsNumber, repeatText, dateHourText;
-    private ImageView addGuestButton;
+    private TextView tittleText, guestsNumber, repeatText, dateHourText, addGuestText;
+    private RelativeLayout addGuestButton;
+    private ImageView addGuestIcon;
     private LinearLayout repeatBox, guestBox;
+    private View addGuestButtonDivider;
+    private Rect rect;
 
     private DateFormat dateFormat;
 
@@ -90,11 +98,36 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         dateHourText = (TextView) view.findViewById(R.id.dateHourText);
         tittleText = (TextView) view.findViewById(R.id.title);
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
-        addGuestButton = (ImageView) view.findViewById(R.id.addGuestButton);
+        addGuestButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
         repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
         guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
         repeatText = (TextView) view.findViewById(R.id.repeatText);
+        addGuestIcon = (ImageView) view.findViewById(R.id.addGuestIcon);
+        addGuestText = (TextView) view.findViewById(R.id.addGuestText);
+        addGuestButtonDivider = (View) view.findViewById(R.id.addGuestButtonDivider);
+
+        addGuestText.setText(getString(R.string.invite_guest_btn));
+
+        new Actor.Builder(SpringSystem.create(), addGuestButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setNestedScrollingEnabled(false);
@@ -160,11 +193,12 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
             }
 
             if (permissionToInvite && !isFlagInPast(flagServer)) {
-                addGuestButton.setImageResource(R.drawable.btn_add_person);
+                addGuestIcon.setImageResource(R.drawable.btn_add_person);
                 addGuestButton.setOnClickListener(this);
             } else {
                 addGuestButton.setOnClickListener(null);
                 addGuestButton.setVisibility(View.GONE);
+                addGuestButtonDivider.setVisibility(View.GONE);
             }
 
             tittleText.setText(flagServer.getTitle());

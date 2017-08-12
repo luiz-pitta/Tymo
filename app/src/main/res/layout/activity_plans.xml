@@ -50,7 +50,7 @@
                         android:lines="1"
                         android:text="mmmm yyyy"
                         android:textColor="@color/grey_900"
-                        android:textSize="16sp"
+                        android:textSize="14sp"
                         android:textStyle="bold" />
 
                 </LinearLayout>

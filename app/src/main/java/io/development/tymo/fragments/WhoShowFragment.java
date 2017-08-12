@@ -4,6 +4,7 @@ package io.development.tymo.fragments;
 import android.app.Fragment;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,9 +14,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,11 +48,14 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class WhoShowFragment extends Fragment  implements View.OnClickListener {
 
-    private TextView whoCanInvite, guestsNumber;
+    private TextView whoCanInvite, guestsNumber, addGuestText;
+    private View addGuestButtonDivider;
     private TextView feedVisibility;
-    private ImageView addGuestButton;
+    private RelativeLayout addGuestButton;
+    private ImageView addGuestIcon;
     private View progressLoadingBox, whoLinearBox;
     private final int GUEST_UPDATE = 37, ADD_GUEST = 39;
+    private Rect rect;
 
     private RecyclerView recyclerView;
     private PersonAdapter adapter;
@@ -84,10 +92,35 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
 
         feedVisibility = (TextView) view.findViewById(R.id.feedVisibility);
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
-        addGuestButton = (ImageView) view.findViewById(R.id.addGuestButton);
+        addGuestButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
         progressLoadingBox = view.findViewById(R.id.progressLoadingBox);
         whoLinearBox = view.findViewById(R.id.whoLinearBox);
+        addGuestIcon = (ImageView) view.findViewById(R.id.addGuestIcon);
+        addGuestText = (TextView) view.findViewById(R.id.addGuestText);
+        addGuestButtonDivider = (View) view.findViewById(R.id.addGuestButtonDivider);
+
+        addGuestText.setText(getString(R.string.invite_guest_btn));
+
+        new Actor.Builder(SpringSystem.create(), addGuestButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setNestedScrollingEnabled(false);
@@ -189,11 +222,12 @@ public class WhoShowFragment extends Fragment  implements View.OnClickListener {
             guestsNumber.setText(String.valueOf(listPerson.size()));
 
             if (permissionInvite && !isActivityInPast(activityServer)) {
-                addGuestButton.setImageResource(R.drawable.btn_add_person);
+                addGuestIcon.setImageResource(R.drawable.btn_add_person);
                 addGuestButton.setOnClickListener(this);
             } else {
                 addGuestButton.setOnClickListener(null);
                 addGuestButton.setVisibility(View.GONE);
+                addGuestButtonDivider.setVisibility(View.GONE);
             }
         }
     }

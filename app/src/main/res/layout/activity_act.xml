@@ -241,15 +241,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <TextView
-                        android:id="@+id/requiredText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:text="Campos obrigatórios"
-                        android:textColor="@color/red_500"
-                        android:textSize="12sp" />
-
                     <LinearLayout
                         android:id="@+id/privacyBox"
                         android:layout_width="wrap_content"

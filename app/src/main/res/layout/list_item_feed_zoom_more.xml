@@ -199,7 +199,7 @@
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
                 android:gravity="clip_horizontal"
-                android:maxLines="4"
+                android:maxLines="3"
                 android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
                 android:textColor="@color/grey_800"
                 android:textSize="16sp" />

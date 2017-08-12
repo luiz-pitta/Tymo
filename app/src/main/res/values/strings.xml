@@ -45,10 +45,10 @@
     </string-array>
 
     <string-array name="array_repeat_type">
-        <item>Não se repete</item>
-        <item>Repetir diariamente</item>
-        <item>Repetir semanalmente</item>
-        <item>Repetir mensalmente</item>
+        <item>Nunca</item>
+        <item>Diariamente</item>
+        <item>Semanalmente</item>
+        <item>Mensalmente</item>
     </string-array>
 
     <string-array name="array_contact_delete">
@@ -109,11 +109,13 @@
     <string name="act_menu_who_goes">Quem vai?</string>
     <string name="act_not_found">Atividade não encontrada!</string>
     <string name="act_people_selected">Pessoas selecionadas</string>
+    <string name="act_guests">Convidados</string>
     <string name="act_privacy">Pública</string>
     <string name="act_tags">TAGS de Interesses (mín. 1)</string>
     <string name="act_who_can_invite">Quem pode convidar?</string>
     <string name="act">Atividade</string>
     <string name="add">Adicionar</string>
+    <string name="add_guest_btn">Adicionar</string>
     <string name="administrator_make">Tornar Administrador</string>
     <string name="administrator_new">Novo Administrador: %1$s</string>
     <string name="administrator">Administrador</string>
@@ -143,7 +145,9 @@
     <string name="commitments">Compromissos</string>
     <string name="compare_people_selected">Selecionados</string>
     <string name="compare">Comparar</string>
+    <string name="compare_agendas">Comparar Agendas</string>
     <string name="confirm">Confirmar</string>
+    <string name="customize">Customizar</string>
     <string name="contact_confirmation_question_add">Você tem certeza que deseja adicionar %1$s à sua lista de contatos?</string>
     <string name="contact_confirmation_question_block">Você tem certeza que deseja bloquear %1$s?</string>
     <string name="contact_confirmation_question_delete">Você tem certeza que deseja excluir %1$s?</string>
@@ -219,15 +223,15 @@
     <string name="feed_invitation_activity_fit">Encaixado na sua agenda!</string>
     <string name="feed_invitation_activity_ignored">Ignorado!</string>
     <string name="feed_invitation_activity_swiped">Você já encaixou!</string>
-    <string name="feed_visibility_1">(é exibido somente no FEED dos convidados)</string>
-    <string name="feed_visibility_2">(é exibido no FEED de todos os usuários do Tymo)</string>
+    <string name="feed_visibility_1">(será exibido somente no FEED dos convidados)</string>
+    <string name="feed_visibility_2">(será exibido no FEED de todos os usuários do Tymo)</string>
     <string name="filter_and_sort">Filtro e Ordenação</string>
     <string name="filter_by">Filtrar por</string>
     <string name="filter_date_and_hour">Data e hora</string>
     <string name="filter_date_from">De</string>
     <string name="filter_date_to">Até</string>
     <string name="filter_date">Data</string>
-    <string name="filter_friends">Amigos</string>
+    <string name="filter_friends">Meus contatos</string>
     <string name="filter_tags">TAGS de Interesses</string>
     <string name="filter_local">Local</string>
     <string name="filter_popularity">Popularidade</string>
@@ -239,6 +243,7 @@
     <string name="filter_week_days">Dias da semana</string>
     <string name="filter">Filtro</string>
     <string name="finish_register">Finalizar Cadastro</string>
+    <string name="finish">Finalizar</string>
     <string name="fit">Encaixar</string>
     <string name="flag_available">Sinalizador: ESTOU LIVRE!</string>
     <string name="flag_menu_available">Estou\nlivre</string>
@@ -269,6 +274,7 @@
     <string name="hint_title">Título</string>
     <string name="hint_whatsapp_group_link">Link do grupo no WhatsApp (opcional)</string>
     <string name="ignore">Ignorar</string>
+    <string name="invite_guest_btn">Convidar</string>
     <string name="invitation_accepted_more_others_none">aceitou seu convite</string>
     <string name="invitation_accepted_more_others_one">e outra %1$d pessoa aceitaram seu convite</string>
     <string name="invitation_accepted_more_others">e outras %1$d pessoas aceitaram seu convite</string>
@@ -319,10 +325,10 @@
     <string name="permission_location">Precisa da sua localização para essa funcionalidade!</string>
     <string name="popup_message_edit_all_future">Todas futuras</string>
     <string name="popup_message_edit_commitments_with_repetitions">Compromisso com repetições!</string>
-    <string name="popup_message_edit_enter_new_email">Digite o novo email abaixo</string>
+    <string name="popup_message_edit_enter_new_email">Digite o novo email abaixo:</string>
     <string name="popup_message_edit_select_which_one_to_modify">Selecione abaixo qual deseja alterar</string>
     <string name="popup_message_edit_update_email">Atualizar email</string>
-    <string name="popup_message_naming_activity_local_text">Caso queira customizar o nome digite abaixo</string>
+    <string name="popup_message_naming_activity_local_text">Caso queira customizar o nome do local, digite abaixo:</string>
     <string name="popup_message_naming_activity_local_title">Nome do local</string>
     <string name="privacy">Privacidade</string>
     <string name="profile_friend_menu_contacts">Contatos</string>
@@ -381,7 +387,9 @@
     <string name="remove">Remover</string>
     <string name="repeat">Repetir</string>
     <string name="repeat_daily">diariamente</string>
-    <string name="repeat_how_many_times">Repetir quantas vezes? (máx. 30)</string>
+    <string name="repeat_how_many_times">Repetir quantas vezes?</string>
+    <string name="repeat_frequence">Repetir com que frequência?</string>
+    <string name="repeat_max_times">(máx. 30)</string>
     <string name="repeat_monthly">mensalmente</string>
     <string name="repeat_not">Não se repete</string>
     <string name="repeat_text_imported_google_agenda">Atividade importada sem as repetições, edite para criá-las!</string>
@@ -531,7 +539,7 @@
     <string name="visibility_private">Privada</string>
     <string name="visibility_public_2">Todos os usuários do app poderão ver na sua agenda</string>
     <string name="visibility_public">Pública</string>
-    <string name="visibility_text">Escolha o nível de visibilidade da atividade na sua agenda:</string>
+    <string name="visibility_text">Escolha o nível de visibilidade da atividade na sua agenda</string>
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
     <string name="version_new_update_title">Nova versão disponível\n%1$s</string>

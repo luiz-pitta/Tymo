@@ -29,6 +29,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
         private ImageView personPhoto;
         private TextView personName;
         private ImageView deleteButton, checkButton;
+        private TextView creatorButton;
 
         public MyViewHolder(View view) {
             super(view);
@@ -36,6 +37,7 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
             personName = (TextView) view.findViewById(R.id.profileName);
             deleteButton = (ImageView) view.findViewById(R.id.deleteButton);
             checkButton = (ImageView) view.findViewById(R.id.checkButton);
+            creatorButton = (TextView) view.findViewById(R.id.creatorButton);
 
             deleteButton.setVisibility(View.VISIBLE);
         }
@@ -63,10 +65,17 @@ public class PersonAdapter extends RecyclerView.Adapter<PersonAdapter.MyViewHold
         else
             holder.deleteButton.setVisibility(View.VISIBLE);
 
-        if(person.getInvitation() == 1)
-            holder.checkButton.setVisibility(View.VISIBLE);
-        else
-            holder.checkButton.setVisibility(View.INVISIBLE);
+        if(person.isCreator()){
+            holder.creatorButton.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.creatorButton.setVisibility(View.INVISIBLE);
+
+            if (person.getInvitation() == 1)
+                holder.checkButton.setVisibility(View.VISIBLE);
+            else
+                holder.checkButton.setVisibility(View.INVISIBLE);
+        }
 
         if(!person.getPhoto().matches("")){
             Glide.clear(holder.personPhoto);
