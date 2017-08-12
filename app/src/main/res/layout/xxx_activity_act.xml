@@ -35,7 +35,7 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_act_main_box"
                     android:orientation="vertical"
-                    android:paddingBottom="10dp"
+                    android:paddingBottom="30dp"
                     android:paddingTop="30dp">
 
                     <RelativeLayout
@@ -77,26 +77,36 @@
 
                     </RelativeLayout>
 
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:layout_alignParentBottom="true"
+                    android:background="@color/horizontal_line" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/white"
+                    android:orientation="vertical"
+                    android:padding="20dp">
+
                     <TextView
                         android:id="@+id/title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="20dp"
-                        android:gravity="center"
                         android:text="Title"
+                        android:gravity="center"
                         android:textColor="@color/grey_900"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <LinearLayout
                         android:id="@+id/dateBox"
+                        android:layout_marginTop="10dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
@@ -124,15 +134,14 @@
                         android:id="@+id/repeatBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="65dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="45dp"
                         android:gravity="center">
 
                         <TextView
                             android:id="@+id/repeatText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Repeat"
+                            android:text="Text"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp"
                             android:textStyle="normal" />
@@ -143,8 +152,6 @@
                         android:id="@+id/locationBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
@@ -166,32 +173,25 @@
                             android:layout_marginRight="10dp"
                             android:ellipsize="end"
                             android:maxLines="2"
-                            android:text="Local"
+                            android:text="Text"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp"
                             android:textStyle="normal" />
 
                     </LinearLayout>
 
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/horizontal_line_height"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/horizontal_line" />
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/white"
-                    android:orientation="vertical"
-                    android:padding="20dp">
+                    <View
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/horizontal_line_height"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/horizontal_line" />
 
                     <TextView
                         android:id="@+id/descriptionShort"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:ellipsize="end"
                         android:text="Description"
                         android:textColor="@color/grey_600"
@@ -202,6 +202,7 @@
                         android:id="@+id/descriptionReadMore"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
                         android:ellipsize="end"
                         android:text="Description Read More"
                         android:textColor="@color/grey_600"

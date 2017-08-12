@@ -114,7 +114,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act);
+        setContentView(R.layout.xxx_activity_act);
 
         mSubscriptions = new CompositeDisposable();
 
