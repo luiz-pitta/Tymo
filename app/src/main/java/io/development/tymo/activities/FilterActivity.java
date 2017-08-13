@@ -197,6 +197,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         topHorizontalLineLocal = findViewById(R.id.topHorizontalLineLocal);
         topHorizontalLineDate = findViewById(R.id.topHorizontalLineDate);
         topHorizontalLineSchedule = findViewById(R.id.topHorizontalLineSchedule);
+        addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
 
         proximityText.setOnClickListener(this);
         popularText.setOnClickListener(this);
@@ -236,6 +237,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         minutes_end = -1;
         hour_start = -1;
         hour_end = -1;
+
+        addPersonButton.setOnClickListener(this);
 
         new Actor.Builder(SpringSystem.create(), addPersonButton)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
