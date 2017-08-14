@@ -455,6 +455,7 @@
     <string name="settings_import_from_facebook_text">Você deseja importar seus eventos?</string>
     <string name="settings_import_from_facebook">Importar Eventos do Facebook</string>
     <string name="settings_import_from_google_agenda_error">Você não possui o Google Agenda instalado!</string>
+    <string name="settings_import_from_google_agenda_error2">Erro ao importar! Tente Novamente</string>
     <string name="settings_import_from_google_agenda_no_commitments">Você não possui nenhum compromisso para importar!</string>
     <string name="settings_import_from_google_agenda_success">Importado do Google Agenda com sucesso!</string>
     <string name="settings_import_from_google_agenda_tag">Google Agenda</string>

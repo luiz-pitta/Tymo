@@ -240,6 +240,7 @@ public class ReminderEditFragment extends Fragment implements DatePickerDialog.O
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(now);
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
