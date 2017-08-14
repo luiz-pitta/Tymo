@@ -435,7 +435,7 @@
     <string name="server_message_facebook_error">Conta existente cadastrada pelo facebook com esse email</string>
     <string name="server_message_flag_registered_successfully">Sinalizador registrado com sucesso</string>
     <string name="server_message_flag_updated_successfully">Sinalizador atualizado com sucesso</string>
-    <string name="server_message_internal_server_error">Falha no servidor</string>
+    <string name="server_message_internal_server_error">Ops! Ocorreu um erro inesperado. Tente mais tarde.</string>
     <string name="server_message_invalid_request">Solicitação inválida</string>
     <string name="server_message_invalid_token">Token inválido</string>
     <string name="server_message_invited_successfully">Convite enviado com sucesso</string>
