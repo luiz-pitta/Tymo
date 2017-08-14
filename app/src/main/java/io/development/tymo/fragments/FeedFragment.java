@@ -728,7 +728,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                     public boolean onTouch(View v, MotionEvent event) {
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_UP:
-                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+                                /*if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
                                     Intent intent = new Intent(getActivity(), FilterActivity.class);
 
                                     // [START image_view_event]
@@ -742,7 +742,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                                         intent.putExtra("filter_load", new FilterWrapper(filterServer));
 
                                     startActivityForResult(intent, Constants.FILTER_RESULT);
-                                }
+                                }*/
                                 break;
                             case MotionEvent.ACTION_DOWN:
                                 rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
@@ -761,7 +761,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_UP:
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-                                    int change = mNavigator.getCurrentPosition();
+                                    /*int change = mNavigator.getCurrentPosition();
                                     if (change == 0) {
                                         detail.setImageResource(R.drawable.ic_zoom_less);
                                         if (listFeed.size() == 0) {
@@ -807,7 +807,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                                         // [END image_view_event]
 
                                         setCurrentTab(0);
-                                    }
+                                    }*/
                                 }
                                 break;
                             case MotionEvent.ACTION_DOWN:
