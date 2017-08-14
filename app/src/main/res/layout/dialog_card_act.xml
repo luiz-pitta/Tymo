@@ -80,79 +80,79 @@
                 android:orientation="vertical"
                 android:visibility="visible">
 
-            <LinearLayout
-                android:id="@+id/dateBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                <LinearLayout
+                    android:id="@+id/dateBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_calendar_clock"
-                    android:tint="@color/grey_600" />
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_calendar_clock"
+                        android:tint="@color/grey_600" />
 
-                <TextView
-                    android:id="@+id/dateMonthYear"
+                    <TextView
+                        android:id="@+id/dateMonthYear"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLines="2"
+                        android:text="Date"
+                        android:textColor="@color/grey_600"
+                        android:textSize="16sp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/locationBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:text="Date"
-                    android:textColor="@color/grey_600"
-                    android:textSize="16sp" />
+                    android:layout_marginTop="10dp">
 
-            </LinearLayout>
+                    <ImageView
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_marginRight="10dp"
+                        android:src="@drawable/ic_location"
+                        android:tint="@color/grey_600" />
 
-            <LinearLayout
-                android:id="@+id/locationBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical">
+                    <TextView
+                        android:id="@+id/locationText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:ellipsize="end"
+                        android:gravity="center_vertical"
+                        android:maxLines="2"
+                        android:text="Location"
+                        android:textColor="@color/grey_600"
+                        android:textSize="16sp" />
 
-                <ImageView
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginRight="10dp"
-                    android:src="@drawable/ic_location"
-                    android:tint="@color/grey_600" />
+                </LinearLayout>
 
                 <TextView
-                    android:id="@+id/locationText"
+                    android:id="@+id/description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
-                    android:maxLines="2"
-                    android:text="Location"
-                    android:textColor="@color/grey_600"
+                    android:maxLines="3"
+                    android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
+                    android:textColor="@color/grey_800"
                     android:textSize="16sp" />
 
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:ellipsize="end"
-                android:gravity="center_vertical"
-                android:maxLines="3"
-                android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
-                android:textColor="@color/grey_800"
-                android:textSize="16sp" />
-
-            <include
-                android:id="@+id/profilesPhotos"
-                layout="@layout/list_profiles"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left"
-                android:layout_marginTop="20dp"
-                android:visibility="visible" />
+                <include
+                    android:id="@+id/profilesPhotos"
+                    layout="@layout/list_profiles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left"
+                    android:layout_marginTop="20dp"
+                    android:visibility="visible" />
 
             </LinearLayout>
 

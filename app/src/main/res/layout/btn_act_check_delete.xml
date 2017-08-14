@@ -83,7 +83,7 @@
                 android:layout_height="40dp"
                 android:padding="5dp"
                 android:src="@drawable/ic_trash"
-                android:tint="@color/red_100" />
+                android:tint="@color/white" />
 
             <TextView
                 android:id="@+id/deleteText"
@@ -91,7 +91,7 @@
                 android:layout_height="wrap_content"
                 android:text="@string/remove"
                 android:textAllCaps="true"
-                android:textColor="@color/red_100"
+                android:textColor="@color/white"
                 android:textSize="14sp"
                 android:textStyle="bold" />
 

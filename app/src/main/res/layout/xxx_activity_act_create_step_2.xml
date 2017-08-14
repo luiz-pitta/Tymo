@@ -164,7 +164,7 @@
                             android:layout_below="@+id/visibilityCalendarPicker"
                             android:text="@string/feed_visibility_1"
                             android:textColor="@color/grey_900"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                     </RelativeLayout>
 

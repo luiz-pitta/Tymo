@@ -152,7 +152,7 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/dateBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -164,6 +164,7 @@
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/dateIcon"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:layout_marginRight="10dp"
@@ -174,6 +175,8 @@
                             android:id="@+id/dateHourText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_toRightOf="@+id/dateIcon"
                             android:ellipsize="end"
                             android:gravity="center_vertical"
                             android:maxLines="2"
@@ -181,37 +184,35 @@
                             android:textColor="@color/grey_600"
                             android:textSize="14sp" />
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/repeatBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/dateBox"
-                        android:layout_marginLeft="65dp"
-                        android:layout_marginRight="20dp"
-                        android:gravity="center">
-
-                        <TextView
-                            android:id="@+id/repeatText"
+                        <LinearLayout
+                            android:id="@+id/repeatBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Text"
-                            android:textColor="@color/grey_600"
-                            android:textSize="12sp"
-                            android:textStyle="normal" />
+                            android:layout_below="@+id/dateHourText"
+                            android:layout_marginLeft="45dp"
+                            android:gravity="center">
 
-                    </LinearLayout>
+                            <TextView
+                                android:id="@+id/repeatText"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Text"
+                                android:textColor="@color/grey_600"
+                                android:textSize="12sp"
+                                android:textStyle="normal" />
+
+                        </LinearLayout>
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/locationBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_below="@+id/repeatBox"
+                        android:layout_below="@+id/dateBox"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -229,8 +230,8 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginRight="10dp"
+                            android:layout_marginTop="8dp"
                             android:ellipsize="end"
-                            android:maxLines="2"
                             android:text="Text"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp"
@@ -287,7 +288,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:gravity="center_vertical"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -302,6 +302,7 @@
                             android:id="@+id/whatsAppGroupLink"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
                             android:text="WhatsApp Group Link"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp" />
@@ -372,7 +373,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/feed_visibility_1"
                             android:textColor="@color/grey_900"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 

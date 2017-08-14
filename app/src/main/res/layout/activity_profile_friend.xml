@@ -41,7 +41,7 @@
                     android:id="@+id/profileAboutBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="25dp"
                     android:layout_marginBottom="20dp"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp">
@@ -103,7 +103,7 @@
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
+                    android:layout_height="45dp"
                     android:layout_alignParentBottom="true"
                     android:background="@color/black_opacity_40"
                     android:divider="@drawable/divider_profile_timer"
@@ -123,8 +123,8 @@
 
                         <ProgressBar
                             android:id="@+id/progressIcon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:visibility="gone" />
 
                         <TextView
@@ -134,13 +134,13 @@
                             android:ellipsize="end"
                             android:lines="1"
                             android:textColor="@color/white"
-                            android:textSize="10sp"
+                            android:textSize="12sp"
                             android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/friendshipRequestsIcon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:src="@drawable/ic_person_add"
                             android:tint="@color/white" />
 
@@ -152,7 +152,7 @@
                             android:lines="1"
                             android:text="@string/add"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -168,8 +168,8 @@
 
                         <ImageView
                             android:id="@+id/contactsIcon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:src="@drawable/ic_people_two"
                             android:tint="@color/white" />
 
@@ -181,7 +181,7 @@
                             android:lines="1"
                             android:text="@string/profile_friend_menu_contacts"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -197,8 +197,8 @@
 
                         <ImageView
                             android:id="@+id/aboutIcon"
-                            android:layout_width="20dp"
-                            android:layout_height="20dp"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
                             android:src="@drawable/ic_notepad"
                             android:tint="@color/white" />
 
@@ -210,7 +210,7 @@
                             android:lines="1"
                             android:text="@string/about"
                             android:textColor="@color/white"
-                            android:textSize="10sp" />
+                            android:textSize="12sp" />
 
                     </LinearLayout>
 
@@ -244,8 +244,8 @@
 
                         <ImageView
                             android:id="@+id/calendarIcon"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
                             android:layout_marginRight="5dp"
                             android:src="@drawable/ic_calendar"
                             android:tint="@color/grey_900" />
@@ -259,7 +259,7 @@
                             android:lines="1"
                             android:text="mmmm yyyy"
                             android:textColor="@color/grey_900"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
 
                     </LinearLayout>

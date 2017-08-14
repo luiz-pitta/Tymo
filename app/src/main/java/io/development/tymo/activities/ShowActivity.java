@@ -1811,11 +1811,11 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (view == deleteButtonBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_100));
-                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_100));
+                deleteText.setTextColor(ContextCompat.getColor(this, R.color.white));
+                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_300));
-                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_300));
+                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_200));
+                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_200));
             }
         }
 

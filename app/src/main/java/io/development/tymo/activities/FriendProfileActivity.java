@@ -499,27 +499,21 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             }
         } else if (view == friendshipRequestsBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                friendshipRequestsText.setTextColor(ContextCompat.getColor(this, R.color.white));
-                friendshipRequestsIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+                friendshipRequestsBox.setBackgroundColor(0);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                friendshipRequestsText.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
-                friendshipRequestsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_300));
+                friendshipRequestsBox.setBackgroundColor(ContextCompat.getColor(this, R.color.black_opacity_20));;
             }
         } else if (view == contactsBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                contactsText.setTextColor(ContextCompat.getColor(this, R.color.white));
-                contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+                contactsBox.setBackgroundColor(0);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                contactsText.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
-                contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_300));
+                contactsBox.setBackgroundColor(ContextCompat.getColor(this, R.color.black_opacity_20));
             }
         } else if (view == aboutBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                aboutText.setTextColor(ContextCompat.getColor(this, R.color.white));
-                aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+                aboutBox.setBackgroundColor(0);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                aboutText.setTextColor(ContextCompat.getColor(this, R.color.grey_300));
-                aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_300));
+                aboutBox.setBackgroundColor(ContextCompat.getColor(this, R.color.black_opacity_20));
             }
         }
 
@@ -655,28 +649,16 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.GONE);
             profilePhotoBox.setOnClickListener(null);
             profilePhotoBox.setOnTouchListener(null);
-            contactsBox.setOnClickListener(null);
-            contactsBox.setOnTouchListener(null);
-            aboutBox.setOnClickListener(null);
-            aboutBox.setOnTouchListener(null);
-            contactsText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
-            contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
-            aboutText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
-            aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            contactsBox.setVisibility(View.GONE);
+            aboutBox.setVisibility(View.GONE);
         } else {
             prived = false;
             findViewById(R.id.nextPreviousBox).setVisibility(View.VISIBLE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.VISIBLE);
             profilePhotoBox.setOnClickListener(this);
             profilePhotoBox.setOnTouchListener(this);
-            contactsBox.setOnClickListener(this);
-            contactsBox.setOnTouchListener(this);
-            aboutBox.setOnClickListener(this);
-            aboutBox.setOnTouchListener(this);
-            contactsText.setTextColor(ContextCompat.getColor(this, R.color.white));
-            contactsIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
-            aboutText.setTextColor(ContextCompat.getColor(this, R.color.white));
-            aboutIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            contactsBox.setVisibility(View.VISIBLE);
+            aboutBox.setVisibility(View.VISIBLE);
         }
 
         if (!user.getPhoto().matches("")) {

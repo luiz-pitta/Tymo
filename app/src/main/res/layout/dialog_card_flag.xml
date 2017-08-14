@@ -88,8 +88,7 @@
                 <LinearLayout
                     android:id="@+id/dateBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:layout_width="35dp"
@@ -102,6 +101,7 @@
                         android:id="@+id/dateMonthYear"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
                         android:ellipsize="end"
                         android:gravity="center_vertical"
                         android:maxLines="2"
@@ -126,7 +126,6 @@
                     android:visibility="gone" />
 
             </LinearLayout>
-
 
 
         </LinearLayout>
@@ -182,18 +181,18 @@
                     android:id="@+id/buttonIcon2"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginRight="2.5dp"
                     android:src="@drawable/ic_check"
-                    android:tint="@color/green_600"
-                    android:layout_gravity="center_vertical"/>
+                    android:tint="@color/green_600" />
 
                 <TextView
                     android:id="@+id/buttonText2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:ellipsize="end"
                     android:gravity="center"
-                    android:layout_gravity="center_vertical"
                     android:lines="1"
                     android:text="@string/fit"
                     android:textAllCaps="true"
