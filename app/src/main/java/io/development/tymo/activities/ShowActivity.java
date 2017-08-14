@@ -1,10 +1,12 @@
 package io.development.tymo.activities;
 
 import android.app.Dialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -735,6 +737,38 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                         repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
                     }
                 }
+
+                locationBox.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent intent = null;
+                        if(activityServer.getLat() != -500) {
+                            intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                    "geo:" + activityServer.getLat() +
+                                            "," + activityServer.getLng() +
+                                            "?q=" + activityServer.getLat() +
+                                            "," + activityServer.getLng() +
+                                            "(" + activityServer.getLocation() + ")"));
+                        }else {
+
+                            intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                    "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+                        }
+
+                        Bundle bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                        try {
+                            startActivity(intent);
+                        } catch (ActivityNotFoundException ex) {
+                            Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+
             }
 
             new Actor.Builder(SpringSystem.create(), addGuestButton)
