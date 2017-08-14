@@ -777,7 +777,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     private void handleError(Throwable error) {
         mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     public List<WeekModel> getListPlans() {

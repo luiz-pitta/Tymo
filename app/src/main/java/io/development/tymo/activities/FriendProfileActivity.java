@@ -172,7 +172,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         calendarIcon = (ImageView) findViewById(R.id.calendarIcon);
         profilePhotoBox = (RelativeLayout) findViewById(R.id.profilePhotoBox);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(275);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -408,7 +408,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void handleErrorBgProfile(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     void refreshItems() {
@@ -976,7 +979,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         //setProgress(false);
         //setProgressFriendRequest(false);
         friendshipRequestsBox.setOnClickListener(this);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override

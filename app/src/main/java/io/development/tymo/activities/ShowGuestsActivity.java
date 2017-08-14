@@ -258,7 +258,10 @@ public class ShowGuestsActivity extends AppCompatActivity implements View.OnTouc
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override

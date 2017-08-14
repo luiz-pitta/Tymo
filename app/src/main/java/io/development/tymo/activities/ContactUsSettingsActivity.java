@@ -23,6 +23,7 @@ import io.development.tymo.R;
 import io.development.tymo.model_server.AppInfoServer;
 import io.development.tymo.model_server.AppInfoWrapper;
 import io.development.tymo.network.NetworkUtil;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -58,7 +59,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
         emailBox = (LinearLayout) findViewById(R.id.emailBox);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(225);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -135,7 +136,10 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
     private void handleError(Throwable error) {
         //setProgress(false);
         mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -44,6 +44,7 @@ import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
+import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -242,7 +243,10 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     private void handleError(Throwable error) {
         //AddActivity addActivity = (AddActivity)getActivity();
         //addActivity.setProgress(false);
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     public void setProgress(boolean progress){

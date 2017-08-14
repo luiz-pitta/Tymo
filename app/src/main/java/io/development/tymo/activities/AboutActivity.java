@@ -48,6 +48,7 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -171,7 +172,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     private String getGender(String gender){
@@ -383,7 +387,10 @@ public class AboutActivity extends AppCompatActivity implements View.OnClickList
 
                 mUser.setPhoto((String) uploadResult.get("secure_url"));
             } catch (Exception e) {
-                Toast.makeText(AboutActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                if(Utilities.isDeviceOnline(AboutActivity.this))
+                    Toast.makeText(AboutActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(AboutActivity.this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
             return mUser;
         }

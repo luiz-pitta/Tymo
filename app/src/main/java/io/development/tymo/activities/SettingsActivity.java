@@ -92,6 +92,7 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.GoogleCalendarEvents;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -258,7 +259,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-        } else if (! isDeviceOnline()) {
+        } else if (!Utilities.isDeviceOnline(this)) {
             Toast.makeText(SettingsActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         } else {
             new MakeRequestTask(mCredential).execute();
@@ -298,13 +299,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     @Override
     public void onPermissionsDenied(int requestCode, List<String> list) {
         // Do nothing.
-    }
-
-    private boolean isDeviceOnline() {
-        ConnectivityManager connMgr =
-                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-        return (networkInfo != null && networkInfo.isConnected());
     }
 
     private boolean isGooglePlayServicesAvailable() {
@@ -583,7 +577,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     public void setProgress(boolean progress) {

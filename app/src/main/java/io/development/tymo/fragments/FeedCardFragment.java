@@ -44,6 +44,7 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -96,7 +97,7 @@ public class FeedCardFragment extends Fragment {
         mSwipeRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swipeRefreshLayout);
         feed_empty_view = (LinearLayout) view.findViewById(R.id.feed_empty_view);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(275);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
 
         mSubscriptions = new CompositeDisposable();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -301,7 +302,10 @@ public class FeedCardFragment extends Fragment {
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     public void confirmActivity(){

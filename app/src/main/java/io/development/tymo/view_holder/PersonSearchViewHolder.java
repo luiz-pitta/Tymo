@@ -39,6 +39,7 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -661,7 +662,10 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
     private void handleError(Throwable error) {
         //setProgressFriendRequest(false);
         actionIcon.setOnClickListener(this);
-        Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(mContext))
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(mContext, mContext.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
         /*LayoutInflater inflater = (LayoutInflater)mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View layout = inflater.inflate(R.layout.toast, null);
         TextView toastText = (TextView) layout.findViewById(R.id.toastText);

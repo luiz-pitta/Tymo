@@ -75,7 +75,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         searchView.setQueryHint(getResources().getString(R.string.hint_search_tags));
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(225);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -230,7 +230,10 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override

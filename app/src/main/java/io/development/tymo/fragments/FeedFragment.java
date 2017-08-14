@@ -653,8 +653,12 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
                 feedListFragment.setAdapterItens(listFeed);
             }
-        }else
-            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        }else {
+            if(Utilities.isDeviceOnline(getActivity()))
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initAnimation() {
@@ -889,6 +893,69 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onClick(View view) {
+        if(view == filterButtonBox){
+            Intent intent = new Intent(getActivity(), FilterActivity.class);
+
+            // [START image_view_event]
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "filter" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            // [END image_view_event]
+
+            if (filterServer != null && filterServer.isFilterFilled())
+                intent.putExtra("filter_load", new FilterWrapper(filterServer));
+
+            startActivityForResult(intent, Constants.FILTER_RESULT);
+        }else if(view == zoomButtonBox){
+            int change = mNavigator.getCurrentPosition();
+            if (change == 0) {
+                detail.setImageResource(R.drawable.ic_zoom_less);
+                if (listFeed.size() == 0) {
+                    feedIgnoreButton.setVisibility(View.INVISIBLE);
+                    feedCheckButton.setVisibility(View.INVISIBLE);
+                } else {
+                    feedIgnoreButton.setVisibility(View.VISIBLE);
+                    feedCheckButton.setVisibility(View.VISIBLE);
+                }
+                FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+                FeedCardFragment feedCardFragment = (FeedCardFragment) mNavigator.getFragment(1);
+
+                currentPosition = feedListFragment.getCurrentPosition();
+
+                if (feedCardFragment != null)
+                    feedCardFragment.setCurrentPosition(currentPosition);
+
+                // [START image_view_event]
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_less" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                // [END image_view_event]
+
+                setCurrentTab(1);
+            } else {
+                detail.setImageResource(R.drawable.ic_zoom_more);
+                feedIgnoreButton.setVisibility(View.INVISIBLE);
+                feedCheckButton.setVisibility(View.INVISIBLE);
+
+                FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+                FeedCardFragment feedCardFragment = (FeedCardFragment) mNavigator.getFragment(1);
+
+                currentPosition = feedCardFragment.getCurrentPosition();
+
+                feedListFragment.setCurrentPosition(currentPosition);
+
+                // [START image_view_event]
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "ic_zoom_more" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                // [END image_view_event]
+
+                setCurrentTab(0);
+            }
+        }
     }
 
     @Override

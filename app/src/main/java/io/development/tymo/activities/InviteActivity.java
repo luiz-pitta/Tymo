@@ -101,6 +101,8 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         recyclerView.addItemDecoration(itemDecoration);
 
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapterWithProgress(adapter = new InviteAdapter(this));
 
@@ -415,7 +417,10 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override
