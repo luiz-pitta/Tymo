@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -33,8 +34,11 @@ import com.cunoraz.tagview.Tag;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -83,6 +87,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private ImageView mColorView;
     private ImageView mColorViewUpper;
     private ImageView mColorIcon;
+
+    private Rect rect;
 
     private ImageView mColorViewMain;
     private ImageView mColorViewUpperMain;
@@ -218,6 +224,25 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         setCurrentTab(mNavigator.getCurrentPosition());
         privacyText.setText(getResources().getString(R.string.act_privacy));
         privacyIcon.setImageResource(R.drawable.ic_public);
+
+        new Actor.Builder(SpringSystem.create(), mPieceCustom)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_edit");
         if (activityWrapper == null) {
@@ -1611,6 +1636,19 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 dialog.dismiss();
+            }
+        });
+
+        closeButton.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    closeButton.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    closeButton.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_200));
+                }
+
+                return false;
             }
         });
 
