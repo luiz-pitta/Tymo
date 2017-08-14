@@ -7,15 +7,10 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <include
-        android:id="@+id/actionBar"
-        layout="@layout/action_bar" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/actionBar">
+        android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollView"
@@ -29,20 +24,66 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     android:id="@+id/mainBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/bg_act_main_box"
-                    android:orientation="vertical"
-                    android:paddingBottom="30dp"
-                    android:paddingTop="30dp">
+                    android:background="@drawable/bg_act_main_box">
+
+                    <ImageView
+                        android:id="@+id/actionBackIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="8dp"
+                        android:rotation="45"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/grey_600" />
+
+                    <LinearLayout
+                        android:id="@+id/textsBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="15dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:text="@string/create_activity"
+                            android:textAllCaps="true"
+                            android:textColor="@color/grey_600"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:text="@string/steps_1_of_3"
+                            android:textColor="@color/grey_600"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                     <RelativeLayout
                         android:id="@+id/pieceBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal">
+                        android:layout_width="110dp"
+                        android:layout_height="95dp"
+                        android:layout_below="@+id/textsBox"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="30dp">
 
                         <ImageView
                             android:id="@+id/cubeUpperBoxIcon"
@@ -75,9 +116,49 @@
 
                         </RelativeLayout>
 
+                        <ImageView
+                            android:id="@+id/magicWandButton"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_alignParentBottom="true"
+                            android:layout_alignParentRight="true"
+                            android:background="@drawable/btn_magic_wand"
+                            android:padding="2dp"
+                            android:src="@drawable/ic_magic_wand"
+                            android:tint="@color/grey_600" />
+
                     </RelativeLayout>
 
-                </LinearLayout>
+                    <LinearLayout
+                        android:id="@+id/addImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pieceBox"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp">
+
+                        <ImageView
+                            android:id="@+id/addImageIcon"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:src="@drawable/ic_add"
+                            android:tint="@color/deep_purple_400" />
+
+                        <TextView
+                            android:id="@+id/addImageText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_image"
+                            android:textColor="@color/deep_purple_400"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -409,9 +490,9 @@
                             android:layout_height="30dp"
                             android:layout_marginRight="10dp"
                             android:background="@drawable/bg_act_edit_box"
-                            android:imeOptions="actionDone"
                             android:gravity="center"
                             android:hint="0"
+                            android:imeOptions="actionDone"
                             android:inputType="number"
                             android:lines="1"
                             android:paddingLeft="20dp"

@@ -7,10 +7,6 @@
     android:focusable="true"
     android:focusableInTouchMode="true">
 
-    <include
-        android:id="@+id/actionBar"
-        layout="@layout/action_bar" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
@@ -28,6 +24,58 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/actionBackIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_action_back"
+                        android:tint="@color/grey_600" />
+
+                    <LinearLayout
+                        android:id="@+id/textsBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:layout_centerHorizontal="true"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="15dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:text="@string/create_activity"
+                            android:textAllCaps="true"
+                            android:textColor="@color/grey_600"
+                            android:textSize="16sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:text="@string/steps_3_of_3"
+                            android:textColor="@color/grey_600"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
+
+                </RelativeLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -63,13 +111,6 @@
                                 android:textColor="@color/grey_900"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/horizontal_line_height"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:background="@color/horizontal_line" />
 
                             <RelativeLayout
                                 android:id="@+id/optionBox1"
@@ -318,13 +359,6 @@
                                 </RelativeLayout>
 
                             </RelativeLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/horizontal_line_height"
-                                android:layout_marginLeft="20dp"
-                                android:layout_marginRight="20dp"
-                                android:background="@color/horizontal_line" />
 
                         </LinearLayout>
 

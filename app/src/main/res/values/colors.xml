@@ -332,6 +332,7 @@
     <color name="white_opacity_50">#82ffffff</color>
     <color name="white_opacity_70">#B3ffffff</color>
     <color name="white_opacity_80">#ccffffff</color>
+    <color name="white_opacity_90">#e6ffffff</color>
     <color name="white_opacity_95">#f2ffffff</color>
     <color name="deep_purple_100_opacity_95">#F2D1C4E9</color>
     <color name="deep_purple_200_opacity_95">#F2B39DDB</color>
@@ -339,6 +340,7 @@
     <color name="deep_purple_200_opacity_90">#E6B39DDB</color>
     <color name="deep_purple_300_opacity_90">#E69575CD</color>
     <color name="deep_purple_400_opacity_90">#E67E57C2</color>
+    <color name="grey_50_opacity_95">#e6FAFAFA</color>
     <color name="grey_500_opacity_60">#999E9E9E</color>
 
     <!-- Facebook Colors -->

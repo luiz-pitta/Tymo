@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -11,6 +12,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -22,37 +25,49 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.borjabravo.readmoretextview.ReadMoreTextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
 
 import io.development.tymo.R;
+import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.adapters.ShowActivityFragmentAdapter;
-import io.development.tymo.fragments.WhatShowFragment;
-import io.development.tymo.fragments.WhenShowFragment;
-import io.development.tymo.fragments.WhoShowFragment;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.InviteRequest;
+import io.development.tymo.model_server.ListUserWrapper;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.TagServer;
 import io.development.tymo.model_server.User;
+import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.NotificationSyncJob;
+import io.development.tymo.utils.RecyclerItemClickListener;
+import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -63,34 +78,45 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private ImageView mBackButton;
 
-    private FragmentNavigator mNavigator;
+    private TextView privacyText, editButton, agendaStatus, agendaStatusNeedInvitation;
+    private ImageView privacyIcon, privacyArrowIcon;
 
-    private TextView m_title, privacyText, editButton;
-    private ImageView m_ic_edit;
-    private ImageView icon1;
-    private ImageView privacyIcon;
+    private Context context;
+    private TagView tagGroup;
+    private Tag tag;
+    private TextView tittleText, whatsAppGroupLink, descriptionShort;
+    private ReadMoreTextView descriptionReadMore;
+    private LinearLayout whatsAppGroupLinkBox;
 
-    private LinearLayout privacyBox;
+    private TextView dateHourText, guestText;
+    private TextView locationText, repeatText;
+    private LinearLayout locationBox;
+    private LinearLayout repeatBox, guestBox;
 
-    private UpdateButtonController controller;
+    private DateFormat dateFormat;
 
-    private TextView whatText;
-    private TextView whereWhenText;
-    private TextView whoText;
+    private Rect rect;
 
-    private ImageView whatButton;
-    private ImageView whereWhenButton;
-    private ImageView whoButton;
+    private RelativeLayout pieceBox;
+    private TextView whoCanInvite, guestsNumber, addGuestText;
+    private View addGuestButtonDivider;
+    private TextView feedVisibility;
+    private RelativeLayout addGuestButton;
+    private ImageView addGuestIcon;
+    private View progressLoadingBox;
+    private final int GUEST_UPDATE = 37, ADD_GUEST = 39;
 
-    private View whatCorners;
-    private View whereWhenCorners;
-    private View whoCorners;
+    private RecyclerView recyclerView;
+    private PersonAdapter adapter;
+    private ArrayList<User> listPerson = new ArrayList<>();
+    private ArrayList<User> listConfirmed = new ArrayList<>();
+    private ArrayList<User> listToInvite = new ArrayList<>();
 
     private ImageView pieceIcon;
     private ImageView cubeLowerBoxIcon;
     private ImageView cubeUpperBoxIcon;
 
-    private View checkButtonBox, deleteButtonBox;
+    private LinearLayout checkButtonBox, deleteButtonBox, privacyBox;
     private ImageView checkButton, deleteButton;
     private TextView checkText, deleteText;
 
@@ -108,58 +134,66 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
     private CompositeDisposable mSubscriptions;
+    private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act);
+        setContentView(R.layout.xxx_activity_act);
 
         mSubscriptions = new CompositeDisposable();
 
-        findViewById(R.id.buttonsBar).setVisibility(View.VISIBLE);
-        findViewById(R.id.confirmationBar).setVisibility(View.GONE);
-        findViewById(R.id.magicWandButton).setVisibility(View.GONE);
-
-        privacyBox = (LinearLayout) findViewById(R.id.privacyBox);
-        checkButtonBox = findViewById(R.id.checkButtonBox);
-        deleteButtonBox = findViewById(R.id.deleteButtonBox);
+        checkButtonBox = (LinearLayout) findViewById(R.id.checkButtonBox);
+        deleteButtonBox = (LinearLayout) findViewById(R.id.deleteButtonBox);
         checkButton = (ImageView) findViewById(R.id.checkButton);
         deleteButton = (ImageView) findViewById(R.id.deleteButton);
         checkText = (TextView) findViewById(R.id.checkText);
         deleteText = (TextView) findViewById(R.id.deleteText);
+        agendaStatusNeedInvitation = (TextView) findViewById(R.id.agendaStatusNeedInvitation);
+        agendaStatus = (TextView) findViewById(R.id.agendaStatus);
+        privacyBox = (LinearLayout) findViewById(R.id.textsBox);
+        privacyText = (TextView) findViewById(R.id.text);
+        privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
+        privacyArrowIcon = (ImageView) findViewById(R.id.arrowIcon);
         editButton = (TextView) findViewById(R.id.editButton);
-
         cubeLowerBoxIcon = (ImageView) findViewById(R.id.cubeLowerBoxIcon);
         cubeUpperBoxIcon = (ImageView) findViewById(R.id.cubeUpperBoxIcon);
         pieceIcon = (ImageView) findViewById(R.id.pieceIcon);
+        pieceBox = (RelativeLayout) findViewById(R.id.pieceBox);
 
-        whatText = (TextView) findViewById(R.id.whatText);
-        whereWhenText = (TextView) findViewById(R.id.whereWhenText);
-        whoText = (TextView) findViewById(R.id.whoText);
+        tagGroup = (TagView) findViewById(R.id.tagGroup);
+        tittleText = (TextView) findViewById(R.id.title);
+        descriptionReadMore = (ReadMoreTextView) findViewById(R.id.descriptionReadMore);
+        descriptionShort = (TextView) findViewById(R.id.descriptionShort);
+        whatsAppGroupLinkBox = (LinearLayout) findViewById(R.id.whatsAppGroupLinkBox);
+        whatsAppGroupLink = (TextView) findViewById(R.id.whatsAppGroupLink);
 
-        whatCorners = findViewById(R.id.whatCorners);
-        whereWhenCorners = findViewById(R.id.whereWhenCorners);
-        whoCorners = findViewById(R.id.whoCorners);
+        dateFormat = new DateFormat(this);
 
-        whatButton = (ImageView) findViewById(R.id.whatIcon);
-        whereWhenButton = (ImageView) findViewById(R.id.whereWhenIcon);
-        whoButton = (ImageView) findViewById(R.id.whoIcon);
+        dateHourText = (TextView) findViewById(R.id.dateHourText);
+        repeatBox = (LinearLayout) findViewById(R.id.repeatBox);
+        repeatText = (TextView) findViewById(R.id.repeatText);
+        locationText = (TextView) findViewById(R.id.locationText);
+        locationBox = (LinearLayout) findViewById(R.id.locationBox);
 
-        whatText.setOnClickListener(this);
-        whereWhenText.setOnClickListener(this);
-        whoText.setOnClickListener(this);
+        whoCanInvite = (TextView) findViewById(R.id.whoCanInvite);
 
-        whatButton.setOnClickListener(this);
-        whereWhenButton.setOnClickListener(this);
-        whoButton.setOnClickListener(this);
+        feedVisibility = (TextView) findViewById(R.id.feedVisibility);
+        recyclerView = (RecyclerView) findViewById(R.id.guestRow);
+        addGuestButton = (RelativeLayout) findViewById(R.id.addGuestButton);
+        guestsNumber = (TextView) findViewById(R.id.guestsNumber);
+        progressLoadingBox = findViewById(R.id.progressLoadingBox);
+        addGuestIcon = (ImageView) findViewById(R.id.addGuestIcon);
+        addGuestText = (TextView) findViewById(R.id.addGuestText);
+        addGuestButtonDivider = (View) findViewById(R.id.addGuestButtonDivider);
+        guestBox = (LinearLayout) findViewById(R.id.guestBox);
+        guestText = (TextView) findViewById(R.id.guestText);
 
-        whatCorners.setOnClickListener(this);
-        whereWhenCorners.setOnClickListener(this);
-        whoCorners.setOnClickListener(this);
+        editButton.setVisibility(View.GONE);
 
-        privacyBox.setOnClickListener(this);
+        addGuestText.setText(getString(R.string.invite_guest_btn));
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
@@ -175,36 +209,19 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
 
-        checkButton.setOnClickListener(this);
-        deleteButton.setOnClickListener(this);
+        checkButtonBox.setOnClickListener(this);
+        deleteButtonBox.setOnClickListener(this);
+        privacyBox.setOnClickListener(this);
+        addGuestButton.setOnClickListener(this);
+        guestBox.setOnClickListener(this);
 
-        //set button controller
-        controller = new UpdateButtonController(this);
-        controller.attach(true, whatText, whatButton, whatCorners);
-        controller.attach(false, whereWhenText, whereWhenButton, whereWhenCorners);
-        controller.attach(false, whoText, whoButton, whoCorners);
-        controller.updateAll(Utilities.DEFAULT_POSITION, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
+        checkButtonBox.setOnTouchListener(this);
+        deleteButtonBox.setOnTouchListener(this);
+        privacyBox.setOnTouchListener(this);
+        addGuestButton.setOnTouchListener(this);
+        guestBox.setOnTouchListener(this);
 
-        privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
-        privacyIcon.setVisibility(View.GONE);
-
-        privacyText = (TextView) findViewById(R.id.privacyText);
-
-
-        m_title = (TextView) findViewById(R.id.text);
-        m_title.setText(getResources().getString(R.string.act));
-
-        m_ic_edit = (ImageView) findViewById(R.id.icon2);
-        m_ic_edit.setImageDrawable(getResources().getDrawable(R.drawable.ic_edit));
-        m_ic_edit.setOnClickListener(this);
-
-        icon1 = (ImageView) findViewById(R.id.icon1);
-        //icon1.setImageDrawable(getResources().getDrawable(R.drawable.ic_more_vertical));
-        icon1.setVisibility(View.GONE);
-
-        mNavigator = new FragmentNavigator(getFragmentManager(), new ShowActivityFragmentAdapter(), R.id.contentBox);
-        mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
-        mNavigator.onCreate(savedInstanceState);
+        privacyBox.setVisibility(View.GONE);
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         mBackButton.setOnTouchListener(this);
@@ -216,8 +233,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 onBackPressed();
             }
         });
-
-        setCurrentTab(mNavigator.getCurrentPosition());
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_show");
 
@@ -232,7 +247,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         setProgress(true);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
+
     }
 
     public void refreshItems() {
@@ -241,8 +257,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 updateLayout();
@@ -252,7 +268,35 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         // Load complete
     }
 
-    public void updateLayout(){
+    private void loadTags(ArrayList<TagServer> tags) {
+        tagGroup.removeAll();
+
+        Collections.sort(tags, new Comparator<TagServer>() {
+            @Override
+            public int compare(TagServer c1, TagServer c2) {
+                String name1 = c1.getTitle();
+                String name2 = c2.getTitle();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        for (int i = 0; i < tags.size(); i++) {
+            String text = tags.get(i).getTitle();
+            tag = new Tag(text);
+            tag.radius = Utilities.convertDpToPixel(10.0f, this);
+            tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+            tag.isDeletable = false;
+            tagGroup.addTag(tag);
+        }
+    }
+
+    public void updateLayout() {
         ActivityServer activityServer = new ActivityServer();
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -464,7 +508,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         int m = activity.getMonthStart();
         int y = activity.getYearStart();
 
-        if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+        if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
         //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
         //ACTIVITY_DELETED_SUCCESSFULLY e WITHOUT_NOTIFICATION
@@ -502,12 +546,11 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             ActivityServer activityServer = activityWrapper.getActivityServer();
 
             User user = checkIfInActivity(userList);
-            m_ic_edit.setVisibility(View.INVISIBLE);
 
             if (user != null) {
-                privacyIcon.setVisibility(View.VISIBLE);
-                privacyText.setVisibility(View.VISIBLE);
-                findViewById(R.id.arrowIcon).setVisibility(View.VISIBLE);
+                privacyBox.setVisibility(View.VISIBLE);
+                privacyBox.setOnClickListener(this);
+                privacyBox.setOnTouchListener(this);
                 switch (user.getPrivacy()) {
                     case 0:
                         privacyIcon.setImageResource(R.drawable.ic_public);
@@ -530,60 +573,64 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                 if (checkIfAdm(response.getAdms(), email)) {
-                    m_ic_edit.setVisibility(View.GONE);
                     editButton.setVisibility(View.VISIBLE);
-                    findViewById(R.id.space).setVisibility(View.VISIBLE);
-                } else
-                    m_ic_edit.setVisibility(View.INVISIBLE);
+                } else {
+                    editButton.setVisibility(View.GONE);
+                }
 
                 privacyBox.setVisibility(View.VISIBLE);
+                privacyBox.setOnClickListener(this);
+                privacyBox.setOnTouchListener(this);
 
                 if (checkIfCreator(response.getUser().getEmail())) {
+                    editButton.setVisibility(View.VISIBLE);
+                    agendaStatus.setVisibility(View.VISIBLE);
+                    agendaStatusNeedInvitation.setVisibility(View.GONE);
+                    agendaStatus.setText(getString(R.string.agenda_status_fitted));
                     deleteButtonBox.setVisibility(View.VISIBLE);
-                    deleteButton.setBackgroundResource(R.drawable.btn_feed_ignore);
-                    deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_600));
-                    deleteButton.setOnClickListener(this);
                     checkButtonBox.setVisibility(View.GONE);
                 } else if (user.getInvited() > 0) {
                     if (user.getInvitation() == 1) {
+                        agendaStatus.setVisibility(View.VISIBLE);
+                        agendaStatusNeedInvitation.setVisibility(View.GONE);
+                        agendaStatus.setText(getString(R.string.agenda_status_fitted));
                         deleteButtonBox.setVisibility(View.VISIBLE);
-                        deleteButton.setBackgroundResource(R.drawable.btn_feed_ignore);
-                        deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_600));
-                        deleteButton.setOnClickListener(this);
                         checkButtonBox.setVisibility(View.GONE);
                     } else {
                         privacyBox.setVisibility(View.GONE);
+                        agendaStatus.setVisibility(View.VISIBLE);
+                        agendaStatusNeedInvitation.setVisibility(View.GONE);
+                        agendaStatus.setText(getString(R.string.agenda_status_invited));
                         checkButtonBox.setVisibility(View.VISIBLE);
-                        checkButton.setBackgroundResource(R.drawable.btn_feed_check);
-                        checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
-                        checkButton.setOnClickListener(this);
                         deleteButtonBox.setVisibility(View.GONE);
                     }
                 } else if (activityServer.getInvitationType() == 2) {
                     privacyBox.setVisibility(View.GONE);
+                    agendaStatus.setVisibility(View.VISIBLE);
+                    agendaStatusNeedInvitation.setVisibility(View.GONE);
+                    agendaStatus.setText(getString(R.string.agenda_status_anyone_can_participate));
                     checkButtonBox.setVisibility(View.VISIBLE);
-                    checkButton.setBackgroundResource(R.drawable.btn_feed_check);
-                    checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
-                    checkButton.setOnClickListener(this);
                     deleteButtonBox.setVisibility(View.GONE);
                 } else {
                     privacyBox.setVisibility(View.GONE);
+                    agendaStatus.setVisibility(View.GONE);
+                    agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
                     checkButtonBox.setVisibility(View.GONE);
                     deleteButtonBox.setVisibility(View.GONE);
                 }
 
             } else {
+                agendaStatus.setVisibility(View.GONE);
+                agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
                 deleteButtonBox.setVisibility(View.GONE);
                 checkButtonBox.setVisibility(View.GONE);
                 if (activityServer.getInvitationType() == 2) {
+                    agendaStatus.setVisibility(View.VISIBLE);
+                    agendaStatusNeedInvitation.setVisibility(View.GONE);
+                    agendaStatus.setText(getString(R.string.agenda_status_anyone_can_participate));
                     checkButtonBox.setVisibility(View.VISIBLE);
-                    checkButton.setBackgroundResource(R.drawable.btn_feed_check);
-                    checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
-                    checkButton.setOnClickListener(this);
                 }
                 privacyBox.setVisibility(View.GONE);
-                privacyIcon.setVisibility(View.INVISIBLE);
-                findViewById(R.id.arrowIcon).setVisibility(View.INVISIBLE);
             }
 
             Glide.clear(pieceIcon);
@@ -596,28 +643,325 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
             cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
 
-            m_title.setText(activityServer.getTitle());
+            //m_title.setText(activityServer.getTitle());
 
-            WhatShowFragment whatShowFragment = (WhatShowFragment) mNavigator.getFragment(0);
-            whatShowFragment.setLayout(activityServer, response.getTags());
             activityServers = response.getWhatsGoingAct();
-
-            WhenShowFragment whenShowFragment = (WhenShowFragment) mNavigator.getFragment(1);
-            if (whenShowFragment != null)
-                whenShowFragment.setLayout(getActivity(), getActivityServers());
 
             permissionInvite = checkIfCanInvite(getActivity().getInvitationType());
 
-            WhoShowFragment whoShowFragment = (WhoShowFragment) mNavigator.getFragment(2);
-            if (whoShowFragment != null) {
-                whoShowFragment.setLayout(activityServer, invitedList, confirmedList, permissionInvite);
-                whoShowFragment.setProgress(false);
+            if (tittleText != null) {
+                tittleText.setText(activityServer.getTitle());
+
+                if (activityServer.getWhatsappGroupLink() == null || activityServer.getWhatsappGroupLink().matches(""))
+                    whatsAppGroupLinkBox.setVisibility(View.GONE);
+                else
+                    whatsAppGroupLink.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
+
+                if (activityServer.getDescription() != null && activityServer.getDescription().length() <= 240) {
+                    descriptionShort.setVisibility(View.VISIBLE);
+                    descriptionReadMore.setVisibility(View.GONE);
+
+                    if (!activityServer.getDescription().matches(""))
+                        descriptionShort.setText(activityServer.getDescription());
+                    else
+                        descriptionShort.setVisibility(View.GONE);
+                } else {
+                    if (activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
+                        String description = activityServer.getDescription() + " " + "\n\n";
+                        descriptionReadMore.setText(description);
+                    } else
+                        descriptionReadMore.setVisibility(View.GONE);
+                }
+
+                loadTags(response.getTags());
             }
+
+            if (locationText != null) {
+                Calendar calendar = Calendar.getInstance();
+                Calendar calendar2 = Calendar.getInstance();
+                calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+                calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
+                String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                String dayStart = String.format("%02d", activityServer.getDayStart());
+                String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                int yearStart = activityServer.getYearStart();
+                String hourStart = String.format("%02d", activityServer.getHourStart());
+                String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+                String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+                String dayEnd = String.format("%02d", activityServer.getDayEnd());
+                String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                int yearEnd = activityServer.getYearEnd();
+                String hourEnd = String.format("%02d", activityServer.getHourEnd());
+                String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
+
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                    } else {
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                    }
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                }
+
+                if (activityServer.getLocation() == null || activityServer.getLocation().matches(""))
+                    locationBox.setVisibility(View.GONE);
+                else
+                    locationText.setText(activityServer.getLocation());
+
+                if (activityServer.getRepeatType() == 0) {
+                    repeatBox.setVisibility(View.GONE);
+                } else {
+                    String repeatly;
+                    repeatBox.setVisibility(View.VISIBLE);
+                    switch (activityServer.getRepeatType()) {
+                        case Constants.DAYLY:
+                            repeatly = this.getString(R.string.repeat_daily);
+                            break;
+                        case Constants.WEEKLY:
+                            repeatly = this.getString(R.string.repeat_weekly);
+                            break;
+                        case Constants.MONTHLY:
+                            repeatly = this.getString(R.string.repeat_monthly);
+                            break;
+                        default:
+                            repeatly = "";
+                            break;
+                    }
+
+                    if (activityServer.getRepeatType() == 5) {
+                        repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
+                    } else {
+                        repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
+                    }
+                }
+            }
+
+            new Actor.Builder(SpringSystem.create(), addGuestButton)
+                    .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                    .onTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            switch (event.getAction()) {
+                                case MotionEvent.ACTION_UP:
+                                    if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                    }
+                                    break;
+                                case MotionEvent.ACTION_DOWN:
+                                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                    break;
+                            }
+                            return true;
+                        }
+                    })
+                    .build();
+
+            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+            recyclerView.setNestedScrollingEnabled(false);
+
+            context = recyclerView.getContext();
+
+            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+                @Override
+                public void onItemClick(View view, int position, MotionEvent e) {
+                    SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                    String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                    Intent intent = new Intent(context, ShowGuestsActivity.class);
+                    intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+                    intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+                    intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
+                    intent.putExtra("id_act", getActivity().getId());
+
+                    Bundle bundle = new Bundle();
+                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                    startActivityForResult(intent, GUEST_UPDATE);
+                }
+
+                @Override
+                public void onLongItemClick(View view, int position, MotionEvent e) {
+                }
+            }));
+
+            setLayout(this.getActivity(), this.getUserList(), this.getUserConfirmedList(), this.getPermissionInvite());
+
         }
 
         setProgress(false);
 
         mSwipeRefreshLayout.setRefreshing(false);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if(resultCode == RESULT_OK) {
+            if (requestCode == GUEST_UPDATE) {
+                setProgress(true);
+                updateLayout();
+            } else if (requestCode == ADD_GUEST) {
+                ActivityServer activityServer = new ActivityServer();
+                SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                PersonModelWrapper wrap =
+                        (PersonModelWrapper) intent.getSerializableExtra("guest_objs");
+
+                listToInvite.clear();
+                listToInvite.addAll(wrap.getItemDetails());
+                if(listToInvite.size() > 0) {
+                    activityServer.setId(getActivity().getId());
+                    activityServer.setVisibility(Constants.ACT);
+                    activityServer.setCreator(mSharedPreferences.getString(Constants.EMAIL, ""));
+                    for (int i = 0; i < listToInvite.size(); i++)
+                        activityServer.addGuest(listToInvite.get(i).getEmail());
+
+                    addGuestToActivity(activityServer);
+                }
+            }
+        }
+    }
+
+    public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean permissionInvite){
+
+        if(recyclerView!=null) {
+            String[] stringArray = this.getResources().getStringArray(R.array.array_who_can_invite_show);
+
+            whoCanInvite.setText(stringArray[activityServer.getInvitationType()]);
+
+            if (activityServer.getInvitationType() == 2) {
+                feedVisibility.setText(R.string.feed_visibility_2);
+            } else {
+                feedVisibility.setText(R.string.feed_visibility_1);
+            }
+
+            listPerson.clear();
+            listConfirmed.clear();
+            listConfirmed.addAll(confirmed);
+
+            for (int i = 0; i < users.size(); i++) {
+                User usr = users.get(i);
+                usr.setDelete(false);
+                listPerson.add(usr);
+            }
+
+            adapter = new PersonAdapter(listPerson, this);
+            recyclerView.setAdapter(adapter);
+            guestsNumber.setText(String.valueOf(listPerson.size()));
+
+            if (permissionInvite && !isActivityInPast(activityServer)) {
+                addGuestIcon.setImageResource(R.drawable.btn_add_person);
+                addGuestButton.setOnClickListener(this);
+            } else {
+                addGuestButton.setOnClickListener(null);
+                addGuestButton.setVisibility(View.GONE);
+                addGuestButtonDivider.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    private boolean isActivityInPast(ActivityServer activityServer){
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, -7);
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        boolean isHourBefore = isTimeInBefore(hour + ":" + minute, activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd());
+        boolean isDateBefore = isDateInBefore(activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd(), year, month, day);
+
+        return (isHourBefore && isDateBefore) || isDateBefore;
+    }
+
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
+        if(yearEnd < year)
+            return false;
+        if(year == yearEnd){
+            if(monthOfYearEnd < monthOfYear)
+                return false;
+            else if(monthOfYearEnd == monthOfYear){
+                if(dayOfMonthEnd <= dayOfMonth)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private boolean isTimeInBefore(String now, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+
+        try {
+            Date date1 = sdf.parse(now);
+            Date date2 = sdf.parse(time);
+
+            return date1.after(date2);
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
+    private String getLastActivity(ArrayList<ActivityServer> activityServers) {
+
+        Collections.sort(activityServers, new Comparator<ActivityServer>() {
+            @Override
+            public int compare(ActivityServer c1, ActivityServer c2) {
+                ActivityServer activityServer;
+                int day = 0, month = 0, year = 0;
+                int day2 = 0, month2 = 0, year2 = 0;
+
+                day = c1.getDayStart();
+                month = c1.getMonthStart();
+                year = c1.getYearStart();
+
+                day2 = c2.getDayStart();
+                month2 = c2.getMonthStart();
+                year2 = c2.getYearStart();
+
+
+                if (year < year2)
+                    return -1;
+                else if (year > year2)
+                    return 1;
+                else if (month < month2)
+                    return -1;
+                else if (month > month2)
+                    return 1;
+                else if (day < day2)
+                    return -1;
+                else if (day > day2)
+                    return 1;
+                else
+                    return 0;
+
+            }
+        });
+
+        ActivityServer activityServer = activityServers.get(activityServers.size() - 1);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+
+        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(cal.get(Calendar.DAY_OF_WEEK), cal);
+        String dayEnd = String.format("%02d", activityServer.getDayEnd());
+        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
+        int yearEnd = activityServer.getYearEnd();
+
+        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
+
+        return date;
     }
 
     public boolean getPermissionInvite() {
@@ -660,57 +1004,26 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mNavigator!=null)
-            mNavigator.onSaveInstanceState(outState);
-    }
-
-
-    private void setCurrentTab(int position) {
-        mNavigator.showFragment(position);
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
 
-        if (id == R.id.whatText || id == R.id.whatButton || id == R.id.whatCorners) {
+        if (id == R.id.editButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whatText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            controller.updateAll(0, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
-            setCurrentTab(0);
-        } else if (id == R.id.whereWhenText || id == R.id.whereWhenButton || id == R.id.whereWhenCorners) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whereWhenText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            controller.updateAll(1, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
-            setCurrentTab(1);
-        } else if (id == R.id.whoText || id == R.id.whoButton || id == R.id.whoCorners) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whoText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            controller.updateAll(2, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
-            setCurrentTab(2);
-        } else if (id == R.id.editButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent myIntent = new Intent(ShowActivity.this, AddActivity.class);
             myIntent.putExtra("act_edit", activityWrapper);
             startActivity(myIntent);
             finish();
-        } else if (id == R.id.checkButton) {
+        } else if (id == R.id.checkButtonBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             InviteRequest inviteRequest = new InviteRequest();
@@ -726,15 +1039,15 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             inviteRequest.setIdAct(getActivity().getId());
 
             updateInviteRequest(inviteRequest);
-        } else if (id == R.id.deleteButton) {
+        } else if (id == R.id.deleteButtonBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if (checkIfCreator(creator_activity.getEmail())) {
                 createDialogRemove(getActivity().getRepeatType() > 0);
-            } else{
+            } else {
                 InviteRequest inviteRequest = new InviteRequest();
 
                 SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -752,11 +1065,45 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         } else if (v == privacyBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogPrivacy();
+        }
+        else if(v == addGuestButton){
+            int i;
+            ArrayList<String> list = new ArrayList<>();
+            for(i = 0; i < listPerson.size(); i++){
+                list.add(listPerson.get(i).getEmail());
+            }
+            Intent intent = new Intent(this, SelectPeopleActivity.class);
+            intent.putStringArrayListExtra("guest_list", list);
+            intent.putExtra("erase_from_list", true);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addGuestButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            startActivityForResult(intent, ADD_GUEST);
+        }
+        else if(v == guestBox){
+            SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+            Intent intent = new Intent(context, ShowGuestsActivity.class);
+            intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+            intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+            intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
+            intent.putExtra("id_act", getActivity().getId());
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            startActivityForResult(intent, GUEST_UPDATE);
         }
     }
 
@@ -848,8 +1195,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 activity.setId(idx);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 activity.setVisibility(Constants.FLAG);
@@ -919,13 +1266,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionBox1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionBox1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_no_radius));
                 }
 
                 switch (selected) {
@@ -954,13 +1297,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionBox2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionBox2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_no_radius));
                 }
 
                 switch (selected) {
@@ -989,13 +1328,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionBox3.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionBox3.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_radius));
                 }
 
                 switch (selected) {
@@ -1015,6 +1350,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                         optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
                         break;
                 }
+
                 return false;
             }
         });
@@ -1022,9 +1358,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         optionBox1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //optionBox1.setBackgroundColor(color_selected);
-                //optionBox2.setBackgroundColor(color_transparent);
-                //optionBox3.setBackgroundColor(color_transparent);
                 checkBoxActivated1.setVisibility(View.VISIBLE);
                 checkBoxActivated2.setVisibility(View.GONE);
                 checkBoxActivated3.setVisibility(View.GONE);
@@ -1043,9 +1376,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         optionBox2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //optionBox1.setBackgroundColor(color_transparent);
-                //optionBox2.setBackgroundColor(color_selected);
-                //optionBox3.setBackgroundColor(color_transparent);
                 checkBoxActivated1.setVisibility(View.GONE);
                 checkBoxActivated2.setVisibility(View.VISIBLE);
                 checkBoxActivated3.setVisibility(View.GONE);
@@ -1065,9 +1395,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         optionBox3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //optionBox1.setBackgroundColor(color_transparent);
-                //optionBox2.setBackgroundColor(color_transparent);
-                //optionBox3.setBackgroundColor(color_selected);
                 checkBoxActivated1.setVisibility(View.GONE);
                 checkBoxActivated2.setVisibility(View.GONE);
                 checkBoxActivated3.setVisibility(View.VISIBLE);
@@ -1144,7 +1471,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         int m = activity.getMonthStart();
         int y = activity.getYearStart();
 
-        if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+        if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
     }
 
@@ -1154,7 +1481,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.dispose();
     }
 
-    private void getActivityStartToday(){
+    private void getActivityStartToday() {
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -1187,7 +1514,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponseToday(Response response) {
 
         JobManager mJobManager = JobManager.instance();
-        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+        if (mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
             mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
 
         ArrayList<Object> list = new ArrayList<>();
@@ -1195,13 +1522,13 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
-            for(int i=0;i<activityServers.size();i++){
+            for (int i = 0; i < activityServers.size(); i++) {
                 list.add(activityServers.get(i));
             }
         }
         if (response.getMyCommitFlag() != null) {
             ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
-            for(int i=0;i<flagServers.size();i++){
+            for (int i = 0; i < flagServers.size(); i++) {
                 list.add(flagServers.get(i));
             }
         }
@@ -1333,19 +1660,19 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
                 list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
-                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
+                        activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getYearStart()));
             }
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
                 list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
-                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
+                        flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
                 list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
-                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
+                        reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }
 
@@ -1370,7 +1697,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             Calendar c2 = Calendar.getInstance();
 
             c1.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
-            c1.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+            c1.set(Calendar.MONTH, activityOfDay.getMonth() - 1);
             c1.set(Calendar.YEAR, activityOfDay.getYear());
             c1.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
             c1.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
@@ -1378,35 +1705,34 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             c1.set(Calendar.MILLISECOND, 0);
 
             c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-            c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+            c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
             c2.set(Calendar.YEAR, activityOfDayNext.getYear());
             c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
             c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
             c2.set(Calendar.SECOND, 0);
             c2.set(Calendar.MILLISECOND, 0);
 
-            while(activityOfDayNext !=null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
+            while (activityOfDayNext != null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
                 j++;
                 count_same++;
-                if(j < list_notify.size()) {
+                if (j < list_notify.size()) {
                     activityOfDayNext = list_notify.get(j);
                     c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
                     c2.set(Calendar.YEAR, activityOfDayNext.getYear());
                     c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
                     c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
                     c2.set(Calendar.SECOND, 0);
                     c2.set(Calendar.MILLISECOND, 0);
-                }
-                else
+                } else
                     activityOfDayNext = null;
             }
             activityOfDay.setCommitmentSameHour(count_same);
 
-            time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+            time_exact = (int) (c1.getTimeInMillis() - c3.getTimeInMillis()) / (1000 * 60);
+            if (time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
                 c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras)
@@ -1415,9 +1741,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            if(time_exact >= 1440) {
+            if (time_exact >= 1440) {
                 c1.add(Calendar.MINUTE, -1380);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras2)
@@ -1426,7 +1752,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            i=j-1;
+            i = j - 1;
         }
 
         if (list_notify.size() > 0) {
@@ -1449,12 +1775,45 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
-        }
-        else if (view == editButton) {
+        } else if (view == editButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                editButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        } else if (view == privacyBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                privacyText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                privacyArrowIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+                privacyIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                privacyText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                privacyArrowIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+                privacyIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == guestBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                guestsNumber.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                guestsNumber.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests_pressed));
+            }
+        } else if (view == checkButtonBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_200));
+                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_200));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_400));
+                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_400));
+            }
+        } else if (view == deleteButtonBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_100));
+                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_100));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_300));
+                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_300));
             }
         }
 

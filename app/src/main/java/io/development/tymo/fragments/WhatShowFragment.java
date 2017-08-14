@@ -33,8 +33,8 @@ public class WhatShowFragment extends Fragment {
 
     private TagView tagGroup;
     private Tag tag;
-    private TextView tittleText, url, descriptionTextShort;
-    private ReadMoreTextView descriptionText;
+    private TextView tittleText, whatsAppGroupLink, descriptionShort;
+    private ReadMoreTextView descriptionReadMore;
     private LinearLayout whatsAppGroupLinkBox;
     private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -64,9 +64,9 @@ public class WhatShowFragment extends Fragment {
 
         tagGroup = (TagView) view.findViewById(R.id.tagGroup);
         tittleText = (TextView) view.findViewById(R.id.title);
-        url = (TextView) view.findViewById(R.id.whatsAppGroupLink);
-        descriptionText = (ReadMoreTextView) view.findViewById(R.id.descriptionReadMore);
-        descriptionTextShort = (TextView) view.findViewById(R.id.descriptionShort);
+        whatsAppGroupLink = (TextView) view.findViewById(R.id.whatsAppGroupLink);
+        descriptionReadMore = (ReadMoreTextView) view.findViewById(R.id.descriptionReadMore);
+        descriptionShort = (TextView) view.findViewById(R.id.descriptionShort);
         whatsAppGroupLinkBox = (LinearLayout) view.findViewById(R.id.whatsAppGroupLinkBox);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
@@ -85,22 +85,22 @@ public class WhatShowFragment extends Fragment {
             if (activityServer.getWhatsappGroupLink() == null || activityServer.getWhatsappGroupLink().matches(""))
                 whatsAppGroupLinkBox.setVisibility(View.GONE);
             else
-                url.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
+                whatsAppGroupLink.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
 
             if (activityServer.getDescription() != null && activityServer.getDescription().length() <= 240) {
-                descriptionTextShort.setVisibility(View.VISIBLE);
-                descriptionText.setVisibility(View.GONE);
+                descriptionShort.setVisibility(View.VISIBLE);
+                descriptionReadMore.setVisibility(View.GONE);
 
                 if (!activityServer.getDescription().matches(""))
-                    descriptionTextShort.setText(activityServer.getDescription());
+                    descriptionShort.setText(activityServer.getDescription());
                 else
-                    descriptionTextShort.setVisibility(View.GONE);
+                    descriptionShort.setVisibility(View.GONE);
             } else {
                 if (activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
                     String description = activityServer.getDescription() + " " + "\n\n";
-                    descriptionText.setText(description);
+                    descriptionReadMore.setText(description);
                 } else
-                    descriptionText.setVisibility(View.GONE);
+                    descriptionReadMore.setVisibility(View.GONE);
             }
 
             loadTags(tags);

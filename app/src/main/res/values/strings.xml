@@ -39,6 +39,12 @@
         <item>Qualquer um pode entrar</item>
     </string-array>
 
+    <string-array name="array_who_can_invite_show">
+        <item>Somente administradores podem convidar</item>
+        <item>Somente convidados podem convidar</item>
+        <item>Qualquer um pode entrar</item>
+    </string-array>
+
     <string-array name="array_privacy">
         <item>Todos</item>
         <item>Somente meus contatos</item>
@@ -225,8 +231,8 @@
     <string name="feed_invitation_activity_fit">Encaixado na sua agenda!</string>
     <string name="feed_invitation_activity_ignored">Ignorado!</string>
     <string name="feed_invitation_activity_swiped">Você já encaixou!</string>
-    <string name="feed_visibility_1">(será exibido somente no FEED dos convidados)</string>
-    <string name="feed_visibility_2">(será exibido no FEED de todos os usuários do Tymo)</string>
+    <string name="feed_visibility_1">(exibida somente no FEED dos convidados)</string>
+    <string name="feed_visibility_2">(exibida no FEED de todos os usuários do Tymo)</string>
     <string name="filter_and_sort">Filtro e Ordenação</string>
     <string name="filter_by">Filtrar por</string>
     <string name="filter_date_and_hour">Data e hora</string>
@@ -286,7 +292,7 @@
     <string name="login_forgot_password">Esqueceu sua senha?</string>
     <string name="login_forgot_text_1">Esqueceu seus dados de login?</string>
     <string name="login_forgot_text_2">Insira o email correspondente a sua conta no Tymo. Em seguida, lhe enviaremos uma mensagem de recuperação de senha.</string>
-    <string name="login_register_facebook_incomplete_text_1">Conexão com o Facebook realizada com sucesso</string>
+    <string name="login_register_facebook_incomplete_text_1">Conexão com o Facebook\nrealizada com sucesso</string>
     <string name="login_register_facebook_incomplete_text_2">Complete as informações abaixo:</string>
     <string name="login_register_my_interests_text_1">Ajude-nos a exibir o que você deseja</string>
     <string name="login_register_my_interests_text_2">O que você gostaria de ver com mais frequência no seu FEED e na BUSCA?</string>
@@ -376,6 +382,9 @@
     <string name="register_privacy_always_friends">Somente Amigos</string>
     <string name="register_privacy_privated">Privado</string>
     <string name="register_privacy_public">Pública</string>
+    <string name="steps_1_of_3">passo 1 de 3</string>
+    <string name="steps_2_of_3">passo 2 de 3</string>
+    <string name="steps_3_of_3">passo 3 de 3</string>
     <string name="register_steps">passo %1$d de %2$d</string>
     <string name="register_year">Ano</string>
     <string name="register">Cadastro</string>
@@ -392,9 +401,10 @@
     <string name="repeat_monthly">mensalmente</string>
     <string name="repeat_not">Não se repete</string>
     <string name="repeat_text_imported_google_agenda">Atividade importada sem as repetições, edite para criá-las!</string>
-    <string name="repeat_text">Repete %1$s até %2$s</string>
+    <string name="repeat_text">(repete %1$s até %2$s)</string>
     <string name="repeat_weekly">semanalmente</string>
     <string name="repeat">Repetir</string>
+    <string name="add_image">Adicionar imagem</string>
     <string name="response_invitation_accepted">Convite encaixado</string>
     <string name="response_invitation_ignored">Convite ignorado</string>
     <string name="response_invitation_request_accepted">%1$s aceitou sua solicitação</string>
@@ -546,5 +556,9 @@
     <string name="visibility_text">Escolha o nível de visibilidade da atividade na sua agenda</string>
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
+    <string name="agenda_status_need_invitation">Você precisa ser convidado para poder encaixar!</string>
+    <string name="agenda_status_fitted">Está na sua agenda!</string>
+    <string name="agenda_status_invited">Você foi convidado!</string>
+    <string name="agenda_status_anyone_can_participate">Qualquer um pode entrar!</string>
 
 </resources>

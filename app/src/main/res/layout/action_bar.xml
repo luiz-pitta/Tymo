@@ -15,45 +15,26 @@
 
     <Space
         android:id="@+id/space"
-        android:visibility="gone"
-        android:layout_toRightOf="@+id/actionBackIcon"
         android:layout_width="30dp"
-        android:layout_height="match_parent" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_toRightOf="@+id/actionBackIcon"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/icons"
-        android:layout_toRightOf="@+id/space"
+        android:layout_toRightOf="@+id/actionBackIcon"
+        android:ellipsize="end"
         android:gravity="center"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:lines="1"
-            android:text="Text"
-            android:textAllCaps="true"
-            android:textColor="@color/grey_600"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:lines="1"
-            android:text="Text"
-            android:textColor="@color/grey_600"
-            android:textSize="12sp"
-            android:visibility="gone" />
-
-    </LinearLayout>
+        android:lines="1"
+        android:text="Text"
+        android:textAllCaps="true"
+        android:textColor="@color/grey_600"
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:id="@+id/icons"

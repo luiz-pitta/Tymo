@@ -335,10 +335,15 @@
 
                 </FrameLayout>
 
-                <Space
-                    android:id="@+id/space"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="60dp" />
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:background="@color/horizontal_line" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/grey_100" />
 
             </LinearLayout>
 

@@ -1877,13 +1877,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionBox1.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    optionIcon1.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionTitle1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionText1.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionBox1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_no_radius));
                 }
 
                 switch (selected) {
@@ -1912,13 +1908,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionBox2.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionTitle2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionText2.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionBox2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_no_radius));
                 }
 
                 switch (selected) {
@@ -1947,13 +1939,9 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public boolean onTouch(View view, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
-                    optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_600));
+                    optionBox3.setBackground(null);
                 } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    optionIcon3.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionTitle3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
-                    optionText3.setTextColor(ContextCompat.getColor(dialog.getContext(), R.color.grey_400));
+                    optionBox3.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_radius));
                 }
 
                 switch (selected) {
