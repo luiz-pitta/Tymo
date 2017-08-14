@@ -49,7 +49,6 @@ import java.util.Date;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.PersonAdapter;
-import io.development.tymo.adapters.ShowActivityFragmentAdapter;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
