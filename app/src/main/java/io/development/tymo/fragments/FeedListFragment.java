@@ -162,10 +162,14 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+
 
         recyclerView.setRefreshListener(this);
         recyclerView.setAdapterWithProgress(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
 
         recyclerView.setRefreshingColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400));
 
@@ -291,7 +295,10 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     private void initSwipe(){

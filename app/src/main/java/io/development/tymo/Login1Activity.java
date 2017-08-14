@@ -59,6 +59,7 @@ import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ForceUpdateChecker;
 import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.ServerMessage;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -302,44 +303,54 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     }
 
     private void handleError(Throwable error) {
+        try{
+            if (error instanceof retrofit2.HttpException) {
 
-        if (error instanceof retrofit2.HttpException) {
+                Gson gson = new GsonBuilder().create();
 
-            Gson gson = new GsonBuilder().create();
+                try {
 
-            try {
+                    String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
+                    Response response = gson.fromJson(errorBody,Response.class);
+                    if(response.getMessage().matches("REGISTER")) {
 
-                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
-                if(response.getMessage().matches("REGISTER")) {
+                        Intent register = new Intent(Login1Activity.this, RegisterPart2Activity.class);
+                        Intent error_face = new Intent(Login1Activity.this, RegisterPart1Activity.class);
 
-                    Intent register = new Intent(Login1Activity.this, RegisterPart2Activity.class);
-                    Intent error_face = new Intent(Login1Activity.this, RegisterPart1Activity.class);
+                        UserWrapper wrapper = new UserWrapper(user);
+                        register.putExtra("user_wrapper", wrapper);
+                        error_face.putExtra("user_wrapper", wrapper);
 
-                    UserWrapper wrapper = new UserWrapper(user);
-                    register.putExtra("user_wrapper", wrapper);
-                    error_face.putExtra("user_wrapper", wrapper);
+                        if(!user.isProblemFacebook())
+                            startActivity(register);
+                        else
+                            startActivity(error_face);
 
-                    if(!user.isProblemFacebook())
-                        startActivity(register);
-                    else
-                        startActivity(error_face);
+                        overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
+                        progressBox.setVisibility(View.GONE);
+                    }
+                    else {
+                        progressBox.setVisibility(View.GONE);
+                        Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
+                    }
 
-                    overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
-                    progressBox.setVisibility(View.GONE);
+                } catch (IOException e) {
+                    //progressBox.setVisibility(View.GONE);
+                    e.printStackTrace();
                 }
-                else {
-                    progressBox.setVisibility(View.GONE);
-                    Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
-                }
-
-            } catch (IOException e) {
+            } else {
                 //progressBox.setVisibility(View.GONE);
-                e.printStackTrace();
+                if(Utilities.isDeviceOnline(this))
+                    Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
-        } else {
-            //progressBox.setVisibility(View.GONE);
-            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        }
+        catch (Exception e){
+            if(Utilities.isDeviceOnline(this))
+                Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
         }
     }
 

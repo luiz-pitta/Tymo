@@ -124,6 +124,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         recyclerView.setRefreshListener(this);
         recyclerView.setRefreshingColor(ContextCompat.getColor(this,R.color.deep_purple_400));
 
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+
         if (email.matches(my_email)) {
             m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
             adapter = new ContactsAdapter(this, true, false, this);
@@ -359,7 +361,10 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override

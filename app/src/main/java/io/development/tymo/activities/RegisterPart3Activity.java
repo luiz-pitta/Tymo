@@ -218,21 +218,31 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        if (error instanceof retrofit2.HttpException) {
-            Gson gson = new GsonBuilder().create();
-            try {
+        try {
+            if (error instanceof retrofit2.HttpException) {
+                Gson gson = new GsonBuilder().create();
+                try {
 
-                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
-                progressBox.setVisibility(View.GONE);
-                Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
+                    String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
+                    Response response = gson.fromJson(errorBody, Response.class);
+                    progressBox.setVisibility(View.GONE);
+                    Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
 
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                if(Utilities.isDeviceOnline(this))
+                    Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
-        } else {
-            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        }catch (Exception e){
+            if(Utilities.isDeviceOnline(this))
+                Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
         }
     }
 

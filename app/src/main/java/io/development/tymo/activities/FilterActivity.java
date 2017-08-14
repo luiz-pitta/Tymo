@@ -197,7 +197,6 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         topHorizontalLineLocal = findViewById(R.id.topHorizontalLineLocal);
         topHorizontalLineDate = findViewById(R.id.topHorizontalLineDate);
         topHorizontalLineSchedule = findViewById(R.id.topHorizontalLineSchedule);
-        addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
 
         proximityText.setOnClickListener(this);
         popularText.setOnClickListener(this);
@@ -237,28 +236,6 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         minutes_end = -1;
         hour_start = -1;
         hour_end = -1;
-
-        addPersonButton.setOnClickListener(this);
-
-        new Actor.Builder(SpringSystem.create(), addPersonButton)
-                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
-                .onTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_UP:
-                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-
-                                }
-                                break;
-                            case MotionEvent.ACTION_DOWN:
-                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                                break;
-                        }
-                        return true;
-                    }
-                })
-                .build();
 
         m_title.setText(getResources().getString(R.string.filter_and_sort));
 
@@ -667,6 +644,26 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
 
         cleanFriends.setOnTouchListener(this);
+
+        new Actor.Builder(SpringSystem.create(), addPersonButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
         filterIconFriends.setColorFilter(getResources().getColor(R.color.grey_600));
         filterTextFriends.setTextColor(getResources().getColor(R.color.grey_600));

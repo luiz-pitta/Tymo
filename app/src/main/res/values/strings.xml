@@ -224,6 +224,7 @@
     <string name="error_facebook_login">Erro no login com Facebook</string>
     <string name="error_modify_profile_photo">Erro ao alterar foto do perfil</string>
     <string name="error_network">Sem conexão com a Internet</string>
+    <string name="error_internal_app">Ops! Ocorreu um erro inesperado. Tente mais tarde</string>
     <string name="error">Erro</string>
     <string name="facebook_messenger_show">Mostrar Messenger</string>
     <string name="facebook_messenger">Facebook Messenger</string>
@@ -465,6 +466,7 @@
     <string name="settings_import_from_facebook_text">Você deseja importar seus eventos?</string>
     <string name="settings_import_from_facebook">Importar Eventos do Facebook</string>
     <string name="settings_import_from_google_agenda_error">Você não possui o Google Agenda instalado!</string>
+    <string name="settings_import_from_google_agenda_error2">Erro ao importar! Tente Novamente</string>
     <string name="settings_import_from_google_agenda_no_commitments">Você não possui nenhum compromisso para importar!</string>
     <string name="settings_import_from_google_agenda_success">Importado do Google Agenda com sucesso!</string>
     <string name="settings_import_from_google_agenda_tag">Google Agenda</string>

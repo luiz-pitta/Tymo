@@ -87,6 +87,8 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
         recyclerView.setRefreshListener(this);
         recyclerView.setRefreshingColor(ContextCompat.getColor(this,R.color.deep_purple_400));
 
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+
         recyclerView.setEmptyView(R.layout.empty_pending_requests);
 
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -179,7 +181,10 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(this))
+            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override

@@ -129,7 +129,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                     }
-                    else if (obj instanceof Flag){
+                    else if (obj instanceof Flag && ((Flag) obj).getFlagServer().getType()){
                         flagServer = ((Flag) obj).getFlagServer();
 
                         Intent myIntent = new Intent(context, FlagActivity.class);
@@ -172,8 +172,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     Calendar day_card = Calendar.getInstance();
                     day_card.set(weekModel.getYear(),weekModel.getMonth()-1, weekModel.getDay());
 
-                    //show = isOlderThan7Days(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
-                    //        now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+                    show = isInThePast(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
+                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
 
                     createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
@@ -194,11 +194,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         }));
     }
 
-    private boolean isOlderThan7Days(int y1, int m1, int d1, int y2, int m2, int d2) {
+    private boolean isInThePast(int y1, int m1, int d1, int y2, int m2, int d2) {
         LocalDate start = new LocalDate(y1, m1, d1);
         LocalDate end = new LocalDate(y2, m2, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
-        return timePeriod.getDays() <= 7;
+        return timePeriod.getDays() < 1;
     }
 
 

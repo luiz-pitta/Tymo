@@ -52,6 +52,7 @@ import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.RecyclerItemClickListener;
+import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -304,7 +305,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     }
 
     private void handleError(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override
@@ -566,6 +570,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(now);
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -573,10 +578,6 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
-
-            Calendar week_ago = Calendar.getInstance();
-            week_ago.add(Calendar.DATE, -7);
-            //dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.date_start));
@@ -592,6 +593,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
+            dpd.setMinDate(now);
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -599,10 +601,6 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             if(year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
-
-            Calendar week_ago = Calendar.getInstance();
-            week_ago.add(Calendar.DATE, -7);
-            //dpd.setMinDate(week_ago);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.date_start));

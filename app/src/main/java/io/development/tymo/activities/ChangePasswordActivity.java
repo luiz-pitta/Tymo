@@ -28,6 +28,7 @@ import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.ServerMessage;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -99,26 +100,42 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
     }
 
     private void handleError(Throwable error) {
-        if (error instanceof retrofit2.HttpException) {
-            Gson gson = new GsonBuilder().create();
-            try {
+        try {
+            if (error instanceof retrofit2.HttpException) {
+                Gson gson = new GsonBuilder().create();
+                try {
 
-                String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
-                Response response = gson.fromJson(errorBody,Response.class);
-                if(response.getMessage().matches("CURRENT_PASS_WRONG")){
-                    passwordActual.setError(getResources().getString(R.string.validation_field_password_old_wrong));
-                    Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.validation_field_password_old_wrong), Toast.LENGTH_LONG).show();
-                    progressBox.setVisibility(View.GONE);
-                }else {
-                    Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
-                    progressBox.setVisibility(View.GONE);
+                    String errorBody = ((retrofit2.HttpException) error).response().errorBody().string();
+                    Response response = gson.fromJson(errorBody, Response.class);
+                    if (response.getMessage().matches("CURRENT_PASS_WRONG")) {
+                        passwordActual.setError(getResources().getString(R.string.validation_field_password_old_wrong));
+                        Toast.makeText(ChangePasswordActivity.this, getResources().getString(R.string.validation_field_password_old_wrong), Toast.LENGTH_LONG).show();
+                        progressBox.setVisibility(View.GONE);
+                    } else {
+                        if(Utilities.isDeviceOnline(this))
+                            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                        else
+                            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
+                        progressBox.setVisibility(View.GONE);
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
-
-            } catch (IOException e) {
-                e.printStackTrace();
+            } else
+            {
+                if(Utilities.isDeviceOnline(this))
+                    Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+                else
+                    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
-        } else
-            Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        }
+        catch (Exception e){
+            if(Utilities.isDeviceOnline(this))
+                Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+            else
+                Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
+        }
     }
 
     @Override

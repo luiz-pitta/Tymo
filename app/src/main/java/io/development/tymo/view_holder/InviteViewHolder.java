@@ -33,6 +33,7 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.models.InviteModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
@@ -170,7 +171,10 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(context))
+            Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(context, context.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
 

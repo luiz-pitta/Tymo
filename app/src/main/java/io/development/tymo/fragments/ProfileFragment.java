@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         profilePhotoBox.setOnClickListener(this);
         editProfile.setOnClickListener(this);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(225);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
 
         getBgProfile();
 
@@ -332,7 +332,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
     }
 
     private void handleErrorBgProfile(Throwable error) {
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     void refreshItems() {
@@ -1186,7 +1189,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         //setProgress(false);
         noInternet = true;
         mSwipeRefreshLayout.setRefreshing(false);
-        Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        if(Utilities.isDeviceOnline(getActivity()))
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
 
