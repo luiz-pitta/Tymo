@@ -276,6 +276,7 @@
     <string name="hint_flag_unavailable">Insira um título</string>
     <string name="hint_local_filter">Local</string>
     <string name="hint_local">Local (opcional)</string>
+    <string name="add_local">Adicionar local</string>
     <string name="hint_search_interests">Encontre interesses...</string>
     <string name="hint_search_tags">Encontre tags...</string>
     <string name="hint_search">Pesquisar...</string>
@@ -406,6 +407,7 @@
     <string name="repeat_weekly">semanalmente</string>
     <string name="repeat">Repetir</string>
     <string name="add_image">Adicionar imagem</string>
+    <string name="add_image_loaded">Imagem carregada</string>
     <string name="response_invitation_accepted">Convite encaixado</string>
     <string name="response_invitation_ignored">Convite ignorado</string>
     <string name="response_invitation_request_accepted">%1$s aceitou sua solicitação</string>
@@ -562,5 +564,6 @@
     <string name="agenda_status_fitted">Está na sua agenda!</string>
     <string name="agenda_status_invited">Você foi convidado!</string>
     <string name="agenda_status_anyone_can_participate">Qualquer um pode entrar!</string>
+    <string name="title_max_caract">%1$d de 100</string>
 
 </resources>

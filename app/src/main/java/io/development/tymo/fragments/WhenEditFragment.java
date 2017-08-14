@@ -43,7 +43,7 @@ import io.development.tymo.model_server.ActivityServer;
  * A simple {@link Fragment} subclass.
  */
 public class WhenEditFragment extends Fragment implements
-        DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnLongClickListener {
+        DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnLongClickListener {
 
     private int day_start, month_start, year_start;
     private int day_end, month_end, year_end;
@@ -64,7 +64,7 @@ public class WhenEditFragment extends Fragment implements
     private boolean locationNotWorking = false;
     private AddActivity addActivity = null;
 
-    private TextView mapText;
+    private TextView mapText, repeatMax;
     private TextView dateStart, dateEnd;
     private TextView timeStart, timeEnd;
     private TextView locationText;
@@ -79,7 +79,8 @@ public class WhenEditFragment extends Fragment implements
         return fragment;
     }
 
-    public WhenEditFragment() {}
+    public WhenEditFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -98,15 +99,14 @@ public class WhenEditFragment extends Fragment implements
         super.onViewCreated(view, savedInstanceState);
 
         locationText = (TextView) view.findViewById(R.id.locationText);
-        mapText = (TextView) view.findViewById(R.id.mapText);
-        dateStart = (TextView)view.findViewById(R.id.dateStart);
-        dateEnd = (TextView)view.findViewById(R.id.dateEnd);
-        timeStart = (TextView)view.findViewById(R.id.timeStart);
-        timeEnd = (TextView)view.findViewById(R.id.timeEnd);
-        repeatNumberBox = (LinearLayout)view.findViewById(R.id.repeatNumberBox);
-        repeatBox = (LinearLayout)view.findViewById(R.id.repeatBox);
-        repeatEditText = (EditText)view.findViewById(R.id.repeatEditText);
-        mapText.setOnClickListener(this);
+        repeatMax = (TextView) view.findViewById(R.id.repeatMax);
+        dateStart = (TextView) view.findViewById(R.id.dateStart);
+        dateEnd = (TextView) view.findViewById(R.id.dateEnd);
+        timeStart = (TextView) view.findViewById(R.id.timeStart);
+        timeEnd = (TextView) view.findViewById(R.id.timeEnd);
+        repeatNumberBox = (LinearLayout) view.findViewById(R.id.repeatNumberBox);
+        repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
+        repeatEditText = (EditText) view.findViewById(R.id.repeatEditText);
         locationText.setOnClickListener(this);
         locationText.setOnLongClickListener(this);
 
@@ -128,19 +128,36 @@ public class WhenEditFragment extends Fragment implements
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                }
+                else {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String number = String.valueOf(s);
-                if(number.length() > 2)
+                if (number.length() > 2) {
                     repeatEditText.setText("30");
+                }
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                }
+                else {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                }
+                else {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                }
             }
         });
 
@@ -148,13 +165,14 @@ public class WhenEditFragment extends Fragment implements
         spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 repeat_type = position;
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if(position != 0)
+                if (position != 0)
                     repeatNumberBox.setVisibility(View.VISIBLE);
                 else
                     repeatNumberBox.setVisibility(View.GONE);
@@ -167,13 +185,13 @@ public class WhenEditFragment extends Fragment implements
         timeStart.setOnClickListener(this);
         timeEnd.setOnClickListener(this);
 
-        addActivity = (AddActivity)getActivity();
+        addActivity = (AddActivity) getActivity();
 
-        if(addActivity.getActivity() != null && addActivity.getActivity().getLat() != -500) {
+        if (addActivity.getActivity() != null && addActivity.getActivity().getLat() != -500) {
             LatLng latLng = new LatLng(addActivity.getActivity().getLat(), addActivity.getActivity().getLng());
             LatLngBounds latLngBounds = new LatLngBounds(latLng, latLng);
             builder = new PlacePicker.IntentBuilder().setLatLngBounds(latLngBounds);
-        }else
+        } else
             builder = new PlacePicker.IntentBuilder();
 
 
@@ -186,7 +204,7 @@ public class WhenEditFragment extends Fragment implements
         setLayout(addActivity.getActivity(), addActivity.getEditable());
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
     }
 
     @Override
@@ -198,10 +216,10 @@ public class WhenEditFragment extends Fragment implements
     public void onResume() {
         super.onResume();
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog2");
-        if(dpd != null) dpd.setOnDateSetListener(this);
+        if (dpd != null) dpd.setOnDateSetListener(this);
 
         TimePickerDialog tpd = (TimePickerDialog) getFragmentManager().findFragmentByTag("Timepickerdialog");
-        if(tpd != null) tpd.setOnTimeSetListener(this);
+        if (tpd != null) tpd.setOnTimeSetListener(this);
     }
 
     @Override
@@ -211,11 +229,11 @@ public class WhenEditFragment extends Fragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode,resultCode,data);
+        super.onActivityResult(requestCode, resultCode, data);
         addActivity.setProgress(false);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
-                Place selectedPlace = PlacePicker.getPlace(getActivity(),data);
+                Place selectedPlace = PlacePicker.getPlace(getActivity(), data);
                 String name = selectedPlace.getAddress().toString();
                 lat = selectedPlace.getLatLng().latitude;
                 lng = selectedPlace.getLatLng().longitude;
@@ -275,8 +293,8 @@ public class WhenEditFragment extends Fragment implements
             @Override
             public void onClick(View v) {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelDialogLocation" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelDialogLocation" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 dialog.dismiss();
             }
@@ -287,12 +305,12 @@ public class WhenEditFragment extends Fragment implements
             public void onClick(View v) {
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmDialogLocation" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmDialogLocation" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 location = editText.getText().toString();
-                if(!location.matches(""))
+                if (!location.matches(""))
                     locationText.setText(location);
                 dialog.dismiss();
             }
@@ -302,21 +320,20 @@ public class WhenEditFragment extends Fragment implements
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year,monthOfYear,dayOfMonth);
-        calendarStart.set(year,monthOfYear,dayOfMonth);
-        String day= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String month= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        calendar.set(yearEnd,monthOfYearEnd,dayOfMonthEnd);
-        String day2= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String month2= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String date = day+"/"+month+"/"+year;
-        String date2 = day2+"/"+month2+"/"+yearEnd;
+        calendar.set(year, monthOfYear, dayOfMonth);
+        calendarStart.set(year, monthOfYear, dayOfMonth);
+        String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        calendar.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+        String day2 = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String month2 = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String date = day + "/" + month + "/" + year;
+        String date2 = day2 + "/" + month2 + "/" + yearEnd;
 
 
-        if(validadeDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd))
-        {
+        if (validadeDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd)) {
             day_start = dayOfMonth;
             month_start = monthOfYear;
             year_start = year;
@@ -325,8 +342,7 @@ public class WhenEditFragment extends Fragment implements
             year_end = yearEnd;
             dateStart.setText(date);
             dateEnd.setText(date2);
-        }
-        else{
+        } else {
             day_start = dayOfMonth;
             month_start = monthOfYear;
             year_start = year;
@@ -339,14 +355,14 @@ public class WhenEditFragment extends Fragment implements
 
     }
 
-    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
-        if(yearEnd < year)
+    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if (yearEnd < year)
             return false;
-        if(year == yearEnd){
-            if(monthOfYearEnd < monthOfYear)
+        if (year == yearEnd) {
+            if (monthOfYearEnd < monthOfYear)
                 return false;
-            else if(monthOfYearEnd == monthOfYear){
-                if(dayOfMonthEnd < dayOfMonth)
+            else if (monthOfYearEnd == monthOfYear) {
+                if (dayOfMonthEnd < dayOfMonth)
                     return false;
             }
         }
@@ -360,21 +376,19 @@ public class WhenEditFragment extends Fragment implements
         String minuteString = String.format("%02d", minute);
         String hourStringEnd = String.format("%02d", hourOfDayEnd);
         String minuteStringEnd = String.format("%02d", minuteEnd);
-        String time = hourString+":"+minuteString;
-        String time2 = hourStringEnd+":"+minuteStringEnd;
+        String time = hourString + ":" + minuteString;
+        String time2 = hourStringEnd + ":" + minuteStringEnd;
 
-        if(day_start == -1)
+        if (day_start == -1)
             Toast.makeText(getActivity(), "Preencha primeiro a data!", Toast.LENGTH_LONG).show();
-        else if(validadeHour(hourOfDay, minute, hourOfDayEnd, minuteEnd))
-        {
+        else if (validadeHour(hourOfDay, minute, hourOfDayEnd, minuteEnd)) {
             minutes_start = minute;
             hour_start = hourOfDay;
             minutes_end = minuteEnd;
             hour_end = hourOfDayEnd;
             timeStart.setText(time);
             timeEnd.setText(time2);
-        }
-        else {
+        } else {
             minutes_start = minute;
             hour_start = hourOfDay;
             minutes_end = minute;
@@ -385,8 +399,8 @@ public class WhenEditFragment extends Fragment implements
 
     }
 
-    private boolean validadeHour(int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd){
-        if(sameDay() && day_start != -1){
+    private boolean validadeHour(int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+        if (sameDay() && day_start != -1) {
             if (hourOfDayEnd < hourOfDay)
                 return false;
             if (hourOfDayEnd == hourOfDay) {
@@ -398,7 +412,7 @@ public class WhenEditFragment extends Fragment implements
         return true;
     }
 
-    private boolean sameDay(){
+    private boolean sameDay() {
         return day_start == day_end && month_start == month_end && year_start == year_end;
     }
 
@@ -437,9 +451,9 @@ public class WhenEditFragment extends Fragment implements
     public List<Integer> getRepeatFromView() {
         List<Integer> list = new ArrayList<>();
         String temp = repeatEditText.getText().toString();
-        if(repeat_type == 0)
+        if (repeat_type == 0)
             repeat_qty = -1;
-        else if(temp.length() > 0)
+        else if (temp.length() > 0)
             repeat_qty = Integer.parseInt(temp);
 
         list.add(repeat_type);
@@ -448,11 +462,11 @@ public class WhenEditFragment extends Fragment implements
     }
 
     @Override
-    public boolean onLongClick(View v){
-        if(v == locationText && lat != -500){
+    public boolean onLongClick(View v) {
+        if (v == locationText && lat != -500) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             createDialogLocation(locationText.getText().toString());
         }
@@ -460,27 +474,28 @@ public class WhenEditFragment extends Fragment implements
     }
 
     @Override
-    public void onClick(View v){
-        if((v == mapText || v == locationText) && !locationNotWorking){
+    public void onClick(View v) {
+        if (v == locationText && !locationNotWorking) {
             addActivity.setProgress(true);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mapText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mapText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(lat != -500) {
+            if (lat != -500) {
                 LatLng latLng = new LatLng(lat, lng);
                 LatLngBounds latLngBounds = new LatLngBounds(latLng, latLng);
                 builder = new PlacePicker.IntentBuilder().setLatLngBounds(latLngBounds);
 
                 try {
                     placePicker = builder.build(getActivity());
-                } catch (Exception e) {}
+                } catch (Exception e) {
+                }
             }
 
             startActivityForResult(placePicker, PLACE_PICKER_REQUEST);
-        }else if(v == timeStart){
+        } else if (v == timeStart) {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
                     WhenEditFragment.this,
@@ -490,19 +505,19 @@ public class WhenEditFragment extends Fragment implements
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(hour_start != -1)
+            if (hour_start != -1)
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
-            tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            tpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             tpd.setStartTitle(getResources().getString(R.string.date_start));
             tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(0);
             tpd.show(getFragmentManager(), "Timepickerdialog");
-        }else if(v == timeEnd){
+        } else if (v == timeEnd) {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
                     WhenEditFragment.this,
@@ -512,19 +527,19 @@ public class WhenEditFragment extends Fragment implements
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(hour_start != -1)
+            if (hour_start != -1)
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
-            tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            tpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             tpd.setStartTitle(getResources().getString(R.string.date_start));
             tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(1);
             tpd.show(getFragmentManager(), "Timepickerdialog");
-        }else if(v == dateStart){
+        } else if (v == dateStart) {
             Calendar now = Calendar.getInstance();
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     WhenEditFragment.this,
@@ -535,19 +550,19 @@ public class WhenEditFragment extends Fragment implements
 
             dpd.setMinDate(now);
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(year_start != -1)
+            if (year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
-            dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.date_start));
             dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(0);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
-        }else if(v == dateEnd){
+        } else if (v == dateEnd) {
 
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     WhenEditFragment.this,
@@ -558,15 +573,15 @@ public class WhenEditFragment extends Fragment implements
 
             dpd.setMinDate(calendarStart);
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(year_start != -1)
+            if (year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
 
-            dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             dpd.setStartTitle(getResources().getString(R.string.date_start));
             dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(1);
@@ -575,25 +590,25 @@ public class WhenEditFragment extends Fragment implements
 
     }
 
-    public void setLayout(ActivityServer activityServer, boolean edit){
-        if(activityServer != null && dateStart!=null) {
+    public void setLayout(ActivityServer activityServer, boolean edit) {
+        if (activityServer != null && dateStart != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
 
-            String day= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-            String month= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-            calendar.set(activityServer.getYearEnd(),activityServer.getMonthEnd()-1,activityServer.getDayEnd());
-            String day2= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-            String month2= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-            String date = day+"/"+month+"/"+activityServer.getYearStart();
-            String date2 = day2+"/"+month2+"/"+activityServer.getYearEnd();
+            String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+            String day2 = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String month2 = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String date = day + "/" + month + "/" + activityServer.getYearStart();
+            String date2 = day2 + "/" + month2 + "/" + activityServer.getYearEnd();
 
             String hourString = String.format("%02d", activityServer.getHourStart());
             String minuteString = String.format("%02d", activityServer.getMinuteStart());
             String hourStringEnd = String.format("%02d", activityServer.getHourEnd());
             String minuteStringEnd = String.format("%02d", activityServer.getMinuteEnd());
-            String time = hourString+":"+minuteString;
-            String time2 = hourStringEnd+":"+minuteStringEnd;
+            String time = hourString + ":" + minuteString;
+            String time2 = hourStringEnd + ":" + minuteStringEnd;
 
             day_start = activityServer.getDayStart();
             month_start = activityServer.getMonthStart() - 1;
@@ -617,7 +632,7 @@ public class WhenEditFragment extends Fragment implements
             lat = activityServer.getLat();
             lng = activityServer.getLng();
 
-            if(!edit) {
+            if (!edit) {
 
                 if (activityServer.getRepeatType() == 0)
                     spinner.setSelectedIndex(activityServer.getRepeatType());
@@ -626,12 +641,11 @@ public class WhenEditFragment extends Fragment implements
                     repeatNumberBox.setVisibility(View.VISIBLE);
                     repeatEditText.setText(String.valueOf(activityServer.getRepeatQty()));
                 }
-            }else{
+            } else {
                 if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
                     spinner.setSelectedIndex(0);
                     repeatBox.setVisibility(View.VISIBLE);
-                }
-                else{
+                } else {
                     repeatBox.setVisibility(View.GONE);
                     repeatNumberBox.setVisibility(View.GONE);
                 }

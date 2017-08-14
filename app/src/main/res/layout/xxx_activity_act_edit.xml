@@ -10,8 +10,7 @@
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/actionBar">
+        android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollView"
@@ -82,7 +81,6 @@
 
                     </LinearLayout>
 
-
                     <RelativeLayout
                         android:id="@+id/pieceBox"
                         android:layout_width="110dp"
@@ -145,12 +143,14 @@
                         android:gravity="center"
                         android:orientation="horizontal"
                         android:paddingBottom="5dp"
-                        android:paddingTop="5dp">
+                        android:paddingTop="5dp"
+                        android:visibility="visible">
 
                         <ImageView
                             android:id="@+id/addImageIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:padding="5dp"
                             android:src="@drawable/ic_add"
                             android:tint="@color/deep_purple_400" />
 
@@ -161,6 +161,44 @@
                             android:text="@string/add_image"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/addImageIcon2"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_magic_wand"
+                            android:tint="@color/deep_purple_400" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/loadedImage"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/pieceBox"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center"
+                        android:orientation="horizontal"
+                        android:paddingBottom="5dp"
+                        android:paddingTop="5dp"
+                        android:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/loadedImageText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_image_loaded"
+                            android:textColor="@color/grey_600"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/loadedImageIcon"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_magic_wand" />
 
                     </LinearLayout>
 
@@ -183,57 +221,63 @@
                         android:id="@+id/title"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
-                        android:background="@drawable/bg_act_edit_box"
+                        android:backgroundTint="@color/grey_300"
                         android:gravity="center_vertical"
                         android:hint="@string/hint_title"
                         android:imeOptions="actionDone"
                         android:inputType="text"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:textColor="@color/grey_600"
+                        android:textColor="@color/grey_900"
                         android:textColorHint="@color/grey_400"
                         android:textSize="14sp"
                         android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/titleMax"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="right"
+                        android:text="0 de 100"
+                        android:textColor="@color/grey_400"
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_act_edit_box"
-                        android:minHeight="80dp"
-                        android:orientation="vertical"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="10dp">
+                        android:orientation="vertical">
 
                         <RelativeLayout
                             android:id="@+id/addTagBox"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:text="@string/act_tags"
-                                android:textColor="@color/grey_600"
-                                android:textSize="14sp" />
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
 
                             <ImageView
                                 android:id="@+id/addTagIcon"
-                                android:layout_width="50dp"
-                                android:layout_height="50dp"
-                                android:layout_alignParentRight="true"
-                                android:layout_centerVertical="true"
-                                android:padding="11dp"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:padding="5dp"
                                 android:src="@drawable/ic_add"
                                 android:tint="@color/deep_purple_400" />
+
+                            <TextView
+                                android:id="@+id/addTagText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/addTagIcon"
+                                android:text="@string/act_tags"
+                                android:textColor="@color/deep_purple_400"
+                                android:textSize="14sp" />
 
                         </RelativeLayout>
 
                         <android.support.v4.widget.NestedScrollView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
                             android:visibility="visible">
 
                             <com.cunoraz.tagview.TagView
@@ -250,13 +294,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_act_edit_box"
+                        android:backgroundTint="@color/grey_300"
                         android:gravity="center_vertical"
                         android:hint="@string/hint_description"
                         android:inputType="textMultiLine"
                         android:minHeight="40dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
                         android:textColor="@color/grey_600"
                         android:textColorHint="@color/grey_400"
                         android:textSize="14sp"
@@ -433,13 +475,14 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
-                            android:layout_marginRight="10dp"
+                            android:layout_marginRight="20dp"
                             android:text="@string/repeat_frequence"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp" />
@@ -447,28 +490,25 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="30dp"
-                            android:background="@drawable/bg_act_edit_box"
-                            android:drawableLeft="@drawable/ic_whatsapp"
-                            android:gravity="center_vertical"
-                            android:paddingRight="10dp"
-                            android:textColor="@color/grey_600"
-                            android:textColorHint="@color/grey_400"
-                            android:textSize="14sp">
+                            android:gravity="center_vertical">
 
                             <com.jaredrummler.materialspinner.MaterialSpinner
                                 android:id="@+id/repeatPicker"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/repeatIcon"
                                 android:clickable="true"
-                                android:gravity="center_horizontal"
-                                android:textColor="@color/grey_600"
                                 android:textSize="14sp"
                                 app:ms_arrow_tint="@color/grey_600"
+                                app:ms_background_color="@color/white"
                                 app:ms_dropdown_height="wrap_content"
                                 app:ms_dropdown_max_height="120dp"
                                 app:ms_text_color="@color/grey_600" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/horizontal_line_height"
+                                android:layout_below="@+id/repeatPicker"
+                                android:background="@color/horizontal_line" />
 
                         </RelativeLayout>
 
@@ -479,7 +519,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -492,22 +533,21 @@
 
                         <EditText
                             android:id="@+id/repeatEditText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="30dp"
-                            android:layout_marginRight="10dp"
-                            android:background="@drawable/bg_act_edit_box"
+                            android:layout_width="50dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="5dp"
+                            android:backgroundTint="@color/grey_300"
                             android:gravity="center"
                             android:hint="0"
                             android:imeOptions="actionDone"
                             android:inputType="number"
                             android:lines="1"
-                            android:paddingLeft="20dp"
-                            android:paddingRight="20dp"
                             android:textColor="@color/grey_600"
                             android:textColorHint="@color/grey_400"
                             android:textSize="14sp" />
 
                         <TextView
+                            android:id="@+id/repeatMax"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
@@ -518,11 +558,49 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/locationBoxAdd"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal"
+                        android:visibility="visible">
+
+                        <ImageView
+                            android:id="@+id/locationIconAdd"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_centerVertical="true"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_add"
+                            android:tint="@color/deep_purple_400" />
+
+                        <TextView
+                            android:id="@+id/locationTextAdd"
+                            android:layout_width="wrap_content"
+                            android:layout_height="40dp"
+                            android:gravity="center_vertical"
+                            android:lines="1"
+                            android:text="@string/add_local"
+                            android:textColor="@color/deep_purple_400"
+                            android:textSize="14sp" />
+
+                        <ImageView
+                            android:id="@+id/locationIconAdd2"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_centerVertical="true"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_location"
+                            android:tint="@color/deep_purple_400" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
                         android:id="@+id/locationBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -537,17 +615,15 @@
                         <TextView
                             android:id="@+id/locationText"
                             android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:background="@drawable/bg_act_edit_box"
-                            android:clickable="true"
-                            android:gravity="center_vertical"
-                            android:hint="@string/hint_local"
-                            android:lines="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_marginTop="8dp"
+                            android:ellipsize="end"
+                            android:text="Text"
                             android:textColor="@color/grey_600"
-                            android:textColorHint="@color/grey_400"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
 
                     </LinearLayout>
 
@@ -571,14 +647,11 @@
                             android:id="@+id/whatsAppGroupLink"
                             android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:background="@drawable/bg_act_edit_box"
+                            android:backgroundTint="@color/grey_300"
                             android:gravity="center_vertical"
                             android:hint="@string/hint_whatsapp_group_link"
                             android:imeOptions="actionDone"
                             android:inputType="text"
-                            android:lines="1"
-                            android:paddingLeft="10dp"
-                            android:paddingRight="10dp"
                             android:textColor="@color/grey_600"
                             android:textColorHint="@color/grey_400"
                             android:textSize="14sp" />
@@ -594,6 +667,7 @@
                         android:orientation="horizontal">
 
                         <TextView
+                            android:id="@+id/guestText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="10dp"
@@ -628,7 +702,6 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
                         android:layout_marginTop="20dp"
                         android:text="@string/act_who_can_invite"
                         android:textColor="@color/deep_purple_400"
@@ -638,65 +711,56 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp"
-                        android:background="@drawable/bg_act_edit_box"
-                        android:paddingBottom="5dp"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp"
-                        android:paddingTop="5dp">
+                        android:layout_marginTop="7dp">
 
                         <com.jaredrummler.materialspinner.MaterialSpinner
                             android:id="@+id/visibilityCalendarPicker"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:clickable="true"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:textColor="@color/grey_900"
                             android:textSize="14sp"
                             android:textStyle="bold"
                             app:ms_arrow_tint="@color/grey_900"
+                            app:ms_background_color="@color/white"
                             app:ms_dropdown_height="wrap_content"
                             app:ms_dropdown_max_height="120dp"
                             app:ms_text_color="@color/grey_900" />
+
+                        <View
+                            android:id="@+id/horizontalBottomLine"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/horizontal_line_height"
+                            android:layout_below="@+id/visibilityCalendarPicker"
+                            android:background="@color/horizontal_line" />
 
                         <TextView
                             android:id="@+id/feedVisibility"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/visibilityCalendarPicker"
+                            android:layout_below="@+id/horizontalBottomLine"
+                            android:layout_marginTop="2dp"
                             android:text="@string/feed_visibility_1"
-                            android:textColor="@color/grey_900"
+                            android:textColor="@color/grey_600"
                             android:textSize="12sp" />
 
                     </RelativeLayout>
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/advanceButton"
+                <Space
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_creation_advance"
-                    android:clickable="true"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="@string/save_updates"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_height="60dp" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include
+        layout="@layout/btn_confirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
     <include
         android:id="@+id/progressBox"

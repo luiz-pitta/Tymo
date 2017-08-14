@@ -97,7 +97,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
     private RelativeLayout itemBoxInterests;
     private TextView cleanInterests;
     private ImageView filterIconInterests, expandMoreIconInterests, addTagIcon;
-    private LinearLayout addTagBox;
+    private RelativeLayout addTagBox;
     private ExpandableLinearLayout expandableLayoutInterests;
     private TagView tagGroup;
     private OnTagDeleteListener mOnTagDeleteListener = new OnTagDeleteListener() {
@@ -741,7 +741,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         expandMoreIconInterests = (ImageView) findViewById(R.id.expandMoreIconInterests);
         expandableLayoutInterests = (ExpandableLinearLayout)findViewById(R.id.expandableLayoutInterests);
         tagGroup = (TagView) findViewById(R.id.tag_group);
-        addTagBox = (LinearLayout) findViewById(R.id.addTagBox);
+        addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
         addTagIcon = (ImageView) findViewById(R.id.addTagIcon);
         addTagText = (TextView) findViewById(R.id.addTagText);
 
@@ -769,8 +769,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         });
 
         itemBoxInterests.setOnClickListener(this);
-        addTagIcon.setOnClickListener(this);
-        addTagIcon.setOnTouchListener(this);
+        addTagBox.setOnClickListener(this);
+        addTagBox.setOnTouchListener(this);
         cleanInterests.setOnClickListener(this);
 
         if(filterWrapper != null){
@@ -1070,7 +1070,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             intent.putStringArrayListExtra("guest_list", list);
 
             startActivityForResult(intent, 133);
-        }else if(v == addTagIcon){
+        }else if(v == addTagBox){
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1315,11 +1315,13 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
-        else if (view == addTagIcon) {
+        else if (view == addTagBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+                addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+                addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         }
         else if (view == cleanDate) {

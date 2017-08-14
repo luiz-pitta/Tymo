@@ -52,8 +52,8 @@ import io.reactivex.schedulers.Schedulers;
 
 public class RegisterPart3Activity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private ImageView mBackButton;
-    private TextView m_title, m_title2, advanceButton;
+    private ImageView mBackButton, addTagIcon;
+    private TextView m_title, m_title2, advanceButton, addTagText;
     private LinearLayout progressBox;
     private RelativeLayout addTagBox;
 
@@ -98,12 +98,15 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         advanceButton = (TextView) findViewById(R.id.advanceButton);
         progressBox = (LinearLayout) findViewById(R.id.progressBox);
         addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
+        addTagText = (TextView) findViewById(R.id.addTagText);
+        addTagIcon = (ImageView) findViewById(R.id.addTagIcon);
 
         addTagBox.setOnClickListener(this);
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
         advanceButton.setOnTouchListener(this);
+        addTagBox.setOnTouchListener(this);
 
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
@@ -389,6 +392,13 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
                 advanceButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
                 advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
             }
+        }
+        else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+            addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            addTagText.setTextColor(ContextCompat.getColor(this, R.color.white));
+        } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+            addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_100));
+            addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
         }
 
         return false;

@@ -6,11 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.cunoraz.tagview.OnTagDeleteListener;
 import com.cunoraz.tagview.Tag;
@@ -33,12 +38,14 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WhatEditFragment extends Fragment implements View.OnClickListener {
+public class WhatEditFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
     private Tag tag;
     private TagView tagGroup;
+    private TextView titleMax, addTagText;
     private EditText tittleEditText, descriptionEditText, whatsAppEditText;
     private RelativeLayout addTagBox;
+    private ImageView addTagIcon;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -76,11 +83,34 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
         tagGroup = (TagView) view.findViewById(R.id.tagGroup);
         descriptionEditText = (EditText) view.findViewById(R.id.description);
         tittleEditText = (EditText) view.findViewById(R.id.title);
+        titleMax = (TextView) view.findViewById(R.id.titleMax);
         whatsAppEditText = (EditText) view.findViewById(R.id.whatsAppGroupLink);
         addTagBox = (RelativeLayout) view.findViewById(R.id.addTagBox);
+        addTagText = (TextView) view.findViewById(R.id.addTagText);
+        addTagIcon = (ImageView) view.findViewById(R.id.addTagIcon);
 
         addTagBox.setOnClickListener(this);
+        addTagBox.setOnTouchListener(this);
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
+
+        titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+
+        tittleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+            }
+        });
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -238,5 +268,20 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener {
                 tag.isDeletable = true;
             tagGroup.addTag(tag);
         }
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == addTagBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                addTagIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+                addTagText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                addTagIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
+                addTagText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
+            }
+        }
+
+        return false;
     }
 }

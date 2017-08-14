@@ -25,37 +25,37 @@
             android:orientation="vertical">
 
             <LinearLayout
-                android:id="@+id/addTagBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_act_edit_box"
                 android:orientation="vertical"
-                android:paddingBottom="5dp"
-                android:paddingLeft="10dp">
+                android:paddingBottom="5dp">
 
                 <RelativeLayout
-                    android:layout_width="match_parent"
+                    android:id="@+id/addTagBox"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="5dp"
                     android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/addTagIcon"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
+                        android:layout_centerVertical="true"
+                        android:padding="5dp"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/deep_purple_400" />
 
                     <TextView
                         android:id="@+id/addTagText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/addTagIcon"
                         android:text="@string/filter_tags"
-                        android:textColor="@color/grey_600"
+                        android:textColor="@color/deep_purple_400"
                         android:textSize="14sp" />
-
-                    <ImageView
-                        android:id="@+id/addTagIcon"
-                        android:layout_width="50dp"
-                        android:layout_height="50dp"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:padding="11dp"
-                        android:src="@drawable/ic_add"
-                        android:tint="@color/deep_purple_400" />
 
                 </RelativeLayout>
 
@@ -63,6 +63,8 @@
                     android:id="@+id/tags_laoyut"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
                     android:visibility="visible">
 
                     <com.cunoraz.tagview.TagView
@@ -127,10 +129,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_centerVertical="true"
-            android:paddingRight="10dp"
-            android:paddingLeft="10dp"
             android:layout_toLeftOf="@+id/expandMoreIconInterests"
             android:gravity="center"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:text="@string/clean"
             android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"

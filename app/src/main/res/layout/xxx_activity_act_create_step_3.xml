@@ -366,31 +366,20 @@
 
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/advanceButton"
+                <Space
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_marginBottom="30dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/btn_creation_advance"
-                    android:clickable="true"
-                    android:ellipsize="end"
-                    android:gravity="center"
-                    android:lines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:text="@string/finish"
-                    android:textAllCaps="true"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:layout_height="60dp" />
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
+
+    <include
+        layout="@layout/btn_confirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
 
     <include
         android:id="@+id/progressBox"
