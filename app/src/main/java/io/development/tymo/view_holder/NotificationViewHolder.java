@@ -84,10 +84,12 @@ public class NotificationViewHolder extends BaseViewHolder<NotificationModel> {
             cubeUpperBoxIcon.setColorFilter(invite.getColorUpper());
             cubeLowerBoxIcon.setColorFilter(invite.getColorLower());
             pieceBox.setVisibility(View.VISIBLE);
+            itemIcon.setVisibility(View.GONE);
         }
         else if(invite.getActivity() instanceof FlagServer) {
             itemIcon.setVisibility(View.VISIBLE);
-            if(((FlagServer) invite.getActivity()).getType() == true){
+            pieceBox.setVisibility(View.GONE);
+            if(((FlagServer) invite.getActivity()).getType()){
                 itemIcon.setImageResource(R.drawable.ic_flag_available);
                 text1.setTextColor(context.getResources().getColor(R.color.flag_available));
             }
@@ -96,6 +98,7 @@ public class NotificationViewHolder extends BaseViewHolder<NotificationModel> {
                 text1.setTextColor(context.getResources().getColor(R.color.flag_unavailable));
             }
         }else {
+            pieceBox.setVisibility(View.GONE);
             itemIcon.setVisibility(View.VISIBLE);
             itemIcon.setImageResource(R.drawable.ic_reminder);
         }
