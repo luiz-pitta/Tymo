@@ -158,6 +158,7 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
         editor.putBoolean(Constants.INTRO, false);
         editor.putString(Constants.PREF_ACCOUNT_NAME, "");
+        editor.putString("ListCalendarImportGoogle", "");
         editor.apply();
 
         if(AccessToken.getCurrentAccessToken() != null)

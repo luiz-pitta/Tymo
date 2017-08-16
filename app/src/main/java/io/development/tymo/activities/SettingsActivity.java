@@ -61,6 +61,8 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.google.api.services.calendar.model.CalendarList;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
@@ -111,13 +113,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private TextView versionName;
 
     private CallbackManager callbackManager;
-    GoogleAccountCredential mCredential;
+    private GoogleAccountCredential mCredential;
 
     private final int USER_UPDATE = 37;
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final int REQUEST_AUTHORIZATION = 1001;
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
 
     private LinearLayout account, importFromFacebook, importFromGoogleAgenda;
@@ -371,6 +373,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
         editor.putBoolean(Constants.INTRO, false);
         editor.putString(Constants.PREF_ACCOUNT_NAME, "");
+        editor.putString("ListCalendarImportGoogle", "");
         editor.apply();
 
         if (AccessToken.getCurrentAccessToken() != null)
@@ -738,7 +741,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
                 boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
 
-                if(!login_type) {
+                if(!login_type || AccessToken.getCurrentAccessToken() == null) {
                     if(AccessToken.getCurrentAccessToken() != null)
                         LoginManager.getInstance().logOut();
 
@@ -914,9 +917,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     calendarSelectedList.add(accountsList.get(j));
                 }
 
-                new GetCalendarEventsAsync(mCredential).execute(calendarSelectedList.toArray(new String[calendarSelectedList.size()]));
+                if (calendarSelectedList.size() > 0) {
+                    SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(calendarSelectedList);
+                    editor.putString("ListCalendarImportGoogle", json);
+                    editor.apply();
 
-                dialog.dismiss();
+                    new GetCalendarEventsAsync(mCredential).execute(calendarSelectedList.toArray(new String[calendarSelectedList.size()]));
+
+                    dialog.dismiss();
+                }else
+                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error3), Toast.LENGTH_LONG).show();
+
             }
         });
 
@@ -1041,7 +1054,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         String name_place;
         JSONObject place;
         Double lat, lng;
-        Date start = new Date(), end = new Date();
+        Date start = new Date(), end;
         Calendar calendar = Calendar.getInstance();
         Calendar c = Calendar.getInstance();
 
@@ -1063,7 +1076,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                 start = format.parse(start_time);
             } catch (Exception e) {
-                start_time = "";
             }
 
             try {
@@ -1071,7 +1083,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                 end = format.parse(end_time);
             } catch (Exception e) {
-                end_time = "";
+                end = start;
             }
 
             try {
@@ -1111,18 +1123,37 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             else if(year == year_today && month == month_today && day < day_today)
                 return null;
 
-            activityServer.setDayStart(calendar.get(Calendar.DAY_OF_MONTH));
-            activityServer.setMonthStart(calendar.get(Calendar.MONTH)+1);
-            activityServer.setYearStart(calendar.get(Calendar.YEAR));
+            activityServer.setDayStart(day);
+            activityServer.setMonthStart(month);
+            activityServer.setYearStart(year);
             activityServer.setHourStart(calendar.get(Calendar.HOUR_OF_DAY));
             activityServer.setMinuteStart(calendar.get(Calendar.MINUTE));
 
-            calendar.setTime(end);
-            activityServer.setDayEnd(calendar.get(Calendar.DAY_OF_MONTH));
-            activityServer.setMonthEnd(calendar.get(Calendar.MONTH)+1);
-            activityServer.setYearEnd(calendar.get(Calendar.YEAR));
-            activityServer.setHourEnd(calendar.get(Calendar.HOUR_OF_DAY));
-            activityServer.setMinuteEnd(calendar.get(Calendar.MINUTE));
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(end);
+
+            int y2 = c2.get(Calendar.YEAR);
+            int m2 = c2.get(Calendar.MONTH) + 1;
+            int d2 = c2.get(Calendar.DAY_OF_MONTH);
+            int minute2 = c2.get(Calendar.MINUTE);
+            int hour2 = c2.get(Calendar.HOUR_OF_DAY);
+
+            LocalDate starts = new LocalDate(year, month, day);
+            LocalDate ends = new LocalDate(y2, m2, d2);
+            Period timePeriod = new Period(starts, ends, PeriodType.days());
+            if (timePeriod.getDays() > 15) {
+                activityServer.setDayEnd(day);
+                activityServer.setMonthEnd(month);
+                activityServer.setYearEnd(year);
+                activityServer.setMinuteEnd(calendar.get(Calendar.MINUTE));
+                activityServer.setHourEnd(calendar.get(Calendar.HOUR_OF_DAY));
+            } else {
+                activityServer.setDayEnd(d2);
+                activityServer.setMonthEnd(m2);
+                activityServer.setYearEnd(y2);
+                activityServer.setMinuteEnd(minute2);
+                activityServer.setHourEnd(hour2);
+            }
 
             activityServer.setRepeatType(0);
             activityServer.setRepeatQty(-1);
@@ -1130,8 +1161,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.facebook_dark_blue));
             activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.facebook_blue));
             activityServer.setCubeIcon("");
-
-            activityServer.setCreator(user.getEmail());
 
             activityServer.setWhatsappGroupLink("");
 
@@ -1391,7 +1420,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                     for (Event event : items) {
 
-                        if (event.getRecurrence() == null && event.getRecurringEventId() == null) {
+                        if (event.getRecurrence() == null && event.getRecurringEventId() == null && !event.getStatus().equals("cancelled")) {
                             ActivityServer server = createActivityGoogle(event);
                             if(server != null)
                                 list_activities_to_import.add(server);
@@ -1416,7 +1445,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
                     for (Event event : itemsRepeat) {
 
-                        if(event.getRecurringEventId() != null) {
+                        if(event.getRecurringEventId() != null && !event.getStatus().equals("cancelled")) {
                             ActivityServer server = createActivityGoogle(event);
                             if(server != null)
                                 list_activities_to_import.add(server);

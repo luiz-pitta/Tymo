@@ -1,5 +1,6 @@
 package io.development.tymo.activities;
 
+
 import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -9,6 +10,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
@@ -29,20 +31,48 @@ import com.aspsine.fragmentnavigator.FragmentNavigator;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
+import com.facebook.AccessToken;
+import com.facebook.CallbackManager;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
 import com.facebook.rebound.SpringSystem;
+import com.google.api.client.extensions.android.http.AndroidHttp;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.api.client.util.DateTime;
+import com.google.api.client.util.ExponentialBackOff;
+import com.google.api.services.calendar.CalendarScopes;
+import com.google.api.services.calendar.model.Event;
+import com.google.api.services.calendar.model.Events;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaouan.revealator.Revealator;
 import com.miguelcatalan.materialsearchview.MaterialSearchView;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
@@ -105,8 +135,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int ABOUT = 2;
     private static final int SEARCH = 3;
 
+    private static final int REQUEST_AUTHORIZATION = 1001;
+    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+
     private View addView;
 
+    private CallbackManager callbackManager;
+    private GoogleAccountCredential mCredential;
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
     private JobManager mJobManager;
@@ -138,6 +173,292 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_main);
 
         initInterface(savedInstanceState);
+
+        if(AccessToken.getCurrentAccessToken() != null)
+            importFromFacebookRequest();
+
+        Gson gson = new Gson();
+        ArrayList<String> list_json = new ArrayList<>();
+        String json = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString("ListCalendarImportGoogle", "");
+        if(!json.matches(""))
+            list_json = gson.fromJson(json, new TypeToken<ArrayList<String>>(){}.getType());
+
+        if(list_json.size() > 0 && mCredential.getSelectedAccountName() != null && !mCredential.getSelectedAccountName().equals(""))
+            new GetCalendarEventsAsync(mCredential).execute(list_json.toArray(new String[list_json.size()]));
+
+
+    }
+
+    private void importFromGoogle(ArrayList<ActivityServer> activityServers) {
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(activityServers)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGoogleImported,this::handleError));
+    }
+
+    private void handleResponseGoogleImported(Response response) {}
+
+    private void importFromFacebookRequest(){
+        GraphRequest request = GraphRequest.newMeRequest(
+                AccessToken.getCurrentAccessToken(),
+                new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject object, GraphResponse response) {
+
+                        // Application code
+                        try {
+                            JSONArray events = object.getJSONObject("events").getJSONArray("data");
+                            ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
+                            for(int i=0;i<events.length();i++){
+                                JSONObject jsonObject = events.getJSONObject(i);
+                                ActivityServer server = createActivity(jsonObject);
+                                if(server != null)
+                                    list_activities_to_import.add(server);
+                            }
+
+                            if(list_activities_to_import.size() > 0)
+                                importFromFacebook(list_activities_to_import);
+                            else {
+                            }
+                        }
+                        catch (Exception  e){
+                        }
+                    }
+                });
+        Bundle parameters = new Bundle();
+        parameters.putString("fields", "id, email, events");
+        request.setParameters(parameters);
+        request.executeAsync();
+    }
+
+    private void importFromFacebook(ArrayList<ActivityServer> activityServers) {
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityFacebook(activityServers)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseFacebookImported,this::handleError));
+    }
+
+    private void handleResponseFacebookImported(Response response) {
+
+    }
+
+    protected void facebookSDKInitialize() {
+        callbackManager = CallbackManager.Factory.create();
+    }
+
+    private ActivityServer createActivity(JSONObject jsonObject){
+        ActivityServer activityServer = new ActivityServer();
+        String id = "0", description="", start_time, end_time, name="";
+        String name_place;
+        JSONObject place;
+        Double lat, lng;
+        Date start = new Date(), end;
+        Calendar calendar = Calendar.getInstance();
+        Calendar c = Calendar.getInstance();
+
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String creator = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        try {
+            id = jsonObject.getString("id");
+            name = jsonObject.getString("name");
+
+            try {
+                description = jsonObject.getString("description");
+            } catch (Exception e) {
+                description = "";
+            }
+
+            try {
+                start_time = jsonObject.getString("start_time");
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                start = format.parse(start_time);
+            } catch (Exception e) {
+            }
+
+            try {
+                end_time = jsonObject.getString("end_time");
+                DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+                end = format.parse(end_time);
+            } catch (Exception e) {
+                end = start;
+            }
+
+            try {
+                place = jsonObject.getJSONObject("place");
+                name_place = place.getString("name");
+                lat = place.getJSONObject("location").getDouble("latitude");
+                lng = place.getJSONObject("location").getDouble("longitude");
+            } catch (Exception e) {
+                name_place = "";
+                lat = -500.0;
+                lng = -500.0;
+            }
+
+            activityServer.setIdFacebook(Long.parseLong(id));
+            activityServer.setTitle(name);
+            activityServer.setDescription(description);
+            activityServer.setLocation(name_place);
+            activityServer.setInvitationType(0);
+
+            activityServer.setLat(lat);
+            activityServer.setLng(lng);
+
+            calendar.setTime(start);
+
+            int day = calendar.get(Calendar.DAY_OF_MONTH);
+            int month = calendar.get(Calendar.MONTH) + 1;
+            int year = calendar.get(Calendar.YEAR);
+
+            int day_today = c.get(Calendar.DAY_OF_MONTH);
+            int month_today = c.get(Calendar.MONTH)+1;
+            int year_today = c.get(Calendar.YEAR);
+
+            if(year < year_today)
+                return null;
+            else if(year == year_today && month < month_today)
+                return null;
+            else if(year == year_today && month == month_today && day < day_today)
+                return null;
+
+            activityServer.setDayStart(day);
+            activityServer.setMonthStart(month);
+            activityServer.setYearStart(year);
+            activityServer.setHourStart(calendar.get(Calendar.HOUR_OF_DAY));
+            activityServer.setMinuteStart(calendar.get(Calendar.MINUTE));
+
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(end);
+
+            int y2 = c2.get(Calendar.YEAR);
+            int m2 = c2.get(Calendar.MONTH) + 1;
+            int d2 = c2.get(Calendar.DAY_OF_MONTH);
+            int minute2 = c2.get(Calendar.MINUTE);
+            int hour2 = c2.get(Calendar.HOUR_OF_DAY);
+
+            LocalDate starts = new LocalDate(year, month, day);
+            LocalDate ends = new LocalDate(y2, m2, d2);
+            Period timePeriod = new Period(starts, ends, PeriodType.days());
+            if (timePeriod.getDays() > 15) {
+                activityServer.setDayEnd(day);
+                activityServer.setMonthEnd(month);
+                activityServer.setYearEnd(year);
+                activityServer.setMinuteEnd(calendar.get(Calendar.MINUTE));
+                activityServer.setHourEnd(calendar.get(Calendar.HOUR_OF_DAY));
+            } else {
+                activityServer.setDayEnd(d2);
+                activityServer.setMonthEnd(m2);
+                activityServer.setYearEnd(y2);
+                activityServer.setMinuteEnd(minute2);
+                activityServer.setHourEnd(hour2);
+            }
+
+            activityServer.setRepeatType(0);
+            activityServer.setRepeatQty(-1);
+
+            activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.facebook_dark_blue));
+            activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.facebook_blue));
+            activityServer.setCubeIcon("");
+
+            activityServer.setWhatsappGroupLink("");
+
+            activityServer.addTags(getResources().getString(R.string.settings_import_from_facebook_tag));
+
+            activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+            Calendar calendar2 = Calendar.getInstance();
+            calendar2.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+            activityServer.setDateTimeStart(calendar2.getTimeInMillis());
+
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
+            activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
+
+            activityServer.setCreator(creator);
+        }
+        catch (Exception e){
+
+        }
+        return activityServer;
+    }
+
+    private ActivityServer createActivityGoogle(Event event){
+        ActivityServer activityServer = new ActivityServer();
+
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String creator = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        activityServer.setIdGoogle(event.getId());
+        activityServer.setTitle(event.getSummary() != null ? event.getSummary() : getResources().getString(R.string.settings_import_from_google_agenda_tag));
+        activityServer.setDescription(event.getDescription() != null ? event.getDescription() : "");
+        activityServer.setLat(-500);
+        activityServer.setLng(-500);
+        activityServer.setLocation(event.getLocation() != null ? event.getLocation() : "");
+        activityServer.setRepeatType(0);
+        activityServer.setRepeatQty(-1);
+        activityServer.setInvitationType(0);
+        activityServer.setWhatsappGroupLink("");
+        activityServer.addTags(getResources().getString(R.string.settings_import_from_google_agenda_tag));
+
+        activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube));
+        activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube_light));
+
+        activityServer.setCreator(creator);
+        activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+        DateTime start = event.getStart().getDateTime();
+        DateTime end = event.getEnd().getDateTime();
+        if (start == null) // All-day events don't have start times, so just use the start date.
+            start = event.getStart().getDate();
+
+        if (end == null) // All-day events don't have start times, so just use the start date.
+            end = event.getEnd().getDate();
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(start.getValue());
+        int y1 = c.get(Calendar.YEAR);
+        int m1 = c.get(Calendar.MONTH) + 1;
+        int d1 = c.get(Calendar.DAY_OF_MONTH);
+        int minute1 = c.get(Calendar.MINUTE);
+        int hour1 = c.get(Calendar.HOUR_OF_DAY);
+
+        activityServer.setDayStart(d1);
+        activityServer.setMonthStart(m1);
+        activityServer.setYearStart(y1);
+        activityServer.setMinuteStart(minute1);
+        activityServer.setHourStart(hour1);
+
+        c.setTimeInMillis(end.getValue());
+        int y2 = c.get(Calendar.YEAR);
+        int m2 = c.get(Calendar.MONTH) + 1;
+        int d2 = c.get(Calendar.DAY_OF_MONTH);
+        int minute2 = c.get(Calendar.MINUTE);
+        int hour2 = c.get(Calendar.HOUR_OF_DAY);
+
+        LocalDate starts = new LocalDate(y1, m1, d1);
+        LocalDate ends = new LocalDate(y2, m2, d2);
+        Period timePeriod = new Period(starts, ends, PeriodType.days());
+        if (timePeriod.getDays() > 15) {
+            activityServer.setDayEnd(d1);
+            activityServer.setMonthEnd(m1);
+            activityServer.setYearEnd(y1);
+            activityServer.setMinuteEnd(minute1);
+            activityServer.setHourEnd(hour1);
+        } else {
+            activityServer.setDayEnd(d2);
+            activityServer.setMonthEnd(m2);
+            activityServer.setYearEnd(y2);
+            activityServer.setMinuteEnd(minute2);
+            activityServer.setHourEnd(hour2);
+        }
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+        activityServer.setDateTimeStart(calendar2.getTimeInMillis());
+
+        calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
+        activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
+
+        return activityServer;
     }
 
     @Override
@@ -273,6 +594,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void initInterface(Bundle savedInstanceState){
         mSubscriptions = new CompositeDisposable();
         mJobManager = JobManager.instance();
+        facebookSDKInitialize();
+
+        mCredential = GoogleAccountCredential.usingOAuth2(
+                getApplicationContext(), Arrays.asList(SCOPES))
+                .setBackOff(new ExponentialBackOff());
+
+        String accountName = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE)
+                .getString(Constants.PREF_ACCOUNT_NAME, null);
+
+        if (accountName != null && !accountName.equals(""))
+            mCredential.setSelectedAccountName(accountName);
 
         String token = FirebaseInstanceId.getInstance().getToken();
         if(token != null) {
@@ -628,6 +960,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode == RESULT_OK)
+            callbackManager.onActivityResult(requestCode, resultCode, data);
+
+
         if (requestCode == MaterialSearchView.REQUEST_VOICE && resultCode == RESULT_OK) {
             ArrayList<String> matches = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
             if (matches != null && matches.size() > 0) {
@@ -692,8 +1030,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             searchFragment.doSearchFilter(filterServer);
         }
-
-        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void searchViewInit(){
@@ -1132,5 +1468,116 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         setIntent(intent);
+    }
+
+    private class GetCalendarEventsAsync extends AsyncTask<String, Void, Integer> {
+        private com.google.api.services.calendar.Calendar mService = null;
+        private Exception mLastError = null;
+
+        GetCalendarEventsAsync(GoogleAccountCredential credential) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.calendar.Calendar.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName(getString(R.string.app_name))
+                    .build();
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            try {
+                ArrayList<String> calendarList = new ArrayList<>();
+                calendarList.addAll(Arrays.asList(params));
+
+                return getDataFromApi(calendarList);
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        private Integer getDataFromApi(ArrayList<String> calendarList) throws IOException {
+            Calendar calendar = Calendar.getInstance();
+
+            calendar.add(Calendar.MONTH, 3);
+            DateTime now = new DateTime(System.currentTimeMillis());
+            DateTime end = new DateTime(calendar.getTimeInMillis());
+
+            ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
+
+            for(String name : calendarList) {
+                String pageToken = null;
+                do { //Get events without repeat
+                    Events events = mService.events()
+                            .list(name)
+                            .setPageToken(pageToken)
+                            .setMaxResults(2000)
+                            .setTimeMin(now)
+                            .execute();
+
+                    List<Event> items = events.getItems();
+
+                    for (Event event : items) {
+
+                        if (event.getRecurrence() == null && event.getRecurringEventId() == null && !event.getStatus().equals("cancelled")) {
+                            ActivityServer server = createActivityGoogle(event);
+                            if(server != null)
+                                list_activities_to_import.add(server);
+                        }
+                    }
+                    pageToken = events.getNextPageToken();
+                } while (pageToken != null);
+
+                pageToken = null;
+                do { //Get events with repeat
+                    Events eventsRepeat = mService.events()
+                            .list(name)
+                            .setPageToken(pageToken)
+                            .setMaxResults(2000)
+                            .setTimeMin(now)
+                            .setTimeMax(end)
+                            .setSingleEvents(true)
+                            .setShowDeleted(false)
+                            .setOrderBy("startTime")
+                            .execute();
+                    List<Event> itemsRepeat = eventsRepeat.getItems();
+
+                    for (Event event : itemsRepeat) {
+
+                        if(event.getRecurringEventId() != null && !event.getStatus().equals("cancelled")) {
+                            ActivityServer server = createActivityGoogle(event);
+                            if(server != null)
+                                list_activities_to_import.add(server);
+                        }
+                    }
+                    pageToken = eventsRepeat.getNextPageToken();
+                } while (pageToken != null);
+            }
+
+            if(list_activities_to_import.size() > 0)
+                importFromGoogle(list_activities_to_import);
+
+            return list_activities_to_import.size();
+        }
+
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onPostExecute(Integer output) {
+        }
+
+        @Override
+        protected void onCancelled() {
+            if (mLastError != null) {
+                if (mLastError instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(
+                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                            REQUEST_AUTHORIZATION);
+                }
+            }
+        }
     }
 }
