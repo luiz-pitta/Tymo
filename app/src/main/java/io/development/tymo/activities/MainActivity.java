@@ -264,8 +264,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleError(Throwable error) {
         if(Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
-        else
-            Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
+        //else
+        //    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     private void handleError2(Throwable error) {}
@@ -684,7 +684,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             filterServer = wrap.getFilterServer();
 
-            filterServer.setQuery(searchView.getQuery());
+            String query = !searchView.getQuery().equals("") ? searchView.getQuery() : ".";
+
+            filterServer.setQuery(query);
 
             SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
 
@@ -700,7 +702,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                ((SearchFragment)mNavigator.getFragment(SEARCH)).doSearch(query);
+                if(filterServer == null || !filterServer.isFilterFilled())
+                    ((SearchFragment)mNavigator.getFragment(SEARCH)).doSearch(query);
+                else
+                    ((SearchFragment)mNavigator.getFragment(SEARCH)).doSearchFilter(filterServer);
+
                 return false;
             }
 

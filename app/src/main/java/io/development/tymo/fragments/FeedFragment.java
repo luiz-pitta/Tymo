@@ -55,6 +55,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
+import io.development.tymo.BuildConfig;
 import io.development.tymo.R;
 import io.development.tymo.TymoApplication;
 import io.development.tymo.activities.FilterActivity;
@@ -489,6 +490,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             feedListFragment.setProgress(true);
 
         dateTymo.setIdDevice(Settings.Secure.getString(getActivity().getContentResolver(), Settings.Secure.ANDROID_ID));
+        dateTymo.setCurrentVersionApp(BuildConfig.VERSION_NAME);
         mSubscriptions.add(NetworkUtil.getRetrofit().getFeedActivities(email, dateTymo)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

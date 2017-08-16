@@ -334,6 +334,7 @@
     <string name="password_reset_text_1">Redefinição de senha</string>
     <string name="password_reset_text_2">Digite a nova senha.</string>
     <string name="permission_import_from_google_agenda">Você precisa dessa permissão para importar do Google Agenda</string>
+    <string name="permission_import_from_google_agenda2">Essa funcionalidade precisa do Google Play Services. Por favor instale</string>
     <string name="permission_location">Precisa da sua localização para essa funcionalidade!</string>
     <string name="popup_message_edit_all_future">Todas futuras</string>
     <string name="popup_message_edit_commitments_with_repetitions">Compromisso com repetições!</string>
@@ -472,7 +473,7 @@
     <string name="settings_import_from_google_agenda_no_commitments">Você não possui nenhum compromisso para importar!</string>
     <string name="settings_import_from_google_agenda_success">Importado do Google Agenda com sucesso!</string>
     <string name="settings_import_from_google_agenda_tag">Google Agenda</string>
-    <string name="settings_import_from_google_agenda_text">Você deseja importar seus compromissos de qual conta?</string>
+    <string name="settings_import_from_google_agenda_text">Você deseja importar seus compromissos de quais contas?</string>
     <string name="settings_import_from_google_agenda_title">Google Agenda</string>
     <string name="settings_import_from_google_agenda">Importar Compromissos do Google Agenda</string>
     <string name="settings_list_blocked_users">Lista de Usuários Bloqueados</string>

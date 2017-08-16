@@ -42,6 +42,9 @@ public interface RetrofitInterface {
     @POST("import_from_facebook")
     Observable<Response> registerActivityFacebook(@Body ArrayList<ActivityServer> activitiesServer);
 
+    @POST("import_from_google_new_api")
+    Observable<Response> registerActivityGooglenewApi(@Body ArrayList<ActivityServer> activitiesServer);
+
     @POST("import_from_google")
     Observable<Response> registerActivityGoogle(@Body ArrayList<ActivityServer> activitiesServer);
 

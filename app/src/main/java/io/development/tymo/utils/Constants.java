@@ -22,6 +22,7 @@ public class Constants {
     public static final String APP_INFO = "app_info";
     public static final String LOGIN_TYPE = "login_type";
     public static final String USER_NAME = "user_name";
+    public static final String PREF_ACCOUNT_NAME = "accountName";
 
     public static final int FILTER_RESULT = 157;
     public static final int REGISTER_ACT = 37;

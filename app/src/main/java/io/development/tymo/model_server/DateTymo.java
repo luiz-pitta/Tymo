@@ -13,6 +13,7 @@ public class DateTymo {
     private long date_time;
     private long date_time_end;
     private String id_device;
+    private String current_version_app;
 
     private double lat_current;
     private double lng_current;
@@ -51,6 +52,10 @@ public class DateTymo {
 
     public void setIdDevice(String id_device) {
         this.id_device = id_device;
+    }
+
+    public void setCurrentVersionApp(String current_version_app) {
+        this.current_version_app = current_version_app;
     }
 
     public int getDay() {
