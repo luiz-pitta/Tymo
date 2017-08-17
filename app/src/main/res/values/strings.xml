@@ -258,11 +258,11 @@
     <string name="finish_register">Finalizar Cadastro</string>
     <string name="finish">Finalizar</string>
     <string name="fit">Encaixar</string>
-    <string name="flag_available">Sinalizador: ESTOU LIVRE!</string>
+    <string name="flag_available">Estou livre!</string>
     <string name="flag_menu_available">Livre</string>
     <string name="flag_menu_unavailable">Ocupado</string>
-    <string name="flag_menu_available_with_title">Livre:</string>
-    <string name="flag_menu_unavailable_with_title">Ocupado:</string>
+    <string name="flag_menu_available_action_text">Estou livre!</string>
+    <string name="flag_menu_unavailable_action_text">Estou ocupado!</string>
     <string name="flag_people_selected">Sinalizados</string>
     <string name="flag_privacy">Somente sinalizados podem ver</string>
     <string name="flag_unavailable">Estou ocupado!</string>

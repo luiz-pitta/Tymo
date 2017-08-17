@@ -8,10 +8,14 @@
     <!-- App Colors -->
     <color name="action_bar_background">#fafafa</color>
     <color name="feed_info_box">#e6ededed</color>
-    <color name="flag_available_light">#a1df6a</color>
     <color name="flag_available">#689F38</color>
-    <color name="flag_unavailable_light">#ff7b71</color>
+    <color name="flag_available_light">#a1df6a</color>
+    <color name="flag_available_gradient_middle">#6faa3c</color>
+    <color name="flag_available_gradient_light">#7bbd42</color>
     <color name="flag_unavailable">#F44336</color>
+    <color name="flag_unavailable_light">#ff7b71</color>
+    <color name="flag_unavailable_gradient_middle">#f5493d</color>
+    <color name="flag_unavailable_gradient_light">#f66055</color>
     <color name="hint_foreground_material_dark">#00000000</color>
     <color name="hint_foreground_material_light">#00000000</color>
     <color name="horizontal_line">#e0e0e0</color>

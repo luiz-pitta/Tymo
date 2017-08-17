@@ -3,6 +3,7 @@ package io.development.tymo.view_holder;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -47,11 +48,13 @@ import io.development.tymo.models.cards.Flag;
 import io.development.tymo.models.cards.FreeTime;
 import io.development.tymo.models.cards.HolidayCard;
 import io.development.tymo.models.cards.Reminder;
+import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 
@@ -65,6 +68,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private LinearLayout dayBox;
     private FlagServer flagServer;
     private ReminderServer reminderServer;
+    private String email;
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private User friend;
@@ -85,6 +89,9 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         this.callback = callback;
         this.friend = usr;
         this.free = free;
+
+        SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(context);
 
@@ -133,6 +140,20 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
                     }
                     else if (obj instanceof Flag && ((Flag) obj).getFlagServer().getType()){
+                        flagServer = ((Flag) obj).getFlagServer();
+
+                        Intent myIntent = new Intent(context, FlagActivity.class);
+                        myIntent.putExtra("type_flag", 1);
+                        myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
+                        context.startActivity(myIntent);
+
+                        bundle = new Bundle();
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                    }
+                    else if (obj instanceof Flag && !((Flag) obj).getFlagServer().getType() && email.equals(((Flag) obj).getFlagServer().getCreator())){
                         flagServer = ((Flag) obj).getFlagServer();
 
                         Intent myIntent = new Intent(context, FlagActivity.class);
