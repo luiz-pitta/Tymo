@@ -162,14 +162,12 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(850);
 
 
         recyclerView.setRefreshListener(this);
         recyclerView.setAdapterWithProgress(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
 
         recyclerView.setRefreshingColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400));
 

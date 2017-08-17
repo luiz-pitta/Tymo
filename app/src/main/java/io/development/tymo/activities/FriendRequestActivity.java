@@ -87,7 +87,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
         recyclerView.setRefreshListener(this);
         recyclerView.setRefreshingColor(ContextCompat.getColor(this,R.color.deep_purple_400));
 
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(500);
 
         recyclerView.setEmptyView(R.layout.empty_pending_requests);
 

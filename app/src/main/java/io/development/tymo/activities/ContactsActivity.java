@@ -124,7 +124,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         recyclerView.setRefreshListener(this);
         recyclerView.setRefreshingColor(ContextCompat.getColor(this,R.color.deep_purple_400));
 
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(375);
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(850);
 
         if (email.matches(my_email)) {
             m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));

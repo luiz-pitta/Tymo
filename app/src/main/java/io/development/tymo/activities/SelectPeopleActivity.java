@@ -90,7 +90,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         //magImage.setVisibility(GONE);
 
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(500);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
