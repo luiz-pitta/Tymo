@@ -26,6 +26,7 @@ public class FreeTimeViewHolder extends BaseViewHolder<FreeTime> {
     public LinearLayout iconBox;
     private Context mContext;
     private Rect rect;
+    private Actor actor;
 
     public FreeTimeViewHolder(ViewGroup parent, Context context) {
         super(parent, R.layout.card);
@@ -37,25 +38,16 @@ public class FreeTimeViewHolder extends BaseViewHolder<FreeTime> {
         iconBox = $(R.id.iconBox);
         mContext = context;
 
-        new Actor.Builder(SpringSystem.create(), $(R.id.card))
+        actor = new Actor.Builder(SpringSystem.create(), $(R.id.card))
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
                 .onTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_UP:
-                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-
-                                }
-                                break;
-                            case MotionEvent.ACTION_DOWN:
-                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                                break;
-                        }
                         return true;
                     }
                 })
                 .build();
+
 
         iconBox.setVisibility(View.GONE);
         text.setVisibility(View.VISIBLE);
@@ -68,5 +60,9 @@ public class FreeTimeViewHolder extends BaseViewHolder<FreeTime> {
         time.setBackgroundColor(ContextCompat.getColor(mContext,R.color.transparent));
         box.setBackgroundResource(R.drawable.bg_card_free_time);
         icon.setImageResource(0);
+        if(card.isInPast())
+            actor.setTouchEnabled(false);
+        else
+            actor.setTouchEnabled(true);
     }
 }

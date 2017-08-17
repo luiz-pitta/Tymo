@@ -8,12 +8,22 @@ public class CompareModel {
     private String name, email;
     private List<Object> activities = new ArrayList<>();
     private List<Object> free = new ArrayList<>();
+    private boolean inPast = false;
 
 
-    public CompareModel(String m_photo, String name, String email) {
+    public CompareModel(String m_photo, String name, String email, boolean inPast) {
         this.m_photo = m_photo;
         this.name = name;
         this.email = email;
+        this.inPast = inPast;
+    }
+
+    public boolean isInPast() {
+        return inPast;
+    }
+
+    public void setInPast(boolean inPast) {
+        this.inPast = inPast;
     }
 
     public String getName() {

@@ -27,12 +27,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.development.tymo.R;
+import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.FriendProfileActivity;
+import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.DateTymo;
 import io.development.tymo.model_server.FlagServer;
+import io.development.tymo.model_server.FlagWrapper;
 import io.development.tymo.model_server.FreeTimeServer;
 import io.development.tymo.model_server.ReminderServer;
+import io.development.tymo.model_server.ReminderWrapper;
 import io.development.tymo.models.CompareModel;
 import io.development.tymo.models.cards.ActivityCard;
 import io.development.tymo.models.cards.Flag;
@@ -98,6 +102,11 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 @Override
                 public void onItemClick(View view, int position, MotionEvent e) {
                     Object obj = adapter.getItem(position);
+                    FlagServer flagServer;
+                    ReminderServer reminderServer;
+
+                    SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                    String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                     Activity activity = (Activity) context;
                     CreatePopUpDialogFragment createPopUpDialogFragment = new CreatePopUpDialogFragment();
@@ -108,9 +117,57 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 
-                    if (!free)
-                        createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
-                                CreatePopUpDialogFragment.Type.CUSTOM, obj, Utilities.TYPE_COMPARE, null);
+                    if (!free) {
+                        if (obj instanceof Reminder){
+                            reminderServer = ((Reminder) obj).getReminderServer();
+
+                            Intent myIntent = new Intent(context, ReminderActivity.class);
+                            myIntent.putExtra("type_reminder", 1);
+                            myIntent.putExtra("reminder_show", new ReminderWrapper(reminderServer));
+                            context.startActivity(myIntent);
+
+                            bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        }
+                        else if (obj instanceof Flag && ((Flag) obj).getFlagServer().getType()){
+                            flagServer = ((Flag) obj).getFlagServer();
+
+                            Intent myIntent = new Intent(context, FlagActivity.class);
+                            myIntent.putExtra("type_flag", 1);
+                            myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
+                            context.startActivity(myIntent);
+
+                            bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        }
+                        else if (obj instanceof Flag && !((Flag) obj).getFlagServer().getType() && email.equals(((Flag) obj).getFlagServer().getCreator())){
+                            flagServer = ((Flag) obj).getFlagServer();
+
+                            Intent myIntent = new Intent(context, FlagActivity.class);
+                            myIntent.putExtra("type_flag", 1);
+                            myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
+                            context.startActivity(myIntent);
+
+                            bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        }
+                        else {
+                            createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
+                                    CreatePopUpDialogFragment.Type.CUSTOM, obj, Utilities.TYPE_COMPARE, null);
+
+                            createPopUpDialogFragment.setCallback(callback);
+                            createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                        }
+                    }
                     else {
                         FreeTime freeTime = (FreeTime) obj;
                         DateTymo dateTymo = new DateTymo();
@@ -126,9 +183,13 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                         createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
                                 Utilities.TYPE_COMPARE, null);
+
+                        if(!freeTime.isInPast()) {
+                            createPopUpDialogFragment.setCallback(callback);
+                            createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                        }
                     }
-                    createPopUpDialogFragment.setCallback(callback);
-                    createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+
 
                 }
 
@@ -199,9 +260,9 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
 
         holder.adapter.clear();
         if (!free)
-            holder.adapter.addAll(getPlansItemData(compare.getActivities()));
+            holder.adapter.addAll(getPlansItemData(compare.getActivities(), compare.isInPast()));
         else
-            holder.adapter.addAll(getPlansItemData(compare.getFree()));
+            holder.adapter.addAll(getPlansItemData(compare.getFree(), compare.isInPast()));
     }
 
     @Override
@@ -225,7 +286,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
         dateList.addAll(list);
     }
 
-    public static List<Object> getPlansItemData(List<Object> objectList) {
+    private List<Object> getPlansItemData(List<Object> objectList, boolean inPast) {
         List<Object> list = new ArrayList<>();
 
         for (int i = 0; i < objectList.size(); i++) {
@@ -324,7 +385,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String minute_end = String.format("%02d", freeTimeServer.getMinuteEnd());
                 String time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
-                list.add(new FreeTime(time));
+                list.add(new FreeTime(time, inPast));
             }
         }
         return list;

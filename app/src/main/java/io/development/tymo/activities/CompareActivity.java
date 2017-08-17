@@ -28,6 +28,10 @@ import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -35,6 +39,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import io.development.tymo.adapters.PlansAdapter;
+import io.development.tymo.models.WeekModel;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
@@ -343,6 +349,13 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         return (viewX>=40 && viewY<=25);
     }
 
+    private boolean isInThePast(int y1, int m1, int d1, int y2, int m2, int d2) {
+        LocalDate end = new LocalDate(y1, m1, d1);
+        LocalDate start = new LocalDate(y2, m2, d2);
+        Period timePeriod = new Period(start, end, PeriodType.days());
+        return timePeriod.getDays() < 0;
+    }
+
     private void setCompare(Plans plans) {
         //setProgress(true);
         CompareTotalFragment compareTotalFragment = (CompareTotalFragment) mNavigator.getFragment(0);
@@ -394,15 +407,20 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         cal.clear(Calendar.SECOND);
         cal.clear(Calendar.MILLISECOND);
 
-        int day, month;
+        int day, month, year;
         String invited;
 
         for(int i = 0; i < listPerson.size(); i++){
             day = cal.get(Calendar.DAY_OF_MONTH);
             month = cal.get(Calendar.MONTH)+1;
+            year = cal.get(Calendar.YEAR);
             invited = listPerson.get(i).getEmail();
 
-            CompareModel compareModel = new CompareModel(listPerson.get(i).getPhoto(), listPerson.get(i).getName(), listPerson.get(i).getEmail());
+            Calendar now = Calendar.getInstance();
+            boolean inPast = isInThePast(year,month, day,
+                    now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+
+            CompareModel compareModel = new CompareModel(listPerson.get(i).getPhoto(), listPerson.get(i).getName(), listPerson.get(i).getEmail(), inPast);
 
             int j;
             for(j = 0; j < response.getMyCommitAct().size(); j++) {
