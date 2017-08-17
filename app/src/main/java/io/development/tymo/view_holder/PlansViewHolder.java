@@ -20,6 +20,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -50,6 +51,8 @@ import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 
 public class PlansViewHolder extends BaseViewHolder<WeekModel> {

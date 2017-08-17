@@ -160,7 +160,7 @@ public class ReminderShowFragment extends Fragment {
         String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
         int yearStart = reminderServer.getYearStart();
 
-        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekStart, dayStart, monthStart, yearStart);
+        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekStart.toLowerCase(), dayStart, monthStart, yearStart);
 
         return date;
     }

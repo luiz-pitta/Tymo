@@ -167,7 +167,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:padding="5dp"
-                            android:src="@drawable/ic_magic_wand"
+                            android:src="@drawable/ic_picture"
                             android:tint="@color/deep_purple_400" />
 
                     </LinearLayout>
@@ -185,6 +185,14 @@
                         android:paddingTop="5dp"
                         android:visibility="gone">
 
+                        <ImageView
+                            android:id="@+id/loadedImageIcon"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_check"
+                            android:tint="@color/grey_600" />
+
                         <TextView
                             android:id="@+id/loadedImageText"
                             android:layout_width="wrap_content"
@@ -194,11 +202,12 @@
                             android:textSize="14sp" />
 
                         <ImageView
-                            android:id="@+id/loadedImageIcon"
+                            android:id="@+id/loadedImageIcon2"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:padding="5dp"
-                            android:src="@drawable/ic_magic_wand" />
+                            android:src="@drawable/ic_picture"
+                            android:tint="@color/grey_600" />
 
                     </LinearLayout>
 
@@ -226,7 +235,8 @@
                         android:hint="@string/hint_title"
                         android:imeOptions="actionDone"
                         android:inputType="text"
-                        android:textColor="@color/grey_900"
+                        android:maxLength="100"
+                        android:textColor="@color/grey_600"
                         android:textColorHint="@color/grey_400"
                         android:textSize="14sp"
                         android:textStyle="bold" />
@@ -238,12 +248,12 @@
                         android:layout_gravity="right"
                         android:text="0 de 100"
                         android:textColor="@color/grey_400"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
+                        android:layout_marginTop="10dp"
                         android:orientation="vertical">
 
                         <RelativeLayout
@@ -350,7 +360,6 @@
                                     android:clickable="true"
                                     android:gravity="center"
                                     android:hint="@string/hint_date"
-                                    android:inputType="text"
                                     android:lines="1"
                                     android:paddingBottom="5dp"
                                     android:paddingLeft="10dp"
@@ -369,7 +378,6 @@
                                     android:clickable="true"
                                     android:gravity="center"
                                     android:hint="@string/hint_time"
-                                    android:inputType="text"
                                     android:lines="1"
                                     android:paddingBottom="5dp"
                                     android:paddingLeft="10dp"
@@ -408,7 +416,6 @@
                                     android:clickable="true"
                                     android:gravity="center"
                                     android:hint="@string/hint_date"
-                                    android:inputType="text"
                                     android:lines="1"
                                     android:paddingBottom="5dp"
                                     android:paddingLeft="10dp"
@@ -427,7 +434,6 @@
                                     android:clickable="true"
                                     android:gravity="center"
                                     android:hint="@string/hint_time"
-                                    android:inputType="text"
                                     android:lines="1"
                                     android:paddingBottom="5dp"
                                     android:paddingLeft="10dp"
@@ -449,12 +455,14 @@
                                     android:paddingTop="5dp">
 
                                     <ImageView
+                                        android:id="@+id/repeatAddIcon"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
                                         android:src="@drawable/ic_refresh"
                                         android:tint="@color/deep_purple_400" />
 
                                     <TextView
+                                        android:id="@+id/repeatAddText"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="@string/repeat"

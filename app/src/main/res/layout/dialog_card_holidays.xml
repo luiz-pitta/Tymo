@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true">
 
     <LinearLayout
@@ -41,9 +41,9 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="@string/card_holidays_text"
+                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="18sp"
-                android:textAllCaps="true"
                 android:textStyle="bold" />
 
         </RelativeLayout>
@@ -58,8 +58,7 @@
             <LinearLayout
                 android:id="@+id/dateBox"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:layout_width="35dp"
@@ -72,28 +71,22 @@
                     android:id="@+id/dateMonthYear"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
                     android:text="Date"
                     android:textColor="@color/grey_600"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
-
-            <!--XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-            LISTA: list_item_holiday.xml
-            - Com divisor (horizontal line)
-            - O conteúdo deve ter MARGIN TOP = 20dp
-            XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX-->
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/listHoliday"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginTop="20dp"
-                app:scrollbarStyle="insideOverlay"
-                />
+                app:scrollbarStyle="insideOverlay" />
 
         </LinearLayout>
 

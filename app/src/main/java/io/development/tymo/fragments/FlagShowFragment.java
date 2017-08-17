@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -51,12 +52,12 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FlagShowFragment extends Fragment implements View.OnClickListener {
+public class FlagShowFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
-    private TextView tittleText, guestsNumber, repeatText, dateHourText, addGuestText;
+    private TextView guestsNumber, repeatText, dateHourText, addGuestText, guestText;
     private RelativeLayout addGuestButton;
     private ImageView addGuestIcon;
-    private LinearLayout repeatBox, guestBox;
+    private LinearLayout repeatBox, guestBox, whoCanInviteBox, profilesPhotos;
     private View addGuestButtonDivider;
     private Rect rect;
 
@@ -96,18 +97,23 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         dateFormat = new DateFormat(getActivity());
 
         dateHourText = (TextView) view.findViewById(R.id.dateHourText);
-        tittleText = (TextView) view.findViewById(R.id.title);
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
         addGuestButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
+        guestText = (TextView) view.findViewById(R.id.guestText);
         repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
         guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
+        whoCanInviteBox = (LinearLayout) view.findViewById(R.id.whoCanInviteBox);
+        profilesPhotos = (LinearLayout) view.findViewById(R.id.profilesPhotos);
         repeatText = (TextView) view.findViewById(R.id.repeatText);
         addGuestIcon = (ImageView) view.findViewById(R.id.addGuestIcon);
         addGuestText = (TextView) view.findViewById(R.id.addGuestText);
         addGuestButtonDivider = (View) view.findViewById(R.id.addGuestButtonDivider);
 
-        addGuestText.setText(getString(R.string.invite_guest_btn));
+        addGuestText.setText(getString(R.string.signalize_guest_btn));
+
+        guestBox.setOnClickListener(this);
+        guestBox.setOnTouchListener(this);
 
         new Actor.Builder(SpringSystem.create(), addGuestButton)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
@@ -145,8 +151,8 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
                 intent.putExtra("is_flag", true);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 startActivityForResult(intent, GUEST_UPDATE);
@@ -158,12 +164,12 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         }));
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
     }
 
     public void setLayout(FlagServer flagServer, ArrayList<User> users, ArrayList<User> confirmed, ArrayList<FlagServer> flagServers, boolean permissionToInvite) {
-        if(recyclerView!=null) {
+        if (recyclerView != null) {
             Calendar calendar = Calendar.getInstance();
             Calendar calendar2 = Calendar.getInstance();
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
@@ -201,8 +207,6 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
                 addGuestButtonDivider.setVisibility(View.GONE);
             }
 
-            tittleText.setText(flagServer.getTitle());
-
             if (flagServer.getType()) {
                 listPerson.clear();
                 listConfirmed.clear();
@@ -217,8 +221,12 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
                 adapter = new PersonAdapter(listPerson, getActivity());
                 recyclerView.setAdapter(adapter);
                 guestsNumber.setText(String.valueOf(listPerson.size()));
-            } else
+            } else {
                 guestBox.setVisibility(View.GONE);
+                whoCanInviteBox.setVisibility(View.GONE);
+                profilesPhotos.setVisibility(View.GONE);
+            }
+
 
             if (flagServer.getRepeatType() == 0)
                 repeatBox.setVisibility(View.GONE);
@@ -244,7 +252,7 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    private boolean isFlagInPast(FlagServer flagServer){
+    private boolean isFlagInPast(FlagServer flagServer) {
         Calendar c = Calendar.getInstance();
         c.add(Calendar.DATE, -7);
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -259,14 +267,14 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         return (isHourBefore && isDateBefore) || isDateBefore;
     }
 
-    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
-        if(yearEnd < year)
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if (yearEnd < year)
             return false;
-        if(year == yearEnd){
-            if(monthOfYearEnd < monthOfYear)
+        if (year == yearEnd) {
+            if (monthOfYearEnd < monthOfYear)
                 return false;
-            else if(monthOfYearEnd == monthOfYear){
-                if(dayOfMonthEnd <= dayOfMonth)
+            else if (monthOfYearEnd == monthOfYear) {
+                if (dayOfMonthEnd <= dayOfMonth)
                     return false;
             }
         }
@@ -303,11 +311,28 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
             intent.putExtra("erase_from_list", true);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addGuestButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addGuestButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivityForResult(intent, ADD_GUEST);
+        }
+        else if(v == guestBox){
+            FlagActivity flagActivity = (FlagActivity) getActivity();
+
+            Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
+            intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+            intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+            intent.putExtra("is_adm", false);
+            intent.putExtra("id_act", flagActivity.getFlag().getId());
+            intent.putExtra("is_flag", true);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            startActivityForResult(intent, GUEST_UPDATE);
         }
     }
 
@@ -394,7 +419,7 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
         String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
         int yearEnd = flagServer.getYearEnd();
 
-        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekEnd, dayEnd, monthEnd, yearEnd);
+        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
 
         return date;
     }
@@ -407,5 +432,20 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == guestBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+                guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
+                guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests_pressed));
+            }
+        }
+
+        return false;
     }
 }

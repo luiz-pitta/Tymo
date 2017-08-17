@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/white">
 
     <include
@@ -15,208 +15,11 @@
         android:layout_height="match_parent"
         android:layout_below="@id/actionBar">
 
-    <android.support.v4.widget.NestedScrollView
-        android:id="@+id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
-
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <RelativeLayout
-                android:id="@+id/mainBox"
-                android:layout_width="match_parent"
-                android:layout_height="250dp">
-
-                <ImageView
-                    android:id="@+id/backgroundProfile"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/bg_profile_morning" />
-
-                <RelativeLayout
-                    android:id="@+id/profileAboutBox"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="25dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="20dp">
-
-                    <RelativeLayout
-                        android:id="@+id/profilePhotoBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true">
-
-                        <ImageView
-                            android:id="@+id/profilePhoto"
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:layout_centerHorizontal="true"
-                            android:src="@drawable/ic_profile_photo_empty" />
-
-                        <View
-                            android:layout_width="100dp"
-                            android:layout_height="100dp"
-                            android:background="@drawable/bg_shape_oval_white_corners" />
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:id="@+id/profileNameDescriptionBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/profilePhotoBox"
-                        android:layout_marginTop="10dp">
-
-                        <TextView
-                            android:id="@+id/profileName"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:gravity="center_horizontal"
-                            android:lines="1"
-                            android:text="Profile Name"
-                            android:textColor="@color/grey_900"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/profileDescription"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/profileName"
-                            android:layout_marginTop="5dp"
-                            android:ellipsize="end"
-                            android:gravity="center_horizontal"
-                            android:lines="2"
-                            android:text="Profile Description"
-                            android:textColor="@color/grey_900"
-                            android:textSize="16sp" />
-
-                    </RelativeLayout>
-
-                </RelativeLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="45dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@color/black_opacity_40"
-                    android:divider="@drawable/divider_profile_timer"
-                    android:dividerPadding="8dp"
-                    android:orientation="horizontal"
-                    android:showDividers="middle">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:id="@+id/friendshipRequestsBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ProgressBar
-                            android:id="@+id/progressIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:visibility="gone" />
-
-                        <TextView
-                            android:id="@+id/progressText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:textColor="@color/white"
-                            android:textSize="12sp"
-                            android:visibility="gone" />
-
-                        <ImageView
-                            android:id="@+id/friendshipRequestsIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_person_add"
-                            android:tint="@color/white" />
-
-                        <TextView
-                            android:id="@+id/friendshipRequestsText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:text="@string/add"
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:id="@+id/contactsBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:id="@+id/contactsIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_people_two"
-                            android:tint="@color/white" />
-
-                        <TextView
-                            android:id="@+id/contactsText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:text="@string/profile_friend_menu_contacts"
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:id="@+id/aboutBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:gravity="center"
-                        android:paddingLeft="10dp"
-                        android:paddingRight="10dp">
-
-                        <ImageView
-                            android:id="@+id/aboutIcon"
-                            android:layout_width="25dp"
-                            android:layout_height="25dp"
-                            android:src="@drawable/ic_notepad"
-                            android:tint="@color/white" />
-
-                        <TextView
-                            android:id="@+id/aboutText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:text="@string/about"
-                            android:textColor="@color/white"
-                            android:textSize="12sp" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </RelativeLayout>
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -224,132 +27,329 @@
                 android:orientation="vertical">
 
                 <RelativeLayout
-                    android:id="@+id/dateCompareBox"
+                    android:id="@+id/mainBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_height="250dp">
 
-                    <LinearLayout
-                        android:id="@+id/dateBox"
+                    <ImageView
+                        android:id="@+id/backgroundProfile"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="10dp"
-                        android:layout_toLeftOf="@+id/compareButton"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:layout_height="match_parent"
+                        android:background="@drawable/bg_profile_morning" />
 
-                        <ImageView
-                            android:id="@+id/calendarIcon"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_marginRight="5dp"
-                            android:src="@drawable/ic_calendar"
-                            android:tint="@color/grey_900" />
+                    <RelativeLayout
+                        android:id="@+id/profileAboutBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="20dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="25dp">
 
-                        <TextView
-                            android:id="@+id/dateMonthYear"
+                        <RelativeLayout
+                            android:id="@+id/profilePhotoBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true">
+
+                            <ImageView
+                                android:id="@+id/profilePhoto"
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:layout_centerHorizontal="true"
+                                android:src="@drawable/ic_profile_photo_empty" />
+
+                            <View
+                                android:layout_width="100dp"
+                                android:layout_height="100dp"
+                                android:background="@drawable/bg_shape_oval_white_corners" />
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:id="@+id/profileNameDescriptionBox"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:ellipsize="end"
-                            android:lines="1"
-                            android:text="mmmm yyyy"
-                            android:textColor="@color/grey_900"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
+                            android:layout_below="@+id/profilePhotoBox"
+                            android:layout_marginTop="10dp">
+
+                            <TextView
+                                android:id="@+id/profileName"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:gravity="center_horizontal"
+                                android:lines="1"
+                                android:text="Profile Name"
+                                android:textColor="@color/grey_900"
+                                android:textSize="18sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/profileDescription"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/profileName"
+                                android:layout_marginTop="5dp"
+                                android:ellipsize="end"
+                                android:gravity="center_horizontal"
+                                android:lines="2"
+                                android:text="Profile Description"
+                                android:textColor="@color/grey_900"
+                                android:textSize="16sp" />
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/black_opacity_40"
+                        android:divider="@drawable/divider_profile_timer"
+                        android:dividerPadding="8dp"
+                        android:orientation="horizontal"
+                        android:showDividers="middle">
+
+                        <LinearLayout
+                            android:id="@+id/friendshipRequestsBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <ProgressBar
+                                android:id="@+id/progressIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:visibility="gone" />
+
+                            <TextView
+                                android:id="@+id/progressText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:textColor="@color/white"
+                                android:textSize="12sp"
+                                android:visibility="gone" />
+
+                            <ImageView
+                                android:id="@+id/friendshipRequestsIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/ic_person_add"
+                                android:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/friendshipRequestsText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:text="@string/add"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/contactsBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <ImageView
+                                android:id="@+id/contactsIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/ic_people_two"
+                                android:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/contactsText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:text="@string/profile_friend_menu_contacts"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/aboutBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:paddingLeft="10dp"
+                            android:paddingRight="10dp">
+
+                            <ImageView
+                                android:id="@+id/aboutIcon"
+                                android:layout_width="25dp"
+                                android:layout_height="25dp"
+                                android:src="@drawable/ic_notepad"
+                                android:tint="@color/white" />
+
+                            <TextView
+                                android:id="@+id/aboutText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:text="@string/about"
+                                android:textColor="@color/white"
+                                android:textSize="12sp" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
-
-                    <include
-                        layout="@layout/btn_compare"
-                        android:id="@+id/compareButton"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true" />
 
                 </RelativeLayout>
 
                 <LinearLayout
-                    android:id="@+id/nextPreviousBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <View
+                    <RelativeLayout
+                        android:id="@+id/dateCompareBox"
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/horizontal_line_height"
-                        android:background="@color/horizontal_line" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="20dp">
+
+                        <LinearLayout
+                            android:id="@+id/dateBox"
+                            android:layout_width="match_parent"
+                            android:layout_height="40dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="10dp"
+                            android:layout_toLeftOf="@+id/compareButton"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/calendarIcon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_marginRight="5dp"
+                                android:src="@drawable/ic_calendar"
+                                android:tint="@color/grey_900" />
+
+                            <TextView
+                                android:id="@+id/dateMonthYear"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="10dp"
+                                android:ellipsize="end"
+                                android:lines="1"
+                                android:text="mmmm yyyy"
+                                android:textColor="@color/grey_900"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                        </LinearLayout>
+
+                        <include
+                            android:id="@+id/compareButton"
+                            layout="@layout/btn_compare"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true" />
+
+                    </RelativeLayout>
 
                     <LinearLayout
+                        android:id="@+id/nextPreviousBox"
                         android:layout_width="match_parent"
-                        android:layout_height="40dp"
-                        android:gravity="center"
-                        android:orientation="horizontal">
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
 
-                        <ImageView
-                            android:id="@+id/previousWeek"
-                            android:layout_width="50dp"
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/horizontal_line_height"
+                            android:background="@color/horizontal_line" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
                             android:layout_height="40dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_action_back"
-                            android:tint="@color/grey_400" />
-
-                        <TextView
-                            android:id="@+id/dateWeek"
-                            android:layout_width="150dp"
-                            android:layout_height="match_parent"
-                            android:ellipsize="end"
                             android:gravity="center"
-                            android:lines="1"
-                            android:text="00/mmm - 00/mmm"
-                            android:textColor="@color/grey_500"
-                            android:textSize="16sp"/>
+                            android:orientation="horizontal">
 
-                        <ImageView
-                            android:id="@+id/nextWeek"
-                            android:layout_width="50dp"
-                            android:layout_height="40dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_action_forward"
-                            android:tint="@color/grey_400" />
+                            <ImageView
+                                android:id="@+id/previousWeek"
+                                android:layout_width="50dp"
+                                android:layout_height="40dp"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_action_back"
+                                android:tint="@color/grey_400" />
+
+                            <TextView
+                                android:id="@+id/dateWeek"
+                                android:layout_width="150dp"
+                                android:layout_height="match_parent"
+                                android:ellipsize="end"
+                                android:gravity="center"
+                                android:lines="1"
+                                android:text="00/mmm - 00/mmm"
+                                android:textColor="@color/grey_500"
+                                android:textSize="16sp" />
+
+                            <ImageView
+                                android:id="@+id/nextWeek"
+                                android:layout_width="50dp"
+                                android:layout_height="40dp"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_action_forward"
+                                android:tint="@color/grey_400" />
+
+                        </LinearLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/horizontal_line_height"
+                            android:background="@color/horizontal_line" />
 
                     </LinearLayout>
 
+                    <FrameLayout
+                        android:id="@+id/container"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center">
+
+                    </FrameLayout>
+
                     <View
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/horizontal_line_height"
                         android:background="@color/horizontal_line" />
 
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:background="@color/grey_100" />
+
                 </LinearLayout>
-
-                <FrameLayout
-                    android:id="@+id/container"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_gravity="center">
-
-                </FrameLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/horizontal_line_height"
-                    android:background="@color/horizontal_line" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="100dp"
-                    android:background="@color/grey_100" />
 
             </LinearLayout>
 
-        </LinearLayout>
-
-    </android.support.v4.widget.NestedScrollView>
+        </android.support.v4.widget.NestedScrollView>
 
     </android.support.v4.widget.SwipeRefreshLayout>
 

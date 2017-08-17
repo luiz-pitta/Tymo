@@ -140,8 +140,7 @@
                 android:id="@+id/dateBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical">
+                android:layout_marginTop="10dp">
 
                 <ImageView
                     android:id="@+id/imageView4"
@@ -149,17 +148,18 @@
                     android:layout_height="30dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_calendar_clock"
-                    android:tint="@color/grey_700" />
+                    android:tint="@color/grey_600" />
 
                 <TextView
                     android:id="@+id/date"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
                     android:text="Date"
-                    android:textColor="@color/grey_700"
+                    android:textColor="@color/grey_600"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -169,25 +169,25 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="5dp"
-                android:layout_marginTop="10dp"
-                android:gravity="center_vertical">
+                android:layout_marginTop="10dp">
 
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_marginRight="10dp"
                     android:src="@drawable/ic_location"
-                    android:tint="@color/grey_700" />
+                    android:tint="@color/grey_600" />
 
                 <TextView
                     android:id="@+id/location"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="6dp"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:maxLines="2"
                     android:text="Location Location Location Location Location Location Location"
-                    android:textColor="@color/grey_700"
+                    android:textColor="@color/grey_600"
                     android:textSize="14sp" />
 
             </LinearLayout>
@@ -202,7 +202,7 @@
                 android:maxLines="3"
                 android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
                 android:textColor="@color/grey_800"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <include
                 android:id="@+id/profilesPhotos"

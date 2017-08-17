@@ -218,6 +218,9 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         applyButton.setOnTouchListener(this);
         cleanButton.setOnTouchListener(this);
 
+        mBackButton.setImageResource(R.drawable.ic_add);
+        mBackButton.setRotation(45);
+
         //set button controller
         controller = new UpdateButtonController(this);
         controller.attach(false, proximityText, proximityButton,proximityCorners);

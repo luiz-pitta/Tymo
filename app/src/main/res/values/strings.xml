@@ -46,7 +46,7 @@
     </string-array>
 
     <string-array name="array_privacy">
-        <item>Todos</item>
+        <item>Todos os usuários</item>
         <item>Somente meus contatos</item>
     </string-array>
 
@@ -68,7 +68,7 @@
 
     <string-array name="array_who_will_be_signalized">
         <item>Todos os meus contatos</item>
-        <item>Somente contatos sinalizados</item>
+        <item>Escolher</item>
     </string-array>
 
     <!-- Days Of Week -->
@@ -116,6 +116,7 @@
     <string name="act_not_found">Atividade não encontrada!</string>
     <string name="act_people_selected">Pessoas selecionadas</string>
     <string name="act_privacy">Pública</string>
+    <string name="flag_privacy_public">Todos os usuários podem ver</string>
     <string name="act_tags">TAGS de Interesses (mín. 1)</string>
     <string name="act_who_can_invite">Quem pode convidar?</string>
     <string name="act">Atividade</string>
@@ -167,6 +168,7 @@
     <string name="create_activity_recover_with_repeat_text">Atividade resgatada possui repetições. Deseja criar com as repetições da original?</string>
     <string name="create_activity">Criar atividade</string>
     <string name="create_flag">Criar sinalizador</string>
+    <string name="create">Criar</string>
     <string name="create_reminder">Criar lembretes e notas</string>
     <string name="created_by_me">Criado por mim</string>
     <string name="created_by">Criado por %1$s</string>
@@ -216,7 +218,7 @@
     <string name="empty_my_contacts_profile_friend_text_1">Esse usuário ainda não possui contatos</string>
     <string name="empty_my_contacts_profile_friend_text_2">Seja o primeiro dessa lista</string>
     <string name="empty_my_contacts_profile_text_1">Você não possui contatos</string>
-    <string name="empty_my_contacts_profile_text_2">Acesse a tela de busca e adicione pessoas à sua rede</string>
+    <string name="empty_my_contacts_profile_text_2">Acesse a tela de busca e adicione usuários à sua rede</string>
     <string name="empty_pending_requests">Não há solicitações para adicionarem você no momento</string>
     <string name="empty_profile_privated">Essa conta é privada.\nAdicione aos seus contatos para ver o conteúdo desse perfil.</string>
     <string name="empty_search">Nenhum item encontrado</string>
@@ -232,8 +234,10 @@
     <string name="feed_invitation_activity_fit">Encaixado na sua agenda!</string>
     <string name="feed_invitation_activity_ignored">Ignorado!</string>
     <string name="feed_invitation_activity_swiped">Você já encaixou!</string>
+    <string name="who_can_signalize">Somente o criador pode sinalizar</string>
     <string name="feed_visibility_1">(exibida somente no FEED dos convidados)</string>
     <string name="feed_visibility_2">(exibida no FEED de todos os usuários do Tymo)</string>
+    <string name="feed_visibility_3">(exibido somente no FEED dos sinalizados)</string>
     <string name="filter_and_sort">Filtro e Ordenação</string>
     <string name="filter_by">Filtrar por</string>
     <string name="filter_date_and_hour">Data e hora</string>
@@ -255,16 +259,18 @@
     <string name="finish">Finalizar</string>
     <string name="fit">Encaixar</string>
     <string name="flag_available">Sinalizador: ESTOU LIVRE!</string>
-    <string name="flag_menu_available">Estou\nlivre</string>
-    <string name="flag_menu_unavailable">Estou\nocupado</string>
+    <string name="flag_menu_available">Livre</string>
+    <string name="flag_menu_unavailable">Ocupado</string>
+    <string name="flag_menu_available_with_title">Livre:</string>
+    <string name="flag_menu_unavailable_with_title">Ocupado:</string>
     <string name="flag_people_selected">Sinalizados</string>
-    <string name="flag_privacy">Somente Sinalizados</string>
+    <string name="flag_privacy">Somente sinalizados podem ver</string>
     <string name="flag_unavailable">Estou ocupado!</string>
-    <string name="flag_who_will_be_signalized">Quem será sinalizado?</string>
+    <string name="flag_who_will_be_signalized">Quem você deseja sinalizar?</string>
     <string name="flag">Sinalizador</string>
     <string name="free_time">Tempo Livre</string>
-    <string name="friend_in_common_one">1 amigo em comum</string>
-    <string name="friend_in_common">%1$d amigos em comum</string>
+    <string name="friend_in_common_one">1 contato em comum</string>
+    <string name="friend_in_common">%1$d contatos em comum</string>
     <string name="gps_enable_text">Seu GPS está desativado e o Tymo o usa o para determinar a distância das atividades de você. Deseja habilitá-lo?</string>
     <string name="guests_fit">Encaixaram (%1$d)</string>
     <string name="guests_invited">Convidados (%1$d)</string>
@@ -282,19 +288,20 @@
     <string name="hint_search">Pesquisar...</string>
     <string name="hint_time">Horário</string>
     <string name="hint_title">Título</string>
+    <string name="hint_title_opcional">Título (opcional)</string>
     <string name="hint_whatsapp_group_link">Link do grupo no WhatsApp (opcional)</string>
     <string name="ignore">Ignorar</string>
-    <string name="invitation_accepted_more_others_none">aceitou seu convite</string>
-    <string name="invitation_accepted_more_others_one">e outra %1$d pessoa aceitaram seu convite</string>
-    <string name="invitation_accepted_more_others">e outras %1$d pessoas aceitaram seu convite</string>
+    <string name="invitation_accepted_more_others_one">aceitou seu convite</string>
+    <string name="invitation_accepted_more_others">e outros %1$d usuários aceitaram seu convite</string>
     <string name="invite_guest_btn">Convidar</string>
+    <string name="signalize_guest_btn">Sinalizar</string>
     <string name="invited_by">Convidado por %1$s</string>
     <string name="location">Localização</string>
     <string name="login_connect_with_facebook">Conectar com o Facebook</string>
     <string name="login_forgot_password">Esqueceu sua senha?</string>
     <string name="login_forgot_text_1">Esqueceu seus dados de login?</string>
     <string name="login_forgot_text_2">Insira o email correspondente a sua conta no Tymo. Em seguida, lhe enviaremos uma mensagem de recuperação de senha.</string>
-    <string name="login_register_facebook_incomplete_text_1">Conexão com o Facebook\nrealizada com sucesso</string>
+    <string name="login_register_facebook_incomplete_text_1">Conexão realizada com sucesso</string>
     <string name="login_register_facebook_incomplete_text_2">Complete as informações abaixo:</string>
     <string name="login_register_my_interests_text_1">Ajude-nos a exibir o que você deseja</string>
     <string name="login_register_my_interests_text_2">O que você gostaria de ver com mais frequência no seu FEED e na BUSCA?</string>
@@ -303,7 +310,7 @@
     <string name="login_register_privacy_text_2">Determine o nível de visibilidade do seu perfil. Quem poderá ver a sua agenda?</string>
     <string name="login_slideshow_1">Encontre e encaixe diferentes atividades na sua agenda.</string>
     <string name="login_slideshow_2">Tenha o controle do seu tempo. Visualize seus compromissos e tempo livre.</string>
-    <string name="login_slideshow_3">Conecte-se com seus amigos e outras pessoas da rede e...</string>
+    <string name="login_slideshow_3">Conecte-se com seus amigos e outros usuários da rede e...</string>
     <string name="login_slideshow_4">...concilie seus horários! Descubra o tempo ideal para realizarem algo.</string>
     <string name="login">Entrar</string>
     <string name="logout_app">Sair do Tymo</string>
@@ -354,14 +361,14 @@
     <string name="push_notification_canceled_act">%1$s cancelou a ATIVIDADE</string>
     <string name="push_notification_canceled_flag">%1$s cancelou o SINALIZADOR</string>
     <string name="push_notification_invitations_accepted_text_1">%1$s aceitou o convite</string>
-    <string name="push_notification_invitations_accepted_text_2">%1$d pessoas aceitaram o convite</string>
+    <string name="push_notification_invitations_accepted_text_2">%1$d usuários aceitaram o convite</string>
     <string name="push_notification_invitations_text_1">Você recebeu um novo convite</string>
     <string name="push_notification_invitations_text_2">Você recebeu %1$d novos convites</string>
     <string name="push_notification_pending_requests_accepted_text_1">%1$s agora é seu contato.</string>
     <string name="push_notification_pending_requests_accepted_text_2">Agora você tem %1$d novos contatos</string>
     <string name="push_notification_pending_requests_accepted_title">Solicitação aceita</string>
     <string name="push_notification_pending_requests_text_1">%1$s pediu para fazer parte da sua rede de contatos</string>
-    <string name="push_notification_pending_requests_text_2">%1$d pessoas pediram para fazer parte da sua rede de contatos</string>
+    <string name="push_notification_pending_requests_text_2">%1$d usuários pediram para fazer parte da sua rede de contatos</string>
     <string name="push_notification_pending_requests_title">Solicitações pendentes</string>
     <string name="push_notification_start_commitments_text_1">Você tem 1 compromisso que está para acontecer</string>
     <string name="push_notification_start_commitments_text_2">Você tem %1$d compromissos que estão para acontecer</string>
@@ -402,7 +409,7 @@
     <string name="repeat_max_times">(máx. 30)</string>
     <string name="repeat_monthly">mensalmente</string>
     <string name="repeat_not">Não se repete</string>
-    <string name="repeat_text_imported_google_agenda">Atividade importada sem as repetições, edite para criá-las!</string>
+    <string name="repeat_text_imported_google_agenda">(atividade importada sem as repetições, edite para criá-las!)</string>
     <string name="repeat_text">(repete %1$s até %2$s)</string>
     <string name="repeat_weekly">semanalmente</string>
     <string name="repeat">Repetir</string>
@@ -500,14 +507,14 @@
     <string name="tutorial_1_text_5">Sinalizador</string>
     <string name="tutorial_1_text_6">Informe de forma direta e simples se você está OCUPADO ou LIVRE para fazer algo.</string>
     <string name="tutorial_1_title">Crie</string>
-    <string name="tutorial_2_text_1">Encontre e capture atividades públicas e da sua rede de amigos</string>
+    <string name="tutorial_2_text_1">Encontre e capture atividades públicas e da sua rede de contatos</string>
     <string name="tutorial_2_text_2">deslize para a esquerda para ignorar uma atividade</string>
     <string name="tutorial_2_text_3">deslize para a direita para encaixar uma atividade nos seus planos</string>
     <string name="tutorial_2_title">Feed</string>
     <string name="tutorial_3_text_1">Filtre quais atividades irão aparecer no seu FEED por interesse, localidade, hora, etc.</string>
     <string name="tutorial_3_title">Filtro</string>
     <string name="tutorial_4_text_1">Este é o espaço para você guardar suas atividades, lembretes e sinalizar se está livre ou ocupado.</string>
-    <string name="tutorial_4_text_2">Encontre espaços de tempo livre e visualize compromissos em comum com seus amigos.</string>
+    <string name="tutorial_4_text_2">Encontre espaços de tempo livre e visualize compromissos em comum com seus contatos.</string>
     <string name="tutorial_4_title">Planos</string>
     <string name="tutorial_welcome_text_1">Vamos começar</string>
     <string name="tutorial_welcome_text_2">Esse guia rápido vai te deixar por dentro do mundo Tymo!</string>
@@ -524,7 +531,7 @@
     <string name="validation_field_act_max_lenght_days_weekly">Para repetir semanalmente a atividade não pode passar de 7 dias de duração</string>
     <string name="validation_field_act_max_lenght_days">A atividade não pode ter mais de 15 dias de duração</string>
     <string name="validation_field_birth_date_required">Preencha a data de nascimento corretamente</string>
-    <string name="validation_field_compare_selected_required">Deve ter ao menos uma pessoa selecionada</string>
+    <string name="validation_field_compare_selected_required">Deve ter ao menos um usuário selecionado</string>
     <string name="validation_field_date_hour_required">A data e a hora são obrigatórias</string>
     <string name="validation_field_email_invalid_or_not_registered">Email inválido ou não cadastrado</string>
     <string name="validation_field_email_required">Preencha o email corretamente</string>
@@ -551,18 +558,20 @@
     <string name="version_new_update_text">É necessária a atualização do app para continuar utilizando o Tymo</string>
     <string name="version_new_update_title">Nova versão disponível\n%1$s</string>
     <string name="version_new_update_yes">Atualizar</string>
-    <string name="visibility_only_my_contacts_2">Somente seus contatos poderão ver na sua agenda (os demais verão um sinalizador de OCUPADO)</string>
-    <string name="visibility_only_my_contacts">Somente Meus Contatos</string>
-    <string name="visibility_private_2">Somente você e os convidados poderão ver na sua agenda (os demais verão um sinalizador de OCUPADO)</string>
+    <string name="visibility_only_my_contacts_2">Somente seus contatos podem ver na sua agenda (os demais verão um sinalizador de OCUPADO)</string>
+    <string name="visibility_only_my_contacts">Meus Contatos</string>
+    <string name="visibility_private_2">Somente você e os convidados podem ver na sua agenda (os demais verão um sinalizador de OCUPADO)</string>
     <string name="visibility_private">Privada</string>
-    <string name="visibility_public_2">Todos os usuários do app poderão ver na sua agenda</string>
+    <string name="visibility_public_2">Todos os usuários podem ver na sua agenda</string>
+    <string name="visibility_text_act">Visibilidade na sua agenda:</string>
     <string name="visibility_public">Pública</string>
-    <string name="visibility_text">Escolha o nível de visibilidade da atividade na sua agenda</string>
+    <string name="visibility_text">Visibilidade na sua agenda:</string>
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
     <string name="agenda_status_need_invitation">Você precisa ser convidado para poder encaixar!</string>
     <string name="agenda_status_fitted">Está na sua agenda!</string>
     <string name="agenda_status_invited">Você foi convidado!</string>
+    <string name="agenda_status_signalized">Você foi sinalizado!</string>
     <string name="agenda_status_anyone_can_participate">Qualquer um pode entrar!</string>
     <string name="title_max_caract">%1$d de 100</string>
 

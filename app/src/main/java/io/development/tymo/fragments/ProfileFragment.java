@@ -206,15 +206,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_UP:
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-                                    Intent intent = new Intent(getActivity(), AboutActivity.class);
-                                    intent.putExtra("user_about", new UserWrapper(user));
-
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "user_about" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                                    startActivity(intent);
                                 }
                                 break;
                             case MotionEvent.ACTION_DOWN:
@@ -277,6 +268,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             if (period == 3) {
                 profileName.setTextColor(getResources().getColor(R.color.grey_900));
                 profileDescription.setTextColor(getResources().getColor(R.color.grey_900));
+                editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
+            }  else if(period == 2 || period == 4) {
+                profileName.setTextColor(getResources().getColor(R.color.white));
+                profileDescription.setTextColor(getResources().getColor(R.color.white));
                 editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
             } else {
                 profileName.setTextColor(getResources().getColor(R.color.white));
@@ -1283,11 +1278,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 if (period == 3) {
                     editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
+                } else if (period == 2 || period == 4){
+                    editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit));
                 } else {
                     editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_night));
                 }
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 if (period == 3) {
+                    editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_pressed));
+                } else if (period == 2 || period == 4){
                     editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_pressed));
                 } else {
                     editProfileText.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.btn_profile_edit_night_pressed));

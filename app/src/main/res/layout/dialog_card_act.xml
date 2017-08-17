@@ -102,15 +102,14 @@
                         android:maxLines="2"
                         android:text="Date"
                         android:textColor="@color/grey_600"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:id="@+id/locationBox"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp">
+                    android:layout_height="wrap_content">
 
                     <ImageView
                         android:layout_width="35dp"
@@ -129,7 +128,7 @@
                         android:maxLines="2"
                         android:text="Location"
                         android:textColor="@color/grey_600"
-                        android:textSize="16sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -143,7 +142,7 @@
                     android:maxLines="3"
                     android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
                     android:textColor="@color/grey_800"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
                 <include
                     android:id="@+id/profilesPhotos"

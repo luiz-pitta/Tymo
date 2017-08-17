@@ -93,7 +93,7 @@
                     android:maxLines="2"
                     android:text="Date"
                     android:textColor="@color/grey_600"
-                    android:textSize="16sp" />
+                    android:textSize="14sp" />
 
             </LinearLayout>
 

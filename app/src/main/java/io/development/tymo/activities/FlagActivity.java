@@ -77,8 +77,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
     private int d,m,y;
 
-    private TextView m_title, privacyText, editButton;
-    private ImageView mBackButton, icon2, privacyIcon;
+    private TextView m_title, titleText, privacyText, editButton, agendaStatus;
+    private ImageView mBackButton, privacyIcon;
     private TextView availableText;
     private TextView unavailableText;
     private ImageView availableButton;
@@ -120,8 +120,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         mSubscriptions = new CompositeDisposable();
 
-        findViewById(R.id.icon1).setVisibility(View.GONE);
-        icon2 = (ImageView) findViewById(R.id.icon2);
         availableBox = (LinearLayout) findViewById(R.id.availableBox);
         unavailableBox = (LinearLayout) findViewById(R.id.unavailableBox);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
@@ -138,6 +136,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
         privacyText = (TextView) findViewById(R.id.privacyText);
         editButton = (TextView) findViewById(R.id.editButton);
+        agendaStatus = (TextView) findViewById(R.id.agendaStatus);
+        titleText = (TextView) findViewById(R.id.title);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
@@ -162,16 +162,18 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         error = false;
 
         type = getIntent().getIntExtra("type_flag",0);
-        icon2.setVisibility(View.INVISIBLE);
+
+        editButton.setVisibility(View.GONE);
 
         if(type == CREATE_EDIT_FLAG) {
+            titleText.setVisibility(View.GONE);
             mSwipeRefreshLayout.setEnabled(false);
-            confirmationButton.setText(R.string.confirm);
+            confirmationButton.setText(R.string.create);
             friend_free = getIntent().getBooleanExtra("flag_free_friend", false);
             m_title.setText(getResources().getString(R.string.create_flag));
             mBackButton.setImageResource(R.drawable.ic_add);
             mBackButton.setRotation(45);
-            findViewById(R.id.buttonsBar).setVisibility(View.GONE);
+            findViewById(R.id.checkDeleteButtonBar).setVisibility(View.GONE);
             space.getLayoutParams().height = (int) Utilities.convertDpToPixel(60, getApplicationContext());
 
             flagWrapper = (FlagWrapper)getIntent().getSerializableExtra("flag_edit");
@@ -246,12 +248,13 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         availableButton.setOnClickListener(this);
         unavailableButton.setOnClickListener(this);
         confirmationButton.setOnClickListener(this);
-        icon2.setOnClickListener(this);
         editButton.setOnClickListener(this);
         editButton.setOnTouchListener(this);
 
         checkButtonBox.setOnClickListener(this);
         deleteButtonBox.setOnClickListener(this);
+        checkButtonBox.setOnTouchListener(this);
+        deleteButtonBox.setOnTouchListener(this);
         mBackButton.setOnTouchListener(this);
 
         //set button controller
@@ -463,6 +466,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             permissionInvite = false;
 
         if(type == CREATE_EDIT_FLAG){
+            titleText.setVisibility(View.GONE);
             FlagEditFragment flagEditFragment = (FlagEditFragment) mNavigator.getFragment(type);
             flagEditFragment.setLayout(flagWrapper.getFlagServer(), invitedList, confirmedList, edit, act_free, user_friend != null);
 
@@ -471,51 +475,61 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 privacyText.setText(getResources().getString(R.string.flag_privacy));
             }else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
-                privacyText.setText(getResources().getString(R.string.act_privacy));
+                privacyText.setText(getResources().getString(R.string.flag_privacy_public));
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
             }
         }else {
             FlagShowFragment flagShowFragment = (FlagShowFragment) mNavigator.getFragment(type);
             flagShowFragment.setLayout(flagWrapper.getFlagServer(), invitedList, confirmedList, response.getWhatsGoingFlag(), permissionInvite);
 
+            if(!flagWrapper.getFlagServer().getTitle().matches("")){
+
+                titleText.setVisibility(View.VISIBLE);
+                titleText.setText(flagWrapper.getFlagServer().getTitle());
+                availableText.setText(getString(R.string.flag_menu_available_with_title));
+                unavailableText.setText(getString(R.string.flag_menu_unavailable_with_title));
+
+                if (flagWrapper.getFlagServer().getType()) {
+                    titleText.setTextColor(ContextCompat.getColor(this, R.color.flag_available));
+                }
+                else{
+                    titleText.setTextColor(ContextCompat.getColor(this, R.color.flag_unavailable));
+                }
+            }
+            else{
+                titleText.setVisibility(View.GONE);
+                availableText.setText(getString(R.string.flag_menu_available));
+                unavailableText.setText(getString(R.string.flag_menu_unavailable));
+            }
+
             User user = checkIfInFlag(userList);
 
             deleteButtonBox.setVisibility(View.VISIBLE);
-            deleteButton.setBackgroundResource(R.drawable.btn_feed_ignore);
-            deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_600));
             checkButtonBox.setVisibility(View.GONE);
+            agendaStatus.setText(getString(R.string.agenda_status_fitted));
 
             if(!flagWrapper.getFlagServer().getType()){
-                //icon2.setVisibility(View.INVISIBLE);
-                //icon2.setOnClickListener(null);
-                icon2.setImageResource(R.drawable.ic_edit);
-                icon2.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
                 findViewById(R.id.space).setVisibility(View.VISIBLE);
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
                 unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
                 unavailableButton.clearColorFilter();
             }else if(permissionInvite) {
-                icon2.setImageResource(R.drawable.ic_edit);
-                icon2.setVisibility(View.GONE);
                 editButton.setVisibility(View.VISIBLE);
                 findViewById(R.id.space).setVisibility(View.VISIBLE);
             }else{
-                icon2.setVisibility(View.INVISIBLE);
-                icon2.setOnClickListener(null);
+                editButton.setVisibility(View.GONE);
 
                 if(user != null){
                     if(user.getInvitation() == 1) {
                         deleteButtonBox.setVisibility(View.VISIBLE);
-                        deleteButton.setBackgroundResource(R.drawable.btn_feed_ignore);
-                        deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_600));
                         checkButtonBox.setVisibility(View.GONE);
+                        agendaStatus.setText(getString(R.string.agenda_status_fitted));
                     }
                     else {
                         checkButtonBox.setVisibility(View.VISIBLE);
-                        checkButton.setBackgroundResource(R.drawable.btn_feed_check);
-                        checkText.setTextColor(ContextCompat.getColor(this, R.color.green_600));
                         deleteButtonBox.setVisibility(View.GONE);
+                        agendaStatus.setText(getString(R.string.agenda_status_signalized));
                     }
                 }
             }
@@ -526,7 +540,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 privacyText.setText(getResources().getString(R.string.flag_privacy));
             }else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
-                privacyText.setText(getResources().getString(R.string.visibility_public));
+                privacyText.setText(getResources().getString(R.string.flag_privacy_public));
             }
         }
 
@@ -1032,7 +1046,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 free = false;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_public);
-                privacyText.setText(getResources().getString(R.string.visibility_public));
+                privacyText.setText(getResources().getString(R.string.flag_privacy_public));
                 availableButton.setImageResource(R.drawable.ic_flag);
                 unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
                 unavailableButton.clearColorFilter();
@@ -1045,7 +1059,16 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            onBackPressed();
+            if(edit){
+                Intent intent = new Intent(this, FlagActivity.class);
+                intent.putExtra("type_flag", 1);
+                intent.putExtra("flag_show", flagWrapper);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                onBackPressed();
+            }
         }
         else if(v == confirmationButton) {
             Bundle bundle = new Bundle();
@@ -1556,6 +1579,22 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == checkButtonBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_200));
+                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_200));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_400));
+                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_400));
+            }
+        } else if (view == deleteButtonBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                deleteText.setTextColor(ContextCompat.getColor(this, R.color.white));
+                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_200));
+                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_200));
             }
         }
 

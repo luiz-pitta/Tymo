@@ -229,14 +229,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                         switch (event.getAction()) {
                             case MotionEvent.ACTION_UP:
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-                                    Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "profilePhoto" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                                    Intent friend = new Intent(FriendProfileActivity.this, AboutFriendActivity.class);
-                                    friend.putExtra("user_about_friend", new UserWrapper(user));
-                                    startActivity(friend);
                                 }
                                 break;
                             case MotionEvent.ACTION_DOWN:
@@ -648,7 +640,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             findViewById(R.id.nextPreviousBox).setVisibility(View.GONE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.GONE);
             profilePhotoBox.setOnClickListener(null);
-            profilePhotoBox.setOnTouchListener(null);
             contactsBox.setVisibility(View.GONE);
             aboutBox.setVisibility(View.GONE);
         } else {
@@ -656,7 +647,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             findViewById(R.id.nextPreviousBox).setVisibility(View.VISIBLE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.VISIBLE);
             profilePhotoBox.setOnClickListener(this);
-            profilePhotoBox.setOnTouchListener(this);
             contactsBox.setVisibility(View.VISIBLE);
             aboutBox.setVisibility(View.VISIBLE);
         }

@@ -64,10 +64,10 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener, View.OnClickListener {
+public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnTouchListener {
 
-    private RelativeLayout addPersonButton;
-    private TextView guestsNumber, addGuestText;
+    private RelativeLayout addPersonButton, sendBox;
+    private TextView guestsNumber, addGuestText, guestText, repeatMax;
     private View addGuestButtonDivider;
     private Rect rect;
 
@@ -78,7 +78,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private final int GUEST_UPDATE = 37, ADD_GUEST = 39;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private LinearLayout selectionGuestBox, sendBox;
+    private LinearLayout guestBox;
 
     private int repeat_type = 0;
     private int repeat_qty = -1;
@@ -92,16 +92,16 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private int minutes_start, hour_start;
     private int minutes_end, hour_end;
 
-    private TextView dateStart, dateEnd;
-    private TextView timeStart, timeEnd;
+    private TextView dateStart, dateEnd, titleMax, sendText;
+    private TextView timeStart, timeEnd, repeatAddText;
 
-    private LinearLayout repeatEditLayout, repeatBox;
+    private LinearLayout repeatEditLayout, repeatBox, whoCanInviteBox, profilesPhotos, repeatAdd;
     private EditText repeatEditText, titleEditText;
     private MaterialSpinner spinner, sendPicker;
 
     private CompositeDisposable mSubscriptions;
 
-    private ImageView addPersonIcon;
+    private ImageView addPersonIcon, repeatAddIcon;
 
     public static Fragment newInstance(String text) {
         FlagEditFragment fragment = new FlagEditFragment();
@@ -129,23 +129,89 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         mSubscriptions = new CompositeDisposable();
 
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
+        titleMax = (TextView) view.findViewById(R.id.titleMax);
         dateStart = (TextView)view.findViewById(R.id.dateStart);
         dateEnd = (TextView)view.findViewById(R.id.dateEnd);
         timeStart = (TextView)view.findViewById(R.id.timeStart);
         timeEnd = (TextView)view.findViewById(R.id.timeEnd);
         repeatEditLayout = (LinearLayout)view.findViewById(R.id.repeatNumberBox);
         repeatEditText = (EditText)view.findViewById(R.id.repeatEditText);
+        repeatMax = (TextView) view.findViewById(R.id.repeatMax);
         titleEditText = (EditText)view.findViewById(R.id.title);
-        selectionGuestBox = (LinearLayout) view.findViewById(R.id.selectionGuestBox);
-        sendBox = (LinearLayout) view.findViewById(R.id.sendBox);
+        whoCanInviteBox = (LinearLayout) view.findViewById(R.id.whoCanInviteBox);
+        guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
+        guestText = (TextView) view.findViewById(R.id.guestText);
+        profilesPhotos = (LinearLayout) view.findViewById(R.id.profilesPhotos);
+        sendText = (TextView)view.findViewById(R.id.sendText);
+        sendBox = (RelativeLayout) view.findViewById(R.id.sendBox);
         repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
         addPersonButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
         addPersonIcon = (ImageView) view.findViewById(R.id.addGuestIcon);
         addGuestText = (TextView) view.findViewById(R.id.addGuestText);
         addGuestButtonDivider = (View) view.findViewById(R.id.addGuestButtonDivider);
+        repeatAddIcon = (ImageView) view.findViewById(R.id.repeatAddIcon);
+        repeatAddText = (TextView) view.findViewById(R.id.repeatAddText);
+        repeatAdd = (LinearLayout) view.findViewById(R.id.repeatAdd);
 
-        addGuestText.setText(getString(R.string.invite_guest_btn));
+        repeatBox.setVisibility(View.GONE);
+
+        addGuestText.setText(getString(R.string.signalize_guest_btn));
+
+        titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+
+        titleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
+        });
+
+        repeatEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                }
+                else {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String number = String.valueOf(s);
+                if (number.length() > 2) {
+                    repeatEditText.setText("30");
+                }
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                }
+                else {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
+                }
+                else {
+                    repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                }
+            }
+        });
 
         new Actor.Builder(SpringSystem.create(), addPersonButton)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
@@ -178,8 +244,14 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         hour_start = -1;
         hour_end = -1;
 
+        guestBox.setOnClickListener(this);
+        guestBox.setOnTouchListener(this);
+        repeatAdd.setOnClickListener(this);
+        repeatAdd.setOnTouchListener(this);
+
         repeatEditLayout.setVisibility(View.GONE);
-        selectionGuestBox.setVisibility(View.GONE);
+        guestBox.setVisibility(View.GONE);
+        profilesPhotos.setVisibility(View.GONE);
 
         spinner = (MaterialSpinner) view.findViewById(R.id.repeatPicker);
         spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
@@ -208,16 +280,21 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if(position != 0)
-                    selectionGuestBox.setVisibility(View.VISIBLE);
-                else
-                    selectionGuestBox.setVisibility(View.GONE);
+                if(position != 0) {
+                    guestBox.setVisibility(View.VISIBLE);
+                    profilesPhotos.setVisibility(View.VISIBLE);
+                }
+                else {
+                    guestBox.setVisibility(View.GONE);
+                    profilesPhotos.setVisibility(View.GONE);
+                }
 
             }
         });
 
         sendPicker.setSelectedIndex(1);
-        selectionGuestBox.setVisibility(View.VISIBLE);
+        guestBox.setVisibility(View.VISIBLE);
+        profilesPhotos.setVisibility(View.VISIBLE);
 
         dateStart.setOnClickListener(this);
         dateEnd.setOnClickListener(this);
@@ -261,18 +338,31 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
     public void setSelectionSendBox(boolean type) {
         if(!type){
-            if(selectionGuestBox.getVisibility() == View.GONE)
+            if(guestBox.getVisibility() == View.GONE) {
                 sendBox.setVisibility(View.GONE);
+                profilesPhotos.setVisibility(View.GONE);
+                sendText.setVisibility(View.GONE);
+                whoCanInviteBox.setVisibility(View.GONE);
+            }
             else{
-                selectionGuestBox.setVisibility(View.GONE);
+                guestBox.setVisibility(View.GONE);
+                profilesPhotos.setVisibility(View.GONE);
+                sendText.setVisibility(View.GONE);
+                whoCanInviteBox.setVisibility(View.GONE);
                 sendBox.setVisibility(View.GONE);
             }
         }else {
-            if(send_toAll == 0)
+            if(send_toAll == 0) {
                 sendBox.setVisibility(View.VISIBLE);
+                sendText.setVisibility(View.VISIBLE);
+                whoCanInviteBox.setVisibility(View.GONE);
+            }
             else{
-                selectionGuestBox.setVisibility(View.VISIBLE);
+                guestBox.setVisibility(View.VISIBLE);
                 sendBox.setVisibility(View.VISIBLE);
+                profilesPhotos.setVisibility(View.VISIBLE);
+                sendText.setVisibility(View.VISIBLE);
+                whoCanInviteBox.setVisibility(View.GONE);
             }
         }
 
@@ -539,7 +629,28 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             tpd.setEndTitle(getResources().getString(R.string.date_end));
             tpd.setCurrentTab(0);
             tpd.show(getFragmentManager(), "Timepickerdialog");
-        }else if(v == timeEnd){
+        }
+        else if(v == repeatAdd){
+            repeatBox.setVisibility(View.VISIBLE);
+            repeatAdd.setVisibility(View.GONE);
+        }
+        /*else if(v == guestBox){
+            FlagActivity flagActivity = (FlagActivity) getActivity();
+
+            Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
+            intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+            intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+            intent.putExtra("is_adm", false);
+            intent.putExtra("id_act", flagActivity.getFlag().getId());
+            intent.putExtra("is_flag", true);
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            startActivityForResult(intent, GUEST_UPDATE);
+        }*/else if(v == timeEnd){
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
                     FlagEditFragment.this,
@@ -695,6 +806,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 repeatBox.setVisibility(View.GONE);
 
                 sendBox.setVisibility(View.GONE);
+                sendText.setVisibility(View.GONE);
 
                 recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -722,7 +834,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 }));
 
                 if (flagServer.getType()) {
-                    selectionGuestBox.setVisibility(View.VISIBLE);
+                    guestBox.setVisibility(View.VISIBLE);
+                    profilesPhotos.setVisibility(View.VISIBLE);
 
                     listPerson.clear();
                     listConfirmed.clear();
@@ -738,13 +851,16 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     recyclerView.setAdapter(adapter);
                     guestsNumber.setText(String.valueOf(listPerson.size()));
                     addPersonButton.setActivated(true);
-                } else
-                    selectionGuestBox.setVisibility(View.GONE);
+                } else {
+                    guestBox.setVisibility(View.GONE);
+                    profilesPhotos.setVisibility(View.GONE);
+                }
 
             } else if (!free) {
                 sendPicker.setSelectedIndex(1);
                 send_toAll = 1;
-                selectionGuestBox.setVisibility(View.VISIBLE);
+                guestBox.setVisibility(View.VISIBLE);
+                profilesPhotos.setVisibility(View.VISIBLE);
 
                 for (int i = 0; i < users.size(); i++) {
                     User usr = users.get(i);
@@ -766,7 +882,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             } else if (friend) {
                 sendPicker.setSelectedIndex(1);
                 send_toAll = 1;
-                selectionGuestBox.setVisibility(View.VISIBLE);
+                guestBox.setVisibility(View.VISIBLE);
+                profilesPhotos.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -822,5 +939,29 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         super.onDestroy();
         if(mSubscriptions != null)
             mSubscriptions.dispose();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent event) {
+        if (view == repeatAdd) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                repeatAddText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+                repeatAddIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                repeatAddText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
+                repeatAddIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
+            }
+        }
+        /*else if (view == guestBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+                guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
+                guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests_pressed));
+            }
+        }*/
+
+        return false;
     }
 }

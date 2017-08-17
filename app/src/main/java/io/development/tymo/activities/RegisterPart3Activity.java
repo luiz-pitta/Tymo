@@ -116,22 +116,17 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
         register_with_facebook = getIntent().getBooleanExtra("register_with_facebook", true);
 
-        if(register_with_facebook) {
-            m_title2.setText(getResources().getString(R.string.register_steps, 2, 2));
-        }
-        else{
-            m_title2.setText(getResources().getString(R.string.register_steps, 3, 3));
-        }
+        m_title2.setText(getResources().getString(R.string.register_steps, 3, 3));
 
         mSubscriptions = new CompositeDisposable();
 
         wrap = (UserWrapper) getIntent().getSerializableExtra("user_wrapper");
-        privacy = getIntent().getIntExtra("user_privacy",0);
+        privacy = getIntent().getIntExtra("user_privacy", 0);
 
         inputStream = TymoApplication.getInstance().getInputStreamer();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
     }
 
@@ -153,13 +148,11 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         dg.setContentView(customView);
         dg.setCanceledOnTouchOutside(true);
 
-        if (listSize == 0){
+        if (listSize == 0) {
             text2.setText(getResources().getString(R.string.validation_field_my_interests_selected_none));
-        }
-        else if (listSize == 1){
+        } else if (listSize == 1) {
             text2.setText(getResources().getString(R.string.validation_field_my_interests_selected_one));
-        }
-        else{
+        } else {
             text2.setText(getResources().getString(R.string.validation_field_my_interests_selected, listSize));
         }
 
@@ -194,7 +187,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         mSubscriptions.add(NetworkUtil.getRetrofit().register(user)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResister,this::handleError));
+                .subscribe(this::handleResister, this::handleError));
     }
 
     private void handleResister(Response response) {
@@ -202,7 +195,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
         SharedPreferences.Editor editor = mSharedPreferences.edit();
         User user = wrap.getUser();
 
-        editor.putString(Constants.EMAIL,user.getEmail());
+        editor.putString(Constants.EMAIL, user.getEmail());
         editor.putBoolean(Constants.LOGIN_TYPE, user.getFromFacebook());
         editor.putString(Constants.USER_NAME, user.getName());
         editor.putBoolean(Constants.LOCATION, user.isLocationGps());
@@ -236,13 +229,13 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
                     e.printStackTrace();
                 }
             } else {
-                if(Utilities.isDeviceOnline(this))
+                if (Utilities.isDeviceOnline(this))
                     Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
-        }catch (Exception e){
-            if(Utilities.isDeviceOnline(this))
+        } catch (Exception e) {
+            if (Utilities.isDeviceOnline(this))
                 Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -250,10 +243,10 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
     }
 
     @Override
-    public  void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 List<String> list = intent.getStringArrayListExtra("tags_objs");
                 interestList.clear();
                 interestList.addAll(list);
@@ -272,7 +265,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
                     }
                 });
 
-                for (int i=0;i<list.size();i++){
+                for (int i = 0; i < list.size(); i++) {
                     Tag tag;
                     tag = new Tag(list.get(i));
                     tag.radius = Utilities.convertDpToPixel(10.0f, this);
@@ -287,45 +280,44 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View view) {
-        if(view == advanceButton){
+        if (view == advanceButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "advanceButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "advanceButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             progressBox.setVisibility(View.VISIBLE);
             User user = wrap.getUser();
 
             user.setPrivacy(privacy);
-            if(interestList.size() < 5) {
+            if (interestList.size() < 5) {
                 progressBox.setVisibility(View.GONE);
                 createDialogMessage(interestList.size());
-            }
-            else {
+            } else {
                 user.addAllInterest(interestList);
-                if(inputStream != null)
+                if (inputStream != null)
                     uploadCloudinary.execute(user);
                 else
                     registerProcess(user);
             }
-        }else if(view == mBackButton) {
+        } else if (view == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             onBackPressed();
-        }else if(view == addTagBox){
+        } else if (view == addTagBox) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             int i;
             ArrayList<String> list = new ArrayList<>();
             List<Tag> list_tags = tagGroup.getTags();
-            for(i = 0; i < list_tags.size(); i++){
+            for (i = 0; i < list_tags.size(); i++) {
                 list.add(list_tags.get(i).text);
             }
             Intent intent = new Intent(this, SelectInterestActivity.class);
@@ -383,8 +375,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_100));
             }
-        }
-        else if (view == advanceButton) {
+        } else if (view == advanceButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 advanceButton.setTextColor(ContextCompat.getColor(this, R.color.white));
                 advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance));
@@ -392,8 +383,7 @@ public class RegisterPart3Activity extends AppCompatActivity implements View.OnC
                 advanceButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
                 advanceButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
             }
-        }
-        else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+        } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
             addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.white));
             addTagText.setTextColor(ContextCompat.getColor(this, R.color.white));
         } else if (event.getAction() == MotionEvent.ACTION_DOWN) {

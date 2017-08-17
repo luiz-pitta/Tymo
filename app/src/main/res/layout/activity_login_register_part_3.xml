@@ -84,6 +84,7 @@
                         android:tint="@color/white" />
 
                     <TextView
+                        android:id="@+id/addTagText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"

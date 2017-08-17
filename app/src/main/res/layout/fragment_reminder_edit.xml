@@ -64,7 +64,6 @@
                     android:background="@drawable/bg_act_edit_box"
                     android:gravity="center"
                     android:hint="@string/hint_date"
-                    android:inputType="text"
                     android:lines="1"
                     android:paddingBottom="5dp"
                     android:paddingLeft="10dp"

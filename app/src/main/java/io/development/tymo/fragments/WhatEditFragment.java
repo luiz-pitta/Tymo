@@ -43,7 +43,7 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener, 
     private Tag tag;
     private TagView tagGroup;
     private TextView titleMax, addTagText;
-    private EditText tittleEditText, descriptionEditText, whatsAppEditText;
+    private EditText titleEditText, descriptionEditText, whatsAppEditText;
     private RelativeLayout addTagBox;
     private ImageView addTagIcon;
 
@@ -82,7 +82,7 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener, 
 
         tagGroup = (TagView) view.findViewById(R.id.tagGroup);
         descriptionEditText = (EditText) view.findViewById(R.id.description);
-        tittleEditText = (EditText) view.findViewById(R.id.title);
+        titleEditText = (EditText) view.findViewById(R.id.title);
         titleMax = (TextView) view.findViewById(R.id.titleMax);
         whatsAppEditText = (EditText) view.findViewById(R.id.whatsAppGroupLink);
         addTagBox = (RelativeLayout) view.findViewById(R.id.addTagBox);
@@ -93,22 +93,22 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener, 
         addTagBox.setOnTouchListener(this);
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
-        titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+        titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
 
-        tittleEditText.addTextChangedListener(new TextWatcher() {
+        titleEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                titleMax.setText(getString(R.string.title_max_caract, tittleEditText.length()));
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
             }
         });
 
@@ -123,7 +123,7 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener, 
 
     public List<String> getTextFromView() {
         List<String> texts = new ArrayList<>();
-        texts.add(tittleEditText.getText().toString());
+        texts.add(titleEditText.getText().toString());
         texts.add(descriptionEditText.getText().toString());
         texts.add(whatsAppEditText.getText().toString());
         return texts;
@@ -225,8 +225,8 @@ public class WhatEditFragment extends Fragment implements View.OnClickListener, 
     }
 
     public void setLayout(ActivityServer activityServer, ArrayList<TagServer> tags){
-        if(tittleEditText!=null) {
-            tittleEditText.setText(activityServer.getTitle());
+        if(titleEditText!=null) {
+            titleEditText.setText(activityServer.getTitle());
 
             whatsAppEditText.setText(activityServer.getWhatsappGroupLink());
 

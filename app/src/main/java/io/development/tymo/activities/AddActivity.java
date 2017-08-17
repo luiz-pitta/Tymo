@@ -731,7 +731,16 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            onBackPressed();
+
+            if(edit){
+                Intent intent = new Intent(this, ShowActivity.class);
+                intent.putExtra("act_show", activityWrapper);
+                startActivity(intent);
+                finish();
+            }
+            else {
+                onBackPressed();
+            }
         }
         else if (v == privacyBox) {
             Bundle bundle = new Bundle();
