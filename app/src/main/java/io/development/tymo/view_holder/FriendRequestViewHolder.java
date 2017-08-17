@@ -48,8 +48,6 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private RelativeLayout mainBox;
-
     private String email_friend;
 
     private CompositeDisposable mSubscriptions;
@@ -64,7 +62,6 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
         text2 = $(R.id.text2);
         text3 = $(R.id.text3);
         text4 = $(R.id.text4);
-        mainBox = $(R.id.mainBox);
         moreVerticalIcon = $(R.id.moreVerticalIcon);
         ignoreButton = $(R.id.ignoreButton);
         acceptButton = $(R.id.acceptButton);
@@ -74,11 +71,10 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
 
         moreVerticalIcon.setVisibility(View.GONE);
         $(R.id.pieceBox).setVisibility(View.GONE);
-        //resquestInvite.getLayoutParams().height = (int) Utilities.convertDpToPixel(120, context);
 
         acceptButton.setOnClickListener(this);
         ignoreButton.setOnClickListener(this);
-        mainBox.setOnClickListener(this);
+        resquestInvite.setOnClickListener(this);
 
         mSubscriptions = new CompositeDisposable();
         mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -123,9 +119,9 @@ public class FriendRequestViewHolder extends BaseViewHolder<FriendRequestModel> 
             text4.setText(context.getResources().getString(R.string.response_request_to_add_ignore));
             friendRequest.setStatus(0);
             updateFriendRequest(friendRequest);
-        } else if (v == mainBox) {
+        } else if (v == resquestInvite) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mainBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "resquestInvite" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 

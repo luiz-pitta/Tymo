@@ -1229,7 +1229,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(intent);
-        } else if (v == editProfile && !noInternet) {
+        } else if ((v == editProfile || v == profilePhotoBox) && !noInternet) {
             Intent intent = new Intent(getActivity(), AboutActivity.class);
             intent.putExtra("user_about", new UserWrapper(user));
 

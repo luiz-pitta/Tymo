@@ -48,7 +48,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
     private ProgressBar ignoreAcceptProgressBar;
     private Context context;
 
-    private RelativeLayout mainBox;
+    private RelativeLayout resquestInvite;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -71,7 +71,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
         ignoreButton = $(R.id.ignoreButton);
         acceptButton = $(R.id.acceptButton);
         pieceIcon = $(R.id.pieceIcon);
-        mainBox = $(R.id.mainBox);
+        resquestInvite = $(R.id.resquestInvite);
         itemImage = $(R.id.itemImage);
         cubeLowerBoxIcon = $(R.id.cubeLowerBoxIcon);
         cubeUpperBoxIcon = $(R.id.cubeUpperBoxIcon);
@@ -86,7 +86,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
 
         acceptButton.setOnClickListener(this);
         ignoreButton.setOnClickListener(this);
-        mainBox.setOnClickListener(this);
+        resquestInvite.setOnClickListener(this);
 
         mSubscriptions = new CompositeDisposable();
         mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -109,9 +109,9 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
 
     @Override
     public void onClick(View v){
-        if(v == mainBox){
+        if(v == resquestInvite){
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mainBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "resquestInvite" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
