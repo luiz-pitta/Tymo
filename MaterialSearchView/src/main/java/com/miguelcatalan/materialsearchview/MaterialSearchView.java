@@ -169,6 +169,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         initSearchView();
 
         mSuggestionsListView.setVisibility(GONE);
+        mFilterBtn.setVisibility(VISIBLE);
         setAnimationDuration(AnimationUtil.ANIMATION_DURATION_MEDIUM);
     }
 
@@ -229,7 +230,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
                 onVoiceClicked();
             } else if (v == mEmptyBtn) {
                 mSearchSrcTextView.setText(null);
-                mFilterBtn.setVisibility(GONE);
+                //mFilterBtn.setVisibility(GONE);
             } else if (v == mSearchSrcTextView) {
                 showSuggestions();
             } else if (v == mTintView) {
@@ -256,7 +257,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         mUserQuery = text;
         boolean hasText = !TextUtils.isEmpty(text);
         if (hasText) {
-            mFilterBtn.setVisibility(GONE);
+            //mFilterBtn.setVisibility(GONE);
             mEmptyBtn.setVisibility(VISIBLE);
             showVoice(false);
         } else {
@@ -543,6 +544,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
             }
         }
         mIsSearchOpen = true;
+        hideKeyboard(this);
     }
 
     private void setVisibleWithAnimation() {
@@ -661,7 +663,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
     @Override
     public void clearFocus() {
         mClearingFocus = true;
-        mFilterBtn.setVisibility(GONE);
+        //mFilterBtn.setVisibility(GONE);
         hideKeyboard(this);
         super.clearFocus();
         mSearchSrcTextView.clearFocus();

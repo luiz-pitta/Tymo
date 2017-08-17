@@ -15,7 +15,8 @@ public class ActivityServer implements Serializable {
     private String name_inviter;
     private String creator_email;
     private long id;
-    private long id_google, id_facebook;
+    private long id_facebook;
+    private String id_google;
 
     private long date_time_now;
 
@@ -291,11 +292,11 @@ public class ActivityServer implements Serializable {
         this.id_facebook = id_facebook;
     }
 
-    public long getIdGoogle() {
+    public String getIdGoogle() {
         return id_google;
     }
 
-    public void setIdGoogle(long id_google) {
+    public void setIdGoogle(String id_google) {
         this.id_google = id_google;
     }
 
@@ -564,8 +565,7 @@ public class ActivityServer implements Serializable {
         boolean equal = false;
 
         if (obj instanceof String){
-            long id_google = Long.parseLong((String)obj);
-            equal = id_google == this.id_google;
+            equal = obj == this.id_google;
         }else if(obj instanceof ActivityServer){
             long id = ((ActivityServer)obj).getId();
             equal = id == this.id;

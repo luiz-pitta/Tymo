@@ -9,8 +9,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +19,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -61,8 +61,11 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.google.api.services.calendar.model.CalendarList;
+import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -82,6 +85,8 @@ import java.util.List;
 import io.development.tymo.BuildConfig;
 import io.development.tymo.Login1Activity;
 import io.development.tymo.R;
+import io.development.tymo.adapters.SelectionCalendarAdapter;
+import io.development.tymo.adapters.SelectionTagAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.AppInfoServer;
 import io.development.tymo.model_server.AppInfoWrapper;
@@ -108,15 +113,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private TextView versionName;
 
     private CallbackManager callbackManager;
-    GoogleAccountCredential mCredential;
+    private GoogleAccountCredential mCredential;
 
     private final int USER_UPDATE = 37;
-    static final int REQUEST_ACCOUNT_PICKER = 1000;
-    static final int REQUEST_AUTHORIZATION = 1001;
-    static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
-    static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
+    private static final int REQUEST_ACCOUNT_PICKER = 1000;
+    private static final int REQUEST_AUTHORIZATION = 1001;
+    private static final int REQUEST_GOOGLE_PLAY_SERVICES = 1002;
+    private static final int REQUEST_PERMISSION_GET_ACCOUNTS = 1003;
     private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
-    private static final String PREF_ACCOUNT_NAME = "accountName";
 
     private LinearLayout account, importFromFacebook, importFromGoogleAgenda;
     private LinearLayout privacy, blockedUserList, tutorial, logout, preferences, notifications;
@@ -128,8 +132,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private int email_google_position = 0;
 
     private CompositeDisposable mSubscriptions;
-    AppInfoServer appInfoServer = null;
-    String urlStringPolicyPrivacy = "", urlStringTermsUse = "";
+    private AppInfoServer appInfoServer = null;
+    private String urlStringPolicyPrivacy = "", urlStringTermsUse = "";
+    private Integer google_calendar_months_to_add = null;
+
 
     private ArrayList<ArrayList<String>> list_google = new ArrayList<>();
     private ArrayList<String> list_email = new ArrayList<>();
@@ -250,6 +256,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 getApplicationContext(), Arrays.asList(SCOPES))
                 .setBackOff(new ExponentialBackOff());
 
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
     }
@@ -262,7 +269,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         } else if (!Utilities.isDeviceOnline(this)) {
             Toast.makeText(SettingsActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         } else {
-            new MakeRequestTask(mCredential).execute();
+            new GetCalendarListAsync(mCredential).execute();
         }
     }
 
@@ -270,9 +277,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
     private void chooseAccount() {
         if (EasyPermissions.hasPermissions(
                 this, Manifest.permission.GET_ACCOUNTS)) {
-            String accountName = getPreferences(Context.MODE_PRIVATE)
-                    .getString(PREF_ACCOUNT_NAME, null);
-            if (accountName != null) {
+            String accountName = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE)
+                    .getString(Constants.PREF_ACCOUNT_NAME, null);
+            if (accountName != null && !accountName.equals("")) {
                 mCredential.setSelectedAccountName(accountName);
                 getResultsFromApi();
             } else {
@@ -285,7 +292,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             // Request the GET_ACCOUNTS permission via a user dialog
             EasyPermissions.requestPermissions(
                     this,
-                    "This app needs to access your Google account (via Contacts).",
+                    getResources().getString(R.string.permission_import_from_google_agenda),
                     REQUEST_PERMISSION_GET_ACCOUNTS,
                     Manifest.permission.GET_ACCOUNTS);
         }
@@ -329,14 +336,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         dialog.show();
     }
 
-    private void getImportedGoogle(String email) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().getImportedGoogle(email)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGoogle,this::handleError));
-    }
-
     private void setNotifications(User user) {
         setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().setNotificationUser(user)
@@ -373,6 +372,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
         editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
         editor.putBoolean(Constants.INTRO, false);
+        editor.putString(Constants.PREF_ACCOUNT_NAME, "");
+        editor.putString("ListCalendarImportGoogle", "");
         editor.apply();
 
         if (AccessToken.getCurrentAccessToken() != null)
@@ -420,142 +421,19 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void importFromGoogle(ArrayList<ActivityServer> activityServers) {
         setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGoogle(activityServers)
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseGoogleImported,this::handleError));
     }
 
     private void handleResponseGoogleImported(Response response) {
-        Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_success), Toast.LENGTH_LONG).show();
+        if(response.getNumberInvitationRequest() > 0)
+            Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_success), Toast.LENGTH_LONG).show();
+        else
+            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_facebook_no_events), Toast.LENGTH_LONG).show();
+
         setProgress(false);
-    }
-
-    private boolean isActivityImported(ArrayList<ActivityServer> list, long id, String name){
-        for(int i=0;i<list.size();i++){
-            ActivityServer activityServer = list.get(i);
-            if(activityServer.getIdGoogle() == id || name.contains(activityServer.getTitle()))
-                return true;
-        }
-        return false;
-    }
-
-    private void handleResponseGoogle(Response response) {
-        ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
-        ArrayList<ActivityServer> list_activities_imported_google = response.getWhatsGoingAct();
-        if(list_google.size() > 0) {
-            ArrayList<String> list_ids_google = list_google.get(0);
-            ArrayList<String> list_names_google = list_google.get(1);
-            ArrayList<String> list_description_google = list_google.get(2);
-            ArrayList<String> list_locations_google = list_google.get(3);
-            ArrayList<String> list_date_start_google = list_google.get(4);
-            ArrayList<String> list_date_end_google = list_google.get(5);
-            ArrayList<String> list_repeat_google = list_google.get(6);
-
-
-            //Retirando as atividades já importadas
-            for (int j = 0; j < list_ids_google.size() && list_activities_imported_google.size() > 0; j++) {
-                if (isActivityImported(list_activities_imported_google, Long.parseLong(list_ids_google.get(j)), list_names_google.get(j))) {
-                    list_ids_google.remove(j);
-                    list_names_google.remove(j);
-                    list_description_google.remove(j);
-                    list_locations_google.remove(j);
-                    list_date_start_google.remove(j);
-                    list_date_end_google.remove(j);
-                    list_repeat_google.remove(j);
-                    j--;
-                }
-            }
-
-            for (int j = 0; j < list_ids_google.size(); j++) {
-                ActivityServer activityServer = new ActivityServer();
-                if(list_names_google.get(j) == null)
-                    continue;
-                activityServer.setTitle(list_names_google.get(j));
-                activityServer.setIdGoogle(Long.parseLong(list_ids_google.get(j)));
-                activityServer.setDescription(list_description_google.get(j) != null ? list_description_google.get(j) : "");
-                activityServer.setLat(-500);
-                activityServer.setLng(-500);
-                activityServer.setLocation(list_locations_google.get(j) != null ? list_locations_google.get(j) : "");
-                activityServer.setRepeatType(list_repeat_google.get(j) != null ? 5 : 0); //Opção 5 caso atividade do Google se repita para colocar msg que ele tem que criar a repetição
-                activityServer.setInvitationType(0); //Somente administrador
-                activityServer.setWhatsappGroupLink("");
-                activityServer.addTags(getResources().getString(R.string.settings_import_from_google_agenda_tag));
-
-                activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube));
-                activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube_light));
-                activityServer.setCubeIcon(response.getIcon().getUrl());
-
-                activityServer.setCreator(user.getEmail());
-
-                Calendar c = Calendar.getInstance();
-                c.setTimeInMillis(Long.parseLong(list_date_start_google.get(j)));
-                int y1 = c.get(Calendar.YEAR);
-                int m1 = c.get(Calendar.MONTH) + 1;
-                int d1 = c.get(Calendar.DAY_OF_MONTH);
-                int minute1 = c.get(Calendar.MINUTE);
-                int hour1 = c.get(Calendar.HOUR_OF_DAY);
-
-                activityServer.setDayStart(d1);
-                activityServer.setMonthStart(m1);
-                activityServer.setYearStart(y1);
-                activityServer.setMinuteStart(minute1);
-                activityServer.setHourStart(hour1);
-
-                if(list_date_end_google.get(j) != null) {
-                    c.setTimeInMillis(Long.parseLong(list_date_end_google.get(j)));
-                    int y2 = c.get(Calendar.YEAR);
-                    int m2 = c.get(Calendar.MONTH) + 1;
-                    int d2 = c.get(Calendar.DAY_OF_MONTH);
-                    int minute2 = c.get(Calendar.MINUTE);
-                    int hour2 = c.get(Calendar.HOUR_OF_DAY);
-
-                    LocalDate start = new LocalDate (y1, m1, d1);
-                    LocalDate end = new LocalDate(y2, m2, d2);
-                    Period timePeriod = new Period(start, end, PeriodType.days());
-                    if(timePeriod.getDays() > 15) {
-                        activityServer.setDayEnd(d1);
-                        activityServer.setMonthEnd(m1);
-                        activityServer.setYearEnd(y1);
-                        activityServer.setMinuteEnd(minute1);
-                        activityServer.setHourEnd(hour1);
-                    }else {
-                        activityServer.setDayEnd(d2);
-                        activityServer.setMonthEnd(m2);
-                        activityServer.setYearEnd(y2);
-                        activityServer.setMinuteEnd(minute2);
-                        activityServer.setHourEnd(hour2);
-                    }
-                }else {
-                    activityServer.setDayEnd(d1);
-                    activityServer.setMonthEnd(m1);
-                    activityServer.setYearEnd(y1);
-                    activityServer.setMinuteEnd(minute1);
-                    activityServer.setHourEnd(hour1);
-                }
-
-                activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
-
-                Calendar calendar2 = Calendar.getInstance();
-                calendar2.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
-                activityServer.setDateTimeStart(calendar2.getTimeInMillis());
-
-                calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
-                activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
-
-                list_activities_to_import.add(activityServer);
-            }
-
-            if(list_activities_to_import.size() > 0)
-                importFromGoogle(list_activities_to_import);
-            else {
-                Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
-                setProgress(false);
-            }
-        }else{
-            Toast.makeText(this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
-            setProgress(false);
-        }
     }
 
     private void getContactUs() {
@@ -571,6 +449,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         if(appInfoServer != null) {
             urlStringPolicyPrivacy = appInfoServer.getPrivacyPoliceUrl();
             urlStringTermsUse = appInfoServer.getUseTermsUrl();
+            google_calendar_months_to_add = appInfoServer.getGoogleCalendarMonthsToAdd();
         }
         setProgress(false);
     }
@@ -603,13 +482,10 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
         switch (requestCode) {
             case 1:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    // All good!
-                } else {
+                if (grantResults.length == 0 && grantResults[0] != PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, getResources().getString(R.string.permission_import_from_google_agenda), Toast.LENGTH_LONG).show();
+                    break;
                 }
-
-                break;
         }
     }
 
@@ -656,7 +532,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            createDialogGoogleImport();
+            getResultsFromApi();
         }
         else if(view == privacy){
             Bundle bundle = new Bundle();
@@ -777,7 +653,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         switch(requestCode) {
             case REQUEST_GOOGLE_PLAY_SERVICES:
                 if (resultCode != RESULT_OK) {
-                    Toast.makeText(SettingsActivity.this, "This app requires Google Play Services. Please install", Toast.LENGTH_LONG).show();
+                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.permission_import_from_google_agenda2), Toast.LENGTH_LONG).show();
                 } else {
                     getResultsFromApi();
                 }
@@ -789,9 +665,9 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                             data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
                     if (accountName != null) {
                         SharedPreferences settings =
-                                getPreferences(Context.MODE_PRIVATE);
+                                getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                         SharedPreferences.Editor editor = settings.edit();
-                        editor.putString(PREF_ACCOUNT_NAME, accountName);
+                        editor.putString(Constants.PREF_ACCOUNT_NAME, accountName);
                         editor.apply();
                         mCredential.setSelectedAccountName(accountName);
                         getResultsFromApi();
@@ -865,7 +741,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
                 boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
 
-                if(!login_type) {
+                if(!login_type || AccessToken.getCurrentAccessToken() == null) {
                     if(AccessToken.getCurrentAccessToken() != null)
                         LoginManager.getInstance().logOut();
 
@@ -959,39 +835,40 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         snackbar.show();
     }
 
-    private void createDialogGoogleImport() {
+    private void createDialogGoogleImport(ArrayList<String> accountsList) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_message, null);
+        View customView = inflater.inflate(R.layout.dialog_list_calendar_select, null);
 
-        TextView text1 = (TextView) customView.findViewById(R.id.text1);
-        TextView text2 = (TextView) customView.findViewById(R.id.text2);
-        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-        MaterialSpinner spinner = (MaterialSpinner) customView.findViewById(R.id.emailPicker);
+        SelectionCalendarAdapter selectionCalendarAdapter;
 
-        customView.findViewById(R.id.editText).setVisibility(View.GONE);
-        customView.findViewById(R.id.emailBox).setVisibility(View.VISIBLE);
+        TextView text1 = customView.findViewById(R.id.text1);
+        TextView text2 = customView.findViewById(R.id.text2);
+        TextView buttonText1 = customView.findViewById(R.id.buttonText1);
+        TextView buttonText2 = customView.findViewById(R.id.buttonText2);
+        RecyclerView mMultiChoiceRecyclerView = customView.findViewById(R.id.recyclerSelectView);
 
         text1.setText(getResources().getString(R.string.settings_import_from_google_agenda_title));
         text2.setText(getResources().getString(R.string.settings_import_from_google_agenda_text));
         buttonText1.setText(getResources().getString(R.string.cancel));
         buttonText2.setText(getResources().getString(R.string.action_import));
 
-        if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
-                != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(SettingsActivity.this, new String[] { Manifest.permission.READ_CALENDAR },
-                    1);
+        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mMultiChoiceRecyclerView.setNestedScrollingEnabled(false);
+
+        ArrayList<String> arrayList = new ArrayList<>();
+        for(int i=1;i<accountsList.size();i=i+2){
+            arrayList.add(accountsList.get(i));
         }
 
-        if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
-                == PackageManager.PERMISSION_GRANTED) {
-            list_email = GoogleCalendarEvents.getCalendarTypes(SettingsActivity.this);
-        }else {
-            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error), Toast.LENGTH_LONG).show();
-            setProgress(false);
-        }
+        selectionCalendarAdapter = new SelectionCalendarAdapter(arrayList, this) ;
+        mMultiChoiceRecyclerView.setAdapter(selectionCalendarAdapter);
+        selectionCalendarAdapter.setSingleClickMode(true);
 
+        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
+        itemDecoration.setDrawLastItem(true);
 
+        mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
+        mMultiChoiceRecyclerView.setHasFixedSize(true);
 
         Dialog dialog = new Dialog(this, R.style.NewDialog);
 
@@ -1010,7 +887,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 return false;
             }
         });
-
         buttonText2.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent event) {
@@ -1023,6 +899,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 return false;
             }
         });
+
         buttonText1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -1033,43 +910,30 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         buttonText2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
-                        != PackageManager.PERMISSION_GRANTED) {
-                    ActivityCompat.requestPermissions(SettingsActivity.this, new String[] { Manifest.permission.READ_CALENDAR },
-                            1);
+                List<Integer> list = selectionCalendarAdapter.getSelectedItemList();
+                ArrayList<String> calendarSelectedList = new ArrayList<>();
+                for(int i=0;i<list.size();i++){
+                    int j = 2*list.get(i);
+                    calendarSelectedList.add(accountsList.get(j));
                 }
 
-                if (ContextCompat.checkSelfPermission(SettingsActivity.this, Manifest.permission.READ_CALENDAR)
-                        == PackageManager.PERMISSION_GRANTED) {
-                    //list_google = GoogleCalendarEvents.readCalendarEvent(SettingsActivity.this, list_email.get(email_google_position));
-                    //getImportedGoogle(user.getEmail());
-                    getResultsFromApi();
-                }else {
-                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error), Toast.LENGTH_LONG).show();
-                    setProgress(false);
-                }
+                if (calendarSelectedList.size() > 0) {
+                    SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).edit();
+                    Gson gson = new Gson();
+                    String json = gson.toJson(calendarSelectedList);
+                    editor.putString("ListCalendarImportGoogle", json);
+                    editor.apply();
 
-                dialog.dismiss();
+                    new GetCalendarEventsAsync(mCredential).execute(calendarSelectedList.toArray(new String[calendarSelectedList.size()]));
+
+                    dialog.dismiss();
+                }else
+                    Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error3), Toast.LENGTH_LONG).show();
+
             }
         });
 
-        if(list_email != null && list_email.size() > 0) {
-
-            spinner.setItems(list_email);
-            spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
-
-                @Override
-                public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
-                    email_google_position = position;
-                }
-            });
-
-            dialog.show();
-
-        }else {
-            Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error), Toast.LENGTH_LONG).show();
-            setProgress(false);
-        }
+        dialog.show();
     }
 
     private void createDialogLogout() {
@@ -1190,7 +1054,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         String name_place;
         JSONObject place;
         Double lat, lng;
-        Date start = new Date(), end = new Date();
+        Date start = new Date(), end;
         Calendar calendar = Calendar.getInstance();
         Calendar c = Calendar.getInstance();
 
@@ -1212,7 +1076,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                 start = format.parse(start_time);
             } catch (Exception e) {
-                start_time = "";
             }
 
             try {
@@ -1220,7 +1083,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 DateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
                 end = format.parse(end_time);
             } catch (Exception e) {
-                end_time = "";
+                end = start;
             }
 
             try {
@@ -1260,18 +1123,37 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             else if(year == year_today && month == month_today && day < day_today)
                 return null;
 
-            activityServer.setDayStart(calendar.get(Calendar.DAY_OF_MONTH));
-            activityServer.setMonthStart(calendar.get(Calendar.MONTH)+1);
-            activityServer.setYearStart(calendar.get(Calendar.YEAR));
+            activityServer.setDayStart(day);
+            activityServer.setMonthStart(month);
+            activityServer.setYearStart(year);
             activityServer.setHourStart(calendar.get(Calendar.HOUR_OF_DAY));
             activityServer.setMinuteStart(calendar.get(Calendar.MINUTE));
 
-            calendar.setTime(end);
-            activityServer.setDayEnd(calendar.get(Calendar.DAY_OF_MONTH));
-            activityServer.setMonthEnd(calendar.get(Calendar.MONTH)+1);
-            activityServer.setYearEnd(calendar.get(Calendar.YEAR));
-            activityServer.setHourEnd(calendar.get(Calendar.HOUR_OF_DAY));
-            activityServer.setMinuteEnd(calendar.get(Calendar.MINUTE));
+            Calendar c2 = Calendar.getInstance();
+            c2.setTime(end);
+
+            int y2 = c2.get(Calendar.YEAR);
+            int m2 = c2.get(Calendar.MONTH) + 1;
+            int d2 = c2.get(Calendar.DAY_OF_MONTH);
+            int minute2 = c2.get(Calendar.MINUTE);
+            int hour2 = c2.get(Calendar.HOUR_OF_DAY);
+
+            LocalDate starts = new LocalDate(year, month, day);
+            LocalDate ends = new LocalDate(y2, m2, d2);
+            Period timePeriod = new Period(starts, ends, PeriodType.days());
+            if (timePeriod.getDays() > 15) {
+                activityServer.setDayEnd(day);
+                activityServer.setMonthEnd(month);
+                activityServer.setYearEnd(year);
+                activityServer.setMinuteEnd(calendar.get(Calendar.MINUTE));
+                activityServer.setHourEnd(calendar.get(Calendar.HOUR_OF_DAY));
+            } else {
+                activityServer.setDayEnd(d2);
+                activityServer.setMonthEnd(m2);
+                activityServer.setYearEnd(y2);
+                activityServer.setMinuteEnd(minute2);
+                activityServer.setHourEnd(hour2);
+            }
 
             activityServer.setRepeatType(0);
             activityServer.setRepeatQty(-1);
@@ -1279,8 +1161,6 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.facebook_dark_blue));
             activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.facebook_blue));
             activityServer.setCubeIcon("");
-
-            activityServer.setCreator(user.getEmail());
 
             activityServer.setWhatsappGroupLink("");
 
@@ -1303,6 +1183,86 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         return activityServer;
     }
 
+    private ActivityServer createActivityGoogle(Event event){
+        ActivityServer activityServer = new ActivityServer();
+
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String creator = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        activityServer.setIdGoogle(event.getId());
+        activityServer.setTitle(event.getSummary() != null ? event.getSummary() : getResources().getString(R.string.settings_import_from_google_agenda_tag));
+        activityServer.setDescription(event.getDescription() != null ? event.getDescription() : "");
+        activityServer.setLat(-500);
+        activityServer.setLng(-500);
+        activityServer.setLocation(event.getLocation() != null ? event.getLocation() : "");
+        activityServer.setRepeatType(0);
+        activityServer.setRepeatQty(-1);
+        activityServer.setInvitationType(0);
+        activityServer.setWhatsappGroupLink("");
+        activityServer.addTags(getResources().getString(R.string.settings_import_from_google_agenda_tag));
+
+        activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube));
+        activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube_light));
+
+        activityServer.setCreator(creator);
+        activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
+
+        DateTime start = event.getStart().getDateTime();
+        DateTime end = event.getEnd().getDateTime();
+        if (start == null) // All-day events don't have start times, so just use the start date.
+            start = event.getStart().getDate();
+
+        if (end == null) // All-day events don't have start times, so just use the start date.
+            end = event.getEnd().getDate();
+
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(start.getValue());
+        int y1 = c.get(Calendar.YEAR);
+        int m1 = c.get(Calendar.MONTH) + 1;
+        int d1 = c.get(Calendar.DAY_OF_MONTH);
+        int minute1 = c.get(Calendar.MINUTE);
+        int hour1 = c.get(Calendar.HOUR_OF_DAY);
+
+        activityServer.setDayStart(d1);
+        activityServer.setMonthStart(m1);
+        activityServer.setYearStart(y1);
+        activityServer.setMinuteStart(minute1);
+        activityServer.setHourStart(hour1);
+
+        c.setTimeInMillis(end.getValue());
+        int y2 = c.get(Calendar.YEAR);
+        int m2 = c.get(Calendar.MONTH) + 1;
+        int d2 = c.get(Calendar.DAY_OF_MONTH);
+        int minute2 = c.get(Calendar.MINUTE);
+        int hour2 = c.get(Calendar.HOUR_OF_DAY);
+
+        LocalDate starts = new LocalDate(y1, m1, d1);
+        LocalDate ends = new LocalDate(y2, m2, d2);
+        Period timePeriod = new Period(starts, ends, PeriodType.days());
+        if (timePeriod.getDays() > 15) {
+            activityServer.setDayEnd(d1);
+            activityServer.setMonthEnd(m1);
+            activityServer.setYearEnd(y1);
+            activityServer.setMinuteEnd(minute1);
+            activityServer.setHourEnd(hour1);
+        } else {
+            activityServer.setDayEnd(d2);
+            activityServer.setMonthEnd(m2);
+            activityServer.setYearEnd(y2);
+            activityServer.setMinuteEnd(minute2);
+            activityServer.setHourEnd(hour2);
+        }
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
+        activityServer.setDateTimeStart(calendar2.getTimeInMillis());
+
+        calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
+        activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
+
+        return activityServer;
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -1322,15 +1282,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         return false;
     }
 
-    /**
-     * An asynchronous task that handles the Google Calendar API call.
-     * Placing the API calls in their own task ensures the UI stays responsive.
-     */
-    private class MakeRequestTask extends AsyncTask<Void, Void, List<String>> {
+
+    private class GetCalendarListAsync extends AsyncTask<Void, Void, ArrayList<String>> {
         private com.google.api.services.calendar.Calendar mService = null;
         private Exception mLastError = null;
 
-        MakeRequestTask(GoogleAccountCredential credential) {
+        GetCalendarListAsync(GoogleAccountCredential credential) {
             HttpTransport transport = AndroidHttp.newCompatibleTransport();
             JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
             mService = new com.google.api.services.calendar.Calendar.Builder(
@@ -1339,12 +1296,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                     .build();
         }
 
-        /**
-         * Background task to call Google Calendar API.
-         * @param params no parameters needed for this task.
-         */
         @Override
-        protected List<String> doInBackground(Void... params) {
+        protected ArrayList<String> doInBackground(Void... params) {
             try {
                 return getDataFromApi();
             } catch (Exception e) {
@@ -1354,16 +1307,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             }
         }
 
-        /**
-         * Fetch a list of the next 10 events from the primary calendar.
-         * @return List of Strings describing returned events.
-         * @throws IOException
-         */
-        private List<String> getDataFromApi() throws IOException {
-            // List the next 10 events from the primary calendar.
-            DateTime now = new DateTime(System.currentTimeMillis());
-            List<String> eventStrings = new ArrayList<String>();
-            String calendarID = null;
+        private ArrayList<String> getDataFromApi() throws IOException {
+            ArrayList<String> eventStrings = new ArrayList<String>();
 
             String pageToken = null;
             do {
@@ -1371,32 +1316,16 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 List<CalendarListEntry> items = calendarList.getItems();
 
                 for (CalendarListEntry calendarListEntry : items) {
-                    if(calendarID == null)
-                        calendarID = calendarListEntry.getSummary();
-                    System.out.println(calendarListEntry.getSummary());
+                    String calendar_type = calendarListEntry.getSummary();
+
+                    if(!calendar_type.contains("Holiday") && !calendar_type.contains("Contacts")) {
+                        eventStrings.add(calendarListEntry.getId());
+                        eventStrings.add(calendarListEntry.getSummary());
+                    }
                 }
                 pageToken = calendarList.getNextPageToken();
             } while (pageToken != null);
 
-
-            Events events = mService.events().list(calendarID)
-                    .setMaxResults(10)
-                    .setTimeMin(now)
-                    .setOrderBy("startTime")
-                    .setSingleEvents(true)
-                    .execute();
-            List<Event> items = events.getItems();
-
-            for (Event event : items) {
-                DateTime start = event.getStart().getDateTime();
-                if (start == null) {
-                    // All-day events don't have start times, so just use
-                    // the start date.
-                    start = event.getStart().getDate();
-                }
-                eventStrings.add(
-                        String.format("%s (%s)", event.getSummary(), start));
-            }
             return eventStrings;
         }
 
@@ -1407,12 +1336,142 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         }
 
         @Override
-        protected void onPostExecute(List<String> output) {
-            setProgress(false);
+        protected void onPostExecute(ArrayList<String> output) {
             if (output == null || output.size() == 0) {
+                setProgress(false);
                 Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_success), Toast.LENGTH_LONG).show();
+                createDialogGoogleImport(output);
+                setProgress(false);
+            }
+        }
+
+        @Override
+        protected void onCancelled() {
+            setProgress(false);
+            if (mLastError != null) {
+                if (mLastError instanceof GooglePlayServicesAvailabilityIOException) {
+                    showGooglePlayServicesAvailabilityErrorDialog(
+                            ((GooglePlayServicesAvailabilityIOException) mLastError)
+                                    .getConnectionStatusCode());
+                } else if (mLastError instanceof UserRecoverableAuthIOException) {
+                    startActivityForResult(
+                            ((UserRecoverableAuthIOException) mLastError).getIntent(),
+                            REQUEST_AUTHORIZATION);
+                } else {
+                    Toast.makeText(SettingsActivity.this, mLastError.getMessage(), Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_error2), Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    private class GetCalendarEventsAsync extends AsyncTask<String, Void, Integer> {
+        private com.google.api.services.calendar.Calendar mService = null;
+        private Exception mLastError = null;
+
+        GetCalendarEventsAsync(GoogleAccountCredential credential) {
+            HttpTransport transport = AndroidHttp.newCompatibleTransport();
+            JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
+            mService = new com.google.api.services.calendar.Calendar.Builder(
+                    transport, jsonFactory, credential)
+                    .setApplicationName(getString(R.string.app_name))
+                    .build();
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            try {
+                ArrayList<String> calendarList = new ArrayList<>();
+                calendarList.addAll(Arrays.asList(params));
+
+                return getDataFromApi(calendarList);
+            } catch (Exception e) {
+                mLastError = e;
+                cancel(true);
+                return null;
+            }
+        }
+
+        private Integer getDataFromApi(ArrayList<String> calendarList) throws IOException {
+            Calendar calendar = Calendar.getInstance();
+
+            if(google_calendar_months_to_add == null)
+                google_calendar_months_to_add = 3;
+
+            calendar.add(Calendar.MONTH, google_calendar_months_to_add);
+            DateTime now = new DateTime(System.currentTimeMillis());
+            DateTime end = new DateTime(calendar.getTimeInMillis());
+
+            ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
+
+            for(String name : calendarList) {
+                String pageToken = null;
+                do { //Get events without repeat
+                    Events events = mService.events()
+                            .list(name)
+                            .setPageToken(pageToken)
+                            .setMaxResults(2000)
+                            .setTimeMin(now)
+                            .execute();
+
+                    List<Event> items = events.getItems();
+
+                    for (Event event : items) {
+
+                        if (event.getRecurrence() == null && event.getRecurringEventId() == null && !event.getStatus().equals("cancelled")) {
+                            ActivityServer server = createActivityGoogle(event);
+                            if(server != null)
+                                list_activities_to_import.add(server);
+                        }
+                    }
+                    pageToken = events.getNextPageToken();
+                } while (pageToken != null);
+
+                pageToken = null;
+                do { //Get events with repeat
+                    Events eventsRepeat = mService.events()
+                            .list(name)
+                            .setPageToken(pageToken)
+                            .setMaxResults(2000)
+                            .setTimeMin(now)
+                            .setTimeMax(end)
+                            .setSingleEvents(true)
+                            .setShowDeleted(false)
+                            .setOrderBy("startTime")
+                            .execute();
+                    List<Event> itemsRepeat = eventsRepeat.getItems();
+
+                    for (Event event : itemsRepeat) {
+
+                        if(event.getRecurringEventId() != null && !event.getStatus().equals("cancelled")) {
+                            ActivityServer server = createActivityGoogle(event);
+                            if(server != null)
+                                list_activities_to_import.add(server);
+                        }
+                    }
+                    pageToken = eventsRepeat.getNextPageToken();
+                } while (pageToken != null);
+            }
+
+            if(list_activities_to_import.size() > 0)
+                importFromGoogle(list_activities_to_import);
+
+            return list_activities_to_import.size();
+        }
+
+
+        @Override
+        protected void onPreExecute() {
+            setProgress(true);
+        }
+
+        @Override
+        protected void onPostExecute(Integer output) {
+            if (output == null || output == 0) {
+                setProgress(false);
+                Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
             }
         }
 

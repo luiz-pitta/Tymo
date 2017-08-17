@@ -208,8 +208,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     int m;
                     int y;
 
-                    if(screen == Utilities.TYPE_PLANS)
-                        callback.refreshLayout(true);
+                    callback.refreshLayout(true);
 
                     updateFeedMessageToActivity(mContext);
 
@@ -310,8 +309,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             private void handleError(Throwable error) {
                 if(Utilities.isDeviceOnline(mContext))
                     Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
-                else
-                    Toast.makeText(mContext, mContext.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
+                //else
+                //    Toast.makeText(mContext, mContext.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
 
             public void setProgress(boolean progress, boolean buttons) {

@@ -8,6 +8,7 @@ public class AppInfoServer implements Serializable {
     private String name, email, site, site_url, use_terms_url, privacy_policy_url;
     private String version, play_store_url;
     private boolean update_required;
+    private int google_calendar_months_to_add;
 
     public void setName(String name) {
         this.name = name;
@@ -31,6 +32,10 @@ public class AppInfoServer implements Serializable {
 
     public void setPrivacyPoliceUrl(String privacy_policy_url) {
         this.privacy_policy_url = privacy_policy_url;
+    }
+
+    public int getGoogleCalendarMonthsToAdd() {
+        return google_calendar_months_to_add;
     }
 
     public String getName() {

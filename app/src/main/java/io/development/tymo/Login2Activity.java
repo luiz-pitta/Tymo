@@ -196,6 +196,8 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                 editor.putBoolean(Constants.NOTIFICATION_REMINDER, false);
                 editor.putBoolean(Constants.NOTIFICATION_PUSH, false);
                 editor.putBoolean(Constants.INTRO, false);
+                editor.putString(Constants.PREF_ACCOUNT_NAME, "");
+                editor.putString("ListCalendarImportGoogle", "");
                 editor.apply();
                 Toast.makeText(this, getResources().getString(R.string.register_account_not_linked_with_facebook), Toast.LENGTH_LONG).show();
                 progressBox.setVisibility(View.GONE);
