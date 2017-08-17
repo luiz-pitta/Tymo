@@ -134,7 +134,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         nextWeek.setOnTouchListener(this);
         mDateText.setOnTouchListener(this);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(850);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

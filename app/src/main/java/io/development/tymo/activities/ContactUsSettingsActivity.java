@@ -59,7 +59,7 @@ public class ContactUsSettingsActivity extends AppCompatActivity implements View
         emailBox = (LinearLayout) findViewById(R.id.emailBox);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(375);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(500);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
