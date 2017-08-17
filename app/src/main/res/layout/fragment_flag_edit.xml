@@ -17,8 +17,7 @@
         android:maxLength="100"
         android:textColor="@color/grey_600"
         android:textColorHint="@color/grey_400"
-        android:textSize="14sp"
-        android:textStyle="bold" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/titleMax"

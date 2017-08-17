@@ -570,6 +570,7 @@
     <string name="visibility_text">Visibilidade na sua agenda:</string>
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
+    <string name="agenda_status_pass">Já acabou. Você não pode mais encaixar :(</string>
     <string name="agenda_status_need_invitation">Você precisa ser convidado para poder encaixar!</string>
     <string name="agenda_status_fitted">Está na sua agenda!</string>
     <string name="agenda_status_invited">Você foi convidado!</string>

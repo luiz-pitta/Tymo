@@ -634,6 +634,16 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 privacyBox.setVisibility(View.GONE);
             }
 
+            if (activityServer.getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && deleteButtonBox.getVisibility() == View.GONE && checkButtonBox.getVisibility() == View.VISIBLE){
+                agendaStatus.setVisibility(View.GONE);
+                checkButtonBox.setVisibility(View.GONE);
+                agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
+                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_pass));
+            }
+            else{
+                agendaStatusNeedInvitation.setVisibility(View.GONE);
+            }
+
             Glide.clear(pieceIcon);
             Glide.with(this)
                     .load(activityServer.getCubeIcon())

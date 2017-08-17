@@ -634,23 +634,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             repeatBox.setVisibility(View.VISIBLE);
             repeatAdd.setVisibility(View.GONE);
         }
-        /*else if(v == guestBox){
-            FlagActivity flagActivity = (FlagActivity) getActivity();
-
-            Intent intent = new Intent(getActivity(), ShowGuestsActivity.class);
-            intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
-            intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
-            intent.putExtra("is_adm", false);
-            intent.putExtra("id_act", flagActivity.getFlag().getId());
-            intent.putExtra("is_flag", true);
-
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            startActivityForResult(intent, GUEST_UPDATE);
-        }*/else if(v == timeEnd){
+        else if(v == timeEnd){
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
                     FlagEditFragment.this,
@@ -718,7 +702,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             dpd.setEndTitle(getResources().getString(R.string.date_end));
             dpd.setCurrentTab(1);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
-        } else if(v == addPersonButton && addPersonButton.isActivated()){
+        } else if((v == addPersonButton || v == guestBox) && addPersonButton.isActivated()){
             Intent intent = new Intent(getActivity(), SelectPeopleActivity.class);
             ArrayList<String> list = new ArrayList<>();
 
@@ -952,7 +936,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 repeatAddIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
             }
         }
-        /*else if (view == guestBox) {
+        else if (view == guestBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
                 guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests));
@@ -960,7 +944,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
                 guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests_pressed));
             }
-        }*/
+        }
 
         return false;
     }
