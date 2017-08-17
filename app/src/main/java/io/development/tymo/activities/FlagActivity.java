@@ -1032,7 +1032,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             if (v == availableText || v == availableButton) {
                 controller.updateAll(0, R.color.flag_available, R.color.flag_available, R.drawable.bg_shape_oval_available_corners);
-                textInputLayout.setHint(R.string.hint_flag_available);
+                textInputLayout.setHint(R.string.hint_title_opcional);
                 free = true;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_lock);
@@ -1042,7 +1042,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 availableButton.clearColorFilter();
             } else if (v ==  unavailableText || v == unavailableButton) {
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
-                textInputLayout.setHint(R.string.hint_flag_unavailable);
+                textInputLayout.setHint(R.string.hint_title_opcional);
                 free = false;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_public);
