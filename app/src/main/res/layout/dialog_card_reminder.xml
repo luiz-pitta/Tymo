@@ -23,7 +23,7 @@
                 android:id="@+id/closeButton"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginBottom="30dp"
+                android:layout_marginBottom="20dp"
                 android:padding="7dp"
                 android:rotation="45"
                 android:src="@drawable/ic_add"
@@ -69,7 +69,8 @@
             <Space
                 android:id="@+id/spaceTop"
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/dateBox"
@@ -100,7 +101,8 @@
             <Space
                 android:id="@+id/spaceBottom"
                 android:layout_width="match_parent"
-                android:layout_height="20dp" />
+                android:layout_height="20dp"
+                android:visibility="gone" />
 
             <LinearLayout
                 android:id="@+id/deleteButtonBox"
