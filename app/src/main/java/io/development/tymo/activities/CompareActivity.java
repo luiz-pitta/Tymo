@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,13 +64,14 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
 
     private ImageView mBackButton, icon2;
     private ImageView previousWeek, nextWeek;
-    private TextView mText;
+    private TextView mText, guestText;
     private TextView mDateText, contactsQty;
     private RecyclerView recyclerView;
     private PersonAdapter adapter;
     private DateFormat dateFormat;
     private RelativeLayout addPersonButton;
     private Rect rect;
+    private LinearLayout guestBox;
 
     private TextView commitmentsButton;
     private TextView freeTimeButton;
@@ -119,6 +121,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         mText = (TextView) findViewById(R.id.text);
         mDateText = (TextView) findViewById(R.id.dateComplete);
         contactsQty = (TextView) findViewById(R.id.contactsQty);
+        guestBox = (LinearLayout) findViewById(R.id.guestBox);
+        guestText = (TextView) findViewById(R.id.guestText);
         addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
         previousWeek = (ImageView) findViewById(R.id.previousWeek);
         nextWeek = (ImageView) findViewById(R.id.nextWeek);
@@ -126,6 +130,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         icon2.setImageResource(R.drawable.ic_add);
+        icon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
 
         icon2.setOnClickListener(this);
         icon2.setOnTouchListener(this);
@@ -133,6 +138,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         previousWeek.setOnTouchListener(this);
         nextWeek.setOnTouchListener(this);
         mDateText.setOnTouchListener(this);
+        guestBox.setOnClickListener(this);
+        guestBox.setOnTouchListener(this);
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(850);
 
@@ -740,7 +747,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             commitmentsButton.setTextColor(ContextCompat.getColor(CompareActivity.this,R.color.white));
             freeTimeButton.setTextColor(ContextCompat.getColor(CompareActivity.this,R.color.deep_purple_400));
             setCurrentTab(0);
-        }else if(view == addPersonButton){
+        }else if(view == addPersonButton || view == guestBox){
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1044,11 +1051,20 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
+        else if (view == guestBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                contactsQty.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                contactsQty.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests_pressed));
+            }
+        }
         else if (view == icon2) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                icon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+                icon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                icon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+                icon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         }
         else if (view == deselectAll) {
