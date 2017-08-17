@@ -83,7 +83,7 @@
                 <Space
                     android:id="@+id/spaceTop"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp" />
+                    android:layout_height="0dp" />
 
                 <LinearLayout
                     android:id="@+id/dateBox"
@@ -114,7 +114,7 @@
                 <Space
                     android:id="@+id/spaceBottom"
                     android:layout_width="match_parent"
-                    android:layout_height="20dp" />
+                    android:layout_height="0dp" />
 
                 <include
                     android:id="@+id/profilesPhotos"
