@@ -452,7 +452,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                startActivity(new Intent(this, CompareActivity.class));
+                Intent intent = new Intent(this, CompareActivity.class);
+                intent.putExtra("email_compare_friend", new UserWrapper(user));
+                startActivity(intent);
+
                 btnCompare.setBackgroundResource(R.drawable.btn_compare);
                 btnCompare.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
             }

@@ -2,6 +2,7 @@ package io.development.tymo.activities;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -89,6 +90,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private ImageView mColorIcon;
 
     private Rect rect;
+    private boolean first_open = true;
 
     private ImageView mColorViewMain;
     private ImageView mColorViewUpperMain;
@@ -674,7 +676,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             controller.updateAll(2, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
             setCurrentTab(2);
         } else if (v == mPieceCustom) {
-            loadListeners().show();
+            if(iconList.size() > 0)
+                createDialogSelectIcon();
         }
         else if (v == confirmationButton) {
             if (!edit && !recover) {
@@ -1608,7 +1611,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private MaterialDialog loadListeners() {
+    private void createDialogSelectIcon() {
         LayoutInflater inflater = (LayoutInflater) getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View customView = inflater.inflate(R.layout.activity_customize_piece, null);
         mColorPickerView = (ColorPickerView) customView.findViewById(R.id.colorpicker);
@@ -1631,6 +1634,13 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
                 mColorViewMain.setColorFilter((int) mColorView.getTag());
                 mColorViewUpperMain.setColorFilter((int) mColorViewUpper.getTag());
+                mColorViewMain.setTag(mColorView.getTag());
+                mColorViewUpperMain.setTag(mColorViewUpper.getTag());
+                if(activityWrapper != null) {
+                    activityWrapper.getActivityServer().setCubeColor((int) mColorView.getTag());
+                    activityWrapper.getActivityServer().setCubeColorUpper((int) mColorViewUpper.getTag());
+                    activityWrapper.getActivityServer().setCubeIcon(urlIcon);
+                }
 
                 Glide.clear(mColorIconMain);
                 Glide.with(AddActivity.this)
@@ -1676,6 +1686,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 mColorViewUpper.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400_light));
                 mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
                 mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
+                if(activityWrapper != null) {
+                    activityWrapper.getActivityServer().setCubeColor(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
+                    activityWrapper.getActivityServer().setCubeColorUpper(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
+                }
 
                 Glide.clear(mColorIcon);
                 Glide.with(AddActivity.this)
@@ -1692,7 +1706,6 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         });
-
 
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 5);
@@ -1734,118 +1747,140 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         );
 
         mColorPickerView.setColorListener(new ColorPickerView.ColorListener() {
-
             @Override
             public void onColorSelected(int color) {
 
-                if (color == ContextCompat.getColor(AddActivity.this, R.color.red_A700)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.red_A700));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.red_A700_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.red_A700));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.red_A700_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.pink_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.pink_900)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_900));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_900_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_900));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_900_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.purple_500)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.purple_500));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.purple_500_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.purple_500));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.purple_500_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_800)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_800));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_800_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_800));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_800_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.cyan_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.cyan_800)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_800));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_800_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_800));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_800_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.green_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.green_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.green_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.green_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.green_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.lime_600)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.lime_600));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.lime_600_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.lime_600));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.lime_600_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.brown_400)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_400));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_400_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_400));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_400_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.brown_700)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_700));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_700_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_700));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_700_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.grey_500)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.grey_500));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.grey_500_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.grey_500));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.grey_500_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500_light));
-                } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900)) {
-                    mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900));
-                    mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900_light));
-                    mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900));
-                    mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900_light));
-                }
+                if(first_open && (mColorViewUpperMain.getTag() != null || (activityWrapper != null && activityWrapper.getActivityServer().getCubeIcon().contains("http")))){
 
+                    if(activityWrapper != null) {
+                        mColorView.setColorFilter(activityWrapper.getActivityServer().getCubeColor());
+                        mColorViewUpper.setColorFilter(activityWrapper.getActivityServer().getCubeColorUpper());
+                        mColorView.setTag(activityWrapper.getActivityServer().getCubeColor());
+                        mColorViewUpper.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
+                    }else {
+                        mColorView.setColorFilter((int)mColorViewMain.getTag());
+                        mColorViewUpper.setColorFilter((int)mColorViewUpperMain.getTag());
+                        mColorView.setTag(mColorViewMain.getTag());
+                        mColorViewUpper.setTag(mColorViewUpperMain.getTag());
+                    }
+                    first_open = false;
+                }else {
+                    if (color == ContextCompat.getColor(AddActivity.this, R.color.red_A700)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.red_A700));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.red_A700_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.red_A700));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.red_A700_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.pink_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.pink_900)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_900));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.pink_900_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_900));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.pink_900_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.purple_500)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.purple_500));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.purple_500_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.purple_500));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.purple_500_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_800_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_800)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_800));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_800_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_800));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_800_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.cyan_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.cyan_800)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_800));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.cyan_800_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_800));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.cyan_800_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.green_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.green_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.green_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.green_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.green_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.lime_600)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.lime_600));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.lime_600_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.lime_600));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.lime_600_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_orange_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.brown_400)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_400));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_400_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_400));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_400_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.brown_700)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_700));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.brown_700_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_700));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.brown_700_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.grey_500)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.grey_500));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.grey_500_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.grey_500));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.grey_500_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_500_light));
+                    } else if (color == ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900)) {
+                        mColorView.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900));
+                        mColorViewUpper.setColorFilter(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900_light));
+                        mColorView.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900));
+                        mColorViewUpper.setTag(ContextCompat.getColor(AddActivity.this, R.color.blue_grey_900_light));
+                    }
+                }
             }
         });
 
-        //Set this to true, to enable visual debugging. To check the offset radius
-        mColorPickerView.setDrawDebug(false);
+        if (activityWrapper == null || !activityWrapper.getActivityServer().getCubeIcon().contains("http")) {
+            if(mColorViewUpperMain.getTag() == null) {
+                urlIcon = Constants.IC_ADD_CUBE_URL;
+                mColorViewMain.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400));
+                mColorViewUpperMain.setTag(ContextCompat.getColor(AddActivity.this, R.color.deep_purple_400_light));
+            }else{
+                mColorViewMain.setTag(mColorViewMain.getTag());
+                mColorViewUpperMain.setTag(mColorViewUpperMain.getTag());
+            }
 
-        if (urlIcon.matches("")) {
             Glide.clear(mColorIcon);
             Glide.with(AddActivity.this)
-                    .load(Constants.IC_ADD_CUBE_URL)
+                    .load(urlIcon)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(mColorIcon);
-
-            urlIcon = Constants.IC_ADD_CUBE_URL;
         } else {
+            urlIcon = activityWrapper.getActivityServer().getCubeIcon();
+            mColorViewMain.setTag(activityWrapper.getActivityServer().getCubeColor());
+            mColorViewUpperMain.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
+
             Glide.clear(mColorIcon);
             Glide.with(AddActivity.this)
                     .load(urlIcon)
@@ -1854,7 +1889,14 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     .into(mColorIcon);
         }
 
-        return dialog;
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                first_open = true;
+            }
+        });
+
+        dialog.show();
     }
 
     public boolean getEditable() {
