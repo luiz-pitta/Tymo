@@ -868,9 +868,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     if (repeat_type == Constants.MONTHLY) {
                         cal.add(Calendar.MONTH, 1);
                         cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
+                    } else if(repeat_type == Constants.WEEKLY){
+                        cal.add(Calendar.WEEK_OF_YEAR, 1);
+                        cal2.add(Calendar.WEEK_OF_YEAR, 1);
+                    }else if(repeat_type == Constants.DAYLY){
+                        cal.add(Calendar.DAY_OF_WEEK, 1);
+                        cal2.add(Calendar.DAY_OF_WEEK, 1);
                     }
                 }
 
@@ -1375,9 +1378,12 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     if (repeat_type == Constants.MONTHLY) {
                         cal.add(Calendar.MONTH, 1);
                         cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
+                    } else if(repeat_type == Constants.WEEKLY){
+                        cal.add(Calendar.WEEK_OF_YEAR, 1);
+                        cal2.add(Calendar.WEEK_OF_YEAR, 1);
+                    }else if(repeat_type == Constants.DAYLY){
+                        cal.add(Calendar.DAY_OF_WEEK, 1);
+                        cal2.add(Calendar.DAY_OF_WEEK, 1);
                     }
                 }
 

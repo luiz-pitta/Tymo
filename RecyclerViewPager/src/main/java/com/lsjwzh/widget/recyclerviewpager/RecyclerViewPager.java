@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.CycleInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.view.animation.OvershootInterpolator;
 
 import java.lang.reflect.Field;
@@ -222,8 +223,8 @@ public class RecyclerViewPager extends RecyclerView {
                             final int distance = (int) Math.sqrt(dx * dx + dy * dy);
                             final int time = calculateTimeForDeceleration(distance);
                             if (time > 0) {
-                                OvershootInterpolator interpolator = new OvershootInterpolator(2.5f);
-                                action.update(-dx, -dy, 1000, interpolator);
+                                LinearInterpolator interpolator = new LinearInterpolator();
+                                action.update(-dx, -dy, 300, interpolator);
                             }
                         }
                     };

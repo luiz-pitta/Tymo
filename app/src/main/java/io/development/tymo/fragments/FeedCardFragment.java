@@ -103,7 +103,7 @@ public class FeedCardFragment extends Fragment {
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
 
         LinearLayoutManager layout = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL,
-                true);
+                false);
         mRecyclerView.setLayoutManager(layout);
 
         mRecyclerView.setTriggerOffset(0.35f);
@@ -111,44 +111,6 @@ public class FeedCardFragment extends Fragment {
         mRecyclerView.setAdapter(adapter = new FeedZoomMoreAdapter(getActivity()));
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLongClickable(true);
-
-        mRecyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), mRecyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, MotionEvent e) {
-                Object object = adapter.getAllData().get(position);
-                FlagServer flagServer;
-                ActivityServer activityServer;
-                Intent myIntent;
-
-                if(object instanceof FlagServer){
-                    flagServer = (FlagServer) object;
-                    myIntent = new Intent(getActivity(), FlagActivity.class);
-                    myIntent.putExtra("type_flag", 1);
-                    myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_show" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                }else{
-                    activityServer = (ActivityServer) object;
-                    myIntent = new Intent(getActivity(), ShowActivity.class);
-                    myIntent.putExtra("act_show", new ActivityWrapper(activityServer));
-
-                    Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_show" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                }
-
-                startActivity(myIntent);
-            }
-
-            @Override
-            public void onLongItemClick(View view, int position, MotionEvent e) {
-
-            }
-        }));
 
         mRecyclerView.addOnPageChangedListener(new RecyclerViewPager.OnPageChangedListener() {
             @Override

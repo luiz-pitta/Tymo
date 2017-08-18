@@ -2,15 +2,18 @@ package io.development.tymo.fragments;
 
 
 import android.content.SharedPreferences;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -108,6 +111,29 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         tabLayout.setupWithViewPager(viewPager);
+
+        for (int i = 0; i < tabLayout.getTabCount(); i++) {
+            View custom_tab = getActivity().getLayoutInflater().inflate(R.layout.custom_tab_layout, null);
+            ImageView imageView = custom_tab.findViewById(R.id.icon);
+            switch(i){
+                case 0:
+                    imageView.setImageResource(R.drawable.ic_people_three);
+                    imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+                    break;
+                case 1:
+                    imageView.setImageResource(R.drawable.ic_my_commitments);
+                    imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                    break;
+                case 2:
+                    imageView.setImageResource(R.drawable.ic_public);
+                    imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
+                    break;
+            }
+
+            tabLayout.getTabAt(i).setCustomView(custom_tab);
+        }
+
+        tabLayout.addOnTabSelectedListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -550,8 +576,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         adapter.addFragment(new SearchPeopleFragment(), getResources().getString(R.string.search_menu_people));
         adapter.addFragment(new SearchMyCommitmentFragment(), getResources().getString(R.string.search_menu_my_commitments));
         adapter.addFragment(new SearchWhatsFragment(), getResources().getString(R.string.search_menu_what_is_going_on));
-        viewPager.setAdapter(adapter);
 
+        viewPager.setAdapter(adapter);
     }
 
 
@@ -617,10 +643,18 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     @Override
-    public void onTabSelected(TabLayout.Tab tab) {}
+    public void onTabSelected(TabLayout.Tab tab) {
+        View custom_tab = tabLayout.getTabAt(tab.getPosition()).getCustomView();
+        ImageView imageView = custom_tab.findViewById(R.id.icon);
+        imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+    }
 
     @Override
-    public void onTabUnselected(TabLayout.Tab tab) {}
+    public void onTabUnselected(TabLayout.Tab tab) {
+        View custom_tab = tabLayout.getTabAt(tab.getPosition()).getCustomView();
+        ImageView imageView = custom_tab.findViewById(R.id.icon);
+        imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
+    }
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {}

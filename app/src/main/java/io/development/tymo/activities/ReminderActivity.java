@@ -366,7 +366,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void deleteFlagActReminder(long id, ActivityServer activityServer) {
-
+        setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -374,6 +374,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleDeleteIgnoreConfirm(Response response) {
+        setProgress(false);
         //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
         //ACTIVITY_DELETED_SUCCESSFULLY e WITHOUT_NOTIFICATION
         finish();

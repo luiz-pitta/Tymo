@@ -17,10 +17,12 @@
 package io.development.tymo.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.LocationManager;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -30,6 +32,7 @@ import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.StyleSpan;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -43,12 +46,20 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.facebook.rebound.SpringSystem;
+import com.google.firebase.analytics.FirebaseAnalytics;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import io.development.tymo.activities.FlagActivity;
+import io.development.tymo.activities.ShowActivity;
+import io.development.tymo.model_server.ActivityWrapper;
+import io.development.tymo.model_server.FlagWrapper;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityServer;
@@ -125,6 +136,39 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
 
             addGuestButton.setVisibility(View.GONE);
             view.findViewById(R.id.addGuestButtonDivider).setVisibility(View.GONE);
+
+            new Actor.Builder(SpringSystem.create(), pieceBox)
+                    .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                    .onTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            return true;
+                        }
+                    })
+                    .build();
+
+            pieceBox.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Object object = mItems.get(getAdapterPosition());
+                    FlagServer flagServer;
+                    ActivityServer activityServer;
+                    Intent myIntent;
+
+                    if(object instanceof FlagServer){
+                        flagServer = (FlagServer) object;
+                        myIntent = new Intent(context, FlagActivity.class);
+                        myIntent.putExtra("type_flag", 1);
+                        myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
+                    }else{
+                        activityServer = (ActivityServer) object;
+                        myIntent = new Intent(context, ShowActivity.class);
+                        myIntent.putExtra("act_show", new ActivityWrapper(activityServer));
+                    }
+
+                    context.startActivity(myIntent);
+                }
+            });
         }
     }
 

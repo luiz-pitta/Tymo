@@ -37,6 +37,7 @@ public class ViewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public CharSequence getPageTitle(int position) {
-        return mFragmentTitleList.get(position);
+        //return mFragmentTitleList.get(position);
+        return null;
     }
 }

@@ -1176,7 +1176,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void deleteFlagActReminder(long id, ActivityServer activity) {
-
+        setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activity)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -1202,6 +1202,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
+
+        setProgress(false);
 
         //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
         //ACTIVITY_DELETED_SUCCESSFULLY e WITHOUT_NOTIFICATION
