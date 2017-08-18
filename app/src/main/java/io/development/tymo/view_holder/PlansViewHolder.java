@@ -8,7 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,8 +25,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -75,7 +73,6 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private FlagServer flagServer;
     private ReminderServer reminderServer;
     private String email;
-    private DateFormat dateFormat;
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private User friend;
@@ -97,8 +94,6 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         this.friend = usr;
         this.free = free;
 
-        dateFormat = new DateFormat(context);
-
         SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -108,8 +103,10 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
         mRecyclerView.setProgressView(R.layout.progress_loading_list);
-        if (free)
+
+        if (free) {
             mRecyclerView.setEmptyView(R.layout.empty_free_time);
+        }
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
 
@@ -288,10 +285,25 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         dayMonth.setText(week.getM_month_text());
         adapter.clear();
 
-        if (!free)
+        Calendar now2 = Calendar.getInstance();
+        now2.add(Calendar.MONTH, -3);
+
+        boolean isStored = !isInThePast(week.getYear(), week.getMonth(), week.getDay(),
+                now2.get(Calendar.YEAR), now2.get(Calendar.MONTH) + 1, now2.get(Calendar.DAY_OF_MONTH));
+
+        if (!free) {
             adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
-        else
+            mRecyclerView.setEmptyView(R.layout.empty_free_time);
+        }
+        else {
             adapter.addAll(setPlansItemData(week.getFree(), false));
+            if(isStored){
+                mRecyclerView.setEmptyView(R.layout.empty_commitments);
+            }
+            else{
+                mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
+            }
+        }
 
         if (week.getPaint())
             dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
