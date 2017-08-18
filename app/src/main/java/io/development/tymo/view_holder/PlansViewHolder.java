@@ -293,22 +293,28 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
         if (!free) {
             adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
-            mRecyclerView.setEmptyView(R.layout.empty_free_time);
         }
         else {
             adapter.addAll(setPlansItemData(week.getFree(), false));
-            if(isStored){
-                mRecyclerView.setEmptyView(R.layout.empty_commitments);
-            }
-            else{
-                mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
-            }
         }
 
         if (week.getPaint())
             dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
         else
             dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+
+        if (!free) {
+            if(isStored){
+                mRecyclerView.setEmptyView(R.layout.empty_commitments);
+            }
+            else{
+                dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_50));
+                mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
+            }
+        }
+        else {
+            mRecyclerView.setEmptyView(R.layout.empty_free_time);
+        }
     }
 
     private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {
