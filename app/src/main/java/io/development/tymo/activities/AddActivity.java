@@ -138,7 +138,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int d, m, y;
-    private String urlIcon = "";
+    private String urlIcon = "", urlIconTemp = "";;
     private boolean edit = false, recover = false;
 
     private int selected = 0;
@@ -1597,7 +1597,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(Utilities.isDeviceOnline(this))
+        if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1621,6 +1621,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         ImageView closeButton = (ImageView) customView.findViewById(R.id.closeButton);
         RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerIcons);
 
+
         mColorPickerView.setDrawDebug(false);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
@@ -1641,6 +1642,8 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                     activityWrapper.getActivityServer().setCubeColorUpper((int) mColorViewUpper.getTag());
                     activityWrapper.getActivityServer().setCubeIcon(urlIcon);
                 }
+
+                urlIcon = urlIconTemp;
 
                 Glide.clear(mColorIconMain);
                 Glide.with(AddActivity.this)
@@ -1727,7 +1730,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(mColorIcon);
 
-                urlIcon = adapter.getItem(position).getUrl();
+                urlIconTemp = adapter.getItem(position).getUrl();
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "RecyclerItemPickIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));

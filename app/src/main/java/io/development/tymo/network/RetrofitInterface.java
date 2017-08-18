@@ -39,11 +39,11 @@ public interface RetrofitInterface {
     @POST("update_email")
     Observable<Response> updateEmail(@Body User user);
 
-    @POST("import_from_facebook")
-    Observable<Response> registerActivityFacebook(@Body ArrayList<ActivityServer> activitiesServer);
+    @POST("import_from_facebook/{email}")
+    Observable<Response> registerActivityFacebook(@Path("email") String email, @Body ArrayList<ActivityServer> activitiesServer);
 
-    @POST("import_from_google_new_api")
-    Observable<Response> registerActivityGooglenewApi(@Body ArrayList<ActivityServer> activitiesServer);
+    @POST("import_from_google_new_api/{email}")
+    Observable<Response> registerActivityGooglenewApi(@Path("email") String email, @Body ArrayList<ActivityServer> activitiesServer);
 
     @POST("import_from_google")
     Observable<Response> registerActivityGoogle(@Body ArrayList<ActivityServer> activitiesServer);

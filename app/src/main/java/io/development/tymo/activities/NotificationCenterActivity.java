@@ -159,7 +159,7 @@ public class NotificationCenterActivity extends AppCompatActivity implements Vie
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(Utilities.isDeviceOnline(this))
+        if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

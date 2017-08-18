@@ -123,7 +123,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void handleError(Throwable error) {
-        if(Utilities.isDeviceOnline(this))
+        if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

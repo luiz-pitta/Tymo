@@ -189,14 +189,14 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
                     e.printStackTrace();
                 }
             } else {
-                if(Utilities.isDeviceOnline(this))
+                if(!Utilities.isDeviceOnline(this))
                     Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
             }
         }
         catch (Exception e){
-            if(Utilities.isDeviceOnline(this))
+            if(!Utilities.isDeviceOnline(this))
                 Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             else
                 Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

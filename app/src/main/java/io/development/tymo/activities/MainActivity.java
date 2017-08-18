@@ -190,7 +190,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void importFromGoogle(ArrayList<ActivityServer> activityServers) {
-        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(activityServers)
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(mSharedPreferences.getString(Constants.EMAIL, ""), activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseGoogleImported,this::handleError));
@@ -232,7 +233,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void importFromFacebook(ArrayList<ActivityServer> activityServers) {
-        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityFacebook(activityServers)
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityFacebook(mSharedPreferences.getString(Constants.EMAIL, ""), activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseFacebookImported,this::handleError));
@@ -583,7 +585,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponse(Response response) {}
 
     private void handleError(Throwable error) {
-        if(Utilities.isDeviceOnline(this))
+        if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1555,8 +1557,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 } while (pageToken != null);
             }
 
-            if(list_activities_to_import.size() > 0)
-                importFromGoogle(list_activities_to_import);
+            importFromGoogle(list_activities_to_import);
 
             return list_activities_to_import.size();
         }

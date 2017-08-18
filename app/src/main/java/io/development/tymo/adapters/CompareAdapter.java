@@ -1,11 +1,13 @@
 package io.development.tymo.adapters;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,7 +16,9 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -24,6 +28,7 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -169,6 +174,8 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                         }
                     }
                     else {
+                        Calendar now = Calendar.getInstance();
+
                         FreeTime freeTime = (FreeTime) obj;
                         DateTymo dateTymo = new DateTymo();
 
@@ -186,7 +193,10 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
 
                         if(!freeTime.isInPast()) {
                             createPopUpDialogFragment.setCallback(callback);
+                            createPopUpDialogFragment.setAloneInCompare(getItemCount() == 1);
                             createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                        }else {
+                            createDialogMessage();
                         }
                     }
 
@@ -280,6 +290,51 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
         int size = compareList.size();
         compareList.clear();
         notifyItemRangeRemoved(0, size);
+    }
+
+    private void createDialogMessage() {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        LinearLayout button1 = (LinearLayout) customView.findViewById(R.id.button1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+
+        button1.setVisibility(View.GONE);
+        editText.setVisibility(View.GONE);
+        text2.setVisibility(View.GONE);
+
+        Dialog dg = new Dialog(context, R.style.NewDialog);
+
+        dg.setContentView(customView);
+        dg.setCanceledOnTouchOutside(true);
+
+        text1.setText(R.string.free_time_past_dialog_text_1);
+        buttonText2.setText(R.string.close);
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dg.dismiss();
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_radius));
+                }
+
+                return false;
+            }
+        });
+
+        dg.show();
     }
 
     public void setDateList(List<Integer> list) {

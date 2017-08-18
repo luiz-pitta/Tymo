@@ -485,11 +485,19 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                 }
             }
 
+            if(i == 0) {
+                for (j = 0; j < response.getMyCommitReminder().size(); j++) {
+                    ReminderServer reminderServer = response.getMyCommitReminder().get(j);
+                    compareModel.addPlans(reminderServer);
+                }
+            }
+
             Collections.sort(compareModel.getActivities(), new Comparator<Object>() {
                 @Override
                 public int compare(Object c1, Object c2) {
                     ActivityServer activityServer;
                     FlagServer flagServer;
+                    ReminderServer reminderServer;
                     int start_hour = 0, start_minute= 0;
                     int start_hour2= 0, start_minute2= 0;
                     int end_hour = 0, end_minute= 0;
@@ -508,6 +516,12 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                         start_minute = flagServer.getMinuteCard();
                         end_hour = flagServer.getHourEndCard();
                         end_minute = flagServer.getMinuteEndCard();
+                    }else if (c1 instanceof ReminderServer) {
+                        reminderServer = (ReminderServer) c1;
+                        start_hour = reminderServer.getHourStart();
+                        start_minute = reminderServer.getMinuteStart();
+                        end_hour = reminderServer.getHourStart();
+                        end_minute = reminderServer.getMinuteStart();
                     }
 
                     if(c2 instanceof ActivityServer) {
@@ -523,6 +537,12 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                         start_minute2 = flagServer.getMinuteCard();
                         end_hour2 = flagServer.getHourEndCard();
                         end_minute2 = flagServer.getMinuteEndCard();
+                    }else if (c2 instanceof ReminderServer) {
+                        reminderServer = (ReminderServer) c2;
+                        start_hour2 = reminderServer.getHourStart();
+                        start_minute2 = reminderServer.getMinuteStart();
+                        end_hour2 = reminderServer.getHourStart();
+                        end_minute2 = reminderServer.getMinuteStart();
                     }
 
                     if(start_hour < start_hour2)
@@ -586,6 +606,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                         reminderServer = (ReminderServer) object;
                         start_hour = reminderServer.getHourStart();
                         start_minute = reminderServer.getMinuteStart();
+                        end_hour = start_hour;
+                        end_minute = start_minute;
                     }
 
                     FreeTimeServer freeTimeServer = new FreeTimeServer();
@@ -676,7 +698,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(Utilities.isDeviceOnline(this))
+        if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

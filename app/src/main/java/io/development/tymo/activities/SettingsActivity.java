@@ -266,7 +266,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             acquireGooglePlayServices();
         } else if (mCredential.getSelectedAccountName() == null) {
             chooseAccount();
-        } else if (!Utilities.isDeviceOnline(this)) {
+        } else if(!Utilities.isDeviceOnline(this)) {
             Toast.makeText(SettingsActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         } else {
             new GetCalendarListAsync(mCredential).execute();
@@ -405,7 +405,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void importFromFacebook(ArrayList<ActivityServer> activityServers) {
         setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityFacebook(activityServers)
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityFacebook(mSharedPreferences.getString(Constants.EMAIL, ""), activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseFacebookImported,this::handleError));
@@ -421,7 +422,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void importFromGoogle(ArrayList<ActivityServer> activityServers) {
         setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(activityServers)
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(mSharedPreferences.getString(Constants.EMAIL, ""), activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponseGoogleImported,this::handleError));
@@ -456,7 +458,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(Utilities.isDeviceOnline(this))
+        if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1455,8 +1457,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 } while (pageToken != null);
             }
 
-            if(list_activities_to_import.size() > 0)
-                importFromGoogle(list_activities_to_import);
+            importFromGoogle(list_activities_to_import);
 
             return list_activities_to_import.size();
         }
@@ -1471,7 +1472,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         protected void onPostExecute(Integer output) {
             if (output == null || output == 0) {
                 setProgress(false);
-                Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
+                //Toast.makeText(SettingsActivity.this, getResources().getString(R.string.settings_import_from_google_agenda_no_commitments), Toast.LENGTH_LONG).show();
             }
         }
 

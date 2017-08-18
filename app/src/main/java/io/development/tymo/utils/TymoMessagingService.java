@@ -21,6 +21,8 @@ import io.development.tymo.activities.FriendRequestActivity;
 import io.development.tymo.activities.InviteActivity;
 import io.development.tymo.activities.MainActivity;
 
+import static android.app.NotificationChannel.DEFAULT_CHANNEL_ID;
+
 public class TymoMessagingService extends FirebaseMessagingService {
 
     @Override
@@ -75,7 +77,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentIntent(pi)
                         .setAutoCancel(true);
@@ -114,7 +116,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentTitle(title)
                         .setContentIntent(pi)
@@ -152,7 +154,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentTitle(title)
                         .setContentIntent(pi)
@@ -201,7 +203,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         }
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentTitle(title)
                         .setContentIntent(pi)
@@ -238,7 +240,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentTitle(getString(R.string.push_notification_pending_requests_accepted_title))
                         .setContentIntent(pi)
@@ -275,7 +277,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
         PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, FriendRequestActivity.class), 0);
 
         NotificationCompat.Builder mBuilder =
-                new NotificationCompat.Builder(this)
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentTitle(getString(R.string.push_notification_pending_requests_title))
                         .setContentIntent(pi)

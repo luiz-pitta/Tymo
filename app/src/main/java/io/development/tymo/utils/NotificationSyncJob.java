@@ -1,5 +1,6 @@
 package io.development.tymo.utils;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NotificationCompat;
 
 import com.evernote.android.job.Job;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
@@ -19,6 +21,7 @@ import io.development.tymo.R;
 import io.development.tymo.activities.CommitmentsOfTheDayActivity;
 import io.development.tymo.model_server.ActivityOfDay;
 
+import static android.app.NotificationChannel.DEFAULT_CHANNEL_ID;
 import static android.content.Context.MODE_PRIVATE;
 
 public class NotificationSyncJob extends Job {
@@ -95,8 +98,8 @@ public class NotificationSyncJob extends Job {
     private void sendNotificationNextActivity(int qty, ArrayList<ActivityOfDay> list_json) {
         PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), CommitmentsOfTheDayActivity.class), 0);
 
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new android.support.v4.app.NotificationCompat.Builder(getContext())
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getContext(), DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentIntent(pi)
                         .setAutoCancel(true);
@@ -114,8 +117,8 @@ public class NotificationSyncJob extends Job {
             ActivityOfDay activityOfDay = list_json.get(position_single >= 0 ? position_single : 0);
             String title = activityOfDay.getTitle();
             int type = activityOfDay.getType(); //Constants.ACT, Constants.FLAG e Constants.REM
-            mBuilder.setContentText(getContext().getString(R.string.push_notification_start_commitments_text_1));
-            bigTextStyle.bigText(getContext().getString(R.string.push_notification_start_commitments_text_1));
+            mBuilder.setContentText(title);
+            bigTextStyle.bigText(title);
             mBuilder.setContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
             bigTextStyle.setBigContentTitle(getContext().getString(R.string.push_notification_start_commitments_title));
         } else {
@@ -139,8 +142,8 @@ public class NotificationSyncJob extends Job {
     private void sendNotificationDayBeforeActivity(int qty, ArrayList<ActivityOfDay> list_json) {
         PendingIntent pi = PendingIntent.getActivity(getContext(), 0, new Intent(getContext(), CommitmentsOfTheDayActivity.class), 0);
 
-        android.support.v4.app.NotificationCompat.Builder mBuilder =
-                new android.support.v4.app.NotificationCompat.Builder(getContext())
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(getContext(), DEFAULT_CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_add_cube)
                         .setContentIntent(pi)
                         .setAutoCancel(true);

@@ -74,6 +74,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
     private static int screen;
     private static User friend;
     private static Object obj;
+    private static boolean alone = false;
     private static RefreshLayoutPlansCallback callback;
 
     private interface DialogBuilder {
@@ -953,10 +954,15 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     TextView flagText = (TextView) customView.findViewById(R.id.flagText);
                     ImageView flagIcon = (ImageView) customView.findViewById(R.id.flagIcon);
 
-                    if (screen != Utilities.TYPE_PLANS) {
+                    if(alone){
+                        reminderBox.setVisibility(View.VISIBLE);
+                        customView.findViewById(R.id.reminderLine).setVisibility(View.VISIBLE);
+                    }else if (screen != Utilities.TYPE_PLANS) {
                         reminderBox.setVisibility(View.GONE);
                         customView.findViewById(R.id.reminderLine).setVisibility(View.GONE);
                     }
+
+
 
                     activityBox.setOnTouchListener(new View.OnTouchListener() {
                         @Override
@@ -1157,5 +1163,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
     public void setCallback(RefreshLayoutPlansCallback cb) {
         callback = cb;
+    }
+
+    public void setAloneInCompare(boolean a) {
+        alone = a;
     }
 }
