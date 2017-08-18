@@ -252,6 +252,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         repeatEditLayout.setVisibility(View.GONE);
         guestBox.setVisibility(View.GONE);
         profilesPhotos.setVisibility(View.GONE);
+        whoCanInviteBox.setVisibility(View.GONE);
 
         spinner = (MaterialSpinner) view.findViewById(R.id.repeatPicker);
         spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
@@ -788,6 +789,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 timeEnd.setOnClickListener(null);
 
                 repeatBox.setVisibility(View.GONE);
+                repeatAdd.setVisibility(View.GONE);
 
                 sendBox.setVisibility(View.GONE);
                 sendText.setVisibility(View.GONE);
@@ -820,6 +822,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 if (flagServer.getType()) {
                     guestBox.setVisibility(View.VISIBLE);
                     profilesPhotos.setVisibility(View.VISIBLE);
+                    whoCanInviteBox.setVisibility(View.VISIBLE);
 
                     listPerson.clear();
                     listConfirmed.clear();

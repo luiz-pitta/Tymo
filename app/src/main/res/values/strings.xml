@@ -431,6 +431,7 @@
     <string name="search_menu_people">Pessoas</string>
     <string name="search_menu_what_is_going_on">O que está rolando?</string>
     <string name="send">Enviar</string>
+    <string name="empty_free_all_day">Livre o dia inteiro!</string>
     <string name="server_failure">Falha no servidor</string>
     <string name="server_message_activity_deleted_successfully">Atividade removida com sucesso</string>
     <string name="server_message_activity_registered_successfully">Atividade registrada com sucesso</string>
