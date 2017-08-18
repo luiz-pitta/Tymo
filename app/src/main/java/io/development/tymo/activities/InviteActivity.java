@@ -101,7 +101,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
         recyclerView.addItemDecoration(itemDecoration);
 
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(500);
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(400);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapterWithProgress(adapter = new InviteAdapter(this));

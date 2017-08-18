@@ -64,7 +64,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener, View.OnClickListener{
+public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private ItemTouchHelper.SimpleCallback simpleItemTouchCallback;
     private LinearLayout feed_empty_view;
@@ -131,29 +131,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
 
         adapter.setNoMore(R.layout.footer_feed_zoom_less);
 
-        adapter.setOnItemClickListener(new RecyclerArrayAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(View v, int position) {
-                Object object = adapter.getItem(position);
-                FlagServer flagServer;
-                ActivityServer activityServer;
-                Intent myIntent;
-
-                if(object instanceof FlagServer){
-                    flagServer = (FlagServer) object;
-                    myIntent = new Intent(getActivity(), FlagActivity.class);
-                    myIntent.putExtra("type_flag", 1);
-                    myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
-                }else{
-                    activityServer = (ActivityServer) object;
-                    myIntent = new Intent(getActivity(), ShowActivity.class);
-                    myIntent.putExtra("act_show", new ActivityWrapper(activityServer));
-                }
-
-                startActivity(myIntent);
-            }
-        });
-
         recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -162,7 +139,7 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
             }
         });
 
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(850);
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(700);
 
 
         recyclerView.setRefreshListener(this);
@@ -621,11 +598,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
         };
         ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
         itemTouchHelper.attachToRecyclerView(recyclerView.getRecyclerView());
-    }
-
-    @Override
-    public void onClick(View view) {
-
     }
 
     @Override

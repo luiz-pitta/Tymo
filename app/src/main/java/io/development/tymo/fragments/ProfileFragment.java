@@ -185,7 +185,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         profilePhotoBox.setOnClickListener(this);
         editProfile.setOnClickListener(this);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(450);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(400);
 
         getBgProfile();
 

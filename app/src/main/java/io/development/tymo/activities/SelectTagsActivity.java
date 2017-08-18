@@ -75,7 +75,7 @@ public class SelectTagsActivity extends AppCompatActivity implements View.OnClic
 
         searchView.setQueryHint(getResources().getString(R.string.hint_search_tags));
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(450);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(400);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

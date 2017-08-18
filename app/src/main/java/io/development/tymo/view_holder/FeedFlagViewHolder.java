@@ -1,11 +1,13 @@
 package io.development.tymo.view_holder;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -18,17 +20,23 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.facebook.rebound.SpringSystem;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import io.development.tymo.R;
+import io.development.tymo.activities.FlagActivity;
+import io.development.tymo.adapters.ActivityAdapter;
 import io.development.tymo.model_server.FlagServer;
+import io.development.tymo.model_server.FlagWrapper;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
 
 import static android.content.Context.MODE_PRIVATE;
 
 
-public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> {
+public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> implements View.OnClickListener {
     private TextView textViewTitle, textViewDescription;
     private ImageView triangle, photoCreator;
     private RelativeLayout pieceBox, textBox;
@@ -77,6 +85,35 @@ public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> {
         $(R.id.cubeLowerBox).setVisibility(View.GONE);
         $(R.id.cubeUpperBoxIcon).setVisibility(View.GONE);
         $(R.id.flagIcon).setVisibility(View.VISIBLE);
+
+        pieceBox.setOnClickListener(this);
+
+        new Actor.Builder(SpringSystem.create(), pieceBox)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        return true;
+                    }
+                })
+                .build();
+    }
+
+    @Override
+    public void onClick(View view) {
+        if(view == pieceBox){
+            FlagServer flagServer;
+            Intent myIntent;
+
+            ActivityAdapter activityAdapter = getOwnerAdapter();
+
+            flagServer = (FlagServer) activityAdapter.getItem(getAdapterPosition());
+            myIntent = new Intent(context, FlagActivity.class);
+            myIntent.putExtra("type_flag", 1);
+            myIntent.putExtra("flag_show", new FlagWrapper(flagServer));
+
+            context.startActivity(myIntent);
+        }
     }
 
     public void setAnimation(){

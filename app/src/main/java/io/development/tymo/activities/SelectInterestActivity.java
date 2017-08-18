@@ -78,7 +78,7 @@ public class SelectInterestActivity extends AppCompatActivity implements View.On
 
         searchView.setQueryHint(getResources().getString(R.string.hint_search_interests));
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(450);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(400);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
