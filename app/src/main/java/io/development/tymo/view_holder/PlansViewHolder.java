@@ -277,7 +277,6 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         dg.show();
     }
 
-
     @Override
     public void setData(WeekModel week) {
         dayNumber.setText(week.getM_day_number());
@@ -285,36 +284,40 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         dayMonth.setText(week.getM_month_text());
         adapter.clear();
 
-        Calendar now2 = Calendar.getInstance();
-        now2.add(Calendar.MONTH, -3);
+        Calendar before3Months = Calendar.getInstance();
+        before3Months.add(Calendar.MONTH, -3);
 
         boolean isStored = !isInThePast(week.getYear(), week.getMonth(), week.getDay(),
-                now2.get(Calendar.YEAR), now2.get(Calendar.MONTH) + 1, now2.get(Calendar.DAY_OF_MONTH));
-
-        if (!free) {
-            adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
-        }
-        else {
-            adapter.addAll(setPlansItemData(week.getFree(), false));
-        }
-
-        if (week.getPaint())
-            dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
-        else
-            dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
+                before3Months.get(Calendar.YEAR), before3Months.get(Calendar.MONTH) + 1, before3Months.get(Calendar.DAY_OF_MONTH));
 
         if (!free) {
             if(isStored){
+                adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments);
+
+                if (week.getPaint())
+                    dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
+                else
+                    dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
             }
             else{
                 dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_50));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
+                mRecyclerView.showEmpty();
             }
         }
         else {
             mRecyclerView.setEmptyView(R.layout.empty_free_time);
+            adapter.addAll(setPlansItemData(week.getFree(), false));
+
+            if (week.getPaint())
+                dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
+            else
+                dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
         }
+
+
+
     }
 
     private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {

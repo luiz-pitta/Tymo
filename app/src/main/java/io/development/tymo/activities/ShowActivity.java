@@ -197,7 +197,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(850);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(750);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -671,14 +671,39 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                     descriptionShort.setVisibility(View.VISIBLE);
                     descriptionReadMore.setVisibility(View.GONE);
 
-                    if (!activityServer.getDescription().matches(""))
+                    if (!activityServer.getDescription().matches("")) {
                         descriptionShort.setText(activityServer.getDescription());
+                        descriptionShort.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(descriptionShort.getLineCount() >= 6) {
+                                    descriptionShort.setVisibility(View.GONE);
+                                    descriptionReadMore.setVisibility(View.VISIBLE);
+                                    String description = activityServer.getDescription() + "  " + "\n\n";
+                                    descriptionReadMore.setText(description);
+                                    descriptionReadMore.post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            descriptionReadMore.setText();
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
                     else
                         descriptionShort.setVisibility(View.GONE);
+
                 } else {
                     if (activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
                         String description = activityServer.getDescription() + " " + "\n\n";
                         descriptionReadMore.setText(description);
+                        descriptionReadMore.post(new Runnable() {
+                            @Override
+                            public void run() {
+                                descriptionReadMore.setText();
+                            }
+                        });
                     } else
                         descriptionReadMore.setVisibility(View.GONE);
                 }

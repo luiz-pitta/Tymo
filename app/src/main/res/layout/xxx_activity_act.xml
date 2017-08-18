@@ -272,9 +272,10 @@
                         android:textColor="@color/grey_600"
                         android:textSize="14sp"
                         app:colorClickableText="@color/deep_purple_400"
+                        app:trimLines="6"
                         app:trimCollapsedText="@string/show_more"
                         app:trimExpandedText="@string/show_less"
-                        app:trimMode="trimModeLength" />
+                        app:trimMode="trimModeLine" />
 
                     <com.cunoraz.tagview.TagView
                         android:id="@+id/tagGroup"

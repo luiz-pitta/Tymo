@@ -172,7 +172,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         calendarIcon = (ImageView) findViewById(R.id.calendarIcon);
         profilePhotoBox = (RelativeLayout) findViewById(R.id.profilePhotoBox);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(850);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(750);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

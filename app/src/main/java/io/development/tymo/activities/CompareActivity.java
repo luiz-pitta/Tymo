@@ -147,7 +147,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         guestBox.setOnClickListener(this);
         guestBox.setOnTouchListener(this);
 
-        mSwipeRefreshLayout.setDistanceToTriggerSync(850);
+        mSwipeRefreshLayout.setDistanceToTriggerSync(750);
 
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override

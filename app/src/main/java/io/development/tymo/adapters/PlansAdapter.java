@@ -6,6 +6,12 @@ import android.view.ViewGroup;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
 import com.jude.easyrecyclerview.adapter.RecyclerArrayAdapter;
 
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
+
+import java.util.Calendar;
+
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.WeekModel;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
@@ -27,6 +33,13 @@ public class PlansAdapter extends RecyclerArrayAdapter<WeekModel> {
         this.callback = callback;
         this.friend = usr;
         this.free = free;
+    }
+
+    private boolean isInThePast(int y1, int m1, int d1, int y2, int m2, int d2) {
+        LocalDate end = new LocalDate(y1, m1, d1);
+        LocalDate start = new LocalDate(y2, m2, d2);
+        Period timePeriod = new Period(start, end, PeriodType.days());
+        return timePeriod.getDays() < 0;
     }
 
     @Override

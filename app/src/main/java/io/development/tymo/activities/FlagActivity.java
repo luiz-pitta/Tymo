@@ -152,6 +152,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+        mSwipeRefreshLayout.setDistanceToTriggerSync(600);
+
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this,R.color.deep_purple_400));
 
         checkButtonBox = findViewById(R.id.checkButtonBox);

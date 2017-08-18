@@ -20,6 +20,7 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.AppCompatTextView;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -28,12 +29,11 @@ import android.text.style.ClickableSpan;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.TextView;
 
 /**
  * Created by borja on 17/4/16.
  */
-public class ReadMoreTextView extends TextView {
+public class ReadMoreTextView extends AppCompatTextView {
 
     private static final int TRIM_MODE_LINES = 0;
     private static final int TRIM_MODE_LENGTH = 1;
@@ -83,7 +83,7 @@ public class ReadMoreTextView extends TextView {
         setText();
     }
 
-    private void setText() {
+    public void setText() {
         super.setText(getDisplayableText(), bufferType);
         setMovementMethod(LinkMovementMethod.getInstance());
         setHighlightColor(Color.TRANSPARENT);
@@ -111,6 +111,8 @@ public class ReadMoreTextView extends TextView {
             }
         }
         if (trimMode == TRIM_MODE_LINES) {
+            if(lineEndIndex < 0)
+                refreshLineEndIndex();
             if (text != null && lineEndIndex > 0) {
                 if (readMore) {
                     return updateCollapsedText();
@@ -127,17 +129,19 @@ public class ReadMoreTextView extends TextView {
         switch (trimMode) {
             case TRIM_MODE_LINES:
                 trimEndIndex = lineEndIndex - (ELLIPSIZE.length() + trimCollapsedText.length() + 1);
-                if (trimEndIndex < 0) {
-                    trimEndIndex = trimLength + 1;
-                }
                 break;
             case TRIM_MODE_LENGTH:
                 trimEndIndex = trimLength + 1;
                 break;
         }
-        SpannableStringBuilder s = new SpannableStringBuilder(text, 0, trimEndIndex)
-                .append(ELLIPSIZE)
-                .append(trimCollapsedText);
+        SpannableStringBuilder s;
+        if(trimEndIndex < 0) {
+            s = new SpannableStringBuilder(text, 0, text.length() - 1);
+        }else {
+            s = new SpannableStringBuilder(text, 0, trimEndIndex)
+                    .append(ELLIPSIZE)
+                    .append(trimCollapsedText);
+        }
         return addClickableSpan(s, trimCollapsedText);
     }
 
