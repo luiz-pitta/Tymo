@@ -60,9 +60,5 @@ public class FreeTimeViewHolder extends BaseViewHolder<FreeTime> {
         time.setBackgroundColor(ContextCompat.getColor(mContext,R.color.transparent));
         box.setBackgroundResource(R.drawable.bg_card_free_time);
         icon.setImageResource(0);
-        if(card.isInPast())
-            actor.setTouchEnabled(false);
-        else
-            actor.setTouchEnabled(true);
     }
 }

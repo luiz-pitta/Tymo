@@ -1,15 +1,19 @@
 package io.development.tymo.view_holder;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -22,6 +26,7 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -50,6 +55,7 @@ import io.development.tymo.models.cards.HolidayCard;
 import io.development.tymo.models.cards.Reminder;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
+import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.Utilities;
 import jp.wasabeef.recyclerview.animators.LandingAnimator;
@@ -69,6 +75,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private FlagServer flagServer;
     private ReminderServer reminderServer;
     private String email;
+    private DateFormat dateFormat;
 
     private FirebaseAnalytics mFirebaseAnalytics;
     private User friend;
@@ -90,6 +97,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         this.friend = usr;
         this.free = free;
 
+        dateFormat = new DateFormat(context);
+
         SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -99,7 +108,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
         mRecyclerView.setItemAnimator(new LandingAnimator());
         mRecyclerView.setProgressView(R.layout.progress_loading_list);
-        if(free)
+        if (free)
             mRecyclerView.setEmptyView(R.layout.empty_free_time);
 
         mRecyclerView.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false));
@@ -117,15 +126,15 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 Activity activity = (Activity) context;
                 CreatePopUpDialogFragment createPopUpDialogFragment;
 
-                String type =  obj.toString().substring(33,obj.toString().length()-8);
+                String type = obj.toString().substring(33, obj.toString().length() - 8);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "CreatePopUpDialogFragment" + type + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "CreatePopUpDialogFragment" + type + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 if (!free) {
-                    if (obj instanceof Reminder){
+                    if (obj instanceof Reminder) {
                         reminderServer = ((Reminder) obj).getReminderServer();
 
                         Intent myIntent = new Intent(context, ReminderActivity.class);
@@ -134,12 +143,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                         context.startActivity(myIntent);
 
                         bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                    }
-                    else if (obj instanceof Flag && ((Flag) obj).getFlagServer().getType()){
+                    } else if (obj instanceof Flag && ((Flag) obj).getFlagServer().getType()) {
                         flagServer = ((Flag) obj).getFlagServer();
 
                         Intent myIntent = new Intent(context, FlagActivity.class);
@@ -148,12 +156,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                         context.startActivity(myIntent);
 
                         bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                    }
-                    else if (obj instanceof Flag && !((Flag) obj).getFlagServer().getType() && email.equals(((Flag) obj).getFlagServer().getCreator())){
+                    } else if (obj instanceof Flag && !((Flag) obj).getFlagServer().getType() && email.equals(((Flag) obj).getFlagServer().getCreator())) {
                         flagServer = ((Flag) obj).getFlagServer();
 
                         Intent myIntent = new Intent(context, FlagActivity.class);
@@ -162,12 +169,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                         context.startActivity(myIntent);
 
                         bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                    }
-                    else {
+                    } else {
                         createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, obj, screen, null);
 
@@ -175,8 +181,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                         createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
 
                     }
-                }
-                else {
+                } else {
                     FreeTime freeTime = (FreeTime) obj;
                     PlansAdapter plansAdapter = getOwnerAdapter();
                     WeekModel weekModel = plansAdapter.getItem(getAdapterPosition());
@@ -193,18 +198,21 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
                     Calendar now = Calendar.getInstance();
                     Calendar day_card = Calendar.getInstance();
-                    day_card.set(weekModel.getYear(),weekModel.getMonth()-1, weekModel.getDay());
+                    day_card.set(weekModel.getYear(), weekModel.getMonth() - 1, weekModel.getDay());
 
-                    show = !isInThePast(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
+                    show = !isInThePast(weekModel.getYear(), weekModel.getMonth(), weekModel.getDay(),
                             now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
 
                     createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
-                                CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
-                                screen, friend);
+                            CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
+                            screen, friend);
 
-                    if(show) {
+                    if (show) {
                         createPopUpDialogFragment.setCallback(callback);
                         createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                    } else {
+                        createDialogMessage(weekModel.getYear(), weekModel.getMonth(), weekModel.getDay(),
+                                now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
                     }
                 }
 
@@ -224,20 +232,68 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         return timePeriod.getDays() < 0;
     }
 
+    private void createDialogMessage(int y1, int m1, int d1, int y2, int m2, int d2) {
+        LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        LinearLayout button1 = (LinearLayout) customView.findViewById(R.id.button1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+
+        button1.setVisibility(View.GONE);
+        editText.setVisibility(View.GONE);
+
+        Dialog dg = new Dialog(context, R.style.NewDialog);
+
+        dg.setContentView(customView);
+        dg.setCanceledOnTouchOutside(true);
+
+        String date = String.format("%02d", d1) + "/" + String.format("%02d", m1) + "/" + String.valueOf(y1);
+        String dateNow = String.format("%02d", d2) + "/" + String.format("%02d", m2) + "/" + String.valueOf(y2);
+
+        text1.setText(R.string.free_time_past_dialog_text_1);
+        text2.setText(context.getString(R.string.free_time_past_dialog_text_2, date, dateNow));
+        buttonText2.setText(R.string.close);
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dg.dismiss();
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_radius));
+                }
+
+                return false;
+            }
+        });
+
+        dg.show();
+    }
+
 
     @Override
-    public void setData(WeekModel week){
+    public void setData(WeekModel week) {
         dayNumber.setText(week.getM_day_number());
         dayText.setText(week.getM_day_text());
         dayMonth.setText(week.getM_month_text());
         adapter.clear();
 
-        if(!free)
+        if (!free)
             adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
         else
             adapter.addAll(setPlansItemData(week.getFree(), false));
 
-        if(week.getPaint())
+        if (week.getPaint())
             dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
         else
             dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
@@ -246,24 +302,24 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {
         List<Object> list = new ArrayList<>();
 
-        for(int i = 0; i < objectList.size(); i++){
+        for (int i = 0; i < objectList.size(); i++) {
             Object object = objectList.get(i);
-            if(object instanceof ActivityServer){
-                ActivityServer activityServer = (ActivityServer)object;
+            if (object instanceof ActivityServer) {
+                ActivityServer activityServer = (ActivityServer) object;
                 String hour_start = String.format("%02d", activityServer.getHourCard());
                 String minute_start = String.format("%02d", activityServer.getMinuteCard());
                 String hour_end = String.format("%02d", activityServer.getHourEndCard());
                 String minute_end = String.format("%02d", activityServer.getMinuteEndCard());
                 String time;
 
-                if(activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
-                    time = hour_start+":"+minute_start+"\n"+"-";
+                if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
+                    time = hour_start + ":" + minute_start + "\n" + "-";
                 else
-                    time = hour_start+":"+minute_start+"\n"+hour_end+":"+minute_end;
+                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
-                if( (screen == Utilities.TYPE_FRIEND && activityServer.getParticipates() == 0) &&
-                    ( (activityServer.getKnowCreator() == 0 && activityServer.getVisibility() > 0) ||
-                      (activityServer.getVisibility() == 2 && activityServer.getKnowCreator() > 0) ) ){
+                if ((screen == Utilities.TYPE_FRIEND && activityServer.getParticipates() == 0) &&
+                        ((activityServer.getKnowCreator() == 0 && activityServer.getVisibility() > 0) ||
+                                (activityServer.getVisibility() == 2 && activityServer.getKnowCreator() > 0))) {
 
                     FlagServer flagServer = new FlagServer();
                     flagServer.setType(false);
@@ -279,10 +335,10 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     flagServer.setMinuteEnd(activityServer.getMinuteEnd());
                     flagServer.setHourEnd(activityServer.getHourEnd());
                     list.add(new Flag(time, R.drawable.ic_flag, false, flagServer, paint, true));
-                }else
+                } else
                     list.add(new ActivityCard(time, activityServer.getCubeIcon(), activityServer.getCubeColor(), activityServer.getCubeColorUpper(), activityServer, false));
 
-            }else if(object instanceof FlagServer){
+            } else if (object instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) object;
                 String hour_start = String.format("%02d", flagServer.getHourCard());
                 String minute_start = String.format("%02d", flagServer.getMinuteCard());
@@ -290,13 +346,13 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_end = String.format("%02d", flagServer.getMinuteEndCard());
                 String time;
 
-                if(flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
-                    time = hour_start+":"+minute_start+"\n"+"-";
+                if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
+                    time = hour_start + ":" + minute_start + "\n" + "-";
                 else
-                    time = hour_start+":"+minute_start+"\n"+hour_end+":"+minute_end;
+                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
 
-                if(screen == Utilities.TYPE_FRIEND && flagServer.getType() && flagServer.getParticipates() == 0){
+                if (screen == Utilities.TYPE_FRIEND && flagServer.getType() && flagServer.getParticipates() == 0) {
                     FlagServer flag = new FlagServer();
                     flag.setType(false);
                     flag.setTitle(context.getResources().getString(R.string.flag_menu_unavailable));
@@ -311,25 +367,25 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     flag.setMinuteEnd(flagServer.getMinuteEnd());
                     flag.setHourEnd(flagServer.getHourEnd());
                     list.add(new Flag(time, R.drawable.ic_flag, false, flag, paint, true));
-                }else
-                    list.add(new Flag(time,R.drawable.ic_flag, flagServer.getType(), flagServer, paint, false));
+                } else
+                    list.add(new Flag(time, R.drawable.ic_flag, flagServer.getType(), flagServer, paint, false));
 
-            }else if(object instanceof ReminderServer){
+            } else if (object instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) object;
                 String hour_start = String.format("%02d", reminderServer.getHourStart());
                 String minute_start = String.format("%02d", reminderServer.getMinuteStart());
                 String time;
 
-                time = hour_start+":"+minute_start;
+                time = hour_start + ":" + minute_start;
 
-                list.add(new Reminder(reminderServer.getTitle(),time, reminderServer));
-            }else if(object instanceof FreeTimeServer){
+                list.add(new Reminder(reminderServer.getTitle(), time, reminderServer));
+            } else if (object instanceof FreeTimeServer) {
                 PlansAdapter plansAdapter = getOwnerAdapter();
                 WeekModel weekModel = plansAdapter.getItem(getAdapterPosition());
 
                 Calendar now = Calendar.getInstance();
 
-                boolean inPast = isInThePast(weekModel.getYear(),weekModel.getMonth(), weekModel.getDay(),
+                boolean inPast = isInThePast(weekModel.getYear(), weekModel.getMonth(), weekModel.getDay(),
                         now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
 
                 FreeTimeServer freeTimeServer = (FreeTimeServer) object;
@@ -337,13 +393,13 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_start = String.format("%02d", freeTimeServer.getMinuteStart());
                 String hour_end = String.format("%02d", freeTimeServer.getHourEnd());
                 String minute_end = String.format("%02d", freeTimeServer.getMinuteEnd());
-                String time = hour_start+":"+minute_start+"\n"+hour_end+":"+minute_end;
+                String time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
                 list.add(new FreeTime(time, inPast));
-            }else if(object instanceof Holiday){
-                list.add(new HolidayCard((Holiday)object));
-            }else if(object instanceof Birthday){
-                list.add(new BirthdayCard((Birthday)object));
+            } else if (object instanceof Holiday) {
+                list.add(new HolidayCard((Holiday) object));
+            } else if (object instanceof Birthday) {
+                list.add(new BirthdayCard((Birthday) object));
             }
         }
 

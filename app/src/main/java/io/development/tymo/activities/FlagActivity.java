@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -574,7 +573,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 agendaStatus.setVisibility(View.GONE);
                 checkButtonBox.setVisibility(View.GONE);
                 agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
-                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_pass));
+                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_past));
             }
             else{
                 agendaStatusNeedInvitation.setVisibility(View.GONE);

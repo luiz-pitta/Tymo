@@ -69,7 +69,6 @@ import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.SecureStringPropertyConverter;
-import io.development.tymo.utils.UpdateButtonController;
 import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -638,7 +637,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 agendaStatus.setVisibility(View.GONE);
                 checkButtonBox.setVisibility(View.GONE);
                 agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
-                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_pass));
+                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_past));
             }
             else{
                 agendaStatusNeedInvitation.setVisibility(View.GONE);

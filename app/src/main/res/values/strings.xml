@@ -214,6 +214,7 @@
     <string name="empty_feed_text_1">Sem novidades...</string>
     <string name="empty_feed_text_2">Seja o primeiro a criar atividades e sinalizadores!</string>
     <string name="empty_free_time">Ocupado o dia inteiro!</string>
+    <string name="empty_plans_past">Não são armazenados compromissos que tenham terminado há mais de 3 meses</string>
     <string name="empty_invitations">Não há convites para você no momento</string>
     <string name="empty_my_contacts_profile_friend_text_1">Esse usuário ainda não possui contatos</string>
     <string name="empty_my_contacts_profile_friend_text_2">Seja o primeiro dessa lista</string>
@@ -540,6 +541,8 @@
     <string name="validation_field_gender_required">Selecione um gênero</string>
     <string name="validation_field_invalid_required_field">Campo obrigatório inválido</string>
     <string name="validation_field_login_password_invalid">Senha inválida</string>
+    <string name="free_time_past_dialog_text_1">Ops! Você está tentando criar algo no passado</string>
+    <string name="free_time_past_dialog_text_2">Intervalo selecionado: %1$s\nHoje: %2$s</string>
     <string name="validation_field_my_interests_minimum">Selecione no mínimo 5 interesses</string>
     <string name="validation_field_my_interests_selected_none">Você ainda não selecionou nenhum interesse</string>
     <string name="validation_field_my_interests_selected_one">Você só selecionou 1</string>
@@ -570,7 +573,7 @@
     <string name="visibility_text">Visibilidade na sua agenda:</string>
     <string name="yes">Sim</string>
     <string name="zoom">Zoom</string>
-    <string name="agenda_status_pass">Já acabou. Você não pode mais encaixar :(</string>
+    <string name="agenda_status_past">Já acabou. Você não pode mais encaixar :(</string>
     <string name="agenda_status_need_invitation">Você precisa ser convidado para poder encaixar!</string>
     <string name="agenda_status_fitted">Está na sua agenda!</string>
     <string name="agenda_status_invited">Você foi convidado!</string>
