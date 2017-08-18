@@ -1086,7 +1086,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            Intent myIntent = new Intent(ShowActivity.this, AddActivity.class);
+            Intent myIntent = new Intent(ShowActivity.this, EditActivity.class);
             myIntent.putExtra("act_edit", activityWrapper);
             startActivity(myIntent);
             finish();
