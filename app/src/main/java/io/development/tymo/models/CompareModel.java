@@ -3,19 +3,27 @@ package io.development.tymo.models;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.development.tymo.model_server.User;
+
 public class CompareModel {
     private String m_photo;
     private String name, email;
     private List<Object> activities = new ArrayList<>();
     private List<Object> free = new ArrayList<>();
+    private ArrayList<User> ListFriends = new ArrayList<>();
     private boolean inPast = false;
 
 
-    public CompareModel(String m_photo, String name, String email, boolean inPast) {
+    public CompareModel(String m_photo, String name, String email, boolean inPast, ArrayList<User> ListFriends) {
         this.m_photo = m_photo;
         this.name = name;
         this.email = email;
         this.inPast = inPast;
+        this.ListFriends = ListFriends;
+    }
+
+    public ArrayList<User> getListFriends() {
+        return ListFriends;
     }
 
     public boolean isInPast() {

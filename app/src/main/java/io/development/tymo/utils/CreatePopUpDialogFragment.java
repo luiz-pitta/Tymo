@@ -76,6 +76,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
     private static Object obj;
     private static boolean alone = false;
     private static RefreshLayoutPlansCallback callback;
+    private static ArrayList<User> listFriends = new ArrayList<>();
 
     private interface DialogBuilder {
         @NonNull
@@ -1027,9 +1028,13 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             intent.putExtra("act_free", new ActivityWrapper(activityServerFreeTime));
 
-                            if (screen != Utilities.TYPE_PLANS)
-                                intent.putExtra("act_free_friend_usr", new UserWrapper(friend));
-
+                            if (screen != Utilities.TYPE_PLANS) {
+                                if(friend != null)
+                                    intent.putExtra("act_free_friend_usr", new UserWrapper(friend));
+                                else if(listFriends.size() > 0){
+                                    intent.putExtra("ListCreateActivityCompare", new UserWrapper(listFriends));
+                                }
+                            }
 
                             Bundle bundle = new Bundle();
                             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_free" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -1095,7 +1100,10 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             if (screen != Utilities.TYPE_PLANS) {
                                 intent.putExtra("flag_free_friend", true);
-                                intent.putExtra("flag_free_friend_usr", new UserWrapper(friend));
+                                if(friend != null)
+                                    intent.putExtra("flag_free_friend_usr", new UserWrapper(friend));
+                                else if(listFriends.size() > 0)
+                                    intent.putExtra("ListCreateActivityCompare", new UserWrapper(listFriends));
                             }
 
                             Bundle bundle = new Bundle();
@@ -1144,8 +1152,6 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
         void refreshLayout(boolean showRefresh);
     }
 
-
-
     private static void updateFeedMessageToActivity(Context context) {
         Intent intent = new Intent("feed_update");
         LocalBroadcastManager.getInstance(context).sendBroadcast(intent);
@@ -1163,6 +1169,10 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
     public void setCallback(RefreshLayoutPlansCallback cb) {
         callback = cb;
+    }
+
+    public void setListFriends(ArrayList<User> list) {
+        listFriends = list;
     }
 
     public void setAloneInCompare(boolean a) {

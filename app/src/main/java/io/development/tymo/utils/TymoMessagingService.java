@@ -47,7 +47,9 @@ public class TymoMessagingService extends FirebaseMessagingService {
             updateNotificationStartToday();
 
         if(notification_push) {
-            if (type.matches("engagement")) {
+            if (type.matches("adm")) {
+                sendNotificationAdm(map.get("title"));
+            }else if (type.matches("engagement")) {
                 if (map.get("activated").matches("true")) {
                     sendNotificationEngagement(map.get("title"), map.get("text"));
                 }
@@ -107,6 +109,39 @@ public class TymoMessagingService extends FirebaseMessagingService {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(Constants.INVITE, mBuilder.build());
+    }
+
+    public void sendNotificationAdm(String title) {
+
+        Intent intent = new Intent(this, MainActivity.class);
+
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_add_cube)
+                        .setContentTitle(getString(R.string.push_notification_adm))
+                        .setContentIntent(pi)
+                        .setAutoCancel(true);
+
+        //Vibration
+        mBuilder.setVibrate(new long[]{500, 750});
+
+        //Ton
+        mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle(getString(R.string.push_notification_adm));
+
+        mBuilder.setContentText(title);
+        bigTextStyle.bigText(title);
+
+        mBuilder.setStyle(bigTextStyle);
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(Constants.ADM_SET, mBuilder.build());
     }
 
     public void sendNotificationCancel(String title, String name, int type) {

@@ -114,7 +114,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                     String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
                     Activity activity = (Activity) context;
-                    CreatePopUpDialogFragment createPopUpDialogFragment = new CreatePopUpDialogFragment();
+                    CreatePopUpDialogFragment createPopUpDialogFragment;
 
                     Bundle bundle = new Bundle();
                     bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "card" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
@@ -174,8 +174,6 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                         }
                     }
                     else {
-                        Calendar now = Calendar.getInstance();
-
                         FreeTime freeTime = (FreeTime) obj;
                         DateTymo dateTymo = new DateTymo();
 
@@ -193,6 +191,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
 
                         if(!freeTime.isInPast()) {
                             createPopUpDialogFragment.setCallback(callback);
+                            createPopUpDialogFragment.setListFriends(compareList.get(getAdapterPosition()).getListFriends());
                             createPopUpDialogFragment.setAloneInCompare(getItemCount() == 1);
                             createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
                         }else {
