@@ -30,6 +30,7 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -104,6 +105,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<User> userList = new ArrayList<>();
     private ArrayList<User> invitedList = new ArrayList<>();
     private ArrayList<User> confirmedList = new ArrayList<>();
+    private ArrayList<User> listUserCompare = new ArrayList<>();
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
@@ -195,6 +197,13 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                         UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("flag_free_friend_usr");
                         if(userWrapper != null)
                             user_friend = userWrapper.getUser();
+                        else {
+                            userWrapper = (UserWrapper) getIntent().getSerializableExtra("ListCreateActivityCompare");
+                            if(userWrapper != null) {
+                                listUserCompare = userWrapper.getUsers();
+                                listUserCompare.remove(0);
+                            }
+                        }
                     }
 
                 }

@@ -106,6 +106,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
     private ArrayList<User> userList = new ArrayList<>();
     private ArrayList<User> admList = new ArrayList<>();
+    private ArrayList<User> listUserCompare = new ArrayList<>();
     private User creator_activity, user_friend = null;
     private ArrayList<User> invitedList = new ArrayList<>();
     private ArrayList<User> confirmedList = new ArrayList<>();
@@ -255,9 +256,18 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
                 recover = true;
             } else {
                 activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_free");
-                UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("act_free_friend_usr");
-                if(activityWrapper != null && userWrapper != null)
-                    user_friend = userWrapper.getUser();
+                if(activityWrapper != null) {
+                    UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("act_free_friend_usr");
+                    if(userWrapper != null)
+                        user_friend = userWrapper.getUser();
+                    else {
+                        userWrapper = (UserWrapper) getIntent().getSerializableExtra("ListCreateActivityCompare");
+                        if(userWrapper != null) {
+                            listUserCompare = userWrapper.getUsers();
+                            listUserCompare.remove(0);
+                        }
+                    }
+                }
             }
         } else {
             edit = true;

@@ -1,6 +1,8 @@
 package io.development.tymo.activities;
 
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -12,9 +14,11 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -24,6 +28,7 @@ import android.widget.Toast;
 import com.aspsine.fragmentnavigator.FragmentNavigator;
 import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
+import com.google.gson.Gson;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -40,7 +45,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.adapters.PlansAdapter;
+import io.development.tymo.model_server.DateTymo;
 import io.development.tymo.models.WeekModel;
+import io.development.tymo.models.cards.FreeTime;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
@@ -90,8 +97,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
     private int day1, month1, year1;
     private int day2, month2, year2;
     private int d1f;
-    private List<CompareModel> listCompare = new ArrayList<>();
-    private List<User> listPerson = new ArrayList<>();
+    private ArrayList<CompareModel> listCompare = new ArrayList<>();
+    private ArrayList<User> listPerson = new ArrayList<>();
 
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
@@ -420,7 +427,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             boolean inPast = isInThePast(year,month, day,
                     now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
 
-            CompareModel compareModel = new CompareModel(listPerson.get(i).getPhoto(), listPerson.get(i).getName(), listPerson.get(i).getEmail(), inPast);
+            CompareModel compareModel = new CompareModel(listPerson.get(i).getPhoto(), listPerson.get(i).getName(), listPerson.get(i).getEmail(), inPast, listPerson);
 
             int j;
             for(j = 0; j < response.getMyCommitAct().size(); j++) {
@@ -744,6 +751,9 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
+            Calendar before3Months = Calendar.getInstance();
+            before3Months.add(Calendar.MONTH, -3);
+
             Calendar now = Calendar.getInstance();
 
             now.set(year_start, month_start-1,day_start);
@@ -754,6 +764,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
+
+            dpd.setMinDate(before3Months);
 
             dpd.setAccentColor(ContextCompat.getColor(CompareActivity.this,R.color.deep_purple_400));
             dpd.show(getFragmentManager(), "Datepickerdialog");
@@ -877,7 +889,81 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             deselectAll.setVisibility(View.GONE);
 
             contactsQty.setText(String.valueOf(listPerson.size()));
+        }else if(view == icon2){
+            CreatePopUpDialogFragment createPopUpDialogFragment;
+            Calendar now = Calendar.getInstance();
+
+            DateTymo dateTymo = new DateTymo();
+
+            dateTymo.setDay(day2);
+            dateTymo.setMonth(month2);
+            dateTymo.setYear(year2);
+
+            dateTymo.setHour(-1);
+            dateTymo.setMinute(-1);
+            dateTymo.setHourEnd(-1);
+            dateTymo.setMinuteEnd(-1);
+            createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
+                    CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
+                    Utilities.TYPE_COMPARE, null);
+
+            boolean inPast = isInThePast(year2,month2, day2,
+                    now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+
+            if(!inPast) {
+                createPopUpDialogFragment.setCallback(this);
+                createPopUpDialogFragment.setAloneInCompare(listPerson.size() == 1);
+                createPopUpDialogFragment.setListFriends(listPerson);
+                createPopUpDialogFragment.show(getFragmentManager(), "custom");
+            }else {
+                createDialogMessage();
+            }
         }
+    }
+
+    private void createDialogMessage() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        LinearLayout button1 = (LinearLayout) customView.findViewById(R.id.button1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+
+        button1.setVisibility(View.GONE);
+        editText.setVisibility(View.GONE);
+        text2.setVisibility(View.GONE);
+
+        Dialog dg = new Dialog(this, R.style.NewDialog);
+
+        dg.setContentView(customView);
+        dg.setCanceledOnTouchOutside(true);
+
+        text1.setText(R.string.free_time_past_dialog_text_1);
+        buttonText2.setText(R.string.close);
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dg.dismiss();
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_radius));
+                }
+
+                return false;
+            }
+        });
+
+        dg.show();
     }
 
     @Override

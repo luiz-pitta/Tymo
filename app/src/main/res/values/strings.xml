@@ -362,6 +362,7 @@
     <string name="progress_updating">Atualizando...</string>
     <string name="push_notification_canceled_act">%1$s cancelou a ATIVIDADE</string>
     <string name="push_notification_canceled_flag">%1$s cancelou o SINALIZADOR</string>
+    <string name="push_notification_adm">Você se tornou administrador</string>
     <string name="push_notification_invitations_accepted_text_1">%1$s aceitou o convite</string>
     <string name="push_notification_invitations_accepted_text_2">%1$d usuários aceitaram o convite</string>
     <string name="push_notification_invitations_text_1">Você recebeu um novo convite</string>

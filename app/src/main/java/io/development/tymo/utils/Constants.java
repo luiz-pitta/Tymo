@@ -39,6 +39,7 @@ public class Constants {
     public static final int INVITE_ACCEPT = 4;
     public static final int CANCEL = 5;
     public static final int NEXT_COMMITMENT = 6;
+    public static final int ADM_SET = 7;
 
     public final static int DAYLY = 1, WEEKLY = 2, MONTHLY = 3;
 
