@@ -138,7 +138,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private int d, m, y;
-    private String urlIcon = "", urlIconTemp = "";;
+    private String urlIcon = "", urlIconTemp = "";
     private boolean edit = false, recover = false;
 
     private int selected = 0;

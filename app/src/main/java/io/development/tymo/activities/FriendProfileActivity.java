@@ -496,7 +496,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 friendshipRequestsBox.setBackgroundColor(0);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                friendshipRequestsBox.setBackgroundColor(ContextCompat.getColor(this, R.color.black_opacity_20));;
+                friendshipRequestsBox.setBackgroundColor(ContextCompat.getColor(this, R.color.black_opacity_20));
             }
         } else if (view == contactsBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {

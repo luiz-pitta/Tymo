@@ -65,7 +65,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     private RelativeLayout addPersonButton;
     private int invite = 0;
     private View progressLoadingBox, whoLinearBox;
-    private RecyclerView recyclerView;
+    private RecyclerView recyclerViewGuestRow;
     private MaterialSpinner spinner;
     private Rect rect;
 
@@ -109,7 +109,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
 
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
         feedVisibility = (TextView) view.findViewById(R.id.feedVisibility);
-        recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
+        recyclerViewGuestRow = (RecyclerView) view.findViewById(R.id.guestRow);
         profilesPhotos = view.findViewById(R.id.profilesPhotos);
         guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
         addPersonButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
@@ -165,9 +165,9 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
             }
         });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
-        recyclerView.setItemAnimator(new LandingAnimator());
-        recyclerView.setNestedScrollingEnabled(false);
+        recyclerViewGuestRow.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewGuestRow.setItemAnimator(new LandingAnimator());
+        recyclerViewGuestRow.setNestedScrollingEnabled(false);
 
         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -182,7 +182,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
         }
         else {
             setLayout(addActivity.getActivity(), addActivity.getUserList(), addActivity.getConfirmedList(), addActivity.getEditable());
-            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            recyclerViewGuestRow.addOnItemTouchListener(new RecyclerItemClickListener(getActivity(), recyclerViewGuestRow, new RecyclerItemClickListener.OnItemClickListener() {
                 @Override
                 public void onItemClick(View view, int position, MotionEvent e) {
                     SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -232,7 +232,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
                 data.add(friend);
             }
             adapter = new PersonAdapter(data, getActivity());
-            recyclerView.setAdapter(adapter);
+            recyclerViewGuestRow.setAdapter(adapter);
             guestsNumber.setText(String.valueOf(data.size()));
             addPersonButton.setActivated(true);
         }
@@ -241,8 +241,6 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleError(Throwable error) {
-        //AddActivity addActivity = (AddActivity)getActivity();
-        //addActivity.setProgress(false);
         if(Utilities.isDeviceOnline(getActivity()))
             Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
@@ -352,7 +350,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
     }
 
     public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean edit){
-        if(recyclerView!=null) {
+        if(recyclerViewGuestRow!=null) {
             invite = activityServer.getInvitationType();
 
             spinner.setSelectedIndex(invite);
@@ -376,7 +374,7 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
             }
 
             adapter = new PersonAdapter(data, getActivity());
-            recyclerView.setAdapter(adapter);
+            recyclerViewGuestRow.setAdapter(adapter);
             guestsNumber.setText(String.valueOf(data.size()));
             addPersonButton.setActivated(true);
 

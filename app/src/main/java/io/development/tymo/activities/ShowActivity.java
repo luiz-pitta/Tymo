@@ -1306,9 +1306,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         TextView optionText2 = (TextView) customView.findViewById(R.id.optionText2);
         TextView optionText3 = (TextView) customView.findViewById(R.id.optionText3);
 
-        int color_selected = this.getResources().getColor(R.color.select);
-        int color_transparent = this.getResources().getColor(R.color.transparent);
-
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 

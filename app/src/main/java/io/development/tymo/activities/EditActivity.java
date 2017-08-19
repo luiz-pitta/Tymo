@@ -14,6 +14,8 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -31,19 +33,24 @@ import com.aspsine.fragmentnavigator.FragmentNavigator;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.christophesmet.android.views.colorpicker.ColorPickerView;
+import com.cunoraz.tagview.OnTagDeleteListener;
+import com.cunoraz.tagview.TagView;
 import com.cunoraz.tagview.Tag;
+import com.cunoraz.tagview.TagView;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
+import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -65,6 +72,7 @@ import io.development.tymo.model_server.IconServer;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.TagServer;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
@@ -82,152 +90,172 @@ import static io.development.tymo.utils.Validation.validateFields;
 
 public class EditActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private ImageView mBackButton;
-    private RelativeLayout mPieceCustom;
-    private ColorPickerView mColorPickerView;
-    private ImageView mColorView;
-    private ImageView mColorViewUpper;
-    private ImageView mColorIcon;
-
     private Rect rect;
-    private boolean first_open = true;
-
-    private ImageView mColorViewMain;
-    private ImageView mColorViewUpperMain;
-    private ImageView mColorIconMain;
-
-    private TextView mOkButton;
-    private TextView mCancelButton;
-
     private ActivityWrapper activityWrapper;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private CompositeDisposable mSubscriptions;
+    private FirebaseAnalytics mFirebaseAnalytics;
+    private String urlIcon = "", urlIconTemp = "";
+    private int d, m, y, selected = 0;
+    private boolean first_open = true, permissionInvite = false;
 
     private ArrayList<ActivityServer> activityServers;
     private ArrayList<IconServer> iconList;
-
     private ArrayList<User> userList = new ArrayList<>();
     private ArrayList<User> admList = new ArrayList<>();
     private User creator_activity, user_friend = null;
     private ArrayList<User> invitedList = new ArrayList<>();
     private ArrayList<User> confirmedList = new ArrayList<>();
-    private boolean permissionInvite = false;
 
-    private FragmentNavigator mNavigator;
+    private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton;
+    private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationTextAdd;
+    private TextView guestText, guestsNumber, addGuestText, feedVisibility;
+    private EditText titleEditText, descriptionEditText, whatsAppEditText;
+    private ImageView cubeLowerBoxIcon, cubeUpperBoxIcon, pieceIcon, customizeCubeLowerBoxIcon, customizeCubeUpperBoxIcon, customizePieceIcon;
+    private ImageView mBackButton, privacyIcon, privacyArrowIcon;
+    private ImageView addImageIcon, addImageIcon2, loadedImageIcon, loadedImageIcon2, addTagIcon, locationIconAdd, locationIconAdd2, locationIcon;
+    private RelativeLayout pieceBox, addPersonButton, addTagBox;
+    private LinearLayout privacyBox, addImage, loadedImage, repeatAdd, repeatBox, repeatNumberBox, locationBoxAdd, locationBox, guestBox;
+    private View addGuestButtonDivider, profilesPhotos, progressLoadingBox;
+    private ColorPickerView customizeColorPicker;
+    private TagView tagGroup;
+    private Tag tag;
+    private MaterialSpinner spinner;
+    private RecyclerView recyclerViewGuestRow;
 
-    private TextView m_title, privacyText, confirmationButton;
-    private ImageView icon2;
-
-    private UpdateButtonController controller;
-
-    private TextView whatText;
-    private TextView whereWhenText;
-    private TextView whoText;
-
-    private ImageView whatButton;
-    private ImageView whereWhenButton;
-    private ImageView whoButton;
-
-    private View whatCorners;
-    private View whereWhenCorners;
-    private View whoCorners;
-
-    private LinearLayout privacyBox;
-    private ImageView privacyIcon;
-
-    private Space space;
-
-    private SwipeRefreshLayout mSwipeRefreshLayout;
-
-    private int d, m, y;
-    private String urlIcon = "", urlIconTemp = "";;
-    private boolean edit = false, recover = false;
-
-    private int selected = 0;
-
-    private CompositeDisposable mSubscriptions;
-
-    private FirebaseAnalytics mFirebaseAnalytics;
 
     private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act);
-
-        findViewById(R.id.buttonsBar).setVisibility(View.GONE);
-        findViewById(R.id.icon1).setVisibility(View.GONE);
+        setContentView(R.layout.xxx_activity_act_edit);
 
         mSubscriptions = new CompositeDisposable();
 
-        whatText = (TextView) findViewById(R.id.whatText);
-        whereWhenText = (TextView) findViewById(R.id.whereWhenText);
-        whoText = (TextView) findViewById(R.id.whoText);
-
-        whatButton = (ImageView) findViewById(R.id.whatIcon);
-        whereWhenButton = (ImageView) findViewById(R.id.whereWhenIcon);
-        whoButton = (ImageView) findViewById(R.id.whoIcon);
-
-        whatCorners = findViewById(R.id.whatCorners);
-        whereWhenCorners = findViewById(R.id.whereWhenCorners);
-        whoCorners = findViewById(R.id.whoCorners);
-
-        confirmationButton = (TextView) findViewById(R.id.confirmationButton);
-        m_title = (TextView) findViewById(R.id.text);
-        icon2 = (ImageView) findViewById(R.id.icon2);
-        privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
-        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
-        mColorViewMain = (ImageView) findViewById(R.id.cubeLowerBoxIcon);
-        mColorViewUpperMain = (ImageView) findViewById(R.id.cubeUpperBoxIcon);
-        mColorIconMain = (ImageView) findViewById(R.id.pieceIcon);
-        mPieceCustom = (RelativeLayout) findViewById(R.id.pieceBox);
-        privacyText = (TextView) findViewById(R.id.privacyText);
-        privacyBox = (LinearLayout) findViewById(R.id.privacyBox);
-        space = (Space) findViewById(R.id.space);
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
+        confirmationButton = (TextView) findViewById(R.id.confirmationButton);
+        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
+        privacyBox = (LinearLayout) findViewById(R.id.textsBox);
+        privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
+        privacyText = (TextView) findViewById(R.id.text);
+        privacyArrowIcon = (ImageView) findViewById(R.id.arrowIcon);
+        cubeLowerBoxIcon = (ImageView) findViewById(R.id.cubeLowerBoxIcon);
+        cubeUpperBoxIcon = (ImageView) findViewById(R.id.cubeUpperBoxIcon);
+        pieceIcon = (ImageView) findViewById(R.id.pieceIcon);
+        pieceBox = (RelativeLayout) findViewById(R.id.pieceBox);
+        addImage = (LinearLayout) findViewById(R.id.addImage);
+        addImageIcon = (ImageView) findViewById(R.id.addImageIcon);
+        addImageText = (TextView) findViewById(R.id.addImageText);
+        addImageIcon2 = (ImageView) findViewById(R.id.addImageIcon2);
+        loadedImage = (LinearLayout) findViewById(R.id.loadedImage);
+        loadedImageIcon = (ImageView) findViewById(R.id.loadedImageIcon);
+        loadedImageText = (TextView) findViewById(R.id.loadedImageText);
+        loadedImageIcon2 = (ImageView) findViewById(R.id.loadedImageIcon2);
+        titleEditText = (EditText) findViewById(R.id.title);
+        titleMax = (TextView) findViewById(R.id.titleMax);
+        tagGroup = (TagView) findViewById(R.id.tagGroup);
+        addTagBox = (RelativeLayout) findViewById(R.id.addTagBox);
+        addTagText = (TextView) findViewById(R.id.addTagText);
+        addTagIcon = (ImageView) findViewById(R.id.addTagIcon);
+        descriptionEditText = (EditText) findViewById(R.id.description);
+        dateStart = (TextView) findViewById(R.id.dateStart);
+        dateEnd = (TextView) findViewById(R.id.dateEnd);
+        timeStart = (TextView) findViewById(R.id.timeStart);
+        timeEnd = (TextView) findViewById(R.id.timeEnd);
+        repeatAdd = (LinearLayout) findViewById(R.id.repeatAdd);
+        repeatBox = (LinearLayout) findViewById(R.id.repeatBox);
+        repeatNumberBox = (LinearLayout) findViewById(R.id.repeatNumberBox);
+        locationBoxAdd = (LinearLayout) findViewById(R.id.locationBoxAdd);
+        locationIconAdd = (ImageView) findViewById(R.id.locationIconAdd);
+        locationTextAdd = (TextView) findViewById(R.id.locationTextAdd);
+        locationIconAdd2 = (ImageView) findViewById(R.id.locationIconAdd2);
+        locationBox = (LinearLayout) findViewById(R.id.locationBox);
+        locationIcon = (ImageView) findViewById(R.id.locationIcon);
+        locationText = (TextView) findViewById(R.id.locationText);
+        whatsAppEditText = (EditText) findViewById(R.id.whatsAppGroupLink);
+        guestBox = (LinearLayout) findViewById(R.id.guestBox);
+        guestText = (TextView) findViewById(R.id.guestText);
+        guestsNumber = (TextView) findViewById(R.id.guestsNumber);
+        profilesPhotos = findViewById(R.id.profilesPhotos);
+        recyclerViewGuestRow = (RecyclerView) findViewById(R.id.guestRow);
+        progressLoadingBox = findViewById(R.id.progressLoadingBox);
+        addPersonButton = (RelativeLayout) findViewById(R.id.addGuestButton);
+        addGuestText = (TextView) findViewById(R.id.addGuestText);
+        addGuestButtonDivider = (View) findViewById(R.id.addGuestButtonDivider);
+        spinner = (MaterialSpinner) findViewById(R.id.visibilityCalendarPicker);
+        feedVisibility = (TextView) findViewById(R.id.feedVisibility);
+
+        mBackButton.setOnClickListener(this);
+        privacyBox.setOnClickListener(this);
+        pieceBox.setOnClickListener(this);
+        confirmationButton.setOnClickListener(this);
+        addImage.setOnClickListener(this);
+        loadedImage.setOnClickListener(this);
+        addTagBox.setOnClickListener(this);
+        locationBoxAdd.setOnClickListener(this);
+        locationBox.setOnClickListener(this);
+        guestBox.setOnClickListener(this);
+        addPersonButton.setOnClickListener(this);
+
+        mBackButton.setOnTouchListener(this);
+        privacyBox.setOnTouchListener(this);
+        addImage.setOnTouchListener(this);
+        loadedImage.setOnTouchListener(this);
+        addTagBox.setOnTouchListener(this);
+        locationBoxAdd.setOnTouchListener(this);
+        locationBox.setOnTouchListener(this);
+        guestBox.setOnTouchListener(this);
 
         mSwipeRefreshLayout.setEnabled(false);
-
-        space.getLayoutParams().height = (int) Utilities.convertDpToPixel(60, getApplicationContext());
-
         mBackButton.setImageResource(R.drawable.ic_add);
         mBackButton.setRotation(45);
+        confirmationButton.setText(R.string.save_updates);
+        titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+        tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
 
-        //icon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_fisherman));
-        m_title.setText(getResources().getString(R.string.create_activity));
-        confirmationButton.setText(R.string.confirm);
+        repeatAdd.setVisibility(View.GONE);
+        repeatBox.setVisibility(View.GONE);
+        repeatNumberBox.setVisibility(View.GONE);
 
-        //Set Listners
-        whatText.setOnClickListener(this);
-        whereWhenText.setOnClickListener(this);
-        whoText.setOnClickListener(this);
-        whatButton.setOnClickListener(this);
-        whereWhenButton.setOnClickListener(this);
-        whoButton.setOnClickListener(this);
-        privacyBox.setOnClickListener(this);
-        mBackButton.setOnClickListener(this);
-        mPieceCustom.setOnClickListener(this);
-        confirmationButton.setOnClickListener(this);
+        titleEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
 
-        icon2.setVisibility(View.INVISIBLE);
-        icon2.setOnClickListener(null);
-        mBackButton.setOnTouchListener(this);
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
 
-        //set button controller
-        controller = new UpdateButtonController(this);
-        controller.attach(true, whatText, whatButton, whatCorners);
-        controller.attach(false, whereWhenText, whereWhenButton, whereWhenCorners);
-        controller.attach(false, whoText, whoButton, whoCorners);
-        controller.updateAll(Utilities.DEFAULT_POSITION, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
+            @Override
+            public void afterTextChanged(Editable s) {
+                titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
+        });
 
-        mNavigator = new FragmentNavigator(getFragmentManager(), new AddActivityFragmentAdapter(), R.id.contentBox);
-        mNavigator.setDefaultPosition(Utilities.DEFAULT_POSITION);
-        mNavigator.onCreate(savedInstanceState);
+        new Actor.Builder(SpringSystem.create(), addPersonButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
-        setCurrentTab(mNavigator.getCurrentPosition());
-        privacyText.setText(getResources().getString(R.string.act_privacy));
-        privacyIcon.setImageResource(R.drawable.ic_public);
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
 
-        new Actor.Builder(SpringSystem.create(), mPieceCustom)
+        new Actor.Builder(SpringSystem.create(), pieceBox)
                 .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
                 .onTouchListener(new View.OnTouchListener() {
                     @Override
@@ -247,42 +275,127 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 .build();
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_edit");
-        if (activityWrapper == null) {
-            activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_recover");
-            if (activityWrapper != null) {
-                icon2.setVisibility(View.INVISIBLE);
-                icon2.setOnClickListener(null);
-                recover = true;
-            } else {
-                activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_free");
-                UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("act_free_friend_usr");
-                if(activityWrapper != null && userWrapper != null)
-                    user_friend = userWrapper.getUser();
-            }
-        } else {
-            edit = true;
-            confirmationButton.setText(R.string.save_updates);
-            m_title.setText(getResources().getString(R.string.edit_activity));
-            icon2.setVisibility(View.INVISIBLE);
-            icon2.setOnClickListener(null);
-        }
 
-        if (activityWrapper != null && (edit || recover)) {
-            ActivityServer activityServer = new ActivityServer();
-            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-            String email = mSharedPreferences.getString(Constants.EMAIL, "");
-            activityServer.setId(0);
-            activityServer.setCreator(email);
-            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-            setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
-        }
+        ActivityServer activityServer = new ActivityServer();
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        activityServer.setId(0);
+        activityServer.setCreator(email);
+        activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+        setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
 
         getIcons();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
     }
 
+    private OnTagDeleteListener mOnTagDeleteListener = new OnTagDeleteListener() {
+
+        @Override
+        public void onTagDeleted(final TagView view, final Tag tag, final int position) {
+            view.remove(position);
+        }
+    };
+
+    private void loadTags(ArrayList<TagServer> tags){
+
+        Collections.sort(tags, new Comparator<TagServer>() {
+            @Override
+            public int compare(TagServer c1, TagServer c2) {
+                String name1 = c1.getTitle();
+                String name2 = c2.getTitle();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        for(int i=0;i<tags.size();i++){
+            String text = tags.get(i).getTitle();
+            tag = new Tag(text);
+            tag.radius = Utilities.convertDpToPixel(10.0f, this);
+            tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+            if(text.matches(getResources().getString(R.string.settings_import_from_facebook_tag)) ||
+                    text.matches(getResources().getString(R.string.settings_import_from_google_agenda_tag)))
+                tag.isDeletable = false;
+            else
+                tag.isDeletable = true;
+            tagGroup.addTag(tag);
+        }
+    }
+
+    public boolean isTagPresent(String tag) {
+        List<Tag> tags = tagGroup.getTags();
+        for(int i=0;i<tags.size();i++){
+            Tag t = tags.get(i);
+            if(t.text.equals(tag))
+                return true;
+        }
+        return false;
+    }
+
+    public  void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+        if (requestCode == 1) {
+            if(resultCode == RESULT_OK){
+                List<String> list = intent.getStringArrayListExtra("tags_objs");
+
+                boolean tag_face = isTagPresent(getResources().getString(R.string.settings_import_from_facebook_tag));
+                boolean tag_google = isTagPresent(getResources().getString(R.string.settings_import_from_google_agenda_tag));
+                tagGroup.removeAll();
+
+                if(tag_face){
+                    Tag tag;
+                    tag = new Tag(getResources().getString(R.string.settings_import_from_facebook_tag));
+                    tag.radius = Utilities.convertDpToPixel(10.0f, this);
+                    tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+                    tag.isDeletable = false;
+                    tagGroup.addTag(tag);
+                }
+                if(tag_google){
+                    Tag tag;
+                    tag = new Tag(getResources().getString(R.string.settings_import_from_google_agenda_tag));
+                    tag.radius = Utilities.convertDpToPixel(10.0f, this);
+                    tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+                    tag.isDeletable = false;
+                    tagGroup.addTag(tag);
+                }
+
+                Collections.sort(list, new Comparator<String>() {
+                    @Override
+                    public int compare(String c1, String c2) {
+                        if (c1.compareTo(c2) > 0)
+                            return 1;
+                        else if (c1.compareTo(c2) < 0)
+                            return -1;
+                        else
+                            return 0;
+                    }
+                });
+
+                for (int i=0;i<list.size();i++){
+                    Tag tag;
+                    tag = new Tag(list.get(i));
+                    tag.radius = Utilities.convertDpToPixel(10.0f, this);
+                    tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
+                    tag.isDeletable = true;
+                    tagGroup.addTag(tag);
+                }
+
+
+
+            }
+        }
+    }
+
+    public List<Tag> getTags() {
+        return tagGroup.getTags();
+    }
 
     @Override
     public boolean onTouch(View view, MotionEvent event) {
@@ -292,6 +405,70 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
+        } else if (view == privacyBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                privacyText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                privacyArrowIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+                privacyIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                privacyText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                privacyArrowIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+                privacyIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == addImage) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                addImageText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                addImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+                addImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                addImageText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                addImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+                addImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        }  else if (view == loadedImage) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                loadedImageText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                loadedImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+                loadedImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                loadedImageText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                loadedImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+                loadedImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        }  else if (view == addTagBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        } else if (view == locationBoxAdd) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                locationTextAdd.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                locationIconAdd.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+                locationIconAdd2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                locationTextAdd.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                locationIconAdd.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+                locationIconAdd2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        } else if (view == locationBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                locationText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                locationIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                locationText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                locationIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == guestBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                guestsNumber.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                guestsNumber.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests_pressed));
+            }
         }
 
         return false;
@@ -300,8 +477,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mNavigator!=null)
-            mNavigator.onSaveInstanceState(outState);
     }
 
     public void setProgress(boolean progress) {
@@ -328,8 +503,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             public int compare(IconServer c1, IconServer c2) {
                 String[] u1 = c1.getUrl().split("/");
                 String[] u2 = c2.getUrl().split("/");
-                String url1 = u1[u1.length-1];
-                String url2 = u2[u2.length-1];
+                String url1 = u1[u1.length - 1];
+                String url2 = u2[u2.length - 1];
 
                 if (url1.compareTo(url2) > 0)
                     return 1;
@@ -520,22 +695,18 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
             if (!activityServer.getCubeIcon().matches("")) {
 
-                Glide.clear(mColorIconMain);
+                Glide.clear(pieceIcon);
                 Glide.with(EditActivity.this)
                         .load(activityServer.getCubeIcon())
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mColorIconMain);
+                        .into(pieceIcon);
 
-                mColorViewUpperMain.setColorFilter(activityServer.getCubeColorUpper());
-                mColorViewMain.setColorFilter(activityServer.getCubeColor());
+                cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
+                cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
             }
 
             if (userEdit != null) {
-                /*if (edit) {
-                    privacyIcon.setOnClickListener(null);
-                    privacyText.setOnClickListener(null);
-                }*/
 
                 switch (userEdit.getPrivacy()) {
                     case 0:
@@ -556,9 +727,20 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-            if (response.getTags().size() > 0) {
-                WhatEditFragment whatEditFragment = (WhatEditFragment) mNavigator.getFragment(0);
-                whatEditFragment.setLayout(activityServer, response.getTags());
+            if(titleEditText!=null) {
+                titleEditText.setText(activityServer.getTitle());
+
+                if (activityServer.getDescription() != null)
+                    descriptionEditText.setText(activityServer.getDescription());
+                else
+                    descriptionEditText.setText("");
+
+                if (activityServer.getDescription() != null)
+                    whatsAppEditText.setText(activityServer.getWhatsappGroupLink());
+                else
+                    whatsAppEditText.setText("");
+
+                loadTags(response.getTags());
             }
 
             activityServers = response.getWhatsGoingAct();
@@ -605,8 +787,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setActivityGuestInformation(long id, ActivityServer activityServer) {
-        WhoEditFragment whoEditFragment = (WhoEditFragment) mNavigator.getFragment(2);
-        whoEditFragment.setProgress(true);
+        // XXX Who EditText
+        //WhoEditFragment whoEditFragment = (WhoEditFragment) mNavigator.getFragment(2);
+        //whoEditFragment.setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().getActivity2(id, activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -635,10 +818,10 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         confirmedList.addAll(getInvitedAdm(userList, admList, creator_activity));
         confirmedList.addAll(getConfirmedNoAdm(userList, admList));
 
-        WhoEditFragment whoEditFragment = (WhoEditFragment) mNavigator.getFragment(2);
-        whoEditFragment.setLayout(getActivity(), invitedList, confirmedList, edit);
-
-        whoEditFragment.setProgress(false);
+        // XXX Who lists & progress
+        //WhoEditFragment whoEditFragment = (WhoEditFragment) mNavigator.getFragment(2);
+        //whoEditFragment.setLayout(getActivity(), invitedList, confirmedList, edit);
+        //whoEditFragment.setProgress(false);
     }
 
     public ActivityServer getActivity() {
@@ -648,536 +831,94 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             return null;
     }
 
-    private void setCurrentTab(int position) {
-        mNavigator.showFragment(position);
-    }
-
     @Override
     public void onClick(View v) {
-        if (v == whatText || v == whatButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whatText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            controller.updateAll(0, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
-            setCurrentTab(0);
-        } else if (v == whereWhenText || v == whereWhenButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whereWhenText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            controller.updateAll(1, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
-            setCurrentTab(1);
-        } else if (v == whoText || v == whoButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "whoText" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            controller.updateAll(2, R.color.deep_purple_400, R.color.deep_purple_400, R.drawable.bg_shape_oval_deep_purple_400_corners);
-            setCurrentTab(2);
-        } else if (v == mPieceCustom) {
-            if(iconList.size() > 0)
+        if (v == pieceBox) {
+            if (iconList.size() > 0)
                 createDialogSelectIcon();
-        }
-        else if (v == confirmationButton) {
-            if (!edit && !recover) {
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonCreate" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                register();
-            }
-            else if (edit) {
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonEdit" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        } else if (v == confirmationButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonEdit" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                if (getActivity().getRepeatType() > 0) {
-                    List<Integer> date;
-                    if (mNavigator.getFragment(1) != null) {
-                        date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
-                    } else {
-                        date = new ArrayList<>();
-                        date.add(getActivity().getDayStart());
-                        date.add(getActivity().getMonthStart() - 1);
-                        date.add(getActivity().getYearStart());
-                        date.add(getActivity().getDayEnd());
-                        date.add(getActivity().getMonthEnd() - 1);
-                        date.add(getActivity().getYearEnd());
-                        date.add(getActivity().getMinuteStart());
-                        date.add(getActivity().getHourStart());
-                        date.add(getActivity().getMinuteEnd());
-                        date.add(getActivity().getHourEnd());
-                    }
-
-                    int d = date.get(0);
-                    int m = date.get(1) + 1;
-                    int y = date.get(2);
-
-                    if (sameDay(y, m, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
-                            && sameDay(date.get(5), date.get(4) + 1, date.get(3), getActivity().getYearEnd(), getActivity().getMonthEnd(), getActivity().getDayEnd()))
-                        edit_activity(false);
-                    else
-                        createDialogEditWithRepeat();
-                } else
-                    edit_activity(false);
-            } else {
-                if (getActivity().getRepeatType() > 0)
-                    createDialogRecoverWithRepeat();
-                else {
-                    register_recover();
+            if (getActivity().getRepeatType() > 0) {
+                List<Integer> date;
+                /* XXX When Edit Date
+                if (mNavigator.getFragment(1) != null) {
+                    date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
+                } else {
+                    date = new ArrayList<>();
+                    date.add(getActivity().getDayStart());
+                    date.add(getActivity().getMonthStart() - 1);
+                    date.add(getActivity().getYearStart());
+                    date.add(getActivity().getDayEnd());
+                    date.add(getActivity().getMonthEnd() - 1);
+                    date.add(getActivity().getYearEnd());
+                    date.add(getActivity().getMinuteStart());
+                    date.add(getActivity().getHourStart());
+                    date.add(getActivity().getMinuteEnd());
+                    date.add(getActivity().getHourEnd());
                 }
-            }
+                */
+
+                date = new ArrayList<>();
+                date.add(getActivity().getDayStart());
+                date.add(getActivity().getMonthStart() - 1);
+                date.add(getActivity().getYearStart());
+                date.add(getActivity().getDayEnd());
+                date.add(getActivity().getMonthEnd() - 1);
+                date.add(getActivity().getYearEnd());
+                date.add(getActivity().getMinuteStart());
+                date.add(getActivity().getHourStart());
+                date.add(getActivity().getMinuteEnd());
+                date.add(getActivity().getHourEnd());
+
+                int d = date.get(0);
+                int m = date.get(1) + 1;
+                int y = date.get(2);
+
+                if (sameDay(y, m, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
+                        && sameDay(date.get(5), date.get(4) + 1, date.get(3), getActivity().getYearEnd(), getActivity().getMonthEnd(), getActivity().getDayEnd()))
+                    edit_activity(false);
+                else
+                    createDialogEditWithRepeat();
+            } else
+                edit_activity(false);
         } else if (v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(edit){
-                Intent intent = new Intent(this, ShowActivity.class);
-                intent.putExtra("act_show", activityWrapper);
-                startActivity(intent);
-                finish();
-            }
-            else {
-                onBackPressed();
-            }
-        }
-        else if (v == privacyBox) {
+            Intent intent = new Intent(this, ShowActivity.class);
+            intent.putExtra("act_show", activityWrapper);
+            startActivity(intent);
+            finish();
+        } else if (v == privacyBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "privacyBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogPrivacy();
+        } else if(v == addTagBox){
 
-        } else if (v == icon2) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(EditActivity.this, RecoverActivity.class));
-            finish();
-        }
-
-    }
-
-    private void register() {
-
-        List<Integer> date = new ArrayList<>();
-        List<Integer> repeat = new ArrayList<>();
-        List<Double> latLng = new ArrayList<>();
-        int invite = 0;
-        List<User> list_guest = new ArrayList<>();
-        int cube_color;
-        int cube_color_upper;
-        String cube_icon;
-        String location = "";
-        String title = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(0);
-        String description = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(1);
-        String whatsapp = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(2);
-        List<Tag> tags = ((WhatEditFragment) mNavigator.getFragment(0)).getTags();
-
-        if (mNavigator.getFragment(1) != null) {
-            date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
-            repeat = ((WhenEditFragment) mNavigator.getFragment(1)).getRepeatFromView();
-            location = ((WhenEditFragment) mNavigator.getFragment(1)).getLocationFromView();
-            latLng = ((WhenEditFragment) mNavigator.getFragment(1)).getLatLngFromView();
-        }
-        if (mNavigator.getFragment(2) != null) {
-            list_guest = ((WhoEditFragment) mNavigator.getFragment(2)).getGuestFromView();
-            invite = ((WhoEditFragment) mNavigator.getFragment(2)).getPrivacyFromView();
-        }
-
-        if (mColorView == null) {
-            cube_color = ContextCompat.getColor(getApplication(), R.color.deep_purple_400);
-            cube_color_upper = ContextCompat.getColor(getApplication(), R.color.deep_purple_400_light);
-            cube_icon = Constants.IC_ADD_CUBE_URL;
-        } else {
-            cube_color = mColorView.getTag() == null ? ContextCompat.getColor(getApplication(), R.color.deep_purple_400) : (int) mColorView.getTag();
-            cube_color_upper = mColorViewUpper.getTag() == null ? ContextCompat.getColor(getApplication(), R.color.deep_purple_400_light) : (int) mColorViewUpper.getTag();
-            cube_icon = urlIcon;
-        }
-
-        int err = 0;
-
-        if (!validateFields(title)) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
-        }  else if (tags.size() == 0) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
-        } else if (date.size() == 0 || date.get(0) == -1 || date.get(6) == -1) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_date_hour_required, Toast.LENGTH_LONG).show();
-        } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-        } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
-        } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
-            err++;
-            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
-        }
-
-        if (err == 0) {
-
-            int repeat_type = repeat.get(0);
-            int repeat_qty = repeat.get(1);
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Integer> day_list_end = new ArrayList<>();
-            List<Integer> month_list_end = new ArrayList<>();
-            List<Integer> year_list_end = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-            List<Long> date_time_list_end = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                Calendar cal2 = Calendar.getInstance();
-                cal2.set(Calendar.HOUR_OF_DAY, 0);
-                cal2.clear(Calendar.MINUTE);
-                cal2.clear(Calendar.SECOND);
-                cal2.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
-                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
-
-                for (int i = 0; i < repeat_qty; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-                    day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
-                    year_list_end.add(cal2.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-                    date_time_list_end.add(cal2.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY) {
-                        cal.add(Calendar.MONTH, 1);
-                        cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                    }
-                }
-
-            }
-
-            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-            String creator = mSharedPreferences.getString(Constants.EMAIL, "");
-
-            ActivityServer activityServer = new ActivityServer();
-            activityServer.setTitle(title);
-            activityServer.setDescription(description);
-            activityServer.setLocation(location);
-            activityServer.setInvitationType(invite);
-
-            activityServer.setLat(latLng.get(0));
-            activityServer.setLng(latLng.get(1));
-
-            d = date.get(0);
-            m = date.get(1);
-            y = date.get(2);
-
-            activityServer.setDayStart(date.get(0));
-            activityServer.setMonthStart(date.get(1) + 1);
-            activityServer.setYearStart(date.get(2));
-            activityServer.setDayEnd(date.get(3));
-            activityServer.setMonthEnd(date.get(4) + 1);
-            activityServer.setYearEnd(date.get(5));
-            activityServer.setMinuteStart(date.get(6));
-            activityServer.setHourStart(date.get(7));
-            activityServer.setMinuteEnd(date.get(8));
-            activityServer.setHourEnd(date.get(9));
-
-            activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
-            activityServer.setDateTimeStart(calendar.getTimeInMillis());
-
-            calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
-            activityServer.setDateTimeEnd(calendar.getTimeInMillis());
-
-            activityServer.setRepeatType(repeat.get(0));
-            activityServer.setRepeatQty(repeat.get(1));
-            activityServer.setDayListStart(day_list_start);
-            activityServer.setMonthListStart(month_list_start);
-            activityServer.setYearListStart(year_list_start);
-            activityServer.setDayListEnd(day_list_end);
-            activityServer.setMonthListEnd(month_list_end);
-            activityServer.setYearListEnd(year_list_end);
-
-            activityServer.setDateTimeListStart(date_time_list_start);
-            activityServer.setDateTimeListEnd(date_time_list_end);
-
-            activityServer.setCubeColor(cube_color);
-            activityServer.setCubeColorUpper(cube_color_upper);
-            activityServer.setCubeIcon(cube_icon);
-
-            activityServer.setVisibility(selected);
-
-            //Criptografa a url do whatsapp
-            String encryptedValue = "";
-            if (whatsapp.length() > 0)
-                encryptedValue = converter.toGraphProperty(whatsapp);
-
-            activityServer.setWhatsappGroupLink(encryptedValue);
 
             int i;
-            for (i = 0; i < tags.size(); i++) {
-                activityServer.addTags(tags.get(i).text);
+            ArrayList<String> list = new ArrayList<>();
+            List<Tag> list_tags = tagGroup.getTags();
+            for(i = 0; i < list_tags.size(); i++){
+                list.add(list_tags.get(i).text);
             }
-            for (i = 1; i < list_guest.size(); i++) {
-                activityServer.addGuest(list_guest.get(i).getEmail());
-                if (list_guest.get(i).isAdm())
-                    activityServer.addAdms(list_guest.get(i).getEmail());
-            }
-
-            if(list_guest.size() == 0 && user_friend != null)
-                activityServer.addGuest(user_friend.getEmail());
-
-            activityServer.setCreator(creator);
-            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-
-            registerProcess(activityServer);
-            setProgress(true);
-
-        } else
-            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
-
-    }
-
-    private void register_recover() {
-
-        List<Integer> date;
-        List<Integer> repeat = new ArrayList<>();
-        List<Double> latLng;
-        int invite = 0;
-        List<User> list_guest = new ArrayList<>();
-        int cube_color;
-        int cube_color_upper;
-        String cube_icon;
-        String location = "";
-        String title = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(0);
-        String description = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(1);
-        String whatsapp = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(2);
-        List<Tag> tags = ((WhatEditFragment) mNavigator.getFragment(0)).getTags();
-
-        if (mNavigator.getFragment(1) != null) {
-            date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
-            repeat = ((WhenEditFragment) mNavigator.getFragment(1)).getRepeatFromView();
-            location = ((WhenEditFragment) mNavigator.getFragment(1)).getLocationFromView();
-            latLng = ((WhenEditFragment) mNavigator.getFragment(1)).getLatLngFromView();
-        } else {
-            date = new ArrayList<>();
-            latLng = new ArrayList<>();
-            date.add(getActivity().getDayStart());
-            date.add(getActivity().getMonthStart() - 1);
-            date.add(getActivity().getYearStart());
-            date.add(getActivity().getDayEnd());
-            date.add(getActivity().getMonthEnd() - 1);
-            date.add(getActivity().getYearEnd());
-            date.add(getActivity().getMinuteStart());
-            date.add(getActivity().getHourStart());
-            date.add(getActivity().getMinuteEnd());
-            date.add(getActivity().getHourEnd());
-
-            location = getActivity().getLocation();
-
-            latLng.add(getActivity().getLat());
-            latLng.add(getActivity().getLng());
-
-            repeat.add(getActivity().getRepeatType());
-            if (repeat.get(0) != 0)
-                repeat.add(getActivity().getRepeatQty());
-            else
-                repeat.add(-1);
+            Intent intent = new Intent(this, SelectTagsActivity.class);
+            intent.putStringArrayListExtra("tags_list", list);
+            startActivityForResult(intent, 1);
         }
-
-        if (mNavigator.getFragment(2) != null) {
-            list_guest = ((WhoEditFragment) mNavigator.getFragment(2)).getGuestFromView();
-            invite = ((WhoEditFragment) mNavigator.getFragment(2)).getPrivacyFromView();
-        } else {
-            invite = getActivity().getInvitationType();
-            list_guest.addAll(userList);
-        }
-
-        if (mColorView == null) {
-            cube_color = getActivity().getCubeColor();
-            cube_color_upper = getActivity().getCubeColorUpper();
-            cube_icon = getActivity().getCubeIcon();
-        } else {
-            cube_color = mColorView.getTag() == null ? getActivity().getCubeColor() : (int) mColorView.getTag();
-            cube_color_upper = mColorViewUpper.getTag() == null ? getActivity().getCubeColorUpper() : (int) mColorViewUpper.getTag();
-            cube_icon = urlIcon.equals(Constants.IC_ADD_CUBE_URL) ? getActivity().getCubeIcon() : urlIcon;
-        }
-
-        int err = 0;
-
-        if (!validateFields(title)) {
-
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
-        } else if (tags.size() == 0) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
-        } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-        } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
-        }else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
-            err++;
-            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
-        }
-
-        if (err == 0) {
-
-            int repeat_type = repeat.get(0);
-            int repeat_qty = repeat.get(1);
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Integer> day_list_end = new ArrayList<>();
-            List<Integer> month_list_end = new ArrayList<>();
-            List<Integer> year_list_end = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-            List<Long> date_time_list_end = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                Calendar cal2 = Calendar.getInstance();
-                cal2.set(Calendar.HOUR_OF_DAY, 0);
-                cal2.clear(Calendar.MINUTE);
-                cal2.clear(Calendar.SECOND);
-                cal2.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
-                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
-
-                for (int i = 0; i < repeat_qty; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-                    day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
-                    year_list_end.add(cal2.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-                    date_time_list_end.add(cal2.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY) {
-                        cal.add(Calendar.MONTH, 1);
-                        cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                    }
-                }
-
-            }
-
-            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-            String creator = mSharedPreferences.getString(Constants.EMAIL, "");
-
-            ActivityServer activityServer = new ActivityServer();
-            activityServer.setTitle(title);
-            activityServer.setDescription(description);
-            activityServer.setLocation(location);
-            activityServer.setInvitationType(invite);
-
-            activityServer.setLat(latLng.get(0));
-            activityServer.setLng(latLng.get(1));
-
-            d = date.get(0);
-            m = date.get(1);
-            y = date.get(2);
-
-            activityServer.setDayStart(date.get(0));
-            activityServer.setMonthStart(date.get(1) + 1);
-            activityServer.setYearStart(date.get(2));
-            activityServer.setDayEnd(date.get(3));
-            activityServer.setMonthEnd(date.get(4) + 1);
-            activityServer.setYearEnd(date.get(5));
-            activityServer.setMinuteStart(date.get(6));
-            activityServer.setHourStart(date.get(7));
-            activityServer.setMinuteEnd(date.get(8));
-            activityServer.setHourEnd(date.get(9));
-
-            activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
-            activityServer.setDateTimeStart(calendar.getTimeInMillis());
-
-            calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
-            activityServer.setDateTimeEnd(calendar.getTimeInMillis());
-
-            activityServer.setRepeatType(repeat.get(0));
-            activityServer.setRepeatQty(repeat.get(1));
-            activityServer.setDayListStart(day_list_start);
-            activityServer.setMonthListStart(month_list_start);
-            activityServer.setYearListStart(year_list_start);
-            activityServer.setDayListEnd(day_list_end);
-            activityServer.setMonthListEnd(month_list_end);
-            activityServer.setYearListEnd(year_list_end);
-
-            activityServer.setDateTimeListStart(date_time_list_start);
-            activityServer.setDateTimeListEnd(date_time_list_end);
-
-            activityServer.setCubeColor(cube_color);
-            activityServer.setCubeColorUpper(cube_color_upper);
-            activityServer.setCubeIcon(cube_icon);
-
-            activityServer.setVisibility(selected);
-
-            //Criptografa a url do whatsapp
-            String encryptedValue = "";
-            if (whatsapp.length() > 0)
-                encryptedValue = converter.toGraphProperty(whatsapp);
-
-            activityServer.setWhatsappGroupLink(encryptedValue);
-
-            int i;
-            for (i = 0; i < tags.size(); i++) {
-                activityServer.addTags(tags.get(i).text);
-            }
-            for (i = 1; i < list_guest.size(); i++) {
-                activityServer.addGuest(list_guest.get(i).getEmail());
-                if (list_guest.get(i).isAdm())
-                    activityServer.addAdms(list_guest.get(i).getEmail());
-            }
-
-            activityServer.setCreator(creator);
-            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-
-            registerProcess(activityServer);
-            setProgress(true);
-
-        } else
-            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
 
     }
 
@@ -1239,7 +980,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void edit_activity(boolean repeat) {
-
+/*
         List<Integer> date;
         List<Double> latLng;
         List<Integer> repeat_single = new ArrayList<>();
@@ -1249,11 +990,11 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         int cube_color_upper;
         String cube_icon;
         String location = "";
-        String title = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(0);
-        String description = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(1);
+        String title = titleEditText.getText().toString();
+        String description = descriptionEditText.getText().toString();
 
-        String whatsapp = ((WhatEditFragment) mNavigator.getFragment(0)).getTextFromView().get(2);
-        List<Tag> tags = ((WhatEditFragment) mNavigator.getFragment(0)).getTags();
+        String whatsapp = whatsAppEditText.getText().toString();
+        List<Tag> tags = getTags();
 
         if (mNavigator.getFragment(1) != null) {
             date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
@@ -1290,13 +1031,13 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             invite = getActivity().getInvitationType();
         }
 
-        if (mColorView == null) {
+        if (customizeCubeLowerBoxIcon == null) {
             cube_color = getActivity().getCubeColor();
             cube_color_upper = getActivity().getCubeColorUpper();
             cube_icon = getActivity().getCubeIcon();
         } else {
-            cube_color = mColorView.getTag() == null ? getActivity().getCubeColor() : (int) mColorView.getTag();
-            cube_color_upper = mColorViewUpper.getTag() == null ? getActivity().getCubeColorUpper() : (int) mColorViewUpper.getTag();
+            cube_color = customizeCubeLowerBoxIcon.getTag() == null ? getActivity().getCubeColor() : (int) customizeCubeLowerBoxIcon.getTag();
+            cube_color_upper = customizeCubeUpperBoxIcon.getTag() == null ? getActivity().getCubeColorUpper() : (int) customizeCubeUpperBoxIcon.getTag();
             cube_icon = urlIcon.equals(Constants.IC_ADD_CUBE_URL) ? getActivity().getCubeIcon() : urlIcon;
         }
 
@@ -1314,7 +1055,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType())) {
             err++;
             Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType()), Toast.LENGTH_LONG).show();
-        }else if ((repeat_type == 0 || repeat_type == 5) && repeat_type != repeat_single.get(0)) {
+        } else if ((repeat_type == 0 || repeat_type == 5) && repeat_type != repeat_single.get(0)) {
             repeat_type = repeat_single.get(0);
             repeat_single_changed = true;
             repeat = true;
@@ -1445,7 +1186,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             if (repeat_type > 0) {
-                if (sameDay(y, m+1, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
+                if (sameDay(y, m + 1, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
                         && sameDay(date.get(5), date.get(4) + 1, date.get(3), getActivity().getYearEnd(), getActivity().getMonthEnd(), getActivity().getDayEnd())) // So editar os dados
                     activityServer.setId(1);
                 else
@@ -1491,12 +1232,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     return false;
             default:
                 return true;
-        }
+        }*/
     }
 
     private String getErrorMessage(int y1, int m1, int d1, int y2, int m2, int d2, int period) {
         LocalDate start = new LocalDate(y1, m1 + 1, d1);
-        LocalDate end = new LocalDate(y2, m2 +  1, d2);
+        LocalDate end = new LocalDate(y2, m2 + 1, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
         if (timePeriod.getDays() > 15)
             return getResources().getString(R.string.validation_field_act_max_lenght_days);
@@ -1526,14 +1267,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             default:
                 return 0;
         }
-    }
-
-    private void registerProcess(ActivityServer activityServer) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().registerActivity(activityServer)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void editActivity(ActivityServer activityServer) {
@@ -1566,7 +1299,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         int month2 = c2.get(Calendar.MONTH);
         int year2 = c2.get(Calendar.YEAR);
 
-        if(getActivity()!=null) {
+        if (getActivity() != null) {
             if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
                 getActivityStartToday();
         }
@@ -1576,7 +1309,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("m", m);
         intent.putExtra("y", y);
         setResult(RESULT_OK, intent);
-        if(user_friend == null)
+        if (user_friend == null)
             finish();
         else
             startActivity(intent);
@@ -1596,8 +1329,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void handleError(Throwable error) {
-        //setProgress(false);
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1614,47 +1346,47 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private void createDialogSelectIcon() {
         LayoutInflater inflater = (LayoutInflater) getApplication().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View customView = inflater.inflate(R.layout.activity_customize_piece, null);
-        mColorPickerView = (ColorPickerView) customView.findViewById(R.id.colorpicker);
-        mColorView = (ImageView) customView.findViewById(R.id.cubeLowerBoxIcon);
-        mColorViewUpper = (ImageView) customView.findViewById(R.id.cubeUpperBoxIcon);
-        mColorIcon = (ImageView) customView.findViewById(R.id.pieceIcon);
+        customizeColorPicker = (ColorPickerView) customView.findViewById(R.id.colorpicker);
+        customizeCubeLowerBoxIcon = (ImageView) customView.findViewById(R.id.cubeLowerBoxIcon);
+        customizeCubeUpperBoxIcon = (ImageView) customView.findViewById(R.id.cubeUpperBoxIcon);
+        customizePieceIcon = (ImageView) customView.findViewById(R.id.pieceIcon);
         ImageView closeButton = (ImageView) customView.findViewById(R.id.closeButton);
-        RecyclerView recyclerView = (RecyclerView) customView.findViewById(R.id.recyclerIcons);
+        RecyclerView recyclerIcons = (RecyclerView) customView.findViewById(R.id.recyclerIcons);
 
 
-        mColorPickerView.setDrawDebug(false);
+        customizeColorPicker.setDrawDebug(false);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .customView(customView, false)
                 .build();
 
-        mOkButton = (TextView) customView.findViewById(R.id.applyButton);
-        mOkButton.setOnClickListener(new View.OnClickListener() {
+        customizeApplyButton = (TextView) customView.findViewById(R.id.applyButton);
+        customizeApplyButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                mColorViewMain.setColorFilter((int) mColorView.getTag());
-                mColorViewUpperMain.setColorFilter((int) mColorViewUpper.getTag());
-                mColorViewMain.setTag(mColorView.getTag());
-                mColorViewUpperMain.setTag(mColorViewUpper.getTag());
-                if(activityWrapper != null) {
-                    activityWrapper.getActivityServer().setCubeColor((int) mColorView.getTag());
-                    activityWrapper.getActivityServer().setCubeColorUpper((int) mColorViewUpper.getTag());
+                cubeLowerBoxIcon.setColorFilter((int) customizeCubeLowerBoxIcon.getTag());
+                cubeUpperBoxIcon.setColorFilter((int) customizeCubeUpperBoxIcon.getTag());
+                cubeLowerBoxIcon.setTag(customizeCubeLowerBoxIcon.getTag());
+                cubeUpperBoxIcon.setTag(customizeCubeUpperBoxIcon.getTag());
+                if (activityWrapper != null) {
+                    activityWrapper.getActivityServer().setCubeColor((int) customizeCubeLowerBoxIcon.getTag());
+                    activityWrapper.getActivityServer().setCubeColorUpper((int) customizeCubeUpperBoxIcon.getTag());
                     activityWrapper.getActivityServer().setCubeIcon(urlIcon);
                 }
 
                 urlIcon = urlIconTemp;
 
-                Glide.clear(mColorIconMain);
+                Glide.clear(pieceIcon);
                 Glide.with(EditActivity.this)
                         .load(urlIcon)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mColorIconMain);
+                        .into(pieceIcon);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mOkButtonPickIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "customizeApplyButtonPickIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 dialog.dismiss();
@@ -1681,60 +1413,60 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        mCancelButton = (TextView) customView.findViewById(R.id.cleanButton);
-        mCancelButton.setOnClickListener(new View.OnClickListener() {
+        customizeCleanButton = (TextView) customView.findViewById(R.id.cleanButton);
+        customizeCleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mColorView.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400));
-                mColorViewUpper.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400_light));
-                mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
-                mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
-                if(activityWrapper != null) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
+                if (activityWrapper != null) {
                     activityWrapper.getActivityServer().setCubeColor(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
                     activityWrapper.getActivityServer().setCubeColorUpper(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
                 }
 
-                Glide.clear(mColorIcon);
+                Glide.clear(customizePieceIcon);
                 Glide.with(EditActivity.this)
                         .load(Constants.IC_ADD_CUBE_URL)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mColorIcon);
+                        .into(customizePieceIcon);
 
                 urlIcon = Constants.IC_ADD_CUBE_URL;
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mCancelButtonPickIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "customizeCleanButtonPickIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         });
 
-        recyclerView.setHasFixedSize(true);
+        recyclerIcons.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new GridLayoutManager(getApplicationContext(), 5);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setNestedScrollingEnabled(false);
+        recyclerIcons.setLayoutManager(layoutManager);
+        recyclerIcons.setNestedScrollingEnabled(false);
 
         CustomizeAddActivityAdapter adapter;
 
-        recyclerView.setAdapter(adapter = new CustomizeAddActivityAdapter(this, iconList));
+        recyclerIcons.setAdapter(adapter = new CustomizeAddActivityAdapter(this, iconList));
 
         RecyclerItemClickListener.OnItemClickListener onItemClickListener = new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, MotionEvent e) {
 
-                Glide.clear(mColorIcon);
+                Glide.clear(customizePieceIcon);
                 Glide.with(EditActivity.this)
                         .load(adapter.getItem(position).getUrl())
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mColorIcon);
+                        .into(customizePieceIcon);
 
                 urlIconTemp = adapter.getItem(position).getUrl();
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "RecyclerItemPickIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "RecyclerItemPickIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
 
@@ -1745,151 +1477,151 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
 
-        recyclerView.addOnItemTouchListener(
-                new RecyclerItemClickListener(getApplicationContext(), recyclerView, onItemClickListener)
+        recyclerIcons.addOnItemTouchListener(
+                new RecyclerItemClickListener(getApplicationContext(), recyclerIcons, onItemClickListener)
         );
 
-        mColorPickerView.setColorListener(new ColorPickerView.ColorListener() {
+        customizeColorPicker.setColorListener(new ColorPickerView.ColorListener() {
             @Override
             public void onColorSelected(int color) {
 
-                if(first_open && (mColorViewUpperMain.getTag() != null || (activityWrapper != null && activityWrapper.getActivityServer().getCubeIcon().contains("http")))){
+                if (first_open && (cubeUpperBoxIcon.getTag() != null || (activityWrapper != null && activityWrapper.getActivityServer().getCubeIcon().contains("http")))) {
 
-                    if(activityWrapper != null) {
-                        mColorView.setColorFilter(activityWrapper.getActivityServer().getCubeColor());
-                        mColorViewUpper.setColorFilter(activityWrapper.getActivityServer().getCubeColorUpper());
-                        mColorView.setTag(activityWrapper.getActivityServer().getCubeColor());
-                        mColorViewUpper.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
-                    }else {
-                        mColorView.setColorFilter((int)mColorViewMain.getTag());
-                        mColorViewUpper.setColorFilter((int)mColorViewUpperMain.getTag());
-                        mColorView.setTag(mColorViewMain.getTag());
-                        mColorViewUpper.setTag(mColorViewUpperMain.getTag());
+                    if (activityWrapper != null) {
+                        customizeCubeLowerBoxIcon.setColorFilter(activityWrapper.getActivityServer().getCubeColor());
+                        customizeCubeUpperBoxIcon.setColorFilter(activityWrapper.getActivityServer().getCubeColorUpper());
+                        customizeCubeLowerBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColor());
+                        customizeCubeUpperBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
+                    } else {
+                        customizeCubeLowerBoxIcon.setColorFilter((int) cubeLowerBoxIcon.getTag());
+                        customizeCubeUpperBoxIcon.setColorFilter((int) cubeUpperBoxIcon.getTag());
+                        customizeCubeLowerBoxIcon.setTag(cubeLowerBoxIcon.getTag());
+                        customizeCubeUpperBoxIcon.setTag(cubeUpperBoxIcon.getTag());
                     }
                     first_open = false;
-                }else {
+                } else {
                     if (color == ContextCompat.getColor(EditActivity.this, R.color.red_A700)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.red_A700));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.red_A700_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.red_A700));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.red_A700_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.red_A700));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.red_A700_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.red_A700));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.red_A700_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.pink_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.pink_900)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_900));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_900_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_900));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_900_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_900));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.pink_900_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_900));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.pink_900_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.purple_500)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.purple_500));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.purple_500_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.purple_500));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.purple_500_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.purple_500));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.purple_500_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.purple_500));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.purple_500_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_800_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.blue_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.blue_800)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_800));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_800_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_800));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_800_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_800));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_800_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_800));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_800_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.cyan_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.cyan_800)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_800));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_800_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_800));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_800_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_800));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.cyan_800_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_800));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.cyan_800_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.green_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.green_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.green_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.green_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.green_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.green_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.green_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.green_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.green_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.lime_600)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.lime_600));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.lime_600_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.lime_600));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.lime_600_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.lime_600));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.lime_600_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.lime_600));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.lime_600_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_orange_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.brown_400)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_400));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_400_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_400));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_400_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_400));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_400_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_400));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_400_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.brown_700)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_700));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_700_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_700));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_700_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_700));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.brown_700_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_700));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.brown_700_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.grey_500)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.grey_500));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.grey_500_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.grey_500));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.grey_500_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.grey_500));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.grey_500_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.grey_500));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.grey_500_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_500_light));
                     } else if (color == ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900)) {
-                        mColorView.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900));
-                        mColorViewUpper.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900_light));
-                        mColorView.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900));
-                        mColorViewUpper.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900_light));
+                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900));
+                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900_light));
+                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900));
+                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.blue_grey_900_light));
                     }
                 }
             }
         });
 
         if (activityWrapper == null || !activityWrapper.getActivityServer().getCubeIcon().contains("http")) {
-            if(mColorViewUpperMain.getTag() == null) {
+            if (cubeUpperBoxIcon.getTag() == null) {
                 urlIcon = Constants.IC_ADD_CUBE_URL;
-                mColorViewMain.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
-                mColorViewUpperMain.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
-            }else{
-                mColorViewMain.setTag(mColorViewMain.getTag());
-                mColorViewUpperMain.setTag(mColorViewUpperMain.getTag());
+                cubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
+                cubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
+            } else {
+                cubeLowerBoxIcon.setTag(cubeLowerBoxIcon.getTag());
+                cubeUpperBoxIcon.setTag(cubeUpperBoxIcon.getTag());
             }
 
-            Glide.clear(mColorIcon);
+            Glide.clear(customizePieceIcon);
             Glide.with(EditActivity.this)
                     .load(urlIcon)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mColorIcon);
+                    .into(customizePieceIcon);
         } else {
             urlIcon = activityWrapper.getActivityServer().getCubeIcon();
-            mColorViewMain.setTag(activityWrapper.getActivityServer().getCubeColor());
-            mColorViewUpperMain.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
+            cubeLowerBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColor());
+            cubeUpperBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
 
-            Glide.clear(mColorIcon);
+            Glide.clear(customizePieceIcon);
             Glide.with(EditActivity.this)
                     .load(urlIcon)
                     .asBitmap()
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(mColorIcon);
+                    .into(customizePieceIcon);
         }
 
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -1900,10 +1632,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         });
 
         dialog.show();
-    }
-
-    public boolean getEditable() {
-        return edit;
     }
 
     @Override
@@ -1937,18 +1665,13 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         TextView optionText2 = (TextView) customView.findViewById(R.id.optionText2);
         TextView optionText3 = (TextView) customView.findViewById(R.id.optionText3);
 
-        int color_selected = this.getResources().getColor(R.color.select);
-        int color_transparent = this.getResources().getColor(R.color.transparent);
-
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         ActivityServer privacyUpdate = new ActivityServer();
 
-        if (edit){
-            privacyUpdate.setCreator(email);
-            privacyUpdate.setId(getActivity().getId());
-        }
+        privacyUpdate.setCreator(email);
+        privacyUpdate.setId(getActivity().getId());
 
         switch (selected) {
             case 1:
@@ -2064,9 +1787,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         optionBox1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //optionBox1.setBackgroundColor(color_selected);
-                //optionBox2.setBackgroundColor(color_transparent);
-                //optionBox3.setBackgroundColor(color_transparent);
                 checkBoxActivated1.setVisibility(View.VISIBLE);
                 checkBoxActivated2.setVisibility(View.GONE);
                 checkBoxActivated3.setVisibility(View.GONE);
@@ -2074,10 +1794,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 privacyText.setText(getResources().getString(R.string.visibility_public));
                 selected = 0;
 
-                if(edit) {
-                    privacyUpdate.setVisibility(selected);
-                    setPrivacyActivity(privacyUpdate);
-                }
+                privacyUpdate.setVisibility(selected);
+                //setPrivacyActivity(privacyUpdate);
 
                 dialog.dismiss();
             }
@@ -2086,9 +1804,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         optionBox2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //optionBox1.setBackgroundColor(color_transparent);
-                //optionBox2.setBackgroundColor(color_selected);
-                //optionBox3.setBackgroundColor(color_transparent);
                 checkBoxActivated1.setVisibility(View.GONE);
                 checkBoxActivated2.setVisibility(View.VISIBLE);
                 checkBoxActivated3.setVisibility(View.GONE);
@@ -2096,12 +1811,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
                 selected = 1;
 
-
-
-                if(edit) {
-                    privacyUpdate.setVisibility(selected);
-                    setPrivacyActivity(privacyUpdate);
-                }
+                privacyUpdate.setVisibility(selected);
+                //setPrivacyActivity(privacyUpdate);
 
                 dialog.dismiss();
             }
@@ -2111,9 +1822,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         optionBox3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //optionBox1.setBackgroundColor(color_transparent);
-                //optionBox2.setBackgroundColor(color_transparent);
-                //optionBox3.setBackgroundColor(color_selected);
                 checkBoxActivated1.setVisibility(View.GONE);
                 checkBoxActivated2.setVisibility(View.GONE);
                 checkBoxActivated3.setVisibility(View.VISIBLE);
@@ -2121,11 +1829,8 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 privacyText.setText(getResources().getString(R.string.visibility_private));
                 selected = 2;
 
-
-                if(edit) {
-                    privacyUpdate.setVisibility(selected);
-                    setPrivacyActivity(privacyUpdate);
-                }
+                privacyUpdate.setVisibility(selected);
+                //setPrivacyActivity(privacyUpdate);
 
                 dialog.dismiss();
             }
@@ -2215,77 +1920,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         dg.show();
     }
 
-    private void createDialogRecoverWithRepeat() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_message, null);
-
-        TextView text1 = (TextView) customView.findViewById(R.id.text1);
-        TextView text2 = (TextView) customView.findViewById(R.id.text2);
-        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-        EditText editText = (EditText) customView.findViewById(R.id.editText);
-
-        editText.setVisibility(View.GONE);
-        text1.setVisibility(View.GONE);
-
-        text2.setText(getResources().getString(R.string.create_activity_recover_with_repeat_text));
-        buttonText1.setText(getResources().getString(R.string.no));
-        buttonText2.setText(getResources().getString(R.string.yes));
-
-        Dialog dg = new Dialog(this, R.style.NewDialog);
-
-        dg.setContentView(customView);
-        dg.setCanceledOnTouchOutside(true);
-
-        buttonText1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                getActivity().setRepeatType(0);
-                getActivity().setRepeatQty(-1);
-                register_recover();
-                dg.dismiss();
-            }
-        });
-
-        buttonText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                register_recover();
-                dg.dismiss();
-            }
-        });
-
-        dg.show();
-    }
-
-    private void getActivityStartToday(){
+    private void getActivityStartToday() {
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -2318,7 +1953,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponseToday(Response response) {
 
         JobManager mJobManager = JobManager.instance();
-        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+        if (mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
             mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
 
         ArrayList<Object> list = new ArrayList<>();
@@ -2326,13 +1961,13 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
-            for(int i=0;i<activityServers.size();i++){
+            for (int i = 0; i < activityServers.size(); i++) {
                 list.add(activityServers.get(i));
             }
         }
         if (response.getMyCommitFlag() != null) {
             ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
-            for(int i=0;i<flagServers.size();i++){
+            for (int i = 0; i < flagServers.size(); i++) {
                 list.add(flagServers.get(i));
             }
         }
@@ -2464,19 +2099,19 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
                 list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
-                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
+                        activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getYearStart()));
             }
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
                 list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
-                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
+                        flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
                 list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
-                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
+                        reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }
 
@@ -2501,7 +2136,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             Calendar c2 = Calendar.getInstance();
 
             c1.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
-            c1.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+            c1.set(Calendar.MONTH, activityOfDay.getMonth() - 1);
             c1.set(Calendar.YEAR, activityOfDay.getYear());
             c1.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
             c1.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
@@ -2509,35 +2144,34 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             c1.set(Calendar.MILLISECOND, 0);
 
             c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-            c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+            c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
             c2.set(Calendar.YEAR, activityOfDayNext.getYear());
             c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
             c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
             c2.set(Calendar.SECOND, 0);
             c2.set(Calendar.MILLISECOND, 0);
 
-            while(activityOfDayNext !=null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
+            while (activityOfDayNext != null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
                 j++;
                 count_same++;
-                if(j < list_notify.size()) {
+                if (j < list_notify.size()) {
                     activityOfDayNext = list_notify.get(j);
                     c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
                     c2.set(Calendar.YEAR, activityOfDayNext.getYear());
                     c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
                     c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
                     c2.set(Calendar.SECOND, 0);
                     c2.set(Calendar.MILLISECOND, 0);
-                }
-                else
+                } else
                     activityOfDayNext = null;
             }
             activityOfDay.setCommitmentSameHour(count_same);
 
-            time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+            time_exact = (int) (c1.getTimeInMillis() - c3.getTimeInMillis()) / (1000 * 60);
+            if (time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
                 c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras)
@@ -2546,9 +2180,9 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            if(time_exact >= 1440) {
+            if (time_exact >= 1440) {
                 c1.add(Calendar.MINUTE, -1380);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras2)
@@ -2557,7 +2191,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            i=j-1;
+            i = j - 1;
         }
 
         if (list_notify.size() > 0) {
