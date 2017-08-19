@@ -41,6 +41,7 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.rebound.SpringSystem;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -123,6 +124,20 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private MaterialSpinner spinner;
     private RecyclerView recyclerViewGuestRow;
 
+    private int day_start, month_start, year_start;
+    private int day_end, month_end, year_end;
+    private int minutes_start, hour_start;
+    private int minutes_end, hour_end;
+    private int repeat_type = 0;
+    private int repeat_qty = -1;
+    private double lat = -500;
+    private double lng = -500;
+    private static final int PLACE_PICKER_REQUEST = 1020;
+    private boolean locationNotWorking = false;
+    private Calendar calendarStart;
+    private PlacePicker.IntentBuilder builder = null;
+    private Intent placePicker = null;
+    private String location = "";
 
     private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
 
@@ -193,6 +208,10 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         addImage.setOnClickListener(this);
         loadedImage.setOnClickListener(this);
         addTagBox.setOnClickListener(this);
+        dateStart.setOnClickListener(this);
+        dateEnd.setOnClickListener(this);
+        timeStart.setOnClickListener(this);
+        timeEnd.setOnClickListener(this);
         locationBoxAdd.setOnClickListener(this);
         locationBox.setOnClickListener(this);
         guestBox.setOnClickListener(this);
@@ -285,6 +304,19 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
 
         getIcons();
+
+        calendarStart = Calendar.getInstance();
+
+        day_start = -1;
+        month_start = -1;
+        year_start = -1;
+        day_end = -1;
+        month_end = -1;
+        year_end = -1;
+        minutes_start = -1;
+        minutes_end = -1;
+        hour_start = -1;
+        hour_end = -1;
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
