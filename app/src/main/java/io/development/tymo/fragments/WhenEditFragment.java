@@ -70,7 +70,7 @@ public class WhenEditFragment extends Fragment implements
     private TextView locationText;
     private LinearLayout repeatNumberBox, repeatBox;
     private EditText repeatEditText;
-    private MaterialSpinner spinner;
+    private MaterialSpinner spinnerRepeatPicker;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -161,9 +161,9 @@ public class WhenEditFragment extends Fragment implements
             }
         });
 
-        spinner = (MaterialSpinner) view.findViewById(R.id.repeatPicker);
-        spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
-        spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+        spinnerRepeatPicker = (MaterialSpinner) view.findViewById(R.id.repeatPicker);
+        spinnerRepeatPicker.setItems(getResources().getStringArray(R.array.array_repeat_type));
+        spinnerRepeatPicker.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
@@ -635,15 +635,15 @@ public class WhenEditFragment extends Fragment implements
             if (!edit) {
 
                 if (activityServer.getRepeatType() == 0)
-                    spinner.setSelectedIndex(activityServer.getRepeatType());
+                    spinnerRepeatPicker.setSelectedIndex(activityServer.getRepeatType());
                 else {
-                    spinner.setSelectedIndex(activityServer.getRepeatType());
+                    spinnerRepeatPicker.setSelectedIndex(activityServer.getRepeatType());
                     repeatNumberBox.setVisibility(View.VISIBLE);
                     repeatEditText.setText(String.valueOf(activityServer.getRepeatQty()));
                 }
             } else {
                 if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
-                    spinner.setSelectedIndex(0);
+                    spinnerRepeatPicker.setSelectedIndex(0);
                     repeatBox.setVisibility(View.VISIBLE);
                 } else {
                     repeatBox.setVisibility(View.GONE);

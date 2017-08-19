@@ -1,5 +1,6 @@
 package io.development.tymo.activities;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -30,6 +31,9 @@ import android.widget.Toast;
 
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.borax12.materialdaterangepicker.date.DatePickerDialog;
+import com.borax12.materialdaterangepicker.time.RadialPickerLayout;
+import com.borax12.materialdaterangepicker.time.TimePickerDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.christophesmet.android.views.colorpicker.ColorPickerView;
@@ -41,7 +45,10 @@ import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.facebook.rebound.SpringSystem;
+import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.jaredrummler.materialspinner.MaterialSpinner;
@@ -53,6 +60,7 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -89,7 +97,7 @@ import io.reactivex.schedulers.Schedulers;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
-public class EditActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
+public class EditActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnTouchListener, View.OnLongClickListener {
 
     private Rect rect;
     private ActivityWrapper activityWrapper;
@@ -108,12 +116,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<User> invitedList = new ArrayList<>();
     private ArrayList<User> confirmedList = new ArrayList<>();
 
-    private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton;
+    private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton, repeatMax, repeatAddText;
     private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationTextAdd;
     private TextView guestText, guestsNumber, addGuestText, feedVisibility;
-    private EditText titleEditText, descriptionEditText, whatsAppEditText;
+    private EditText titleEditText, descriptionEditText, whatsAppEditText, repeatEditText;
     private ImageView cubeLowerBoxIcon, cubeUpperBoxIcon, pieceIcon, customizeCubeLowerBoxIcon, customizeCubeUpperBoxIcon, customizePieceIcon;
-    private ImageView mBackButton, privacyIcon, privacyArrowIcon;
+    private ImageView mBackButton, privacyIcon, privacyArrowIcon, repeatAddIcon;
     private ImageView addImageIcon, addImageIcon2, loadedImageIcon, loadedImageIcon2, addTagIcon, locationIconAdd, locationIconAdd2, locationIcon;
     private RelativeLayout pieceBox, addPersonButton, addTagBox;
     private LinearLayout privacyBox, addImage, loadedImage, repeatAdd, repeatBox, repeatNumberBox, locationBoxAdd, locationBox, guestBox;
@@ -121,7 +129,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private ColorPickerView customizeColorPicker;
     private TagView tagGroup;
     private Tag tag;
-    private MaterialSpinner spinner;
+    private MaterialSpinner spinner, spinnerRepeatPicker;
     private RecyclerView recyclerViewGuestRow;
 
     private int day_start, month_start, year_start;
@@ -179,8 +187,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         timeStart = (TextView) findViewById(R.id.timeStart);
         timeEnd = (TextView) findViewById(R.id.timeEnd);
         repeatAdd = (LinearLayout) findViewById(R.id.repeatAdd);
+        repeatAddIcon = (ImageView) findViewById(R.id.repeatAddIcon);
+        repeatAddText = (TextView) findViewById(R.id.repeatAddText);
         repeatBox = (LinearLayout) findViewById(R.id.repeatBox);
         repeatNumberBox = (LinearLayout) findViewById(R.id.repeatNumberBox);
+        repeatEditText = (EditText) findViewById(R.id.repeatEditText);
+        repeatMax = (TextView) findViewById(R.id.repeatMax);
         locationBoxAdd = (LinearLayout) findViewById(R.id.locationBoxAdd);
         locationIconAdd = (ImageView) findViewById(R.id.locationIconAdd);
         locationTextAdd = (TextView) findViewById(R.id.locationTextAdd);
@@ -199,6 +211,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         addGuestText = (TextView) findViewById(R.id.addGuestText);
         addGuestButtonDivider = (View) findViewById(R.id.addGuestButtonDivider);
         spinner = (MaterialSpinner) findViewById(R.id.visibilityCalendarPicker);
+        spinnerRepeatPicker = (MaterialSpinner) findViewById(R.id.repeatPicker);
         feedVisibility = (TextView) findViewById(R.id.feedVisibility);
 
         mBackButton.setOnClickListener(this);
@@ -212,8 +225,10 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         dateEnd.setOnClickListener(this);
         timeStart.setOnClickListener(this);
         timeEnd.setOnClickListener(this);
+        repeatAdd.setOnClickListener(this);
         locationBoxAdd.setOnClickListener(this);
         locationBox.setOnClickListener(this);
+        locationBox.setOnLongClickListener(this);
         guestBox.setOnClickListener(this);
         addPersonButton.setOnClickListener(this);
 
@@ -222,6 +237,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         addImage.setOnTouchListener(this);
         loadedImage.setOnTouchListener(this);
         addTagBox.setOnTouchListener(this);
+        repeatAdd.setOnTouchListener(this);
         locationBoxAdd.setOnTouchListener(this);
         locationBox.setOnTouchListener(this);
         guestBox.setOnTouchListener(this);
@@ -251,6 +267,39 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void afterTextChanged(Editable s) {
                 titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
+            }
+        });
+
+        repeatEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_600));
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String number = String.valueOf(s);
+                if (number.length() > 2) {
+                    repeatEditText.setText("30");
+                }
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_600));
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (repeatEditText.getText().toString().matches("30")) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_600));
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
         });
 
@@ -318,6 +367,39 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         hour_start = -1;
         hour_end = -1;
 
+        spinnerRepeatPicker.setItems(getResources().getStringArray(R.array.array_repeat_type));
+        spinnerRepeatPicker.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
+
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+                repeat_type = position;
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                if (position != 0)
+                    repeatNumberBox.setVisibility(View.VISIBLE);
+                else
+                    repeatNumberBox.setVisibility(View.GONE);
+            }
+        });
+
+        if (getActivity() != null && getActivity().getLat() != -500) {
+            LatLng latLng = new LatLng(getActivity().getLat(), getActivity().getLng());
+            LatLngBounds latLngBounds = new LatLngBounds(latLng, latLng);
+            builder = new PlacePicker.IntentBuilder().setLatLngBounds(latLngBounds);
+        } else
+            builder = new PlacePicker.IntentBuilder();
+
+
+        try {
+            placePicker = builder.build(this);
+        } catch (Exception e) {
+            locationNotWorking = true;
+        }
+
+        setLayoutWhenWhere(getActivity());
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
     }
@@ -330,7 +412,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
         }
     };
 
-    private void loadTags(ArrayList<TagServer> tags){
+    private void loadTags(ArrayList<TagServer> tags) {
 
         Collections.sort(tags, new Comparator<TagServer>() {
             @Override
@@ -347,12 +429,12 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
 
-        for(int i=0;i<tags.size();i++){
+        for (int i = 0; i < tags.size(); i++) {
             String text = tags.get(i).getTitle();
             tag = new Tag(text);
             tag.radius = Utilities.convertDpToPixel(10.0f, this);
             tag.layoutColor = ContextCompat.getColor(this, R.color.deep_purple_400);
-            if(text.matches(getResources().getString(R.string.settings_import_from_facebook_tag)) ||
+            if (text.matches(getResources().getString(R.string.settings_import_from_facebook_tag)) ||
                     text.matches(getResources().getString(R.string.settings_import_from_google_agenda_tag)))
                 tag.isDeletable = false;
             else
@@ -363,25 +445,35 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
 
     public boolean isTagPresent(String tag) {
         List<Tag> tags = tagGroup.getTags();
-        for(int i=0;i<tags.size();i++){
+        for (int i = 0; i < tags.size(); i++) {
             Tag t = tags.get(i);
-            if(t.text.equals(tag))
+            if (t.text.equals(tag))
                 return true;
         }
         return false;
     }
 
-    public  void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);setProgress(false);
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == Activity.RESULT_OK) {
+                Place selectedPlace = PlacePicker.getPlace(this, intent);
+                String name = selectedPlace.getAddress().toString();
+                lat = selectedPlace.getLatLng().latitude;
+                lng = selectedPlace.getLatLng().longitude;
+                locationText.setText(name);
+            }
+        }
         if (requestCode == 1) {
-            if(resultCode == RESULT_OK){
+            if (resultCode == RESULT_OK) {
                 List<String> list = intent.getStringArrayListExtra("tags_objs");
 
                 boolean tag_face = isTagPresent(getResources().getString(R.string.settings_import_from_facebook_tag));
                 boolean tag_google = isTagPresent(getResources().getString(R.string.settings_import_from_google_agenda_tag));
                 tagGroup.removeAll();
 
-                if(tag_face){
+                if (tag_face) {
                     Tag tag;
                     tag = new Tag(getResources().getString(R.string.settings_import_from_facebook_tag));
                     tag.radius = Utilities.convertDpToPixel(10.0f, this);
@@ -389,7 +481,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     tag.isDeletable = false;
                     tagGroup.addTag(tag);
                 }
-                if(tag_google){
+                if (tag_google) {
                     Tag tag;
                     tag = new Tag(getResources().getString(R.string.settings_import_from_google_agenda_tag));
                     tag.radius = Utilities.convertDpToPixel(10.0f, this);
@@ -410,7 +502,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
 
-                for (int i=0;i<list.size();i++){
+                for (int i = 0; i < list.size(); i++) {
                     Tag tag;
                     tag = new Tag(list.get(i));
                     tag.radius = Utilities.convertDpToPixel(10.0f, this);
@@ -418,7 +510,6 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                     tag.isDeletable = true;
                     tagGroup.addTag(tag);
                 }
-
 
 
             }
@@ -457,7 +548,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 addImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
                 addImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
-        }  else if (view == loadedImage) {
+        } else if (view == loadedImage) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 loadedImageText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
                 loadedImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
@@ -467,13 +558,21 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 loadedImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
                 loadedImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
-        }  else if (view == addTagBox) {
+        } else if (view == addTagBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
                 addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 addTagText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
                 addTagIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        } else if (view == repeatAdd) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                repeatAddText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                repeatAddIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                repeatAddText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                repeatAddIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         } else if (view == locationBoxAdd) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
@@ -759,7 +858,7 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-            if(titleEditText!=null) {
+            if (titleEditText != null) {
                 titleEditText.setText(activityServer.getTitle());
 
                 if (activityServer.getDescription() != null)
@@ -934,22 +1033,25 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogPrivacy();
-        } else if(v == addTagBox){
+        } else if (v == addTagBox) {
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addTagBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             int i;
             ArrayList<String> list = new ArrayList<>();
             List<Tag> list_tags = tagGroup.getTags();
-            for(i = 0; i < list_tags.size(); i++){
+            for (i = 0; i < list_tags.size(); i++) {
                 list.add(list_tags.get(i).text);
             }
             Intent intent = new Intent(this, SelectTagsActivity.class);
             intent.putStringArrayListExtra("tags_list", list);
             startActivityForResult(intent, 1);
+        } else if (v == repeatAdd) {
+            repeatBox.setVisibility(View.VISIBLE);
+            repeatAdd.setVisibility(View.GONE);
         }
 
     }
@@ -2238,5 +2340,297 @@ public class EditActivity extends AppCompatActivity implements View.OnClickListe
     private void handleErrorToday(Throwable error) {
     }
 
+    public void setLayoutWhenWhere(ActivityServer activityServer) {
+        if (activityServer != null && dateStart != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+
+            String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+            String day2 = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String month2 = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            String date = day + "/" + month + "/" + activityServer.getYearStart();
+            String date2 = day2 + "/" + month2 + "/" + activityServer.getYearEnd();
+
+            String hourString = String.format("%02d", activityServer.getHourStart());
+            String minuteString = String.format("%02d", activityServer.getMinuteStart());
+            String hourStringEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteStringEnd = String.format("%02d", activityServer.getMinuteEnd());
+            String time = hourString + ":" + minuteString;
+            String time2 = hourStringEnd + ":" + minuteStringEnd;
+
+            day_start = activityServer.getDayStart();
+            month_start = activityServer.getMonthStart() - 1;
+            year_start = activityServer.getYearStart();
+            minutes_start = activityServer.getMinuteStart();
+            hour_start = activityServer.getHourStart();
+
+            day_end = activityServer.getDayEnd();
+            month_end = activityServer.getMonthEnd() - 1;
+            year_end = activityServer.getYearEnd();
+            minutes_end = activityServer.getMinuteEnd();
+            hour_end = activityServer.getHourEnd();
+
+            dateStart.setText(date);
+            dateEnd.setText(date2);
+            timeStart.setText(time);
+            timeEnd.setText(time2);
+
+            locationText.setText(activityServer.getLocation());
+
+            lat = activityServer.getLat();
+            lng = activityServer.getLng();
+
+            if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
+                spinner.setSelectedIndex(0);
+                repeatBox.setVisibility(View.VISIBLE);
+            } else {
+                repeatBox.setVisibility(View.GONE);
+                repeatNumberBox.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog2");
+        if (dpd != null) dpd.setOnDateSetListener(this);
+
+        TimePickerDialog tpd = (TimePickerDialog) getFragmentManager().findFragmentByTag("Timepickerdialog");
+        if (tpd != null) tpd.setOnTimeSetListener(this);
+    }
+
+    private void createDialogLocation(String adr) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+
+        text1.setText(this.getResources().getString(R.string.popup_message_naming_activity_local_title));
+        text2.setText(this.getResources().getString(R.string.popup_message_naming_activity_local_text));
+        buttonText1.setText(this.getResources().getString(R.string.close));
+        buttonText2.setText(this.getResources().getString(R.string.customize));
+        editText.setText(adr);
+
+        Dialog dialog = new Dialog(this, R.style.NewDialog);
+
+        dialog.setContentView(customView);
+        dialog.setCanceledOnTouchOutside(true);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelDialogLocation" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                dialog.dismiss();
+            }
+        });
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmDialogLocation" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                location = editText.getText().toString();
+                if (!location.matches(""))
+                    locationText.setText(location);
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(year, monthOfYear, dayOfMonth);
+        calendarStart.set(year, monthOfYear, dayOfMonth);
+        String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        calendar.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+        String day2 = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String month2 = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String date = day + "/" + month + "/" + year;
+        String date2 = day2 + "/" + month2 + "/" + yearEnd;
+
+
+        if (validadeDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd)) {
+            day_start = dayOfMonth;
+            month_start = monthOfYear;
+            year_start = year;
+            day_end = dayOfMonthEnd;
+            month_end = monthOfYearEnd;
+            year_end = yearEnd;
+            dateStart.setText(date);
+            dateEnd.setText(date2);
+        } else {
+            day_start = dayOfMonth;
+            month_start = monthOfYear;
+            year_start = year;
+            day_end = dayOfMonth;
+            month_end = monthOfYear;
+            year_end = year;
+            dateStart.setText(date);
+            dateEnd.setText(date);
+        }
+
+    }
+
+    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if (yearEnd < year)
+            return false;
+        if (year == yearEnd) {
+            if (monthOfYearEnd < monthOfYear)
+                return false;
+            else if (monthOfYearEnd == monthOfYear) {
+                if (dayOfMonthEnd < dayOfMonth)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+        String hourString = String.format("%02d", hourOfDay);
+        String minuteString = String.format("%02d", minute);
+        String hourStringEnd = String.format("%02d", hourOfDayEnd);
+        String minuteStringEnd = String.format("%02d", minuteEnd);
+        String time = hourString + ":" + minuteString;
+        String time2 = hourStringEnd + ":" + minuteStringEnd;
+
+        if (day_start == -1)
+            Toast.makeText(this, "Preencha primeiro a data!", Toast.LENGTH_LONG).show();
+        else if (validadeHour(hourOfDay, minute, hourOfDayEnd, minuteEnd)) {
+            minutes_start = minute;
+            hour_start = hourOfDay;
+            minutes_end = minuteEnd;
+            hour_end = hourOfDayEnd;
+            timeStart.setText(time);
+            timeEnd.setText(time2);
+        } else {
+            minutes_start = minute;
+            hour_start = hourOfDay;
+            minutes_end = minute;
+            hour_end = hourOfDay;
+            timeStart.setText(time);
+            timeEnd.setText(time);
+        }
+
+    }
+
+    private boolean validadeHour(int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+        if (sameDay() && day_start != -1) {
+            if (hourOfDayEnd < hourOfDay)
+                return false;
+            if (hourOfDayEnd == hourOfDay) {
+                if (minuteEnd < minute)
+                    return false;
+            }
+            return true;
+        }
+        return true;
+    }
+
+    private boolean sameDay() {
+        return day_start == day_end && month_start == month_end && year_start == year_end;
+    }
+
+    public List<Integer> getDateFromView() {
+        List<Integer> list = new ArrayList<>();
+
+        list.add(day_start);
+        list.add(month_start);
+        list.add(year_start);
+
+        list.add(day_end);
+        list.add(month_end);
+        list.add(year_end);
+
+        list.add(minutes_start);
+        list.add(hour_start);
+
+        list.add(minutes_end);
+        list.add(hour_end);
+
+        return list;
+    }
+
+    public String getLocationFromView() {
+        return locationText.getText().toString();
+    }
+
+    public List<Double> getLatLngFromView() {
+        List<Double> list = new ArrayList<>();
+
+        list.add(lat);
+        list.add(lng);
+        return list;
+    }
+
+    public List<Integer> getRepeatFromView() {
+        List<Integer> list = new ArrayList<>();
+        String temp = repeatEditText.getText().toString();
+        if (repeat_type == 0)
+            repeat_qty = -1;
+        else if (temp.length() > 0)
+            repeat_qty = Integer.parseInt(temp);
+
+        list.add(repeat_type);
+        list.add(repeat_qty);
+        return list;
+    }
+
+    @Override
+    public boolean onLongClick(View v) {
+        if (v == locationText && lat != -500) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            createDialogLocation(locationText.getText().toString());
+        }
+        return true;
+    }
 
 }
