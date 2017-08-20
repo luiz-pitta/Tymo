@@ -217,7 +217,7 @@ public class ShowGuestsActivity extends AppCompatActivity implements View.OnTouc
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getFragmentManager());
+        adapter = new ViewPagerAdapter(getFragmentManager(), true);
 
         adapter.addFragment(new InvitedPeopleFragment(), getResources().getString(R.string.guests_invited, listInvitedUser.size()));
         adapter.addFragment(new FitPeopleFragment(), getResources().getString(R.string.guests_fit, listConfirmedUser.size()));
