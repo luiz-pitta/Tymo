@@ -481,6 +481,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         return user_friend;
     }
 
+    public ArrayList<User> getListUserCompare() {
+        return listUserCompare;
+    }
+
     private void handleFlagInformation(Response response) {
 
         invitedList.clear();
@@ -496,21 +500,21 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         invitedList.add(creator_flag);
         if(user_friend != null)
             invitedList.add(user_friend);
+        else if(listUserCompare.size() > 0)
+            invitedList.addAll(listUserCompare);
+
         invitedList.addAll(getConfirmed(userList));
         invitedList.addAll(getInvited(userList));
 
         confirmedList.add(creator_flag);
         confirmedList.addAll(getConfirmed(userList));
 
-        if(response.getUser() != null)
-            permissionInvite = checkIfCreator(response.getUser().getEmail());
-        else
-            permissionInvite = false;
+        permissionInvite = response.getUser() != null && checkIfCreator(response.getUser().getEmail());
 
         if(type == CREATE_EDIT_FLAG){
             titleText.setVisibility(View.GONE);
             FlagEditFragment flagEditFragment = (FlagEditFragment) mNavigator.getFragment(type);
-            flagEditFragment.setLayout(flagWrapper.getFlagServer(), invitedList, confirmedList, edit, act_free, user_friend != null);
+            flagEditFragment.setLayout(flagWrapper.getFlagServer(), invitedList, confirmedList, edit, act_free, user_friend != null || listUserCompare.size() > 0);
 
             if(flagWrapper.getFlagServer().getType() || act_free){
                 privacyIcon.setImageResource(R.drawable.ic_lock);
@@ -993,7 +997,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("m",m);
         intent.putExtra("y",y);
         setResult(RESULT_OK, intent);
-        if(user_friend == null)
+        if(user_friend == null || listUserCompare.size() == 0)
             finish();
         else
             startActivity(intent);

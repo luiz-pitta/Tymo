@@ -384,9 +384,16 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             user.setDelete(false);
             data.add(user);
             User friend = flagActivity.getUserFriend();
+            ArrayList<User> list = flagActivity.getListUserCompare();
             if(friend != null) {
                 friend.setDelete(false);
                 data.add(friend);
+            }else if(list.size() > 0){
+                for (int i = 0; i < list.size(); i++) {
+                    User usr = list.get(i);
+                    usr.setDelete(false);
+                    data.add(usr);
+                }
             }
             adapter = new PersonAdapter(data, getActivity());
             recyclerView.setAdapter(adapter);
@@ -744,21 +751,26 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             String date = day + "/" + month + "/" + flagServer.getYearStart();
             String date2 = day2 + "/" + month2 + "/" + flagServer.getYearEnd();
 
-            String hourString = String.format("%02d", flagServer.getHourStart());
-            ;
-            String minuteString = String.format("%02d", flagServer.getMinuteStart());
-            ;
-            String hourStringEnd = String.format("%02d", flagServer.getHourEnd());
-            ;
-            String minuteStringEnd = String.format("%02d", flagServer.getMinuteEnd());
-            ;
-            String time = hourString + ":" + minuteString;
-            String time2 = hourStringEnd + ":" + minuteStringEnd;
+            if(flagServer.getHourStart() >= 0) {
+                String hourString = String.format("%02d", flagServer.getHourStart());
 
-            minutes_start = flagServer.getMinuteStart();
-            hour_start = flagServer.getHourStart();
-            minutes_end = flagServer.getMinuteEnd();
-            hour_end = flagServer.getHourEnd();
+                String minuteString = String.format("%02d", flagServer.getMinuteStart());
+
+                String hourStringEnd = String.format("%02d", flagServer.getHourEnd());
+
+                String minuteStringEnd = String.format("%02d", flagServer.getMinuteEnd());
+
+                String time = hourString + ":" + minuteString;
+                String time2 = hourStringEnd + ":" + minuteStringEnd;
+
+                minutes_start = flagServer.getMinuteStart();
+                hour_start = flagServer.getHourStart();
+                minutes_end = flagServer.getMinuteEnd();
+                hour_end = flagServer.getHourEnd();
+
+                timeStart.setText(time);
+                timeEnd.setText(time2);
+            }
 
             day_start = flagServer.getDayStart();
             month_start = flagServer.getMonthStart() - 1;
@@ -769,8 +781,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             dateStart.setText(date);
             dateEnd.setText(date2);
-            timeStart.setText(time);
-            timeEnd.setText(time2);
+
             titleEditText.setText(flagServer.getTitle());
 
             if (!isFlagInPast(flagServer)) {

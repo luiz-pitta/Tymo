@@ -11,10 +11,14 @@ import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
 import java.util.Calendar;
+import java.util.List;
 
+import io.development.tymo.R;
 import io.development.tymo.model_server.User;
 import io.development.tymo.models.WeekModel;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
+import io.development.tymo.view_holder.CubeViewHolder;
+import io.development.tymo.view_holder.FeedFlagViewHolder;
 import io.development.tymo.view_holder.PlansViewHolder;
 
 
@@ -40,6 +44,21 @@ public class PlansAdapter extends RecyclerArrayAdapter<WeekModel> {
         LocalDate start = new LocalDate(y2, m2, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
         return timePeriod.getDays() < 0;
+    }
+
+    @Override
+    public void onViewAttachedToWindow(BaseViewHolder holder) {
+        WeekModel week = getAllData().get(holder.getAdapterPosition());
+        Calendar before3Months = Calendar.getInstance();
+        before3Months.add(Calendar.MONTH, -3);
+
+        boolean isPast3Months = isInThePast(week.getYear(), week.getMonth(), week.getDay(),
+                before3Months.get(Calendar.YEAR), before3Months.get(Calendar.MONTH) + 1, before3Months.get(Calendar.DAY_OF_MONTH));
+
+        if(isPast3Months){
+            PlansViewHolder viewHolder = (PlansViewHolder)holder;
+            viewHolder.setBefore3Months();
+        }
     }
 
     @Override

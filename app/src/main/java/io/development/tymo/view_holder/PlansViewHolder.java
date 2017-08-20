@@ -322,9 +322,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 mRecyclerView.showEmpty();
             }
         }
+    }
 
-
-
+    public void setBefore3Months(){
+        mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
+        mRecyclerView.showEmpty();
     }
 
     private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {
