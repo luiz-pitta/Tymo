@@ -399,8 +399,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             }
         });
 
-        if (getActivity() != null && getActivity().getLat() != -500) {
-            LatLng latLng = new LatLng(getActivity().getLat(), getActivity().getLng());
+        if (this.getActivity() != null && this.getActivity().getLat() != -500) {
+            LatLng latLng = new LatLng(this.getActivity().getLat(), this.getActivity().getLng());
             LatLngBounds latLngBounds = new LatLngBounds(latLng, latLng);
             builder = new PlacePicker.IntentBuilder().setLatLngBounds(latLngBounds);
         } else
@@ -413,7 +413,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             locationNotWorking = true;
         }
 
-        setLayoutWhenWhere(getActivity());
+        setLayoutWhenWhere(this.getActivity());
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
