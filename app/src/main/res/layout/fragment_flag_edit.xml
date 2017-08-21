@@ -65,41 +65,75 @@
                     android:textSize="14sp"
                     android:textStyle="normal" />
 
-                <TextView
-                    android:id="@+id/dateStart"
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_act_edit_box"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:hint="@string/hint_date"
-                    android:lines="1"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp"
-                    android:textColor="@color/grey_600"
-                    android:textColorHint="@color/grey_400"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="5dp">
 
-                <TextView
-                    android:id="@+id/timeStart"
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/dateStart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_act_edit_box"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:hint="@string/hint_date"
+                        android:lines="1"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:textColor="@color/grey_600"
+                        android:textColorHint="@color/grey_400"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/clearDateStart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="2dp"
+                        android:rotation="45"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/grey_400" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_act_edit_box"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:hint="@string/hint_time"
-                    android:lines="1"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp"
-                    android:textColor="@color/grey_600"
-                    android:textColorHint="@color/grey_400"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/timeStart"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_act_edit_box"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:hint="@string/hint_time"
+                        android:lines="1"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:textColor="@color/grey_600"
+                        android:textColorHint="@color/grey_400"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/clearTimeStart"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="2dp"
+                        android:rotation="45"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/grey_400" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
@@ -121,57 +155,97 @@
                     android:textSize="14sp"
                     android:textStyle="normal" />
 
-                <TextView
-                    android:id="@+id/dateEnd"
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_act_edit_box"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:hint="@string/hint_date"
-                    android:lines="1"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp"
-                    android:textColor="@color/grey_600"
-                    android:textColorHint="@color/grey_400"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="5dp">
 
-                <TextView
-                    android:id="@+id/timeEnd"
-                    android:layout_width="match_parent"
+                    <TextView
+                        android:id="@+id/dateEnd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_act_edit_box"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:hint="@string/hint_date"
+                        android:lines="1"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:textColor="@color/grey_600"
+                        android:textColorHint="@color/grey_400"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/clearDateEnd"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="2dp"
+                        android:rotation="45"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/grey_400" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:background="@drawable/bg_act_edit_box"
-                    android:clickable="true"
-                    android:gravity="center"
-                    android:hint="@string/hint_time"
-                    android:lines="1"
-                    android:paddingBottom="5dp"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="10dp"
-                    android:paddingTop="5dp"
-                    android:textColor="@color/grey_600"
-                    android:textColorHint="@color/grey_400"
-                    android:textSize="14sp" />
+                    android:layout_marginTop="5dp">
 
-                <LinearLayout
+                    <TextView
+                        android:id="@+id/timeEnd"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_act_edit_box"
+                        android:clickable="true"
+                        android:gravity="center"
+                        android:hint="@string/hint_time"
+                        android:lines="1"
+                        android:paddingBottom="5dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="5dp"
+                        android:textColor="@color/grey_600"
+                        android:textColorHint="@color/grey_400"
+                        android:textSize="14sp" />
+
+                    <ImageView
+                        android:id="@+id/clearTimeEnd"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="2dp"
+                        android:rotation="45"
+                        android:src="@drawable/ic_add"
+                        android:tint="@color/grey_400" />
+
+                </RelativeLayout>
+
+                <RelativeLayout
                     android:id="@+id/repeatAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
                     android:layout_marginTop="10dp"
-                    android:gravity="center"
-                    android:orientation="horizontal"
                     android:paddingBottom="5dp"
                     android:paddingTop="5dp">
+
+                    <ProgressBar
+                        android:id="@+id/progressRepeatAdd"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:layout_centerInParent="true"
+                        android:visibility="gone" />
 
                     <ImageView
                         android:id="@+id/repeatAddIcon"
                         android:layout_width="25dp"
                         android:layout_height="25dp"
+                        android:layout_centerVertical="true"
                         android:src="@drawable/ic_refresh"
                         android:tint="@color/deep_purple_400" />
 
@@ -179,11 +253,13 @@
                         android:id="@+id/repeatAddText"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_toRightOf="@+id/repeatAddIcon"
                         android:text="@string/repeat"
                         android:textColor="@color/deep_purple_400"
                         android:textSize="14sp" />
 
-                </LinearLayout>
+                </RelativeLayout>
 
             </LinearLayout>
 

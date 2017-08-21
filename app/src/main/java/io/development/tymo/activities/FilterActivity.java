@@ -1116,8 +1116,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             filterIconDate.setColorFilter(getResources().getColor(R.color.grey_600));
             filterTextDate.setTextColor(getResources().getColor(R.color.grey_600));
             cleanDate.setVisibility(View.INVISIBLE);
-            dateStart.setText(getResources().getString(R.string.hint_date));
-            dateEnd.setText(getResources().getString(R.string.hint_date));
+            dateStart.setText("");
+            dateEnd.setText("");
             day_start = -1;
             month_start = -1;
             year_start = -1;
@@ -1204,8 +1204,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
             filterIconDate.setColorFilter(getResources().getColor(R.color.grey_600));
             filterTextDate.setTextColor(getResources().getColor(R.color.grey_600));
             cleanDate.setVisibility(View.INVISIBLE);
-            dateStart.setText(getResources().getString(R.string.hint_date));
-            dateEnd.setText(getResources().getString(R.string.hint_date));
+            dateStart.setText("");
+            dateEnd.setText("");
             day_start = -1;
             month_start = -1;
             year_start = -1;

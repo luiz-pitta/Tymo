@@ -23,6 +23,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.Space;
@@ -117,14 +118,15 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private ArrayList<User> confirmedList = new ArrayList<>();
 
     private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton, repeatMax, repeatAddText;
-    private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationTextAdd;
+    private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationText2, locationTextAdd;
     private TextView guestText, guestsNumber, addGuestText, feedVisibility;
     private EditText titleEditText, descriptionEditText, whatsAppEditText, repeatEditText;
     private ImageView cubeLowerBoxIcon, cubeUpperBoxIcon, pieceIcon, customizeCubeLowerBoxIcon, customizeCubeUpperBoxIcon, customizePieceIcon;
     private ImageView mBackButton, privacyIcon, privacyArrowIcon, repeatAddIcon;
-    private ImageView addImageIcon, addImageIcon2, loadedImageIcon, loadedImageIcon2, addTagIcon, locationIconAdd, locationIconAdd2, locationIcon;
-    private RelativeLayout pieceBox, addPersonButton, addTagBox;
-    private LinearLayout privacyBox, addImage, loadedImage, repeatAdd, repeatBox, repeatNumberBox, locationBoxAdd, locationBox, guestBox;
+    private ImageView clearDateStart, clearDateEnd, clearTimeStart, clearTimeEnd;
+    private ImageView addImageIcon, addImageIcon2, loadedImageIcon, loadedImageIcon2, addTagIcon, locationIconAdd, locationIconAdd2, locationIcon, locationIcon2;
+    private RelativeLayout pieceBox, addPersonButton, addTagBox, locationBox, repeatAdd;
+    private LinearLayout privacyBox, addImage, loadedImage, repeatBox, repeatNumberBox, locationBoxAdd, guestBox;
     private View addGuestButtonDivider, profilesPhotos, progressLoadingBox;
     private ColorPickerView customizeColorPicker;
     private TagView tagGroup;
@@ -186,7 +188,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         dateEnd = (TextView) findViewById(R.id.dateEnd);
         timeStart = (TextView) findViewById(R.id.timeStart);
         timeEnd = (TextView) findViewById(R.id.timeEnd);
-        repeatAdd = (LinearLayout) findViewById(R.id.repeatAdd);
+        clearDateStart = (ImageView) findViewById(R.id.clearDateStart);
+        clearDateEnd = (ImageView) findViewById(R.id.clearDateEnd);
+        clearTimeStart = (ImageView) findViewById(R.id.clearTimeStart);
+        clearTimeEnd = (ImageView) findViewById(R.id.clearTimeEnd);
+        repeatAdd = (RelativeLayout) findViewById(R.id.repeatAdd);
         repeatAddIcon = (ImageView) findViewById(R.id.repeatAddIcon);
         repeatAddText = (TextView) findViewById(R.id.repeatAddText);
         repeatBox = (LinearLayout) findViewById(R.id.repeatBox);
@@ -197,9 +203,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         locationIconAdd = (ImageView) findViewById(R.id.locationIconAdd);
         locationTextAdd = (TextView) findViewById(R.id.locationTextAdd);
         locationIconAdd2 = (ImageView) findViewById(R.id.locationIconAdd2);
-        locationBox = (LinearLayout) findViewById(R.id.locationBox);
+        locationBox = (RelativeLayout) findViewById(R.id.locationBox);
         locationIcon = (ImageView) findViewById(R.id.locationIcon);
+        locationIcon2 = (ImageView) findViewById(R.id.locationIcon2);
         locationText = (TextView) findViewById(R.id.locationText);
+        locationText2 = (TextView) findViewById(R.id.locationText2);
         whatsAppEditText = (EditText) findViewById(R.id.whatsAppGroupLink);
         guestBox = (LinearLayout) findViewById(R.id.guestBox);
         guestText = (TextView) findViewById(R.id.guestText);
@@ -225,10 +233,16 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         dateEnd.setOnClickListener(this);
         timeStart.setOnClickListener(this);
         timeEnd.setOnClickListener(this);
+        clearDateStart.setOnClickListener(this);
+        clearDateEnd.setOnClickListener(this);
+        clearTimeStart.setOnClickListener(this);
+        clearTimeEnd.setOnClickListener(this);
         repeatAdd.setOnClickListener(this);
         locationBoxAdd.setOnClickListener(this);
         locationBox.setOnClickListener(this);
         locationBox.setOnLongClickListener(this);
+        locationIcon2.setOnClickListener(this);
+        locationText2.setOnClickListener(this);
         guestBox.setOnClickListener(this);
         addPersonButton.setOnClickListener(this);
 
@@ -240,6 +254,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         repeatAdd.setOnTouchListener(this);
         locationBoxAdd.setOnTouchListener(this);
         locationBox.setOnTouchListener(this);
+        locationIcon2.setOnTouchListener(this);
+        locationText2.setOnTouchListener(this);
         guestBox.setOnTouchListener(this);
 
         mSwipeRefreshLayout.setEnabled(false);
@@ -248,10 +264,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         confirmationButton.setText(R.string.save_updates);
         titleMax.setText(getString(R.string.title_max_caract, titleEditText.length()));
         tagGroup.setOnTagDeleteListener(mOnTagDeleteListener);
-
-        repeatAdd.setVisibility(View.GONE);
-        repeatBox.setVisibility(View.GONE);
-        repeatNumberBox.setVisibility(View.GONE);
 
         titleEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -377,10 +389,13 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if (position != 0)
+                if (position != 0) {
                     repeatNumberBox.setVisibility(View.VISIBLE);
-                else
+                }
+                else {
                     repeatNumberBox.setVisibility(View.GONE);
+                    repeatEditText.setText("");
+                }
             }
         });
 
@@ -455,7 +470,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-        super.onActivityResult(requestCode, resultCode, intent);setProgress(false);
+        super.onActivityResult(requestCode, resultCode, intent);
+        setProgress(false);
         if (requestCode == PLACE_PICKER_REQUEST) {
             if (resultCode == Activity.RESULT_OK) {
                 Place selectedPlace = PlacePicker.getPlace(this, intent);
@@ -591,6 +607,18 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 locationText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
                 locationIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == locationIcon2) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                locationIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                locationIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == locationText2) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                locationText2.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                locationText2.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         } else if (view == guestBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
@@ -905,8 +933,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void handleActivity(Response response) {
-        //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
-        //INVITED_SUCCESSFULLY
         ActivityServer activityServer = new ActivityServer();
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -975,24 +1001,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
             if (getActivity().getRepeatType() > 0) {
                 List<Integer> date;
-                /* XXX When Edit Date
-                if (mNavigator.getFragment(1) != null) {
-                    date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
-                } else {
-                    date = new ArrayList<>();
-                    date.add(getActivity().getDayStart());
-                    date.add(getActivity().getMonthStart() - 1);
-                    date.add(getActivity().getYearStart());
-                    date.add(getActivity().getDayEnd());
-                    date.add(getActivity().getMonthEnd() - 1);
-                    date.add(getActivity().getYearEnd());
-                    date.add(getActivity().getMinuteStart());
-                    date.add(getActivity().getHourStart());
-                    date.add(getActivity().getMinuteEnd());
-                    date.add(getActivity().getHourEnd());
-                }
-                */
 
+                date = getDateFromView();
+                /*
                 date = new ArrayList<>();
                 date.add(getActivity().getDayStart());
                 date.add(getActivity().getMonthStart() - 1);
@@ -1004,6 +1015,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 date.add(getActivity().getHourStart());
                 date.add(getActivity().getMinuteEnd());
                 date.add(getActivity().getHourEnd());
+                */
 
                 int d = date.get(0);
                 int m = date.get(1) + 1;
@@ -1049,9 +1061,188 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             Intent intent = new Intent(this, SelectTagsActivity.class);
             intent.putStringArrayListExtra("tags_list", list);
             startActivityForResult(intent, 1);
+        } else if (v == clearDateStart || v == clearDateEnd || v == clearTimeStart || v == clearTimeEnd) {
+
+            if (v == clearDateStart){
+                day_start = -1;
+                month_start = -1;
+                year_start = -1;
+                dateStart.setText("");
+            } else if (v == clearDateEnd){
+                day_end = -1;
+                month_end = -1;
+                year_end = -1;
+                dateEnd.setText("");
+            } else if (v == clearTimeStart){
+                hour_start = -1;
+                minutes_start = -1;
+                timeStart.setText("");
+            } else if (v == clearTimeEnd){
+                minutes_end = -1;
+                hour_end = -1;
+                timeEnd.setText("");
+            }
+
         } else if (v == repeatAdd) {
-            repeatBox.setVisibility(View.VISIBLE);
-            repeatAdd.setVisibility(View.GONE);
+            findViewById(R.id.progressRepeatAdd).setVisibility(View.VISIBLE);
+            repeatAddIcon.setVisibility(View.INVISIBLE);
+            repeatAddText.setVisibility(View.INVISIBLE);
+
+            repeatAdd.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    findViewById(R.id.progressRepeatAdd).setVisibility(View.GONE);
+                    repeatAdd.setVisibility(View.GONE);
+                    repeatBox.setVisibility(View.VISIBLE);
+                }
+            }, 1000);
+
+        } else if ((v == locationBox || v == locationBoxAdd) && !locationNotWorking) {
+            setProgress(true);
+
+            if (v == locationBoxAdd) {
+                locationBoxAdd.setVisibility(View.GONE);
+                locationBox.setVisibility(View.VISIBLE);
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mapText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            if (lat != -500) {
+                LatLng latLng = new LatLng(lat, lng);
+                LatLngBounds latLngBounds = new LatLngBounds(latLng, latLng);
+                builder = new PlacePicker.IntentBuilder().setLatLngBounds(latLngBounds);
+
+                try {
+                    placePicker = builder.build(this);
+                } catch (Exception e) {
+                }
+            }
+
+            startActivityForResult(placePicker, PLACE_PICKER_REQUEST);
+        } else if (v == locationIcon2) {
+            findViewById(R.id.progressLocation).setVisibility(View.VISIBLE);
+            locationText.setVisibility(View.INVISIBLE);
+            locationText2.setVisibility(View.INVISIBLE);
+            locationIcon.setVisibility(View.INVISIBLE);
+            locationIcon2.setVisibility(View.INVISIBLE);
+
+            locationIcon2.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    locationText.setText("");
+                    lat = -500;
+                    lng = -500;
+                    locationBoxAdd.setVisibility(View.VISIBLE);
+                    locationText.setVisibility(View.VISIBLE);
+                    locationText2.setVisibility(View.VISIBLE);
+                    locationIcon.setVisibility(View.VISIBLE);
+                    locationIcon2.setVisibility(View.VISIBLE);
+                    locationBox.setVisibility(View.GONE);
+                    findViewById(R.id.progressLocation).setVisibility(View.GONE);
+                }
+            }, 1000);
+
+        } else if (v == locationText2) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            createDialogLocation(locationText.getText().toString());
+
+        } else if (v == timeStart) {
+            Calendar now = Calendar.getInstance();
+            TimePickerDialog tpd = TimePickerDialog.newInstance(
+                    this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    true
+            );
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            if (hour_start != -1)
+                tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
+
+            tpd.setAccentColor(ContextCompat.getColor(this, R.color.deep_purple_400), ContextCompat.getColor(this, R.color.grey_100));
+            tpd.setStartTitle(getResources().getString(R.string.date_start));
+            tpd.setEndTitle(getResources().getString(R.string.date_end));
+            tpd.setCurrentTab(0);
+            tpd.show(getFragmentManager(), "Timepickerdialog");
+        } else if (v == timeEnd) {
+            Calendar now = Calendar.getInstance();
+            TimePickerDialog tpd = TimePickerDialog.newInstance(
+                    this,
+                    now.get(Calendar.HOUR_OF_DAY),
+                    now.get(Calendar.MINUTE),
+                    true
+            );
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            if (hour_start != -1)
+                tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
+
+            tpd.setAccentColor(ContextCompat.getColor(this, R.color.deep_purple_400), ContextCompat.getColor(this, R.color.grey_100));
+            tpd.setStartTitle(getResources().getString(R.string.date_start));
+            tpd.setEndTitle(getResources().getString(R.string.date_end));
+            tpd.setCurrentTab(1);
+            tpd.show(getFragmentManager(), "Timepickerdialog");
+        } else if (v == dateStart) {
+            Calendar now = Calendar.getInstance();
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    this,
+                    now.get(Calendar.YEAR),
+                    now.get(Calendar.MONTH),
+                    now.get(Calendar.DAY_OF_MONTH)
+            );
+
+            dpd.setMinDate(now);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            if (year_start != -1)
+                dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
+
+            dpd.setAccentColor(ContextCompat.getColor(this, R.color.deep_purple_400), ContextCompat.getColor(this, R.color.grey_100));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
+            dpd.setCurrentTab(0);
+            dpd.show(getFragmentManager(), "Datepickerdialog2");
+        } else if (v == dateEnd) {
+
+            DatePickerDialog dpd = DatePickerDialog.newInstance(
+                    this,
+                    calendarStart.get(Calendar.YEAR),
+                    calendarStart.get(Calendar.MONTH),
+                    calendarStart.get(Calendar.DAY_OF_MONTH)
+            );
+
+            dpd.setMinDate(calendarStart);
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            if (year_start != -1)
+                dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
+
+
+            dpd.setAccentColor(ContextCompat.getColor(this, R.color.deep_purple_400), ContextCompat.getColor(this, R.color.grey_100));
+            dpd.setStartTitle(getResources().getString(R.string.date_start));
+            dpd.setEndTitle(getResources().getString(R.string.date_end));
+            dpd.setCurrentTab(1);
+            dpd.show(getFragmentManager(), "Datepickerdialog2");
         }
 
     }
@@ -1114,7 +1305,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void edit_activity(boolean repeat) {
-/*
+
         List<Integer> date;
         List<Double> latLng;
         List<Integer> repeat_single = new ArrayList<>();
@@ -1130,12 +1321,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         String whatsapp = whatsAppEditText.getText().toString();
         List<Tag> tags = getTags();
 
-        if (mNavigator.getFragment(1) != null) {
-            date = ((WhenEditFragment) mNavigator.getFragment(1)).getDateFromView();
-            repeat_single = ((WhenEditFragment) mNavigator.getFragment(1)).getRepeatFromView(); //Repetir em caso da atividade ser simples ou do google agenda
-            location = ((WhenEditFragment) mNavigator.getFragment(1)).getLocationFromView();
-            latLng = ((WhenEditFragment) mNavigator.getFragment(1)).getLatLngFromView();
-        } else {
+        date = getDateFromView();
+        repeat_single = getRepeatFromView(); //Repetir em caso da atividade ser simples ou do google agenda
+        location = getLocationFromView();
+        latLng = getLatLngFromView();
+            /*
             date = new ArrayList<>();
             latLng = new ArrayList<>();
 
@@ -1157,13 +1347,13 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
             latLng.add(getActivity().getLat());
             latLng.add(getActivity().getLng());
-        }
+            */
 
-        if (mNavigator.getFragment(2) != null) {
-            invite = ((WhoEditFragment) mNavigator.getFragment(2)).getPrivacyFromView();
-        } else {
+        // XXX Who
+        //invite = ((WhoEditFragment) mNavigator.getFragment(2)).getPrivacyFromView();
+            /*
             invite = getActivity().getInvitationType();
-        }
+            */
 
         if (customizeCubeLowerBoxIcon == null) {
             cube_color = getActivity().getCubeColor();
@@ -1366,7 +1556,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                     return false;
             default:
                 return true;
-        }*/
+        }
     }
 
     private String getErrorMessage(int y1, int m1, int d1, int y2, int m2, int d2, int period) {
@@ -2377,15 +2567,25 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             timeStart.setText(time);
             timeEnd.setText(time2);
 
-            locationText.setText(activityServer.getLocation());
+            if (activityServer.getLat() == -500) {
+                locationBoxAdd.setVisibility(View.VISIBLE);
+                locationBox.setVisibility(View.GONE);
+            } else {
+                locationBoxAdd.setVisibility(View.GONE);
+                locationBox.setVisibility(View.VISIBLE);
+                locationText.setText(activityServer.getLocation());
+            }
 
             lat = activityServer.getLat();
             lng = activityServer.getLng();
 
             if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
                 spinner.setSelectedIndex(0);
-                repeatBox.setVisibility(View.VISIBLE);
+                repeatAdd.setVisibility(View.VISIBLE);
+                repeatBox.setVisibility(View.GONE);
+                repeatNumberBox.setVisibility(View.GONE);
             } else {
+                repeatAdd.setVisibility(View.GONE);
                 repeatBox.setVisibility(View.GONE);
                 repeatNumberBox.setVisibility(View.GONE);
             }
@@ -2414,7 +2614,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
         text1.setText(this.getResources().getString(R.string.popup_message_naming_activity_local_title));
         text2.setText(this.getResources().getString(R.string.popup_message_naming_activity_local_text));
-        buttonText1.setText(this.getResources().getString(R.string.close));
+        buttonText1.setText(this.getResources().getString(R.string.cancel));
         buttonText2.setText(this.getResources().getString(R.string.customize));
         editText.setText(adr);
 
@@ -2623,7 +2823,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
     @Override
     public boolean onLongClick(View v) {
-        if (v == locationText && lat != -500) {
+        if (v == locationBox && lat != -500) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));

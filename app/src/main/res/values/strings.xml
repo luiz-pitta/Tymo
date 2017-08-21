@@ -174,7 +174,7 @@
     <string name="created_by">Criado por %1$s</string>
     <string name="creator">Criador</string>
     <string name="customize_piece_personalize">Personalize</string>
-    <string name="customize">Customizar</string>
+    <string name="customize">Atualizar</string>
     <string name="date_end">Término</string>
     <string name="date_format_1">%1$s %2$d</string>
     <string name="date_format_10">%1$s de %2$s de %3$s</string>
@@ -349,8 +349,8 @@
     <string name="popup_message_edit_enter_new_email">Digite o novo email abaixo:</string>
     <string name="popup_message_edit_select_which_one_to_modify">Selecione abaixo qual deseja alterar</string>
     <string name="popup_message_edit_update_email">Atualizar email</string>
-    <string name="popup_message_naming_activity_local_text">Caso queira customizar o nome do local, digite abaixo:</string>
-    <string name="popup_message_naming_activity_local_title">Nome do local</string>
+    <string name="popup_message_naming_activity_local_text">Caso queira customizar o nome do local, edite o campo abaixo:</string>
+    <string name="popup_message_naming_activity_local_title">Editar nome do local</string>
     <string name="privacy">Privacidade</string>
     <string name="profile_friend_menu_contacts">Contatos</string>
     <string name="profile_friend_menu_friends">Amigos</string>

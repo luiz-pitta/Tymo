@@ -350,41 +350,75 @@
                                     android:textSize="14sp"
                                     android:textStyle="normal" />
 
-                                <TextView
-                                    android:id="@+id/dateStart"
-                                    android:layout_width="match_parent"
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:background="@drawable/bg_act_edit_box"
-                                    android:clickable="true"
-                                    android:gravity="center"
-                                    android:hint="@string/hint_date"
-                                    android:lines="1"
-                                    android:paddingBottom="5dp"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
-                                    android:paddingTop="5dp"
-                                    android:textColor="@color/grey_600"
-                                    android:textColorHint="@color/grey_400"
-                                    android:textSize="14sp" />
+                                    android:layout_marginTop="5dp">
 
-                                <TextView
-                                    android:id="@+id/timeStart"
-                                    android:layout_width="match_parent"
+                                    <TextView
+                                        android:id="@+id/dateStart"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_act_edit_box"
+                                        android:clickable="true"
+                                        android:gravity="center"
+                                        android:hint="@string/hint_date"
+                                        android:lines="1"
+                                        android:paddingBottom="5dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="5dp"
+                                        android:textColor="@color/grey_600"
+                                        android:textColorHint="@color/grey_400"
+                                        android:textSize="14sp" />
+
+                                    <ImageView
+                                        android:id="@+id/clearDateStart"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginRight="2dp"
+                                        android:rotation="45"
+                                        android:src="@drawable/ic_add"
+                                        android:tint="@color/grey_400" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:background="@drawable/bg_act_edit_box"
-                                    android:clickable="true"
-                                    android:gravity="center"
-                                    android:hint="@string/hint_time"
-                                    android:lines="1"
-                                    android:paddingBottom="5dp"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
-                                    android:paddingTop="5dp"
-                                    android:textColor="@color/grey_600"
-                                    android:textColorHint="@color/grey_400"
-                                    android:textSize="14sp" />
+                                    android:layout_marginTop="5dp">
+
+                                    <TextView
+                                        android:id="@+id/timeStart"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_act_edit_box"
+                                        android:clickable="true"
+                                        android:gravity="center"
+                                        android:hint="@string/hint_time"
+                                        android:lines="1"
+                                        android:paddingBottom="5dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="5dp"
+                                        android:textColor="@color/grey_600"
+                                        android:textColorHint="@color/grey_400"
+                                        android:textSize="14sp" />
+
+                                    <ImageView
+                                        android:id="@+id/clearTimeStart"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginRight="2dp"
+                                        android:rotation="45"
+                                        android:src="@drawable/ic_add"
+                                        android:tint="@color/grey_400" />
+
+                                </RelativeLayout>
 
                             </LinearLayout>
 
@@ -406,57 +440,97 @@
                                     android:textSize="14sp"
                                     android:textStyle="normal" />
 
-                                <TextView
-                                    android:id="@+id/dateEnd"
-                                    android:layout_width="match_parent"
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:background="@drawable/bg_act_edit_box"
-                                    android:clickable="true"
-                                    android:gravity="center"
-                                    android:hint="@string/hint_date"
-                                    android:lines="1"
-                                    android:paddingBottom="5dp"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
-                                    android:paddingTop="5dp"
-                                    android:textColor="@color/grey_600"
-                                    android:textColorHint="@color/grey_400"
-                                    android:textSize="14sp" />
+                                    android:layout_marginTop="5dp">
 
-                                <TextView
-                                    android:id="@+id/timeEnd"
-                                    android:layout_width="match_parent"
+                                    <TextView
+                                        android:id="@+id/dateEnd"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_act_edit_box"
+                                        android:clickable="true"
+                                        android:gravity="center"
+                                        android:hint="@string/hint_date"
+                                        android:lines="1"
+                                        android:paddingBottom="5dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="5dp"
+                                        android:textColor="@color/grey_600"
+                                        android:textColorHint="@color/grey_400"
+                                        android:textSize="14sp" />
+
+                                    <ImageView
+                                        android:id="@+id/clearDateEnd"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginRight="2dp"
+                                        android:rotation="45"
+                                        android:src="@drawable/ic_add"
+                                        android:tint="@color/grey_400" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
+                                    android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="5dp"
-                                    android:background="@drawable/bg_act_edit_box"
-                                    android:clickable="true"
-                                    android:gravity="center"
-                                    android:hint="@string/hint_time"
-                                    android:lines="1"
-                                    android:paddingBottom="5dp"
-                                    android:paddingLeft="10dp"
-                                    android:paddingRight="10dp"
-                                    android:paddingTop="5dp"
-                                    android:textColor="@color/grey_600"
-                                    android:textColorHint="@color/grey_400"
-                                    android:textSize="14sp" />
+                                    android:layout_marginTop="5dp">
 
-                                <LinearLayout
+                                    <TextView
+                                        android:id="@+id/timeEnd"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:background="@drawable/bg_act_edit_box"
+                                        android:clickable="true"
+                                        android:gravity="center"
+                                        android:hint="@string/hint_time"
+                                        android:lines="1"
+                                        android:paddingBottom="5dp"
+                                        android:paddingLeft="10dp"
+                                        android:paddingRight="10dp"
+                                        android:paddingTop="5dp"
+                                        android:textColor="@color/grey_600"
+                                        android:textColorHint="@color/grey_400"
+                                        android:textSize="14sp" />
+
+                                    <ImageView
+                                        android:id="@+id/clearTimeEnd"
+                                        android:layout_width="20dp"
+                                        android:layout_height="20dp"
+                                        android:layout_alignParentRight="true"
+                                        android:layout_centerVertical="true"
+                                        android:layout_marginRight="2dp"
+                                        android:rotation="45"
+                                        android:src="@drawable/ic_add"
+                                        android:tint="@color/grey_400" />
+
+                                </RelativeLayout>
+
+                                <RelativeLayout
                                     android:id="@+id/repeatAdd"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="right"
                                     android:layout_marginTop="10dp"
-                                    android:gravity="center"
-                                    android:orientation="horizontal"
                                     android:paddingBottom="5dp"
                                     android:paddingTop="5dp">
+
+                                    <ProgressBar
+                                        android:id="@+id/progressRepeatAdd"
+                                        android:layout_width="25dp"
+                                        android:layout_height="25dp"
+                                        android:layout_centerInParent="true"
+                                        android:visibility="gone" />
 
                                     <ImageView
                                         android:id="@+id/repeatAddIcon"
                                         android:layout_width="25dp"
                                         android:layout_height="25dp"
+                                        android:layout_centerVertical="true"
                                         android:src="@drawable/ic_refresh"
                                         android:tint="@color/deep_purple_400" />
 
@@ -464,11 +538,13 @@
                                         android:id="@+id/repeatAddText"
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
+                                        android:layout_centerVertical="true"
+                                        android:layout_toRightOf="@+id/repeatAddIcon"
                                         android:text="@string/repeat"
                                         android:textColor="@color/deep_purple_400"
                                         android:textSize="14sp" />
 
-                                </LinearLayout>
+                                </RelativeLayout>
 
                             </LinearLayout>
 
@@ -603,18 +679,23 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/locationBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:orientation="horizontal">
+                        android:layout_marginTop="20dp">
+
+                        <ProgressBar
+                            android:id="@+id/progressLocation"
+                            android:layout_width="25dp"
+                            android:layout_height="25dp"
+                            android:layout_centerInParent="true"
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/locationIcon"
                             android:layout_width="35dp"
                             android:layout_height="35dp"
-                            android:layout_centerVertical="true"
                             android:layout_marginRight="10dp"
                             android:src="@drawable/ic_location"
                             android:tint="@color/grey_600" />
@@ -623,16 +704,41 @@
                             android:id="@+id/locationText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerVertical="true"
-                            android:layout_marginRight="10dp"
                             android:layout_marginTop="8dp"
-                            android:ellipsize="end"
+                            android:layout_toLeftOf="@+id/locationIcon2"
+                            android:layout_toRightOf="@+id/locationIcon"
                             android:text="Text"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp"
                             android:textStyle="normal" />
 
-                    </LinearLayout>
+                        <ImageView
+                            android:id="@+id/locationIcon2"
+                            android:layout_width="35dp"
+                            android:layout_height="35dp"
+                            android:layout_alignParentRight="true"
+                            android:layout_marginLeft="10dp"
+                            android:padding="5dp"
+                            android:rotation="45"
+                            android:src="@drawable/ic_add"
+                            android:tint="@color/grey_600" />
+
+
+                        <TextView
+                            android:id="@+id/locationText2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/locationText"
+                            android:layout_marginLeft="45dp"
+                            android:layout_marginRight="45dp"
+                            android:paddingBottom="4dp"
+                            android:paddingTop="4dp"
+                            android:text="Editar nome do local"
+                            android:textColor="@color/deep_purple_400"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </RelativeLayout>
 
                     <LinearLayout
                         android:id="@+id/whatsAppGroupLinkBox"
@@ -664,47 +770,6 @@
                             android:textSize="14sp" />
 
                     </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/guestBox"
-                        android:layout_width="wrap_content"
-                        android:layout_height="40dp"
-                        android:layout_marginTop="20dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:id="@+id/guestText"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:text="@string/act_guests"
-                            android:textColor="@color/deep_purple_400"
-                            android:textSize="14sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/guestsNumber"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/box_qty_guests"
-                            android:gravity="center"
-                            android:paddingBottom="2dp"
-                            android:paddingLeft="8dp"
-                            android:paddingRight="8dp"
-                            android:paddingTop="2dp"
-                            android:text="0"
-                            android:textColor="@color/white"
-                            android:textSize="14sp" />
-
-                    </LinearLayout>
-
-                    <include
-                        android:id="@+id/profilesPhotos"
-                        layout="@layout/list_profiles"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -751,6 +816,47 @@
                             android:textSize="12sp" />
 
                     </RelativeLayout>
+
+                    <LinearLayout
+                        android:id="@+id/guestBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="40dp"
+                        android:layout_marginTop="20dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/guestText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:text="@string/act_guests"
+                            android:textColor="@color/deep_purple_400"
+                            android:textSize="14sp"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/guestsNumber"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/box_qty_guests"
+                            android:gravity="center"
+                            android:paddingBottom="2dp"
+                            android:paddingLeft="8dp"
+                            android:paddingRight="8dp"
+                            android:paddingTop="2dp"
+                            android:text="0"
+                            android:textColor="@color/white"
+                            android:textSize="14sp" />
+
+                    </LinearLayout>
+
+                    <include
+                        android:id="@+id/profilesPhotos"
+                        layout="@layout/list_profiles"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp" />
 
                 </LinearLayout>
 

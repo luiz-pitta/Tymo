@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true">
 
     <LinearLayout
@@ -17,10 +17,10 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical"
+            android:padding="20dp"
             android:paddingBottom="40dp"
-            android:paddingTop="40dp"
             android:paddingRight="20dp"
-            android:padding="20dp">
+            android:paddingTop="40dp">
 
             <TextView
                 android:id="@+id/text1"
@@ -49,7 +49,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/bg_act_edit_box"
+                android:background="@drawable/bg_act_edit_box_local"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:inputType="textMultiLine"
@@ -57,7 +57,7 @@
                 android:padding="10dp"
                 android:textColor="@color/grey_600"
                 android:textColorHint="@color/grey_400"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <RadioGroup
                 android:id="@+id/radioGroup"
@@ -136,13 +136,13 @@
             android:showDividers="middle">
 
             <LinearLayout
-                android:visibility="visible"
                 android:id="@+id/button1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:visibility="visible">
 
                 <TextView
                     android:id="@+id/buttonText1"
@@ -188,8 +188,8 @@
                     android:text="Text"
                     android:textColor="@color/deep_purple_300"
                     android:textSize="16sp"
-                    android:visibility="visible"
-                    android:textStyle="bold"/>
+                    android:textStyle="bold"
+                    android:visibility="visible" />
 
                 <ImageView
                     android:id="@+id/buttonIcon2"
@@ -197,7 +197,7 @@
                     android:layout_height="35dp"
                     android:src="@drawable/ic_person"
                     android:tint="@color/grey_500"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
 
             </LinearLayout>
 
