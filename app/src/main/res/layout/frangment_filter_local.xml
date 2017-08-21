@@ -34,7 +34,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
                     android:background="@drawable/bg_act_edit_box"
                     android:clickable="true"
                     android:gravity="center_vertical"
