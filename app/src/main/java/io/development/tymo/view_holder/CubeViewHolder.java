@@ -37,11 +37,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class CubeViewHolder extends BaseViewHolder<ActivityServer> implements View.OnClickListener {
-    private TextView textViewTitle, textViewDescription;
+    private TextView textViewTitle, textViewDescription, repeatText;
     private ImageView triangle, cubeUpperBoxIcon, cubeLowerBoxIcon, pieceIcon, photoCreator;
     private RelativeLayout pieceBox, textBox;
     private View photoCreatorRing;
-    private RelativeLayout photoCreatorRingBox;
+    private RelativeLayout photoCreatorRingBox, repeatBox;
 
     RotateAnimation rotation;
     TranslateAnimation animation, animation2;
@@ -49,7 +49,7 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> implements Vi
 
     private String email;
 
-    public CubeViewHolder(ViewGroup parent, final ActivityAdapter adapter, final Context context) {
+    public CubeViewHolder(ViewGroup parent, Context context) {
         super(parent, R.layout.list_item_feed_zoom_less);
 
         SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -66,6 +66,8 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> implements Vi
         triangle = $(R.id.triangle);
         photoCreatorRing = $(R.id.photoCreatorRing);
         photoCreatorRingBox = $(R.id.photoCreatorRingBox);
+        repeatBox = $(R.id.repeatBox);
+        repeatText = $(R.id.repeatText);
         this.context = context;
 
         animation = new TranslateAnimation(0.0f, 0.0f, -Utilities.convertDpToPixel(2, context), Utilities.convertDpToPixel(2, context));
@@ -173,6 +175,12 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> implements Vi
         } else {
             photoCreatorRingBox.setVisibility(View.INVISIBLE);
         }
+
+        if(cube.getListRepeatedActvities().size() > 0){
+            repeatBox.setVisibility(View.VISIBLE);
+            repeatText.setText(context.getResources().getString(R.string.repeat_qty, cube.getListRepeatedActvities().size() + 1));
+        }else
+            repeatBox.setVisibility(View.GONE);
 
         pieceBox.startAnimation(animation2);
 

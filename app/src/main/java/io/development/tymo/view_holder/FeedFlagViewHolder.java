@@ -37,11 +37,11 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> implements View.OnClickListener {
-    private TextView textViewTitle, textViewDescription;
+    private TextView textViewTitle, textViewDescription, repeatText;
     private ImageView triangle, photoCreator;
     private RelativeLayout pieceBox, textBox;
     private View photoCreatorRing;
-    private RelativeLayout photoCreatorRingBox;
+    private RelativeLayout photoCreatorRingBox, repeatBox;
 
     RotateAnimation rotation;
     TranslateAnimation animation, animation2;
@@ -63,6 +63,8 @@ public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> implements Vi
         triangle = $(R.id.triangle);
         photoCreatorRing = $(R.id.photoCreatorRing);
         photoCreatorRingBox = $(R.id.photoCreatorRingBox);
+        repeatBox = $(R.id.repeatBox);
+        repeatText = $(R.id.repeatText);
         this.context = context;
 
         animation = new TranslateAnimation(0.0f, 0.0f,-Utilities.convertDpToPixel(2, context), Utilities.convertDpToPixel(2, context));
@@ -165,6 +167,12 @@ public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> implements Vi
         textViewTitle.setText(context.getResources().getString(R.string.flag_available));
         textViewTitle.setTextColor(ContextCompat.getColor(context, R.color.flag_available));
         textViewDescription.setText(cube.getTitle());
+
+        if(cube.getListRepeatedActvities().size() > 0){
+            repeatBox.setVisibility(View.VISIBLE);
+            repeatText.setText(context.getResources().getString(R.string.repeat_qty, cube.getListRepeatedActvities().size() + 1));
+        }else
+            repeatBox.setVisibility(View.GONE);
 
         pieceBox.startAnimation(animation2);
 

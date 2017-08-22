@@ -66,6 +66,8 @@ public class FlagServer implements Serializable {
     private Boolean toAll;
     private List<String> guest = new ArrayList();
 
+    private ArrayList<FlagServer> listRepeatedActvities = new ArrayList<>();
+
     private String invite_date;
 
     public FlagServer() {
@@ -117,6 +119,10 @@ public class FlagServer implements Serializable {
         this.popularity_points = flagServer.getPopularityPoints();
 
         this.date_time_now = flagServer.getDateTimeNow();
+    }
+
+    public ArrayList<FlagServer> getListRepeatedActvities() {
+        return listRepeatedActvities;
     }
 
     public double getRankPoints() {

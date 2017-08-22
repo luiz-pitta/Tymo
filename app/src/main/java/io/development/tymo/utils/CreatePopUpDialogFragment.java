@@ -632,7 +632,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                     updateInviteRequest(inviteRequest);
                                     dialog.dismiss();
                                 } else {
-                                    createDialogRemove(flagServer.getRepeatType() > 0, Constants.FLAG, dialog);
+                                    createDialogRemove(flagServer.getRepeatType() > 0  && activityServer.getCreator().equals(email), Constants.FLAG, dialog);
                                 }
 
 
@@ -858,7 +858,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                     updateInviteRequest(inviteRequest);
                                     dialog.dismiss();
                                 } else {
-                                    createDialogRemove(activityServer.getRepeatType() > 0, Constants.ACT, dialog);
+                                    SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                                    String email = mSharedPreferences.getString(Constants.EMAIL, "");
+                                    createDialogRemove(activityServer.getRepeatType() > 0 && activityServer.getCreator().equals(email), Constants.ACT, dialog);
                                 }
                             }
                         });

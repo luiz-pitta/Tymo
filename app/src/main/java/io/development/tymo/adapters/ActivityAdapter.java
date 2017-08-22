@@ -40,7 +40,7 @@ public class ActivityAdapter extends RecyclerArrayAdapter<Object> {
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
         switch (viewType){
             case ACT:
-                return new CubeViewHolder(parent,this, context);
+                return new CubeViewHolder(parent, context);
             case FLAG:
                 return new FeedFlagViewHolder(parent, context);
             default:

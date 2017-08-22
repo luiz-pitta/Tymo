@@ -276,6 +276,12 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
             Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
+    public void insertActivityBack(Object activity, int position){
+        adapter.insert(activity, position);
+        if(position == 0)
+            recyclerView.scrollToPosition(0);
+    }
+
     private void initSwipe(){
         simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
 
@@ -377,81 +383,96 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         Vibrator v = (Vibrator) getActivity().getSystemService(Context.VIBRATOR_SERVICE);
                         v.vibrate(200);
 
-                        snackbar = Snackbar.make(recyclerView, getResources().getString(R.string.feed_invitation_activity_fit), Snackbar.LENGTH_LONG)
-                                .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
-                                .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View view) {
-                                        adapter.insert(item, position);
-                                        erase = false;
-                                        if (position == 0)
-                                            recyclerView.scrollToPosition(0);
-                                    }
-                                });
-                    }
-
-                    snackbar.show();
+                        ArrayList<Object> listActivities = new ArrayList<>();
+                        FeedFragment feedFragment = (FeedFragment) getActivity().getFragmentManager().findFragmentByTag("Feed_main");
 
 
-                    snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                        @Override
-                        public void onDismissed(Snackbar transientBottomBar, int event) {
-                            super.onDismissed(transientBottomBar, event);
-                            InviteRequest inviteRequest = new InviteRequest();
-                            ActivityServer activityServer;
-                            FlagServer flagServer;
-
-                            int participates = 0;
-                            if(item instanceof ActivityServer) {
-                                d_notify = ((ActivityServer) item).getDayStart();
-                                m_notify = ((ActivityServer) item).getMonthStart();
-                                y_notify = ((ActivityServer) item).getYearStart();
-                                participates = ((ActivityServer) item).getParticipates();
-                            }
-                            else if(item instanceof FlagServer) {
-                                d_notify = ((FlagServer) item).getDayStart();
-                                m_notify = ((FlagServer) item).getMonthStart();
-                                y_notify = ((FlagServer) item).getYearStart();
-                                participates = ((FlagServer) item).getParticipates();
-                            }
-
-                            if (participates == 1)
-                                erase = false;
-
-                            if(erase) {
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                                SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                                String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-                                inviteRequest.setEmail(email);
-                                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-                                inviteRequest.setStatus(Constants.YES);
-
-                                if(item instanceof ActivityServer){
-                                    inviteRequest.setType(Constants.ACT);
-                                    activityServer = (ActivityServer) item;
-                                    inviteRequest.setIdAct(activityServer.getId());
-                                }else if(item instanceof FlagServer){
-                                    inviteRequest.setType(Constants.FLAG);
-                                    flagServer = (FlagServer) item;
-                                    inviteRequest.setIdAct(flagServer.getId());
-                                }
-
-                                updateInviteRequest(inviteRequest);
-                            }
-
-                            FeedFragment fragment = (FeedFragment)getActivity().getFragmentManager().findFragmentByTag("Feed_main");
-                            if(fragment != null)
-                                fragment.setAdapterItensCard(adapter.getAllData());
-
-                            erase = true;
+                        if (item instanceof ActivityServer) {
+                            ActivityServer activityServer = (ActivityServer) item;
+                            listActivities.add(activityServer);
+                            listActivities.addAll(activityServer.getListRepeatedActvities());
+                        } else if (item instanceof FlagServer) {
+                            FlagServer flagServer = (FlagServer) item;
+                            listActivities.add(flagServer);
+                            listActivities.addAll(flagServer.getListRepeatedActvities());
                         }
-                    });
+
+                        if (listActivities.size() > 1)
+                            feedFragment.createDialogRepeatImport(listActivities, position, 0);
+                        else {
+                            snackbar = Snackbar.make(recyclerView, getResources().getString(R.string.feed_invitation_activity_fit), Snackbar.LENGTH_LONG)
+                                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
+                                    .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View view) {
+                                            adapter.insert(item, position);
+                                            erase = false;
+                                            if (position == 0)
+                                                recyclerView.scrollToPosition(0);
+                                        }
+                                    });
+
+                            snackbar.show();
+
+                            snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                                @Override
+                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                    super.onDismissed(transientBottomBar, event);
+                                    InviteRequest inviteRequest = new InviteRequest();
+                                    ActivityServer activityServer = null;
+                                    FlagServer flagServer = null;
+
+                                    int participates = 0;
+                                    if (item instanceof ActivityServer) {
+                                        d_notify = ((ActivityServer) item).getDayStart();
+                                        m_notify = ((ActivityServer) item).getMonthStart();
+                                        y_notify = ((ActivityServer) item).getYearStart();
+                                        participates = ((ActivityServer) item).getParticipates();
+                                    } else if (item instanceof FlagServer) {
+                                        d_notify = ((FlagServer) item).getDayStart();
+                                        m_notify = ((FlagServer) item).getMonthStart();
+                                        y_notify = ((FlagServer) item).getYearStart();
+                                        participates = ((FlagServer) item).getParticipates();
+                                    }
+
+                                    if (participates == 1)
+                                        erase = false;
+
+                                    if (erase) {
+                                        Bundle bundle = new Bundle();
+                                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_fit) + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                                        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                                        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                                        inviteRequest.setEmail(email);
+                                        inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+                                        inviteRequest.setStatus(Constants.YES);
+
+                                        if (item instanceof ActivityServer) {
+                                            inviteRequest.setType(Constants.ACT);
+                                            activityServer = (ActivityServer) item;
+                                            inviteRequest.setIdAct(activityServer.getId());
+                                        } else if (item instanceof FlagServer) {
+                                            inviteRequest.setType(Constants.FLAG);
+                                            flagServer = (FlagServer) item;
+                                            inviteRequest.setIdAct(flagServer.getId());
+                                        }
+
+                                        updateInviteRequest(inviteRequest);
+                                    }
+
+                                    FeedFragment fragment = (FeedFragment) getActivity().getFragmentManager().findFragmentByTag("Feed_main");
+                                    if (fragment != null)
+                                        fragment.setAdapterItensCard(adapter.getAllData());
+
+                                    erase = true;
+                                }
+                            });
+                        }
+                    }
                 }
             }
 

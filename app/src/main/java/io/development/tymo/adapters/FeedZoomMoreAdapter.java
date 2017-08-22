@@ -97,12 +97,12 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
         private ImageView triangle, flagButton, cubeUpperBoxIcon, photoCreator, pieceIcon, cubeLowerBoxIcon;
         private RelativeLayout pieceBox, cubeLowerBox;
         private LinearLayout textBox, locationBox;
-        private TextView textTitle, textDescription, location, date;
+        private TextView textTitle, textDescription, location, date, repeatText;
         private RecyclerView recyclerView;
         private PersonSmallAdapter adapter;
         private View photoCreatorRing;
         private RelativeLayout photoCreatorRingBox;
-        private RelativeLayout addGuestButton;
+        private RelativeLayout addGuestButton, repeatBox;
 
         public SimpleViewHolder(View view, Context context) {
             super(view);
@@ -117,12 +117,14 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
             date = (TextView) view.findViewById(R.id.date);
             textTitle = (TextView) view.findViewById(R.id.title);
             textDescription = (TextView) view.findViewById(R.id.description);
+            repeatText = (TextView) view.findViewById(R.id.repeatText);
 
             cubeUpperBoxIcon = (ImageView) view.findViewById(R.id.cubeUpperBoxIcon);
             cubeLowerBoxIcon = (ImageView) view.findViewById(R.id.cubeLowerBoxIcon);
             pieceIcon = (ImageView) view.findViewById(R.id.pieceIcon);
             photoCreator = (ImageView) view.findViewById(R.id.photoCreator);
             addGuestButton = (RelativeLayout) view.findViewById(R.id.addGuestButton);
+            repeatBox = (RelativeLayout) view.findViewById(R.id.repeatBox);
             flagButton = (ImageView) view.findViewById(R.id.flagIcon);
             cubeLowerBox = (RelativeLayout) view.findViewById(R.id.cubeLowerBox);
             locationBox = (LinearLayout) view.findViewById(R.id.locationBox);
@@ -412,6 +414,12 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
             } else
                 holder.photoCreator.setImageResource(R.drawable.ic_profile_photo_empty);
 
+            if(feedCubeModel.getListRepeatedActvities().size() > 0){
+                holder.repeatBox.setVisibility(View.VISIBLE);
+                holder.repeatText.setText(mContext.getResources().getString(R.string.repeat_qty, feedCubeModel.getListRepeatedActvities().size() + 1));
+            }else
+                holder.repeatBox.setVisibility(View.GONE);
+
             if (feedCubeModel.getFavoriteCreator() > 0) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);
                 holder.photoCreatorRing.setBackgroundResource(R.drawable.bg_shape_ring_favorite_zoom_more);
@@ -484,6 +492,12 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
                         });
             } else
                 holder.photoCreator.setImageResource(R.drawable.ic_profile_photo_empty);
+
+            if(feedFlagModel.getListRepeatedActvities().size() > 0){
+                holder.repeatBox.setVisibility(View.VISIBLE);
+                holder.repeatText.setText(mContext.getResources().getString(R.string.repeat_qty, feedFlagModel.getListRepeatedActvities().size() + 1));
+            }else
+                holder.repeatBox.setVisibility(View.GONE);
 
             if (feedFlagModel.getFavoriteCreator() > 0) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);

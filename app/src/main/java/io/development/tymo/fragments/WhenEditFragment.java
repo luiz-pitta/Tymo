@@ -603,29 +603,37 @@ public class WhenEditFragment extends Fragment implements
             String date = day + "/" + month + "/" + activityServer.getYearStart();
             String date2 = day2 + "/" + month2 + "/" + activityServer.getYearEnd();
 
-            String hourString = String.format("%02d", activityServer.getHourStart());
-            String minuteString = String.format("%02d", activityServer.getMinuteStart());
-            String hourStringEnd = String.format("%02d", activityServer.getHourEnd());
-            String minuteStringEnd = String.format("%02d", activityServer.getMinuteEnd());
-            String time = hourString + ":" + minuteString;
-            String time2 = hourStringEnd + ":" + minuteStringEnd;
+            if(activityServer.getHourStart() >= 0) {
+                String hourString = String.format("%02d", activityServer.getHourStart());
+
+                String minuteString = String.format("%02d", activityServer.getMinuteStart());
+
+                String hourStringEnd = String.format("%02d", activityServer.getHourEnd());
+
+                String minuteStringEnd = String.format("%02d", activityServer.getMinuteEnd());
+
+                String time = hourString + ":" + minuteString;
+                String time2 = hourStringEnd + ":" + minuteStringEnd;
+
+                minutes_start = activityServer.getMinuteStart();
+                hour_start = activityServer.getHourStart();
+                minutes_end = activityServer.getMinuteEnd();
+                hour_end = activityServer.getHourEnd();
+
+                timeStart.setText(time);
+                timeEnd.setText(time2);
+            }
 
             day_start = activityServer.getDayStart();
             month_start = activityServer.getMonthStart() - 1;
             year_start = activityServer.getYearStart();
-            minutes_start = activityServer.getMinuteStart();
-            hour_start = activityServer.getHourStart();
 
             day_end = activityServer.getDayEnd();
             month_end = activityServer.getMonthEnd() - 1;
             year_end = activityServer.getYearEnd();
-            minutes_end = activityServer.getMinuteEnd();
-            hour_end = activityServer.getHourEnd();
 
             dateStart.setText(date);
             dateEnd.setText(date2);
-            timeStart.setText(time);
-            timeEnd.setText(time2);
 
             locationText.setText(activityServer.getLocation());
 

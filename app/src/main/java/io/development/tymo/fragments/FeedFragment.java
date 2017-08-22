@@ -3,6 +3,8 @@ package io.development.tymo.fragments;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -18,6 +20,9 @@ import android.support.annotation.Nullable;
 import android.app.Fragment;
 import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +48,7 @@ import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.jude.easyrecyclerview.decoration.DividerDecoration;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
@@ -61,12 +67,15 @@ import io.development.tymo.TymoApplication;
 import io.development.tymo.activities.FilterActivity;
 import io.development.tymo.activities.MainActivity;
 import io.development.tymo.adapters.FeedFragmentAdapter;
+import io.development.tymo.adapters.SelectionCalendarAdapter;
+import io.development.tymo.adapters.SelectionRepeatActivitiesFeedAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.BgFeedServer;
 import io.development.tymo.model_server.DateTymo;
 import io.development.tymo.model_server.FilterServer;
 import io.development.tymo.model_server.FilterWrapper;
 import io.development.tymo.model_server.FlagServer;
+import io.development.tymo.model_server.InviteRequest;
 import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.network.NetworkUtil;
@@ -96,6 +105,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
     private boolean try_again = true;
 
     private Calendar currentTime;
+    int d_notify, m_notify, y_notify;
 
     private TextView filterText, zoomText;
 
@@ -958,6 +968,168 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 setCurrentTab(0);
             }
         }
+    }
+
+    public void createDialogRepeatImport(ArrayList<Object> activities, int currentPosition, int fragment_type) {
+        LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_list_multiple_select, null);
+
+        SelectionRepeatActivitiesFeedAdapter selectionRepeatActivitiesFeedAdapter;
+
+        TextView text1 = customView.findViewById(R.id.text1);
+        TextView text2 = customView.findViewById(R.id.text2);
+        TextView buttonText1 = customView.findViewById(R.id.buttonText1);
+        TextView buttonText2 = customView.findViewById(R.id.buttonText2);
+        RecyclerView mMultiChoiceRecyclerView = customView.findViewById(R.id.recyclerSelectView);
+
+        text1.setText(getResources().getString(R.string.dialog_fit_multiple_repeat_activity_title));
+        text2.setText(getResources().getString(R.string.dialog_fit_multiple_repeat_activity_text));
+        buttonText1.setText(getResources().getString(R.string.cancel));
+        buttonText2.setText(getResources().getString(R.string.ok));
+
+        mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMultiChoiceRecyclerView.setNestedScrollingEnabled(false);
+
+        selectionRepeatActivitiesFeedAdapter = new SelectionRepeatActivitiesFeedAdapter(activities, getActivity()) ;
+        mMultiChoiceRecyclerView.setAdapter(selectionRepeatActivitiesFeedAdapter);
+        selectionRepeatActivitiesFeedAdapter.setSingleClickMode(true);
+
+        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(getActivity(),R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, getActivity()));
+        itemDecoration.setDrawLastItem(true);
+
+        mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
+        mMultiChoiceRecyclerView.setHasFixedSize(true);
+
+        Dialog dialog = new Dialog(getActivity(), R.style.NewDialog);
+
+        dialog.setContentView(customView);
+        dialog.setCanceledOnTouchOutside(false);
+
+        buttonText1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText1.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
+                }
+
+                return false;
+            }
+        });
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
+                }
+
+                return false;
+            }
+        });
+
+        buttonText1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(fragment_type == 0) {
+                    FeedListFragment feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+                    if (feedListFragment != null)
+                        feedListFragment.insertActivityBack(activities.get(0), currentPosition);
+                }else if(fragment_type == 1){
+                    FeedCardFragment feedCardFragment = (FeedCardFragment) mNavigator.getFragment(1);
+                    if (feedCardFragment != null)
+                        feedCardFragment.insertActivityBack(activities.get(0), currentPosition);
+                }
+                dialog.dismiss();
+            }
+        });
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int minPosition = 500;
+                InviteRequest inviteRequest = new InviteRequest();
+                ActivityServer activityServer = null;
+                FlagServer flagServer = null;
+
+                List<Integer> list = selectionRepeatActivitiesFeedAdapter.getSelectedItemList();
+
+                for(int i=0;i<list.size();i++){
+                    int position = list.get(i);
+                    Object item = activities.get(position);
+                    if (item instanceof ActivityServer) {
+                        inviteRequest.setType(Constants.ACT);
+                        activityServer = (ActivityServer) item;
+                        inviteRequest.addIds(activityServer.getId());
+                    } else if (item instanceof FlagServer) {
+                        inviteRequest.setType(Constants.FLAG);
+                        flagServer = (FlagServer) item;
+                        inviteRequest.addIds(flagServer.getId());
+                    }
+
+                    if(position < minPosition){
+                        minPosition = position;
+                        if (activityServer != null) {
+                            d_notify = activityServer.getDayStart();
+                            m_notify = activityServer.getMonthStart();
+                            y_notify = activityServer.getYearStart();
+                        } else if (flagServer  != null) {
+                            d_notify = flagServer.getDayStart();
+                            m_notify = flagServer.getMonthStart();
+                            y_notify = flagServer.getYearStart();
+                        }
+                    }
+                }
+
+                SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                inviteRequest.setEmail(email);
+                inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+                inviteRequest.setStatus(Constants.YES);
+
+                updateInviteRequest(inviteRequest);
+
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
+    }
+
+    private void updateInviteRequest(InviteRequest inviteRequest) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().updateInvitesRequest(inviteRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleDeleteIgnoreConfirm,this::handleError));
+    }
+
+    private void handleDeleteIgnoreConfirm(Response response) {
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.add(Calendar.DATE, 1);
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);
+        int month2 = c2.get(Calendar.MONTH) + 1;
+        int year2 = c2.get(Calendar.YEAR);
+
+
+        if((d_notify == day && m_notify == month && y_notify == year) || (d_notify == day2 && m_notify == month2 && y_notify == year2)) {
+            d_notify = -1;
+            m_notify = -1;
+            y_notify = -1;
+            Intent intent = new Intent("notification_update");
+            LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
+
+        //Toast.makeText(getActivity(), ServerMessage.getServerMessage(getActivity(), response.getMessage()), Toast.LENGTH_LONG).show();
+        //ACTIVITY_DELETED_SUCCESSFULLY, RELATIONSHIP_UPDATED_SUCCESSFULLY e WITHOUT_NOTIFICATION
     }
 
     @Override

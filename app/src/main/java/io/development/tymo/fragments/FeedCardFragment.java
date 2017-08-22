@@ -125,8 +125,7 @@ public class FeedCardFragment extends Fragment {
                 else if(item instanceof FlagServer)
                     participates = ((FlagServer)item).getParticipates();
 
-                MainActivity activity = (MainActivity)getActivity();
-                FeedFragment fragment = (FeedFragment)activity.getFragmentNavigator().getFragment(0);
+                FeedFragment fragment = (FeedFragment)getActivity().getFragmentManager().findFragmentByTag("Feed_main");
 
                 fragment.setFeedIgnoreCheckButton(participates == 1);
 
@@ -270,6 +269,11 @@ public class FeedCardFragment extends Fragment {
             Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
+    public void insertActivityBack(Object activity, int position){
+        adapter.addItem(activity, position);
+        mRecyclerView.scrollToPosition(position);
+    }
+
     public void confirmActivity(){
         Object item = adapter.getCurrentItem();
         Snackbar snackbar;
@@ -295,64 +299,80 @@ public class FeedCardFragment extends Fragment {
             if (adapter.getCurrentItemId() > 0)
                 adapter.setCurrentItemId(adapter.getCurrentItemId() - 1);
 
-            snackbar = Snackbar.make(mRecyclerView, R.string.feed_invitation_activity_fit, Snackbar.LENGTH_LONG)
-                    .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
-                    .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            adapter.addItem(item, currentPosition);
+            ArrayList<Object> listActivities = new ArrayList<>();
+            FeedFragment feedFragment = (FeedFragment) getActivity().getFragmentManager().findFragmentByTag("Feed_main");
 
-                            mRecyclerView.scrollToPosition(adapter.getCurrentItemId());
-                            erase = false;
+            if (item instanceof ActivityServer) {
+                ActivityServer activityServer = (ActivityServer) item;
+                listActivities.add(activityServer);
+                listActivities.addAll(activityServer.getListRepeatedActvities());
+            } else if (item instanceof FlagServer) {
+                FlagServer flagServer = (FlagServer) item;
+                listActivities.add(flagServer);
+                listActivities.addAll(flagServer.getListRepeatedActvities());
+            }
+
+            if (listActivities.size() > 1)
+                feedFragment.createDialogRepeatImport(listActivities, currentPosition, 1);
+            else {
+                snackbar = Snackbar.make(mRecyclerView, R.string.feed_invitation_activity_fit, Snackbar.LENGTH_LONG)
+                        .setActionTextColor(ContextCompat.getColor(getActivity(), R.color.white))
+                        .setAction(getResources().getString(R.string.undo), new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                adapter.addItem(item, currentPosition);
+                                mRecyclerView.scrollToPosition(currentPosition);
+                                erase = false;
+                            }
+                        });
+
+                snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                    @Override
+                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                        super.onDismissed(transientBottomBar, event);
+
+                        InviteRequest inviteRequest = new InviteRequest();
+                        ActivityServer activityServer;
+                        FlagServer flagServer;
+
+                        if (erase) {
+                            Bundle bundle = new Bundle();
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_fit) + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                            SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                            inviteRequest.setEmail(email);
+                            inviteRequest.setStatus(Constants.YES);
+                            inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+
+                            if (item instanceof ActivityServer) {
+                                inviteRequest.setType(Constants.ACT);
+                                activityServer = (ActivityServer) item;
+                                inviteRequest.setIdAct(activityServer.getId());
+                            } else if(item instanceof FlagServer){
+                                inviteRequest.setType(Constants.FLAG);
+                                flagServer = (FlagServer) item;
+                                inviteRequest.setIdAct(flagServer.getId());
+                            }
+
+                            updateInviteRequest(inviteRequest);
+
+                            FeedListFragment feedListFragment = (FeedListFragment) getFragmentManager().findFragmentByTag("list");
+                            if (feedListFragment != null)
+                                feedListFragment.setAdapterItens(adapter.getAllData());
                         }
-                    });
 
-            snackbar.addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                @Override
-                public void onDismissed(Snackbar transientBottomBar, int event) {
-                    super.onDismissed(transientBottomBar, event);
+                        erase = true;
 
-                    InviteRequest inviteRequest = new InviteRequest();
-                    ActivityServer activityServer;
-                    FlagServer flagServer;
-
-                    if (erase) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_fit) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                        String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-                        inviteRequest.setEmail(email);
-                        inviteRequest.setStatus(Constants.YES);
-                        inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-
-                        if (item instanceof ActivityServer) {
-                            inviteRequest.setType(Constants.ACT);
-                            activityServer = (ActivityServer) item;
-                            inviteRequest.setIdAct(activityServer.getId());
-                        } else {
-                            inviteRequest.setType(Constants.FLAG);
-                            flagServer = (FlagServer) item;
-                            inviteRequest.setIdAct(flagServer.getId());
-                        }
-
-                        updateInviteRequest(inviteRequest);
-
-                        FeedListFragment feedListFragment = (FeedListFragment) getFragmentManager().findFragmentByTag("list");
-                        if (feedListFragment != null)
-                            feedListFragment.setAdapterItens(adapter.getAllData());
+                        setEmptyLayout(adapter.getItemCount() == 0);
                     }
+                });
 
-                    erase = true;
-
-                    setEmptyLayout(adapter.getItemCount() == 0);
-                }
-            });
-
-            snackbar.show();
+                snackbar.show();
+            }
         }
     }
 

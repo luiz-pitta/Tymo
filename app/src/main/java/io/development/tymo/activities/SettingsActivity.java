@@ -14,7 +14,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
-import android.support.v13.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -62,8 +61,6 @@ import com.google.api.services.calendar.model.Events;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.google.api.services.calendar.model.CalendarList;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
@@ -86,7 +83,6 @@ import io.development.tymo.BuildConfig;
 import io.development.tymo.Login1Activity;
 import io.development.tymo.R;
 import io.development.tymo.adapters.SelectionCalendarAdapter;
-import io.development.tymo.adapters.SelectionTagAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.AppInfoServer;
 import io.development.tymo.model_server.AppInfoWrapper;
@@ -96,7 +92,6 @@ import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.GoogleCalendarEvents;
 import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -839,7 +834,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private void createDialogGoogleImport(ArrayList<String> accountsList) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_list_calendar_select, null);
+        View customView = inflater.inflate(R.layout.dialog_list_multiple_select, null);
 
         SelectionCalendarAdapter selectionCalendarAdapter;
 

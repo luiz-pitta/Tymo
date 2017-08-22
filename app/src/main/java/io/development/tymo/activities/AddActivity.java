@@ -321,6 +321,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             findViewById(R.id.progressBox).setVisibility(View.GONE);
     }
 
+    public ArrayList<User> getListUserCompare() {
+        return listUserCompare;
+    }
+
     private void getIcons() {
         setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().getIcons()
@@ -962,6 +966,10 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
 
             if(list_guest.size() == 0 && user_friend != null)
                 activityServer.addGuest(user_friend.getEmail());
+            else if(list_guest.size() == 0 && listUserCompare.size() > 0) {
+                for(int j=0;j<listUserCompare.size();j++)
+                    activityServer.addGuest(listUserCompare.get(j).getEmail());
+            }
 
             activityServer.setCreator(creator);
             activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
@@ -1592,7 +1600,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
         intent.putExtra("m", m);
         intent.putExtra("y", y);
         setResult(RESULT_OK, intent);
-        if(user_friend == null)
+        if(user_friend == null || listUserCompare.size() == 0)
             finish();
         else
             startActivity(intent);

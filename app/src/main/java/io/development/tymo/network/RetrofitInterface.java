@@ -97,6 +97,9 @@ public interface RetrofitInterface {
     @POST("update_invite_request")
     Observable<Response> updateInviteRequest(@Body InviteRequest inviteRequest);
 
+    @POST("update_invites_request")
+    Observable<Response> updateInvitesRequest(@Body InviteRequest inviteRequest);
+
     @POST("set_adm_activity")
     Observable<Response> setAdm(@Body InviteRequest inviteRequest);
 

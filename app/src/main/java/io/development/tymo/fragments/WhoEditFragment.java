@@ -227,9 +227,16 @@ public class WhoEditFragment extends Fragment implements View.OnClickListener {
             user.setDelete(false);
             data.add(user);
             User friend = addActivity.getUserFriend();
+            ArrayList<User> list = addActivity.getListUserCompare();
             if(friend != null) {
                 friend.setDelete(false);
                 data.add(friend);
+            }else if(list.size() > 0){
+                for (int i = 0; i < list.size(); i++) {
+                    User usr = list.get(i);
+                    usr.setDelete(false);
+                    data.add(usr);
+                }
             }
             adapter = new PersonAdapter(data, getActivity());
             recyclerViewGuestRow.setAdapter(adapter);

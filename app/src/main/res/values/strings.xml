@@ -414,6 +414,7 @@
     <string name="repeat_not">Não se repete</string>
     <string name="repeat_text_imported_google_agenda">(atividade importada sem as repetições, edite para criá-las!)</string>
     <string name="repeat_text">(repete %1$s até %2$s)</string>
+    <string name="repeat_qty">%1$dx</string>
     <string name="repeat_weekly">semanalmente</string>
     <string name="repeat">Repetir</string>
     <string name="add_image">Adicionar imagem</string>
@@ -583,4 +584,6 @@
     <string name="agenda_status_anyone_can_participate">Qualquer um pode entrar!</string>
     <string name="title_max_caract">%1$d de 100</string>
 
+    <string name="dialog_fit_multiple_repeat_activity_title">Atividade com repetição</string>
+    <string name="dialog_fit_multiple_repeat_activity_text">Selecione quais você deseja encaixar</string>
 </resources>

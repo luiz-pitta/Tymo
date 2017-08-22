@@ -1,9 +1,12 @@
 package io.development.tymo.model_server;
 
+import java.util.ArrayList;
+
 public class InviteRequest {
 
     private String email;
     private long id_act;
+    private ArrayList<Long> ids_act = new ArrayList<>();
     private int status;
     private int type;
     private long date_time_now;
@@ -30,6 +33,10 @@ public class InviteRequest {
 
     public void setType(int type) {
         this.type = type;
+    }
+
+    public void addIds(long id){
+        ids_act.add(id);
     }
 
 }

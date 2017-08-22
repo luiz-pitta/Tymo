@@ -82,6 +82,8 @@ public class ActivityServer implements Serializable {
 
     private String invite_date;
 
+    private ArrayList<ActivityServer> listRepeatedActvities = new ArrayList<>();
+
     public ActivityServer() {
     }
 
@@ -146,6 +148,10 @@ public class ActivityServer implements Serializable {
         this.distance = activityServer.getDistance();
 
         this.date_time_now = activityServer.getDateTimeNow();
+    }
+
+    public ArrayList<ActivityServer> getListRepeatedActvities() {
+        return listRepeatedActvities;
     }
 
     public double getRankPoints() {
