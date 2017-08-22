@@ -456,7 +456,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             feedListFragment.setProgress(true);
 
 
-        retrieveFeedActivities(email, dateTymo);
+        //retrieveFeedActivities(email, dateTymo);
     }
 
     private void retrieveFeedFilter(FilterServer filterServer) {
@@ -1126,6 +1126,22 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
             y_notify = -1;
             Intent intent = new Intent("notification_update");
             LocalBroadcastManager.getInstance(getActivity()).sendBroadcast(intent);
+        }
+
+        int currentFragment = mNavigator.getCurrentPosition();
+        FeedListFragment feedListFragment;
+        FeedCardFragment feedCardFragment;
+        switch (currentFragment){
+            case 0:
+                feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+                setAdapterItensCard(feedListFragment.getListFeed());
+                break;
+            case 1:
+                feedListFragment = (FeedListFragment) mNavigator.getFragment(0);
+                feedCardFragment = (FeedCardFragment) mNavigator.getFragment(1);
+                if (feedListFragment != null)
+                    feedListFragment.setAdapterItens(feedCardFragment.getListFeed());
+                break;
         }
 
         //Toast.makeText(getActivity(), ServerMessage.getServerMessage(getActivity(), response.getMessage()), Toast.LENGTH_LONG).show();

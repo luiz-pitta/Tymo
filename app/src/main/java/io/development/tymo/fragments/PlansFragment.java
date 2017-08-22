@@ -96,7 +96,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     private BroadcastReceiver mMessageReceiverRefresh = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            mSwipeRefreshLayout.setRefreshing(true);
+            setProgress();
         }
     };
 
@@ -375,6 +375,16 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
                 break;
         }
+    }
+
+    private void setProgress(){
+        CommitmentFragment commitmentFragment = (CommitmentFragment) mNavigator.getFragment(0);
+        if (commitmentFragment != null)
+            commitmentFragment.showProgressCommitment();
+
+        FreeFragment freeFragment = (FreeFragment) mNavigator.getFragment(1);
+        if (freeFragment != null)
+            freeFragment.showProgressFree();
     }
 
     private void setPlans(Plans plans, boolean showRefresh) {

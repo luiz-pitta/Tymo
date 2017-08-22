@@ -282,6 +282,10 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
             recyclerView.scrollToPosition(0);
     }
 
+    public List<Object> getListFeed(){
+        return adapter.getAllData();
+    }
+
     private void initSwipe(){
         simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT) {
 

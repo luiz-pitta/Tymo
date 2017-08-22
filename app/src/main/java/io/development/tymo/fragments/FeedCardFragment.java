@@ -211,6 +211,11 @@ public class FeedCardFragment extends Fragment {
             return 0;
     }
 
+    public List<Object> getListFeed(){
+        return adapter.getAllData();
+    }
+
+
     private void updateInviteRequest(InviteRequest inviteRequest) {
 
         mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)

@@ -95,7 +95,7 @@ public class CommitmentFragment extends Fragment{
     }
 
     public void showProgressCommitment(){
-        if(recyclerView != null) {
+        if(recyclerView != null && weekAdapter.getCount() > 0) {
             weekAdapter.clear();
             recyclerView.showProgress();
         }

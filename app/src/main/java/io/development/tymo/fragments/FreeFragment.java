@@ -105,7 +105,7 @@ public class FreeFragment extends Fragment {
     }
 
     public void showProgressFree(){
-        if(recyclerView != null) {
+        if(recyclerView != null && weekAdapter.getCount() > 0) {
             weekAdapter.clear();
             recyclerView.showProgress();
         }
