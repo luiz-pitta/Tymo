@@ -43,6 +43,7 @@ import io.development.tymo.model_server.FreeTimeServer;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.ReminderWrapper;
 import io.development.tymo.models.CompareModel;
+import io.development.tymo.models.WeekModel;
 import io.development.tymo.models.cards.ActivityCard;
 import io.development.tymo.models.cards.Flag;
 import io.development.tymo.models.cards.FreeTime;
@@ -69,6 +70,37 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
         private EasyRecyclerView mRecyclerView;
         private PlansCardsAdapter adapter;
         private FirebaseAnalytics mFirebaseAnalytics;
+
+        private View.OnClickListener onClickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Object obj = adapter.getItem(0);
+                FreeTime freeTime = (FreeTime) obj;
+                DateTymo dateTymo = new DateTymo();
+                Activity activity = (Activity) context;
+
+                dateTymo.setDay(dateList.get(0));
+                dateTymo.setMonth(dateList.get(1));
+                dateTymo.setYear(dateList.get(2));
+
+                dateTymo.setHour(Integer.valueOf(freeTime.getTime().substring(0, 2)));
+                dateTymo.setMinute(Integer.valueOf(freeTime.getTime().substring(3, 5)));
+                dateTymo.setHourEnd(Integer.valueOf(freeTime.getTime().substring(6, 8)));
+                dateTymo.setMinuteEnd(Integer.valueOf(freeTime.getTime().substring(9, 11)));
+                CreatePopUpDialogFragment createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
+                        CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
+                        Utilities.TYPE_COMPARE, null);
+
+                if(!freeTime.isInPast()) {
+                    createPopUpDialogFragment.setCallback(callback);
+                    createPopUpDialogFragment.setListFriends(compareList.get(getAdapterPosition()).getListFriends());
+                    createPopUpDialogFragment.setAloneInCompare(getItemCount() == 1);
+                    createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+                }else {
+                    createDialogMessage();
+                }
+            }
+        };
 
         public CompareUserViewHolder(View view) {
             super(view);
@@ -270,8 +302,33 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
         holder.adapter.clear();
         if (!free)
             holder.adapter.addAll(getPlansItemData(compare.getActivities(), compare.isInPast()));
-        else
-            holder.adapter.addAll(getPlansItemData(compare.getFree(), compare.isInPast()));
+        else {
+            boolean freeAllDay = false;
+            if(compare.getFree().size() == 1)
+                freeAllDay = isFreeAllDay((FreeTimeServer)compare.getFree().get(0));
+
+            if(!freeAllDay) {
+                holder.mRecyclerView.setEmptyView(R.layout.empty_free_time);
+                holder.adapter.addAll(getPlansItemData(compare.getFree(), compare.isInPast()));
+                holder.mRecyclerView.getEmptyView().setOnClickListener(null);
+            }else {
+                holder.adapter.addAll(getPlansItemData(compare.getFree(), compare.isInPast()));
+                holder.mRecyclerView.setEmptyView(R.layout.empty_free_all_day);
+                holder.mRecyclerView.getEmptyView().setOnClickListener(holder.onClickListener);
+                holder.mRecyclerView.showEmpty();
+            }
+
+
+        }
+    }
+
+    private boolean isFreeAllDay(FreeTimeServer freeTimeServer){
+        int minute_start = freeTimeServer.getMinuteStart();
+        int hour_start = freeTimeServer.getHourStart();
+        int minute_end = freeTimeServer.getMinuteEnd();
+        int hour_end  = freeTimeServer.getHourEnd();
+        return minute_start == 0 && minute_end == 59
+                && hour_start == 0 && hour_end == 23;
     }
 
     @Override

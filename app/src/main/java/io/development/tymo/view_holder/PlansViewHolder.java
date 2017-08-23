@@ -78,6 +78,45 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private User friend;
     private boolean free;
 
+    private View.OnClickListener onClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Object obj = adapter.getItem(0);
+            Activity activity = (Activity) context;
+            FreeTime freeTime = (FreeTime) obj;
+            PlansAdapter plansAdapter = getOwnerAdapter();
+            WeekModel weekModel = plansAdapter.getItem(getAdapterPosition());
+            DateTymo dateTymo = new DateTymo();
+
+            dateTymo.setDay(weekModel.getDay());
+            dateTymo.setMonth(weekModel.getMonth());
+            dateTymo.setYear(weekModel.getYear());
+
+            dateTymo.setHour(Integer.valueOf(freeTime.getTime().substring(0, 2)));
+            dateTymo.setMinute(Integer.valueOf(freeTime.getTime().substring(3, 5)));
+            dateTymo.setHourEnd(Integer.valueOf(freeTime.getTime().substring(6, 8)));
+            dateTymo.setMinuteEnd(Integer.valueOf(freeTime.getTime().substring(9, 11)));
+
+            Calendar now = Calendar.getInstance();
+            Calendar day_card = Calendar.getInstance();
+            day_card.set(weekModel.getYear(), weekModel.getMonth() - 1, weekModel.getDay());
+
+            boolean show = !isInThePast(weekModel.getYear(), weekModel.getMonth(), weekModel.getDay(),
+                    now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+
+            CreatePopUpDialogFragment createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
+                    CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
+                    screen, friend);
+
+            if (show) {
+                createPopUpDialogFragment.setCallback(callback);
+                createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
+            } else {
+                createDialogMessage(weekModel.getYear(), weekModel.getMonth(), weekModel.getDay(),
+                        now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
+            }
+        }
+    };
 
     public PlansViewHolder(ViewGroup parent, Context context, int screen, CreatePopUpDialogFragment.RefreshLayoutPlansCallback callback, User usr, boolean free) {
         super(parent, R.layout.list_item_plans);
@@ -118,7 +157,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
             @Override
             public void onItemClick(View view, int position, MotionEvent e) {
                 Object obj = adapter.getItem(position);
-                boolean show = true;
+                boolean show;
 
                 Activity activity = (Activity) context;
                 CreatePopUpDialogFragment createPopUpDialogFragment;
@@ -308,8 +347,20 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         }
         else {
             if(isStored){
-                mRecyclerView.setEmptyView(R.layout.empty_free_time);
-                adapter.addAll(setPlansItemData(week.getFree(), false));
+                boolean freeAllDay = false;
+                if(week.getFree().size() == 1)
+                    freeAllDay = isFreeAllDay((FreeTimeServer)week.getFree().get(0));
+
+                if(!freeAllDay) {
+                    mRecyclerView.setEmptyView(R.layout.empty_free_time);
+                    adapter.addAll(setPlansItemData(week.getFree(), false));
+                    mRecyclerView.getEmptyView().setOnClickListener(null);
+                }else {
+                    adapter.addAll(setPlansItemData(week.getFree(), false));
+                    mRecyclerView.setEmptyView(R.layout.empty_free_all_day);
+                    mRecyclerView.getEmptyView().setOnClickListener(onClickListener);
+                    mRecyclerView.showEmpty();
+                }
 
                 if (week.getPaint())
                     dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
@@ -327,6 +378,15 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     public void setBefore3Months(){
         mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
         mRecyclerView.showEmpty();
+    }
+
+    private boolean isFreeAllDay(FreeTimeServer freeTimeServer){
+        int minute_start = freeTimeServer.getMinuteStart();
+        int hour_start = freeTimeServer.getHourStart();
+        int minute_end = freeTimeServer.getMinuteEnd();
+        int hour_end  = freeTimeServer.getHourEnd();
+        return minute_start == 0 && minute_end == 59
+                && hour_start == 0 && hour_end == 23;
     }
 
     private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {

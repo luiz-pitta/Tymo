@@ -47,27 +47,31 @@ public class TymoMessagingService extends FirebaseMessagingService {
             updateNotificationStartToday();
 
         if(notification_push) {
-            if (type.matches("adm")) {
-                sendNotificationAdm(map.get("title"));
-            }else if (type.matches("engagement")) {
-                if (map.get("activated").matches("true")) {
-                    sendNotificationEngagement(map.get("title"), map.get("text"));
-                }
-            } else {
-                String name = map.get("name");
-                int number_solicitation = Integer.valueOf(map.get("n_solicitation"));
-
-                if (type.matches("people"))
-                    sendNotificationPeople(name, number_solicitation);
-                else if (type.matches("peopleAccept")) {
-                    sendNotificationPeopleAccept(name, number_solicitation);
-                } else if (type.matches("invite")) {
-                    sendNotificationInvite(number_solicitation);
-                } else if (type.matches("inviteAccept")) {
-                    sendNotificationInviteAccept(map.get("title"), name, number_solicitation);
-                } else if (type.matches("cancel")) {
-                    sendNotificationCancel(map.get("title"), name, number_solicitation);
-                }
+            String name = map.get("name");
+            switch (type){
+                case "people":
+                    sendNotificationPeople(name, Integer.valueOf(map.get("n_solicitation")));
+                    break;
+                case "peopleAccept":
+                    sendNotificationPeopleAccept(name, Integer.valueOf(map.get("n_solicitation")));
+                    break;
+                case "invite":
+                    sendNotificationInvite(Integer.valueOf(map.get("n_solicitation")));
+                    break;
+                case "inviteAccept":
+                    sendNotificationInviteAccept(map.get("title"), name, Integer.valueOf(map.get("n_solicitation")));
+                    break;
+                case "cancel":
+                    sendNotificationCancel(map.get("title"), name, Integer.valueOf(map.get("n_solicitation")));
+                    break;
+                case "adm":
+                    sendNotificationAdm(map.get("title"));
+                    break;
+                case "engagement":
+                    if (map.get("activated").matches("true")) {
+                        sendNotificationEngagement(map.get("title"), map.get("text"));
+                    }
+                    break;
             }
         }
     }
