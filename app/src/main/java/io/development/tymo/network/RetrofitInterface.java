@@ -202,6 +202,9 @@ public interface RetrofitInterface {
     @POST("get_act2/{id}")
     Observable<Response> getActivity2(@Path("id") long id, @Body ActivityServer activityServer);
 
+    @POST("get_activity_information/{id}")
+    Observable<Response> getActivityInformation(@Path("id") long id);
+
     @POST("get_invite_request/{email}")
     Observable<Response> getInviteRequest(@Path("email") String email, @Body DateTymo date);
 

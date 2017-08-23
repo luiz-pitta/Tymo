@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,9 +18,12 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.adapter.BaseViewHolder;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -359,6 +363,15 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     adapter.addAll(setPlansItemData(week.getFree(), false));
                     mRecyclerView.setEmptyView(R.layout.empty_free_all_day);
                     mRecyclerView.getEmptyView().setOnClickListener(onClickListener);
+                    new Actor.Builder(SpringSystem.create(), mRecyclerView.getEmptyView())
+                            .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                            .onTouchListener(new View.OnTouchListener() {
+                                @Override
+                                public boolean onTouch(View v, MotionEvent event) {
+                                    return true;
+                                }
+                            })
+                            .build();
                     mRecyclerView.showEmpty();
                 }
 

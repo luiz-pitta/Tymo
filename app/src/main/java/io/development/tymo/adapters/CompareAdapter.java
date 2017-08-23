@@ -24,8 +24,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.jude.easyrecyclerview.EasyRecyclerView;
+import com.tumblr.backboard.Actor;
+import com.tumblr.backboard.imitator.ToggleImitator;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -315,6 +318,15 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 holder.adapter.addAll(getPlansItemData(compare.getFree(), compare.isInPast()));
                 holder.mRecyclerView.setEmptyView(R.layout.empty_free_all_day);
                 holder.mRecyclerView.getEmptyView().setOnClickListener(holder.onClickListener);
+                new Actor.Builder(SpringSystem.create(), holder.mRecyclerView.getEmptyView())
+                        .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                        .onTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                return true;
+                            }
+                        })
+                        .build();
                 holder.mRecyclerView.showEmpty();
             }
 

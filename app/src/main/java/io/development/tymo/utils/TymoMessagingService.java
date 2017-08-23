@@ -20,6 +20,7 @@ import io.development.tymo.activities.ContactsActivity;
 import io.development.tymo.activities.FriendRequestActivity;
 import io.development.tymo.activities.InviteActivity;
 import io.development.tymo.activities.MainActivity;
+import io.development.tymo.activities.ShowActivity;
 
 import static android.app.NotificationChannel.DEFAULT_CHANNEL_ID;
 
@@ -65,12 +66,22 @@ public class TymoMessagingService extends FirebaseMessagingService {
                     sendNotificationCancel(map.get("title"), name, Integer.valueOf(map.get("n_solicitation")));
                     break;
                 case "adm":
-                    sendNotificationAdm(map.get("title"));
+                    sendNotificationAdm(map.get("title"), Long.valueOf(map.get("id")));
                     break;
                 case "engagement":
                     if (map.get("activated").matches("true")) {
                         sendNotificationEngagement(map.get("title"), map.get("text"));
                     }
+                    break;
+                case "changeActivity":
+                    sendNotificationChangeActivity(
+                            map.get("title"),
+                            Long.valueOf(map.get("id")),
+                            Boolean.valueOf(map.get("place")),
+                            Boolean.valueOf(map.get("date")),
+                            Boolean.valueOf(map.get("time")),
+                            Boolean.valueOf(map.get("description")),
+                            Boolean.valueOf(map.get("whatsapp")));
                     break;
             }
         }
@@ -115,9 +126,10 @@ public class TymoMessagingService extends FirebaseMessagingService {
         mNotificationManager.notify(Constants.INVITE, mBuilder.build());
     }
 
-    public void sendNotificationAdm(String title) {
+    public void sendNotificationAdm(String title, long id) {
 
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, ShowActivity.class);
+        intent.putExtra("act_id", id);
 
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 
@@ -222,16 +234,6 @@ public class TymoMessagingService extends FirebaseMessagingService {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(Constants.INVITE_ACCEPT, mBuilder.build());
-    }
-
-    private void updateSearchMessageToActivity() {
-        Intent intent = new Intent("search_update");
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-    }
-
-    private void updateNotificationStartToday() {
-        Intent intent = new Intent("notification_update");
-        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 
     public void sendNotificationEngagement(String title, String text) {
@@ -346,5 +348,67 @@ public class TymoMessagingService extends FirebaseMessagingService {
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         mNotificationManager.notify(Constants.PEOPLE, mBuilder.build());
+    }
+
+    public void sendNotificationChangeActivity(String title, long id, boolean place, boolean date, boolean time, boolean description, boolean whatsapp) {
+
+        String text = getString(R.string.push_notification_update_in_activity_title_1);
+        int count;
+
+        Intent intent = new Intent(this, ShowActivity.class);
+        intent.putExtra("act_id", id);
+        PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
+
+        count = (place ? 1 : 0) + (date ? 1 : 0) + (time ? 1 : 0) + (description ? 1 : 0) + (whatsapp ? 1 : 0);
+
+        if(count > 1)
+            text = getString(R.string.push_notification_update_in_activity_title_1);
+        else if(place)
+            text = getString(R.string.push_notification_update_in_activity_title_2);
+        else if(date)
+            text = getString(R.string.push_notification_update_in_activity_title_3);
+        else if(time)
+            text = getString(R.string.push_notification_update_in_activity_title_4);
+        else if(description)
+            text = getString(R.string.push_notification_update_in_activity_title_5);
+        else if(whatsapp)
+            text = getString(R.string.push_notification_update_in_activity_title_6);
+
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
+                        .setSmallIcon(R.drawable.ic_add_cube)
+                        .setContentTitle(text)
+                        .setContentIntent(pi)
+                        .setAutoCancel(true);
+
+        //Vibration
+        mBuilder.setVibrate(new long[]{500, 750});
+
+        //Ton
+        mBuilder.setSound(Settings.System.DEFAULT_NOTIFICATION_URI);
+
+        NotificationCompat.BigTextStyle bigTextStyle = new NotificationCompat.BigTextStyle();
+        bigTextStyle.setBigContentTitle(text);
+
+        mBuilder.setContentText(title);
+        bigTextStyle.bigText(title);
+
+        mBuilder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
+
+        mBuilder.setStyle(bigTextStyle);
+
+        NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        mNotificationManager.notify(Constants.UPDATE_ACT, mBuilder.build());
+    }
+
+    private void updateSearchMessageToActivity() {
+        Intent intent = new Intent("search_update");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+    }
+
+    private void updateNotificationStartToday() {
+        Intent intent = new Intent("notification_update");
+        LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
 }

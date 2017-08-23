@@ -122,6 +122,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private ActivityWrapper activityWrapper;
     private int selected = 0;
+    private long act_id;
 
     private ArrayList<User> userList = new ArrayList<>();
     private ArrayList<User> admList = new ArrayList<>();
@@ -236,19 +237,46 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_show");
 
+        if(activityWrapper != null) {
+            ActivityServer activityServer = new ActivityServer();
+            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+            activityServer.setId(0);
+            activityServer.setCreator(email);
+            activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+            setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
+        }else {
+            act_id = getIntent().getLongExtra("act_id", -1);
+            getActivityInformation(act_id);
+        }
+
+        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
+    }
+
+    private void getActivityInformation(long id) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().getActivityInformation(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseActivity, this::handleError));
+    }
+
+    private void handleResponseActivity(Response response) {
         ActivityServer activityServer = new ActivityServer();
+        ActivityServer activityServer2 = response.getActivityServer();
+
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
         activityServer.setId(0);
         activityServer.setCreator(email);
         activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
+        activityServer2.setId(act_id);
+        activityWrapper = new ActivityWrapper(activityServer2);
+
         setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
-        setProgress(true);
-
-        mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
-
     }
 
     public void refreshItems() {
