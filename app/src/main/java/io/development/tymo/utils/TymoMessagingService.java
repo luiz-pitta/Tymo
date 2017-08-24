@@ -22,9 +22,9 @@ import io.development.tymo.activities.InviteActivity;
 import io.development.tymo.activities.MainActivity;
 import io.development.tymo.activities.ShowActivity;
 
-import static android.app.NotificationChannel.DEFAULT_CHANNEL_ID;
-
 public class TymoMessagingService extends FirebaseMessagingService {
+
+    private String DEFAULT_CHANNEL_ID = "miscellaneous";
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
@@ -48,22 +48,21 @@ public class TymoMessagingService extends FirebaseMessagingService {
             updateNotificationStartToday();
 
         if(notification_push) {
-            String name = map.get("name");
             switch (type){
                 case "people":
-                    sendNotificationPeople(name, Integer.valueOf(map.get("n_solicitation")));
+                    sendNotificationPeople(map.get("name"), Integer.valueOf(map.get("n_solicitation")));
                     break;
                 case "peopleAccept":
-                    sendNotificationPeopleAccept(name, Integer.valueOf(map.get("n_solicitation")));
+                    sendNotificationPeopleAccept(map.get("name"), Integer.valueOf(map.get("n_solicitation")));
                     break;
                 case "invite":
                     sendNotificationInvite(Integer.valueOf(map.get("n_solicitation")));
                     break;
                 case "inviteAccept":
-                    sendNotificationInviteAccept(map.get("title"), name, Integer.valueOf(map.get("n_solicitation")));
+                    sendNotificationInviteAccept(map.get("title"), map.get("name"), Integer.valueOf(map.get("n_solicitation")));
                     break;
                 case "cancel":
-                    sendNotificationCancel(map.get("title"), name, Integer.valueOf(map.get("n_solicitation")));
+                    sendNotificationCancel(map.get("title"), map.get("name"), Integer.valueOf(map.get("n_solicitation")));
                     break;
                 case "adm":
                     sendNotificationAdm(map.get("title"), Long.valueOf(map.get("id")));
