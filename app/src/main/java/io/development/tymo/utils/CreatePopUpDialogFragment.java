@@ -183,6 +183,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             }
 
             private void updateInviteRequest(InviteRequest inviteRequest) {
+                if(screen == Utilities.TYPE_PLANS)
+                    refreshScreen(mContext);
 
                 mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -446,6 +448,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
                                 activity.setVisibility(Constants.ACT);
+                                if(activityServer.getIdFacebook() > 0 || activityServer.getIdGoogle() != null)
+                                    activity.setInvitationType(1);
+
                                 deleteFlagActReminder(activityServer.getId(), activity);
                             } else if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.undo_unfit))) {
                                 InviteRequest inviteRequest = new InviteRequest();

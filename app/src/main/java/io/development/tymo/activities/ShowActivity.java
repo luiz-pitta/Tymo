@@ -1299,7 +1299,10 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                activity.setVisibility(Constants.FLAG);
+                if(getActivity().getIdFacebook() > 0 || getActivity().getIdGoogle() != null)
+                    activity.setInvitationType(1);
+
+                activity.setVisibility(Constants.ACT);
                 deleteFlagActReminder(getActivity().getId(), activity);
 
                 dg.dismiss();

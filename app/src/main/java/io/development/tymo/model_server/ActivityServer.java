@@ -18,6 +18,8 @@ public class ActivityServer implements Serializable {
     private long id_facebook;
     private String id_google;
 
+    boolean deleted_activity_imported = false;
+
     private long date_time_now;
 
     private User user;
@@ -148,6 +150,14 @@ public class ActivityServer implements Serializable {
         this.distance = activityServer.getDistance();
 
         this.date_time_now = activityServer.getDateTimeNow();
+    }
+
+    public boolean isDeletedActivityImported() {
+        return deleted_activity_imported;
+    }
+
+    public void setDeletedActivityImported(boolean deleted_activity_imported) {
+        this.deleted_activity_imported = deleted_activity_imported;
     }
 
     public ArrayList<ActivityServer> getListRepeatedActvities() {

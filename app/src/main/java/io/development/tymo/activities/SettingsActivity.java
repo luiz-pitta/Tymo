@@ -1173,6 +1173,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
 
             activityServer.setCreator(creator);
+            activityServer.setDeletedActivityImported(true);
         }
         catch (Exception e){
 
@@ -1197,6 +1198,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         activityServer.setInvitationType(0);
         activityServer.setWhatsappGroupLink("");
         activityServer.addTags(getResources().getString(R.string.settings_import_from_google_agenda_tag));
+        activityServer.setDeletedActivityImported(true);
 
         activityServer.setCubeColor(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube));
         activityServer.setCubeColorUpper(ContextCompat.getColor(getApplication(), R.color.google_agenda_cube_light));
