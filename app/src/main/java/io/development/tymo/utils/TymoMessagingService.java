@@ -77,11 +77,7 @@ public class TymoMessagingService extends FirebaseMessagingService {
                     sendNotificationChangeActivity(
                             map.get("title"),
                             Long.valueOf(map.get("id")),
-                            Boolean.valueOf(map.get("place")),
-                            Boolean.valueOf(map.get("date")),
-                            Boolean.valueOf(map.get("time")),
-                            Boolean.valueOf(map.get("description")),
-                            Boolean.valueOf(map.get("whatsapp")));
+                            Integer.valueOf(map.get("typeUpdate")));
                     break;
             }
         }
@@ -350,29 +346,34 @@ public class TymoMessagingService extends FirebaseMessagingService {
         mNotificationManager.notify(Constants.PEOPLE, mBuilder.build());
     }
 
-    public void sendNotificationChangeActivity(String title, long id, boolean place, boolean date, boolean time, boolean description, boolean whatsapp) {
+    public void sendNotificationChangeActivity(String title, long id, int type) {
 
         String text = getString(R.string.push_notification_update_in_activity_title_1);
-        int count;
 
         Intent intent = new Intent(this, ShowActivity.class);
         intent.putExtra("act_id", id);
         PendingIntent pi = PendingIntent.getActivity(this, 0, intent, 0);
 
-        count = (place ? 1 : 0) + (date ? 1 : 0) + (time ? 1 : 0) + (description ? 1 : 0) + (whatsapp ? 1 : 0);
-
-        if(count > 1)
-            text = getString(R.string.push_notification_update_in_activity_title_1);
-        else if(place)
-            text = getString(R.string.push_notification_update_in_activity_title_2);
-        else if(date)
-            text = getString(R.string.push_notification_update_in_activity_title_3);
-        else if(time)
-            text = getString(R.string.push_notification_update_in_activity_title_4);
-        else if(description)
-            text = getString(R.string.push_notification_update_in_activity_title_5);
-        else if(whatsapp)
-            text = getString(R.string.push_notification_update_in_activity_title_6);
+        switch (type) {
+            case 1:
+                text = getString(R.string.push_notification_update_in_activity_title_1);
+                break;
+            case 2:
+                text = getString(R.string.push_notification_update_in_activity_title_2);
+                break;
+            case 3:
+                text = getString(R.string.push_notification_update_in_activity_title_3);
+                break;
+            case 4:
+                text = getString(R.string.push_notification_update_in_activity_title_4);
+                break;
+            case 5:
+                text = getString(R.string.push_notification_update_in_activity_title_5);
+                break;
+            case 6:
+                text = getString(R.string.push_notification_update_in_activity_title_6);
+                break;
+        }
 
         NotificationCompat.Builder mBuilder =
                 new NotificationCompat.Builder(this, DEFAULT_CHANNEL_ID)
