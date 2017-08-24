@@ -224,6 +224,14 @@ public class FeedCardFragment extends Fragment {
                 .subscribe(this::handleDeleteIgnoreConfirm,this::handleError));
     }
 
+    private void ignoreActivityRequest(InviteRequest inviteRequest) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().ignoreActivity(inviteRequest)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleDeleteIgnoreConfirm,this::handleError));
+    }
+
     private void setFlagInformation(long id, FlagServer flagServer) {
         flagServer.setCreator("");
         mSubscriptions.add(NetworkUtil.getRetrofit().getFlag2(id, flagServer)
@@ -421,11 +429,32 @@ public class FeedCardFragment extends Fragment {
                     super.onDismissed(transientBottomBar, event);
 
                     if (erase) {
+                        ActivityServer activityServer = null;
+                        FlagServer flagServer = null;
+                        InviteRequest inviteRequest = new InviteRequest();
 
                         Bundle bundle = new Bundle();
                         bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.feed_invitation_activity_ignored) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                        SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                        inviteRequest.setEmail(email);
+                        inviteRequest.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+
+                        if (item instanceof ActivityServer) {
+                            inviteRequest.setType(Constants.ACT);
+                            activityServer = (ActivityServer) item;
+                            inviteRequest.setIdAct(activityServer.getId());
+                        } else if (item instanceof FlagServer) {
+                            inviteRequest.setType(Constants.FLAG);
+                            flagServer = (FlagServer) item;
+                            inviteRequest.setIdAct(flagServer.getId());
+                        }
+
+                        ignoreActivityRequest(inviteRequest);
 
                         FeedListFragment feedListFragment = (FeedListFragment) getFragmentManager().findFragmentByTag("list");
                         if (feedListFragment != null)

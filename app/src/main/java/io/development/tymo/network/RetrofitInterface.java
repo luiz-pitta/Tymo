@@ -69,7 +69,6 @@ public interface RetrofitInterface {
     @POST("visualize_invite_request/{email}")
     Observable<Response> visualizeInviteRequest(@Path("email") String email);
 
-
     @POST("delete_push_notification")
     Observable<Response> deletePushNotification(@Body UserPushNotification pushNotification);
 
@@ -93,6 +92,9 @@ public interface RetrofitInterface {
 
     @POST("cancel_friend_request")
     Observable<Response> cancelFriendRequest(@Body FriendRequest friendRequest);
+
+    @POST("ignore_activity")
+    Observable<Response> ignoreActivity(@Body InviteRequest inviteRequest);
 
     @POST("update_invite_request")
     Observable<Response> updateInviteRequest(@Body InviteRequest inviteRequest);
