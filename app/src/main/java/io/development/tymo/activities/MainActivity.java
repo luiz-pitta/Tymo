@@ -110,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private UpdateButtonController controller;
     private RelativeLayout mainMenu;
 
+    private GraphRequest request = null;
+
     private MaterialSearchView searchView;
     private FloatingActionButton fab;
     private ImageView icon1;
@@ -200,16 +202,20 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponseGoogleImported(Response response) {}
 
     private void importFromFacebookRequest(){
-        GraphRequest request = GraphRequest.newMeRequest(
-                AccessToken.getCurrentAccessToken(),
-                new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject object, GraphResponse response) {
 
+        ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
+
+        request = GraphRequest.newGraphPathRequest(
+                AccessToken.getCurrentAccessToken(),
+                "/me/events?limit=100",
+                new GraphRequest.Callback() {
+                    @Override
+                    public void onCompleted(GraphResponse response) {
+                        JSONObject object = response.getJSONObject();
                         // Application code
                         try {
-                            JSONArray events = object.getJSONObject("events").getJSONArray("data");
-                            ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
+                            JSONArray events = object.getJSONArray("data");
+
                             for(int i=0;i<events.length();i++){
                                 JSONObject jsonObject = events.getJSONObject(i);
                                 ActivityServer server = createActivity(jsonObject);
@@ -217,9 +223,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     list_activities_to_import.add(server);
                             }
 
-                            if(list_activities_to_import.size() > 0)
-                                importFromFacebook(list_activities_to_import);
-                            else {
+                            if(list_activities_to_import.size() > 0) {
+                                GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
+                                if(nextRequest != null) {
+                                    nextRequest.setCallback(request.getCallback());
+                                    nextRequest.executeAsync();
+                                }else
+                                    importFromFacebook(list_activities_to_import);
                             }
                         }
                         catch (Exception  e){
@@ -227,7 +237,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 });
         Bundle parameters = new Bundle();
-        parameters.putString("fields", "id, email, events");
+        parameters.putString("fields", "id, name, description, place, start_time, end_time");
         request.setParameters(parameters);
         request.executeAsync();
     }
@@ -312,17 +322,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int month = calendar.get(Calendar.MONTH) + 1;
             int year = calendar.get(Calendar.YEAR);
 
-            int day_today = c.get(Calendar.DAY_OF_MONTH);
-            int month_today = c.get(Calendar.MONTH)+1;
-            int year_today = c.get(Calendar.YEAR);
-
-            if(year < year_today)
-                return null;
-            else if(year == year_today && month < month_today)
-                return null;
-            else if(year == year_today && month == month_today && day < day_today)
-                return null;
-
             activityServer.setDayStart(day);
             activityServer.setMonthStart(month);
             activityServer.setYearStart(year);
@@ -337,6 +336,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int d2 = c2.get(Calendar.DAY_OF_MONTH);
             int minute2 = c2.get(Calendar.MINUTE);
             int hour2 = c2.get(Calendar.HOUR_OF_DAY);
+
+            int day_today = c.get(Calendar.DAY_OF_MONTH);
+            int month_today = c.get(Calendar.MONTH)+1;
+            int year_today = c.get(Calendar.YEAR);
+
+            if(y2 < year_today)
+                return null;
+            else if(y2 == year_today && m2 < month_today)
+                return null;
+            else if(y2 == year_today && m2 == month_today && d2 < day_today)
+                return null;
 
             LocalDate starts = new LocalDate(year, month, day);
             LocalDate ends = new LocalDate(y2, m2, d2);
@@ -376,6 +386,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             activityServer.setDateTimeEnd(calendar2.getTimeInMillis());
 
             activityServer.setCreator(creator);
+            activityServer.setDeletedActivityImported(true);
         }
         catch (Exception e){
 
