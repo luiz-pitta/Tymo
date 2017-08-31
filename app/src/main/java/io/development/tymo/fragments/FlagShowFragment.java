@@ -196,8 +196,8 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
         String time = String.format("%02d", h1) + ":" + String.format("%02d", min1);
         String timeNow = String.format("%02d", h2) + ":" + String.format("%02d", min2);
 
-        text1.setText(R.string.free_time_past_dialog_text_1);
-        text2.setText(getActivity().getString(R.string.free_time_past_dialog_text_2, date + " - " + time, dateNow + " - " + timeNow));
+        text1.setText(R.string.signalize_past_dialog_text_1);
+        text2.setText(getActivity().getString(R.string.signalize_past_dialog_text_2, date + " - " + time, dateNow + " - " + timeNow));
         buttonText2.setText(R.string.close);
 
         buttonText2.setOnClickListener(new View.OnClickListener() {
@@ -312,7 +312,6 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
 
     private boolean isFlagInPast(FlagServer flagServer) {
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -7);
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
         int year = c.get(Calendar.YEAR);

@@ -7,6 +7,7 @@
     android:orientation="vertical">
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="50dp"
@@ -14,7 +15,7 @@
         android:gravity="center"
         android:text="@string/empty_my_contacts_profile_text_1"
         android:textColor="@color/grey_500"
-        android:textSize="18sp"
+        android:textSize="16sp"
         android:textStyle="bold" />
 
     <TextView

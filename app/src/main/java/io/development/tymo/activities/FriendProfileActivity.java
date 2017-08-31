@@ -91,6 +91,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     private ProgressBar progressIcon;
     private DateFormat dateFormat;
     private Rect rect;
+    private boolean prived = false;
 
     private Calendar currentTime;
     private static int currentSecond, currentMinute, currentHour;
@@ -602,7 +603,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     private void handleResponse(Response response) {
 
         user = response.getUser();
-        boolean prived;
 
         profileName.setText(user.getName());
 
@@ -1020,6 +1020,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
             Intent friend = new Intent(FriendProfileActivity.this, AboutFriendActivity.class);
             friend.putExtra("user_about_friend", new UserWrapper(user));
+            friend.putExtra("privated", prived);
             startActivity(friend);
         } else if (view == previousWeek) {
             Bundle bundle = new Bundle();

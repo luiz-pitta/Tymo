@@ -556,11 +556,12 @@
     <string name="validation_field_invalid_required_field">Campo obrigatório inválido</string>
     <string name="validation_field_login_password_invalid">Senha inválida</string>
     <string name="signalize_past_dialog_text_1">Ops! Você não pode sinalizar usuários para algo do passado</string>
-    <string name="signalize_past_dialog_text_2">Término do sinalizador: %1$s\nHoje: %2$s</string>
+    <string name="signalize_past_dialog_text_2">Término do sinalizador:\n%1$s\n\nHoje:\n%2$s</string>
     <string name="invite_past_dialog_text_1">Ops! Você não pode convidar usuários para algo do passado</string>
-    <string name="invite_past_dialog_text_2">Término da atividade: %1$s\nHoje: %2$s</string>
+    <string name="invite_past_dialog_text_2">Término da atividade:\n%1$s\n\nHoje:\n%2$s</string>
     <string name="free_time_past_dialog_text_1">Ops! Você está tentando criar algo no passado</string>
-    <string name="free_time_past_dialog_text_2">Intervalo selecionado: %1$s\nHoje: %2$s</string>
+    <string name="free_time_past_dialog_text_2">Intervalo selecionado:\n%1$s\n\nHoje:\n%2$s</string>
+    <string name="free_time_past_dialog_text_3">Dia selecionado:\n%1$s\n\nHoje:\n%2$s</string>
     <string name="validation_field_my_interests_minimum">Selecione no mínimo 5 interesses</string>
     <string name="validation_field_my_interests_selected_none">Você ainda não selecionou nenhum interesse</string>
     <string name="validation_field_my_interests_selected_one">Você só selecionou 1</string>

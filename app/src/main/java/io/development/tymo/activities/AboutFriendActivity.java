@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -36,6 +38,9 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
     private TextView birthDate, gender, locationWhereLives, professionWhereWorks, whereStudied;
     private DateFormat dateFormat;
     private FirebaseAnalytics mFirebaseAnalytics;
+    private LinearLayout emptyLayout;
+    private NestedScrollView scrollView;
+    private boolean privated;
 
     private User user;
 
@@ -46,6 +51,8 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
         UserWrapper userWrapper = (UserWrapper)getIntent().getSerializableExtra("user_about_friend");
         user = userWrapper.getUser();
 
+        privated = getIntent().getBooleanExtra("privated", false);
+
         setContentView(R.layout.activity_about);
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
@@ -54,10 +61,20 @@ public class AboutFriendActivity extends AppCompatActivity implements View.OnCli
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         profilePhoto = (ImageView) findViewById(R.id.profilePhoto);
         mTitle = (TextView) findViewById(R.id.text);
-
         fullName = (TextView) findViewById(R.id.fullName);
         description = (TextView) findViewById(R.id.description);
         url = (TextView) findViewById(R.id.infoToContact);
+        emptyLayout = (LinearLayout) findViewById(R.id.emptyLayout);
+        scrollView = (NestedScrollView) findViewById(R.id.scrollView);
+
+        if(privated){
+            emptyLayout.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.GONE);
+        }
+        else{
+            emptyLayout.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
+        }
 
         fullName.setText(user.getName());
 

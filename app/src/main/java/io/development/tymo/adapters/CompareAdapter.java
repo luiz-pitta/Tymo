@@ -96,13 +96,16 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
 
                 createPopUpDialogFragment.setFromCompare(true);
 
+                Calendar now = Calendar.getInstance();
+
                 if(!freeTime.isInPast()) {
                     createPopUpDialogFragment.setCallback(callback);
                     createPopUpDialogFragment.setListFriends(compareList.get(getAdapterPosition()).getListFriends());
                     createPopUpDialogFragment.setAloneInCompare(getItemCount() == 1);
                     createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
                 }else {
-                    createDialogMessage();
+                    createDialogMessage(dateTymo.getYear(), dateTymo.getMonth(), dateTymo.getDay(),
+                            now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
                 }
             }
         };
@@ -229,13 +232,16 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
 
                         createPopUpDialogFragment.setFromCompare(true);
 
+                        Calendar now = Calendar.getInstance();
+
                         if(!freeTime.isInPast()) {
                             createPopUpDialogFragment.setCallback(callback);
                             createPopUpDialogFragment.setListFriends(compareList.get(getAdapterPosition()).getListFriends());
                             createPopUpDialogFragment.setAloneInCompare(getItemCount() == 1);
                             createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
                         }else {
-                            createDialogMessage();
+                            createDialogMessage(dateTymo.getYear(), dateTymo.getMonth(), dateTymo.getDay(),
+                                    now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
                         }
                     }
 
@@ -365,7 +371,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
         notifyItemRangeRemoved(0, size);
     }
 
-    private void createDialogMessage() {
+    private void createDialogMessage(int y1, int m1, int d1, int y2, int m2, int d2) {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.dialog_message, null);
 
@@ -377,14 +383,17 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
 
         button1.setVisibility(View.GONE);
         editText.setVisibility(View.GONE);
-        text2.setVisibility(View.GONE);
 
         Dialog dg = new Dialog(context, R.style.NewDialog);
 
         dg.setContentView(customView);
         dg.setCanceledOnTouchOutside(true);
 
+        String date = String.format("%02d", d1) + "/" + String.format("%02d", m1) + "/" + String.valueOf(y1);
+        String dateNow = String.format("%02d", d2) + "/" + String.format("%02d", m2) + "/" + String.valueOf(y2);
+
         text1.setText(R.string.free_time_past_dialog_text_1);
+        text2.setText(context.getString(R.string.free_time_past_dialog_text_2, date, dateNow));
         buttonText2.setText(R.string.close);
 
         buttonText2.setOnClickListener(new View.OnClickListener() {

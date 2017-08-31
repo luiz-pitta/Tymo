@@ -917,12 +917,13 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                 createPopUpDialogFragment.setListFriends(listPerson);
                 createPopUpDialogFragment.show(getFragmentManager(), "custom");
             }else {
-                createDialogMessage();
+                createDialogMessage(dateTymo.getYear(), dateTymo.getMonth(), dateTymo.getDay(),
+                        now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
             }
         }
     }
 
-    private void createDialogMessage() {
+    private void createDialogMessage(int y1, int m1, int d1, int y2, int m2, int d2) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.dialog_message, null);
 
@@ -934,14 +935,17 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
 
         button1.setVisibility(View.GONE);
         editText.setVisibility(View.GONE);
-        text2.setVisibility(View.GONE);
 
         Dialog dg = new Dialog(this, R.style.NewDialog);
 
         dg.setContentView(customView);
         dg.setCanceledOnTouchOutside(true);
 
+        String date = String.format("%02d", d1) + "/" + String.format("%02d", m1) + "/" + String.valueOf(y1);
+        String dateNow = String.format("%02d", d2) + "/" + String.format("%02d", m2) + "/" + String.valueOf(y2);
+
         text1.setText(R.string.free_time_past_dialog_text_1);
+        text2.setText(getString(R.string.free_time_past_dialog_text_3, date, dateNow));
         buttonText2.setText(R.string.close);
 
         buttonText2.setOnClickListener(new View.OnClickListener() {
