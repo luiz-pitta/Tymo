@@ -808,7 +808,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                         Intent intent;
 
                         if(activityServer.getLat() != -500) {
-                            if(activityServer.getLat() != -250.0 && activityServer.getLat() != -250.0) {
+                            if(activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
                                 intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
                                         "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
                             }
