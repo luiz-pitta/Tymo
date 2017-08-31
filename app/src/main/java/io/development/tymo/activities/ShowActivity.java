@@ -805,16 +805,22 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 locationBox.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = null;
-                        if(activityServer.getLat() != -500) {
-                            intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                                    "geo:" + activityServer.getLat() +
-                                            "," + activityServer.getLng() +
-                                            "?q=" + activityServer.getLat() +
-                                            "," + activityServer.getLng() +
-                                            "(" + activityServer.getLocation() + ")"));
-                        }else {
+                        Intent intent;
 
+                        if(activityServer.getLat() != -500) {
+                            if(activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
+                                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                        "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+                            }
+                            else {
+                                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                        "geo:" + activityServer.getLat() +
+                                                "," + activityServer.getLng() +
+                                                "?q=" + activityServer.getLat() +
+                                                "," + activityServer.getLng() +
+                                                "(" + activityServer.getLocation() + ")"));
+                            }
+                        }else {
                             intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
                                     "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
                         }

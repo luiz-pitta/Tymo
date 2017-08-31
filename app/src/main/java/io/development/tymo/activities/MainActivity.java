@@ -299,8 +299,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             try {
                 place = jsonObject.getJSONObject("place");
                 name_place = place.getString("name");
-                lat = place.getJSONObject("location").getDouble("latitude");
-                lng = place.getJSONObject("location").getDouble("longitude");
+                try {
+                    lat = place.getJSONObject("location").getDouble("latitude");
+                    lng = place.getJSONObject("location").getDouble("longitude");
+                } catch (Exception e) {
+                    lat = -250.0;
+                    lng = -250.0;
+                }
             } catch (Exception e) {
                 name_place = "";
                 lat = -500.0;
