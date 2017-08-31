@@ -41,7 +41,6 @@
                 android:gravity="center"
                 android:maxLines="2"
                 android:text="@string/card_holidays_text"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />

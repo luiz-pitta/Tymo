@@ -35,10 +35,9 @@
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
                 android:textStyle="bold"
-                android:textAllCaps="true"
                 android:text="@string/tutorial_welcome_text_1"
                 android:textColor="@color/grey_900"
-                android:textSize="16sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/text2"

@@ -55,7 +55,6 @@
                             android:gravity="center"
                             android:lines="1"
                             android:text="@string/create_activity"
-                            android:textAllCaps="true"
                             android:textColor="@color/grey_600"
                             android:textSize="16sp"
                             android:textStyle="bold" />

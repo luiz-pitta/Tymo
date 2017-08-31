@@ -45,7 +45,7 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/password"
@@ -61,7 +61,7 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/loginButton"
@@ -75,10 +75,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/login"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/forgot"
@@ -91,8 +89,7 @@
                 android:lines="1"
                 android:text="@string/login_forgot_text_1"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/facebookLoginButton"
@@ -105,7 +102,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/login_connect_with_facebook"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -122,7 +118,6 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/signin"
-                android:textAllCaps="true"
                 android:textColor="@color/deep_purple_400"
                 android:textSize="16sp"
                 android:textStyle="bold" />

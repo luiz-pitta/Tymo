@@ -46,7 +46,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:tabGravity="fill"
-            app:tabIndicatorHeight="3.5dp"
+            app:tabIndicatorHeight="4dp"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/deep_purple_400"
             app:tabTextAppearance="@style/MineCustomTabText" />
@@ -54,7 +54,7 @@
         <View
             android:id="@+id/horizontalBottomLine2"
             android:layout_width="match_parent"
-            android:layout_height="0.5dp"
+            android:layout_height="@dimen/horizontal_line_height"
             android:layout_gravity="bottom"
             android:background="@color/horizontal_line" />
     </FrameLayout>

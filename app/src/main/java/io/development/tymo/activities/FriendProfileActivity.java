@@ -79,9 +79,11 @@ import io.reactivex.schedulers.Schedulers;
 public class FriendProfileActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, View.OnClickListener,
         View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
+    private int mBackButtonColor, mBackButtonColorPressed;
+
     private ImageView mBackButton;
-    private TextView mText, friendshipRequestsText, progressText, btnCompare, aboutText, contactsText;
-    private ImageView icon2, calendarIcon;
+    private TextView friendshipRequestsText, progressText, btnCompare, aboutText, contactsText;
+    private ImageView calendarIcon;
     private ImageView profilePhoto, friendshipRequestsIcon, aboutIcon, contactsIcon;
     private LinearLayout mDateBox, friendshipRequestsBox, contactsBox, aboutBox;
     private RelativeLayout dateCompareBox, profilePhotoBox;
@@ -127,8 +129,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_friend);
 
-        findViewById(R.id.icon1).setVisibility(View.GONE);
-
         dateFormat = new DateFormat(this);
 
         mSubscriptions = new CompositeDisposable();
@@ -149,8 +149,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         btnCompare = (TextView) findViewById(R.id.btnCompare);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         mDateBox = (LinearLayout) findViewById(R.id.dateBox);
-        icon2 = (ImageView) findViewById(R.id.icon2);
-        mText = (TextView) findViewById(R.id.text);
         profilePhoto = (ImageView) findViewById(R.id.profilePhoto);
         friendshipRequestsBox = (LinearLayout) findViewById(R.id.friendshipRequestsBox);
         friendshipRequestsText = (TextView) findViewById(R.id.friendshipRequestsText);
@@ -183,9 +181,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         });
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
-
-
-        mText.setText(getIntent().getStringExtra("name"));
 
         mBackButton.setOnClickListener(this);
         mDateBox.setOnClickListener(this);
@@ -334,12 +329,21 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         if (bgProfile.size() > 0) {
 
             if (period == 3) {
+                mBackButtonColor = getResources().getColor(R.color.grey_900);
+                mBackButtonColorPressed = getResources().getColor(R.color.grey_600);
+                mBackButton.setColorFilter(getResources().getColor(R.color.grey_900));
                 profileName.setTextColor(getResources().getColor(R.color.grey_900));
                 profileDescription.setTextColor(getResources().getColor(R.color.grey_900));
             } else if (period == 2 || period == 4) {
+                mBackButtonColor = getResources().getColor(R.color.white);
+                mBackButtonColorPressed = getResources().getColor(R.color.grey_300);
+                mBackButton.setColorFilter(getResources().getColor(R.color.white));
                 profileName.setTextColor(getResources().getColor(R.color.white));
                 profileDescription.setTextColor(getResources().getColor(R.color.white));
             } else {
+                mBackButtonColor = getResources().getColor(R.color.white);
+                mBackButtonColorPressed = getResources().getColor(R.color.grey_300);
+                mBackButton.setColorFilter(getResources().getColor(R.color.white));
                 profileName.setTextColor(getResources().getColor(R.color.white));
                 profileDescription.setTextColor(getResources().getColor(R.color.white));
             }
@@ -462,9 +466,9 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         } else if (view == mBackButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+                mBackButton.setColorFilter(mBackButtonColor);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+                mBackButton.setColorFilter(mBackButtonColorPressed);
             }
         } else if (view == mDateBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
@@ -607,16 +611,11 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         else
             profileDescription.setVisibility(View.GONE);
 
-
-        icon2.setVisibility(View.INVISIBLE);
-        icon2.setOnClickListener(this);
-
         isTimeToChangeBackground();
 
         if (user.getCountKnows() > 0) {
             if (user.getFromFacebook() && user.isFacebookMessengerEnable()) {
-                //icon2.setVisibility(View.VISIBLE);
-                icon2.setImageDrawable(getResources().getDrawable(R.drawable.ic_facebook_messenger));
+                //facebook messenger
             }
             friendshipRequestsText.setText(getResources().getString(R.string.profile_friend_menu_friends));
             friendshipRequestsIcon.setImageResource(R.drawable.ic_person_check);
@@ -642,14 +641,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             dateCompareBox.setVisibility(View.GONE);
             findViewById(R.id.nextPreviousBox).setVisibility(View.GONE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.GONE);
-            profilePhotoBox.setOnClickListener(null);
-            contactsBox.setVisibility(View.GONE);
-            aboutBox.setVisibility(View.GONE);
         } else {
             prived = false;
             findViewById(R.id.nextPreviousBox).setVisibility(View.VISIBLE);
             findViewById(R.id.commitmentsFreeTimeBox).setVisibility(View.VISIBLE);
-            profilePhotoBox.setOnClickListener(this);
             contactsBox.setVisibility(View.VISIBLE);
             aboutBox.setVisibility(View.VISIBLE);
         }

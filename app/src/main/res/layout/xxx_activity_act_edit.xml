@@ -151,7 +151,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:padding="5dp"
-                            android:src="@drawable/ic_add"
+                            android:src="@drawable/ic_picture"
                             android:tint="@color/deep_purple_400" />
 
                         <TextView
@@ -161,14 +161,6 @@
                             android:text="@string/add_image"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/addImageIcon2"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_picture"
-                            android:tint="@color/deep_purple_400" />
 
                     </LinearLayout>
 
@@ -190,7 +182,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:padding="5dp"
-                            android:src="@drawable/ic_check"
+                            android:src="@drawable/ic_picture"
                             android:tint="@color/grey_600" />
 
                         <TextView
@@ -200,14 +192,6 @@
                             android:text="@string/add_image_loaded"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/loadedImageIcon2"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_picture"
-                            android:tint="@color/grey_600" />
 
                     </LinearLayout>
 
@@ -302,8 +286,9 @@
                         android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:padding="10dp"
                         android:layout_marginTop="20dp"
-                        android:backgroundTint="@color/grey_300"
+                        android:background="@drawable/bg_act_edit_box"
                         android:gravity="center_vertical"
                         android:hint="@string/hint_description"
                         android:inputType="textMultiLine"
@@ -655,7 +640,7 @@
                             android:layout_height="35dp"
                             android:layout_centerVertical="true"
                             android:padding="5dp"
-                            android:src="@drawable/ic_add"
+                            android:src="@drawable/ic_location"
                             android:tint="@color/deep_purple_400" />
 
                         <TextView
@@ -667,15 +652,6 @@
                             android:text="@string/add_local"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/locationIconAdd2"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_location"
-                            android:tint="@color/deep_purple_400" />
 
                     </LinearLayout>
 

@@ -34,9 +34,8 @@
                 android:layout_marginTop="30dp"
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_1"
-                android:textAllCaps="true"
                 android:textColor="@color/grey_600"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -150,9 +149,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/save_updates"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -169,9 +167,8 @@
                 android:paddingLeft="10dp"
                 android:paddingRight="10dp"
                 android:text="@string/cancel"
-                android:textAllCaps="true"
                 android:textColor="@color/grey_900"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
         </LinearLayout>
 

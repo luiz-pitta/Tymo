@@ -36,7 +36,6 @@
                 android:layout_marginTop="30dp"
                 android:gravity="center_horizontal"
                 android:text="@string/login_register_facebook_incomplete_text_1"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold"
@@ -50,7 +49,8 @@
                 android:gravity="center_horizontal"
                 android:text="@string/login_register_facebook_incomplete_text_2"
                 android:textColor="@color/white"
-                android:textSize="16sp"
+                android:textSize="14sp"
+                android:layout_marginBottom="30dp"
                 android:visibility="gone" />
 
             <RelativeLayout
@@ -58,6 +58,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="30dp"
                 android:layout_marginTop="30dp">
 
                 <LinearLayout
@@ -68,15 +69,14 @@
                     android:orientation="vertical">
 
                     <ImageView
-                        android:layout_width="70dp"
-                        android:layout_height="70dp"
+                        android:layout_width="60dp"
+                        android:layout_height="60dp"
                         android:src="@drawable/ic_add" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="@string/register_photo"
-                        android:textAllCaps="true"
                         android:textColor="@color/white"
                         android:textSize="14sp" />
 
@@ -84,12 +84,12 @@
 
                 <ImageView
                     android:id="@+id/photo"
-                    android:layout_width="150dp"
-                    android:layout_height="150dp" />
+                    android:layout_width="120dp"
+                    android:layout_height="120dp" />
 
                 <View
-                    android:layout_width="152dp"
-                    android:layout_height="152dp"
+                    android:layout_width="122dp"
+                    android:layout_height="122dp"
                     android:background="@drawable/bg_shape_oval_white_corners" />
             </RelativeLayout>
 
@@ -97,7 +97,7 @@
                 android:id="@+id/name"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_full_name"
                 android:imeOptions="actionDone"
@@ -107,13 +107,13 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/email"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_email"
                 android:imeOptions="actionDone"
@@ -123,13 +123,13 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <EditText
                 android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:background="@color/white_opacity_10"
                 android:hint="@string/register_password"
                 android:imeOptions="actionDone"
@@ -139,18 +139,17 @@
                 android:paddingRight="20dp"
                 android:textColor="@color/white"
                 android:textColorHint="@color/white"
-                android:textSize="18sp" />
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/birthDateText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="@string/register_birthday"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <LinearLayout
@@ -158,6 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:clickable="true"
                 android:orientation="horizontal">
 
@@ -176,7 +176,7 @@
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/birthMonth"
@@ -193,7 +193,7 @@
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
                 <TextView
                     android:id="@+id/birthYear"
@@ -210,7 +210,7 @@
                     android:paddingRight="20dp"
                     android:textColor="@color/white"
                     android:textColorHint="@color/white"
-                    android:textSize="18sp" />
+                    android:textSize="16sp" />
 
             </LinearLayout>
 
@@ -218,15 +218,15 @@
                 android:id="@+id/genderText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
                 android:ellipsize="end"
                 android:lines="1"
                 android:text="@string/register_gender"
                 android:textColor="@color/white"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="bold" />
 
             <com.jaredrummler.materialspinner.MaterialSpinner
+                android:layout_marginBottom="20dp"
                 android:id="@+id/genderPicker"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
@@ -236,7 +236,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 app:ms_arrow_tint="@color/white"
                 app:ms_background_color="@color/deep_purple_400_light"
@@ -249,7 +249,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
                 android:background="@drawable/btn_login_advance"
                 android:ellipsize="end"
                 android:gravity="center"
@@ -257,10 +256,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/advance"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
 
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

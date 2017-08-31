@@ -32,7 +32,19 @@
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:gravity="center"
-        android:text="@string/empty_profile_privated"
+        android:textStyle="bold"
+        android:text="@string/empty_profile_privated_text_1"
+        android:textColor="@color/grey_500"
+        android:textSize="18sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:layout_marginRight="50dp"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:text="@string/empty_profile_privated_text_2"
         android:textColor="@color/grey_500"
         android:textSize="16sp" />
 

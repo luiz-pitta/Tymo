@@ -2,7 +2,6 @@ package io.development.tymo.fragments;
 
 
 import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -59,7 +59,8 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     private ViewPager viewPager;
     private TabLayout tabLayout;
     private FilterServer filter;
-    
+    private TextView menuTitle;
+
     private DateFormat dateFormat;
 
     private String email;
@@ -86,7 +87,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         dateFormat = new DateFormat(getActivity());
     }
 
@@ -105,27 +106,33 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
         viewPager = (ViewPager) view.findViewById(R.id.viewpager);
         tabLayout = (TabLayout) view.findViewById(R.id.tabs);
+        menuTitle = (TextView) view.findViewById(R.id.menuTitle);
         setupViewPager(viewPager);
 
         SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        menuTitle.setText(R.string.search_menu_users);
 
         tabLayout.setupWithViewPager(viewPager);
 
         for (int i = 0; i < tabLayout.getTabCount(); i++) {
             View custom_tab = getActivity().getLayoutInflater().inflate(R.layout.custom_tab_layout, null);
             ImageView imageView = custom_tab.findViewById(R.id.icon);
-            switch(i){
+            switch (i) {
                 case 0:
                     imageView.setImageResource(R.drawable.ic_people_three);
+                    imageView.setTag(R.drawable.ic_people_three);
                     imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
                     break;
                 case 1:
                     imageView.setImageResource(R.drawable.ic_my_commitments);
+                    imageView.setTag(R.drawable.ic_my_commitments);
                     imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
                     break;
                 case 2:
                     imageView.setImageResource(R.drawable.ic_public);
+                    imageView.setTag(R.drawable.ic_public);
                     imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
                     break;
             }
@@ -136,7 +143,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         tabLayout.addOnTabSelectedListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
         doSearch(".");
     }
@@ -146,7 +153,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         mSubscriptions.add(NetworkUtil.getRetrofit().getSearchResults(query)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void getSearchResultsFilter(String email, FilterServer filterServer) {
@@ -154,7 +161,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         mSubscriptions.add(NetworkUtil.getRetrofit().getSearchFilter(email, filterServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseFilter,this::handleError));
+                .subscribe(this::handleResponseFilter, this::handleError));
     }
 
     private void handleResponseFilter(Response response) {
@@ -170,22 +177,22 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         listMyCommitment.clear();
         listPeople.clear();
 
-        if(filter.getLat() != -500){
-            for(i=0;i<whats_going_act.size();i++){
+        if (filter.getLat() != -500) {
+            for (i = 0; i < whats_going_act.size(); i++) {
                 ActivityServer activityServer = whats_going_act.get(i);
-                if(activityServer.getLat() != -500
+                if (activityServer.getLat() != -500
                         && Utilities.distance(activityServer.getLat(), activityServer.getLng(),
-                        filter.getLat(), filter.getLng()) > 10){
+                        filter.getLat(), filter.getLng()) > 10) {
                     whats_going_act.remove(activityServer);
                     i--;
                 }
             }
 
-            for(i=0;i<my_commit_act.size();i++){
+            for (i = 0; i < my_commit_act.size(); i++) {
                 ActivityServer activityServer = my_commit_act.get(i);
-                if(activityServer.getLat() != -500
+                if (activityServer.getLat() != -500
                         && Utilities.distance(activityServer.getLat(), activityServer.getLng(),
-                        filter.getLat(), filter.getLng()) > 10){
+                        filter.getLat(), filter.getLng()) > 10) {
                     my_commit_act.remove(activityServer);
                     i--;
                 }
@@ -197,65 +204,65 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             my_commit_reminderServer.clear();
         }
 
-        if(filter.getWeekDays().size() > 0){
+        if (filter.getWeekDays().size() > 0) {
             List<Integer> listWeek = filter.getWeekDays();
 
-            for(i=0;i<whats_going_act.size();i++){
+            for (i = 0; i < whats_going_act.size(); i++) {
                 ActivityServer activityServer = whats_going_act.get(i);
-                if(!Utilities.isActivityInWeekDay(listWeek, activityServer.getDayStart(),
-                        activityServer.getMonthStart(), activityServer.getYearStart(),activityServer.getDayEnd(),
-                        activityServer.getMonthEnd(), activityServer.getYearEnd())){
+                if (!Utilities.isActivityInWeekDay(listWeek, activityServer.getDayStart(),
+                        activityServer.getMonthStart(), activityServer.getYearStart(), activityServer.getDayEnd(),
+                        activityServer.getMonthEnd(), activityServer.getYearEnd())) {
                     whats_going_act.remove(activityServer);
                     i--;
                 }
             }
 
-            for(i=0;i<whats_going_flagServer.size();i++){
+            for (i = 0; i < whats_going_flagServer.size(); i++) {
                 FlagServer flagServer = whats_going_flagServer.get(i);
-                if(!Utilities.isActivityInWeekDay(listWeek, flagServer.getDayStart(),
-                        flagServer.getMonthStart(), flagServer.getYearStart(),flagServer.getDayEnd(),
-                        flagServer.getMonthEnd(), flagServer.getYearEnd())){
+                if (!Utilities.isActivityInWeekDay(listWeek, flagServer.getDayStart(),
+                        flagServer.getMonthStart(), flagServer.getYearStart(), flagServer.getDayEnd(),
+                        flagServer.getMonthEnd(), flagServer.getYearEnd())) {
                     whats_going_flagServer.remove(flagServer);
                     i--;
                 }
             }
 
-            for(i=0;i<my_commit_act.size();i++){
+            for (i = 0; i < my_commit_act.size(); i++) {
                 ActivityServer activityServer = my_commit_act.get(i);
-                if(!Utilities.isActivityInWeekDay(listWeek, activityServer.getDayStart(),
-                        activityServer.getMonthStart(), activityServer.getYearStart(),activityServer.getDayEnd(),
-                        activityServer.getMonthEnd(), activityServer.getYearEnd())){
+                if (!Utilities.isActivityInWeekDay(listWeek, activityServer.getDayStart(),
+                        activityServer.getMonthStart(), activityServer.getYearStart(), activityServer.getDayEnd(),
+                        activityServer.getMonthEnd(), activityServer.getYearEnd())) {
                     my_commit_act.remove(activityServer);
                     i--;
                 }
             }
 
-            for(i=0;i<my_commit_flagServer.size();i++){
+            for (i = 0; i < my_commit_flagServer.size(); i++) {
                 FlagServer flagServer = my_commit_flagServer.get(i);
-                if(!Utilities.isActivityInWeekDay(listWeek, flagServer.getDayStart(),
-                        flagServer.getMonthStart(), flagServer.getYearStart(),flagServer.getDayEnd(),
-                        flagServer.getMonthEnd(), flagServer.getYearEnd())){
+                if (!Utilities.isActivityInWeekDay(listWeek, flagServer.getDayStart(),
+                        flagServer.getMonthStart(), flagServer.getYearStart(), flagServer.getDayEnd(),
+                        flagServer.getMonthEnd(), flagServer.getYearEnd())) {
                     my_commit_flagServer.remove(flagServer);
                     i--;
                 }
             }
 
-            for(i=0;i<my_commit_reminderServer.size();i++){
+            for (i = 0; i < my_commit_reminderServer.size(); i++) {
                 ReminderServer reminderServer = my_commit_reminderServer.get(i);
-                if(!Utilities.isActivityInWeekDay(listWeek, reminderServer.getDayStart(),
+                if (!Utilities.isActivityInWeekDay(listWeek, reminderServer.getDayStart(),
                         reminderServer.getMonthStart(), reminderServer.getYearStart(), reminderServer.getDayStart(),
-                        reminderServer.getMonthStart(), reminderServer.getYearStart())){
+                        reminderServer.getMonthStart(), reminderServer.getYearStart())) {
                     my_commit_reminderServer.remove(reminderServer);
                     i--;
                 }
             }
         }
 
-        for(i = 0; i < whats_going_act.size(); i++) {
+        for (i = 0; i < whats_going_act.size(); i++) {
             ActivityServer activityServer = whats_going_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(),activityServer.getMonthStart()-1,activityServer.getDayStart());
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -268,11 +275,11 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             listWhats.add(new ActivitySearch(activityServer.getTitle(), date, this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
 
-        for(i = 0; i < whats_going_flagServer.size(); i++) {
+        for (i = 0; i < whats_going_flagServer.size(); i++) {
             FlagServer flagServer = whats_going_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(flagServer.getYearStart(),flagServer.getMonthStart()-1,flagServer.getDayStart());
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -282,14 +289,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
 
-            listWhats.add(new FlagSearch(flagServer.getTitle(),date,this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
+            listWhats.add(new FlagSearch(flagServer.getTitle(), date, this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
         }
 
-        for(i = 0; i < my_commit_act.size(); i++) {
+        for (i = 0; i < my_commit_act.size(); i++) {
             ActivityServer activityServer = my_commit_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(),activityServer.getMonthStart()-1,activityServer.getDayStart());
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -301,21 +308,20 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.equals(activityServer.getCreatorEmail())){
+            if (email.equals(activityServer.getCreatorEmail())) {
                 creator = this.getResources().getString(R.string.created_by_me);
-            }
-            else{
+            } else {
                 creator = this.getResources().getString(R.string.created_by, activityServer.getCreator());
             }
 
-            listMyCommitment.add(new ActivitySearch(activityServer.getTitle(),date, creator, activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
+            listMyCommitment.add(new ActivitySearch(activityServer.getTitle(), date, creator, activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
 
-        for(i = 0; i < my_commit_flagServer.size(); i++) {
+        for (i = 0; i < my_commit_flagServer.size(); i++) {
             FlagServer flagServer = my_commit_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(flagServer.getYearStart(),flagServer.getMonthStart()-1,flagServer.getDayStart());
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -327,21 +333,20 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.equals(flagServer.getCreatorEmail())){
+            if (email.equals(flagServer.getCreatorEmail())) {
                 creator = this.getResources().getString(R.string.created_by_me);
-            }
-            else{
+            } else {
                 creator = this.getResources().getString(R.string.created_by, flagServer.getCreator());
             }
 
-            listMyCommitment.add(new FlagSearch(flagServer.getTitle(),date, creator, flagServer.getType(), flagServer));
+            listMyCommitment.add(new FlagSearch(flagServer.getTitle(), date, creator, flagServer.getType(), flagServer));
         }
 
-        for(i = 0; i < my_commit_reminderServer.size(); i++) {
+        for (i = 0; i < my_commit_reminderServer.size(); i++) {
             ReminderServer reminderServer = my_commit_reminderServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(reminderServer.getYearStart(),reminderServer.getMonthStart()-1,reminderServer.getDayStart());
+            calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", reminderServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -351,14 +356,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date;
 
-            if (hourStart.matches("00") && minuteStart.matches("00")){
+            if (hourStart.matches("00") && minuteStart.matches("00")) {
                 date = this.getResources().getString(R.string.date_format_3, dayOfWeekStart, dayStart, monthStart, yearStart);
-            }
-            else{
+            } else {
                 date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
-            listMyCommitment.add(new ReminderSearch(reminderServer.getTitle(),date,this.getResources().getString(R.string.my_reminder), reminderServer));
+            listMyCommitment.add(new ReminderSearch(reminderServer.getTitle(), date, this.getResources().getString(R.string.my_reminder), reminderServer));
         }
 
         Collections.sort(listWhats, new Comparator<Object>() {
@@ -375,13 +379,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
         });
 
-        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment)adapter.getItem(WHATS_GOING);
+        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment) adapter.getItem(WHATS_GOING);
         searchWhatsFragment.setAdapterItens(listWhats);
 
-        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment)adapter.getItem(MY_PLANS);
+        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment) adapter.getItem(MY_PLANS);
         searchMyCommitmentFragment.setAdapterItens(listMyCommitment);
 
-        for(i = 0; i < people.size(); i++) {
+        for (i = 0; i < people.size(); i++) {
             User user = people.get(i);
             listPeople.add(user);
         }
@@ -393,7 +397,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
         });
 
-        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment)adapter.getItem(PEOPLE);
+        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment) adapter.getItem(PEOPLE);
         searchPeopleFragment.setAdapterItens(listPeople);
 
     }
@@ -411,11 +415,11 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         listMyCommitment.clear();
         listPeople.clear();
 
-        for(int i = 0; i < whats_going_act.size(); i++) {
+        for (int i = 0; i < whats_going_act.size(); i++) {
             ActivityServer activityServer = whats_going_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(),activityServer.getMonthStart()-1,activityServer.getDayStart());
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -425,14 +429,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
 
-            listWhats.add(new ActivitySearch(activityServer.getTitle(),date,this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
+            listWhats.add(new ActivitySearch(activityServer.getTitle(), date, this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
 
-        for(int i = 0; i < whats_going_flagServer.size(); i++) {
+        for (int i = 0; i < whats_going_flagServer.size(); i++) {
             FlagServer flagServer = whats_going_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(flagServer.getYearStart(),flagServer.getMonthStart()-1,flagServer.getDayStart());
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -442,7 +446,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
 
-            listWhats.add(new FlagSearch(flagServer.getTitle(),date,this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
+            listWhats.add(new FlagSearch(flagServer.getTitle(), date, this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
         }
 
         Collections.sort(listWhats, new Comparator<Object>() {
@@ -452,14 +456,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
         });
 
-        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment)adapter.getItem(WHATS_GOING);
+        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment) adapter.getItem(WHATS_GOING);
         searchWhatsFragment.setAdapterItens(listWhats);
 
-        for(int i = 0; i < my_commit_act.size(); i++) {
+        for (int i = 0; i < my_commit_act.size(); i++) {
             ActivityServer activityServer = my_commit_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(),activityServer.getMonthStart()-1,activityServer.getDayStart());
+            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -471,21 +475,20 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.equals(activityServer.getCreatorEmail())){
+            if (email.equals(activityServer.getCreatorEmail())) {
                 creator = this.getResources().getString(R.string.created_by_me);
-            }
-            else{
+            } else {
                 creator = this.getResources().getString(R.string.created_by, activityServer.getCreator());
             }
 
-            listMyCommitment.add(new ActivitySearch(activityServer.getTitle(),date, creator, activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
+            listMyCommitment.add(new ActivitySearch(activityServer.getTitle(), date, creator, activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
 
-        for(int i = 0; i < my_commit_flagServer.size(); i++) {
+        for (int i = 0; i < my_commit_flagServer.size(); i++) {
             FlagServer flagServer = my_commit_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(flagServer.getYearStart(),flagServer.getMonthStart()-1,flagServer.getDayStart());
+            calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -497,21 +500,20 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String creator;
 
-            if (email.equals(flagServer.getCreatorEmail())){
+            if (email.equals(flagServer.getCreatorEmail())) {
                 creator = this.getResources().getString(R.string.created_by_me);
-            }
-            else{
+            } else {
                 creator = this.getResources().getString(R.string.created_by, flagServer.getCreator());
             }
 
-            listMyCommitment.add(new FlagSearch(flagServer.getTitle(),date, creator, flagServer.getType(), flagServer));
+            listMyCommitment.add(new FlagSearch(flagServer.getTitle(), date, creator, flagServer.getType(), flagServer));
         }
 
-        for(int i = 0; i < my_commit_reminderServer.size(); i++) {
+        for (int i = 0; i < my_commit_reminderServer.size(); i++) {
             ReminderServer reminderServer = my_commit_reminderServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
-            calendar.set(reminderServer.getYearStart(),reminderServer.getMonthStart()-1,reminderServer.getDayStart());
+            calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
             String dayStart = String.format("%02d", reminderServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
@@ -521,14 +523,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date;
 
-            if (hourStart.matches("00") && minuteStart.matches("00")){
+            if (hourStart.matches("00") && minuteStart.matches("00")) {
                 date = this.getResources().getString(R.string.date_format_3, dayOfWeekStart, dayStart, monthStart, yearStart);
-            }
-            else{
+            } else {
                 date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
-            listMyCommitment.add(new ReminderSearch(reminderServer.getTitle(),date, this.getResources().getString(R.string.my_reminder), reminderServer));
+            listMyCommitment.add(new ReminderSearch(reminderServer.getTitle(), date, this.getResources().getString(R.string.my_reminder), reminderServer));
         }
 
         Collections.sort(listMyCommitment, new Comparator<Object>() {
@@ -538,7 +539,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
         });
 
-        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment)adapter.getItem(MY_PLANS);
+        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment) adapter.getItem(MY_PLANS);
         searchMyCommitmentFragment.setAdapterItens(listMyCommitment);
 
         listPeople.addAll(people);
@@ -550,13 +551,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
         });
 
-        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment)adapter.getItem(PEOPLE);
+        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment) adapter.getItem(PEOPLE);
         searchPeopleFragment.setAdapterItens(listPeople);
 
     }
 
     private void handleError(Throwable error) {
-        if(Utilities.isDeviceOnline(getActivity()))
+        if (Utilities.isDeviceOnline(getActivity()))
             Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -568,12 +569,12 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        if(Build.VERSION.SDK_INT >= 17)
+        if (Build.VERSION.SDK_INT >= 17)
             adapter = new ViewPagerAdapter(getChildFragmentManager(), false);
         else
             adapter = new ViewPagerAdapter(getFragmentManager(), false);
 
-        adapter.addFragment(new SearchPeopleFragment(), getResources().getString(R.string.search_menu_people));
+        adapter.addFragment(new SearchPeopleFragment(), getResources().getString(R.string.search_menu_users));
         adapter.addFragment(new SearchMyCommitmentFragment(), getResources().getString(R.string.search_menu_my_commitments));
         adapter.addFragment(new SearchWhatsFragment(), getResources().getString(R.string.search_menu_what_is_going_on));
 
@@ -581,16 +582,16 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
 
-    public void doSearch(String mQuery){
+    public void doSearch(String mQuery) {
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "search" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "search" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment)adapter.getItem(MY_PLANS);
-        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment)adapter.getItem(WHATS_GOING);
-        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment)adapter.getItem(PEOPLE);
+        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment) adapter.getItem(MY_PLANS);
+        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment) adapter.getItem(WHATS_GOING);
+        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment) adapter.getItem(PEOPLE);
 
         searchMyCommitmentFragment.showProgress();
         searchPeopleFragment.showProgress();
@@ -598,7 +599,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH)+1;
+        int month = c.get(Calendar.MONTH) + 1;
         int year = c.get(Calendar.YEAR);
 
         mQuery = Utilities.cleanBackSlash(mQuery);
@@ -616,18 +617,18 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         getSearchResults(query);
     }
 
-    public void doSearchFilter(FilterServer filterServer){
+    public void doSearchFilter(FilterServer filterServer) {
 
         Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "searchFilter" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "searchFilter" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
         mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
         filter = filterServer;
 
-        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment)adapter.getItem(MY_PLANS);
-        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment)adapter.getItem(WHATS_GOING);
-        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment)adapter.getItem(PEOPLE);
+        SearchMyCommitmentFragment searchMyCommitmentFragment = (SearchMyCommitmentFragment) adapter.getItem(MY_PLANS);
+        SearchWhatsFragment searchWhatsFragment = (SearchWhatsFragment) adapter.getItem(WHATS_GOING);
+        SearchPeopleFragment searchPeopleFragment = (SearchPeopleFragment) adapter.getItem(PEOPLE);
 
         searchMyCommitmentFragment.showProgress();
         searchPeopleFragment.showProgress();
@@ -636,7 +637,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         filter.setLatCurrent(TymoApplication.getInstance().getLatLng().get(0));
         filter.setLngCurrent(TymoApplication.getInstance().getLatLng().get(1));
 
-        if(filter.isFilterFilled())
+        if (filter.isFilterFilled())
             getSearchResultsFilter(email, filter);
         else
             doSearch(filter.getQuery());
@@ -647,6 +648,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
         View custom_tab = tabLayout.getTabAt(tab.getPosition()).getCustomView();
         ImageView imageView = custom_tab.findViewById(R.id.icon);
         imageView.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
+        if (imageView.getTag().equals(R.drawable.ic_people_three)) {
+            menuTitle.setText(R.string.search_menu_users);
+        } else if (imageView.getTag().equals(R.drawable.ic_my_commitments)) {
+            menuTitle.setText(R.string.search_menu_my_commitments);
+        } else if (imageView.getTag().equals(R.drawable.ic_public)) {
+            menuTitle.setText(R.string.search_menu_what_is_going_on);
+        }
     }
 
     @Override
@@ -657,12 +665,13 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
     }
 
     @Override
-    public void onTabReselected(TabLayout.Tab tab) {}
+    public void onTabReselected(TabLayout.Tab tab) {
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mSubscriptions != null)
+        if (mSubscriptions != null)
             mSubscriptions.dispose();
     }
 

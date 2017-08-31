@@ -34,7 +34,6 @@
                 android:layout_marginTop="30dp"
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_1"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -47,23 +46,24 @@
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_2"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <TextView
                 android:id="@+id/text3"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="30dp"
+                android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/login_register_my_interests_text_3"
                 android:textColor="@color/deep_purple_100"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/white_opacity_10"
                 android:orientation="vertical"
+                android:layout_marginTop="20dp"
                 android:paddingBottom="5dp"
                 android:paddingTop="5dp">
 
@@ -116,7 +116,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginBottom="30dp"
-                android:layout_marginTop="30dp"
+                android:layout_marginTop="20dp"
                 android:background="@drawable/btn_login_advance"
                 android:ellipsize="end"
                 android:gravity="center"
@@ -124,10 +124,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/finish_register"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
         </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>

@@ -38,7 +38,6 @@
                 android:gravity="center"
                 android:lines="1"
                 android:text="@string/tutorial_1_title"
-                android:textAllCaps="true"
                 android:textColor="@color/deep_purple_400"
                 android:textSize="20sp"
                 android:textStyle="bold" />

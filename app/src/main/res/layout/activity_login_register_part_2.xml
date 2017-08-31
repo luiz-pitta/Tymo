@@ -47,7 +47,6 @@
                 android:layout_marginTop="20dp"
                 android:gravity="center"
                 android:text="@string/login_register_privacy_text_1"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -59,7 +58,7 @@
                 android:gravity="center"
                 android:text="@string/login_register_privacy_text_2"
                 android:textColor="@color/white"
-                android:textSize="16sp" />
+                android:textSize="14sp" />
 
             <com.jaredrummler.materialspinner.MaterialSpinner
                 android:id="@+id/visibilityCalendarPicker"
@@ -71,7 +70,7 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
-                android:textSize="18sp"
+                android:textSize="16sp"
                 android:textStyle="normal"
                 app:ms_arrow_tint="@color/white"
                 app:ms_background_color="@color/deep_purple_400_light"
@@ -92,10 +91,8 @@
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:text="@string/advance"
-                android:textAllCaps="true"
                 android:textColor="@color/white"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:textSize="16sp" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 

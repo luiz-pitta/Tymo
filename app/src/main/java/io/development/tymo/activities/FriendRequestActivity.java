@@ -74,7 +74,7 @@ public class FriendRequestActivity extends AppCompatActivity implements View.OnC
         mBackButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
 
-        m_title.setText(getResources().getString(R.string.profile_menu_pending_requests));
+        m_title.setText(getResources().getString(R.string.profile_menu_1));
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(true);

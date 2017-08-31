@@ -2,6 +2,7 @@ package io.development.tymo;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -9,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,7 +36,8 @@ import static io.development.tymo.utils.Validation.validatePasswordSize;
 
 public class LoginPasswordResetActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private TextView sendButton;
+    private TextView sendButton, text, text3;
+    private ImageView mBackButton;
     private EditText password, token;
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -49,9 +52,18 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
         password = (EditText) findViewById(R.id.password);
         token = (EditText) findViewById(R.id.token);
         sendButton = (TextView) findViewById(R.id.sendButton);
+        text = (TextView) findViewById(R.id.text);
+        text3 = (TextView) findViewById(R.id.text3);
+        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
 
+        mBackButton.setImageResource(R.drawable.ic_add);
+        mBackButton.setRotation(45);
+        findViewById(R.id.text2).setVisibility(View.GONE);
+        text.setText(R.string.password_reset_text_1);
         sendButton.setOnClickListener(this);
         sendButton.setOnTouchListener(this);
+        mBackButton.setOnClickListener(this);
+        mBackButton.setOnTouchListener(this);
 
         mSubscriptions = new CompositeDisposable();
 
@@ -59,9 +71,12 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
         Uri data = getIntent().getData();
         if(data != null) {
             mUser.setToken(data.getLastPathSegment());
+            text3.setText(R.string.password_reset_text_3);
         }
-        else
+        else {
             token.setVisibility(View.VISIBLE);
+            text3.setText(R.string.password_reset_text_2);
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -145,6 +160,14 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
         }
+        else if (view == mBackButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            onBackPressed();
+        }
     }
 
     @Override
@@ -174,6 +197,13 @@ public class LoginPasswordResetActivity extends AppCompatActivity implements Vie
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 sendButton.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_100));
                 sendButton.setBackground(ContextCompat.getDrawable(this, R.drawable.btn_login_advance_pressed));
+            }
+        }
+        else if (view == mBackButton) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_100));
             }
         }
         return false;

@@ -9,6 +9,10 @@ public class ActivityOfDay {
     private int year_start;
     private int minute_start;
     private int hour_start;
+    private boolean date_start_empty;
+    private boolean date_end_empty;
+    private boolean time_start_empty;
+    private boolean time_end_empty;
 
     private int type;
     private int commitment_same_hour;
@@ -24,6 +28,37 @@ public class ActivityOfDay {
         this.commitment_same_hour = 1;
     }
 
+    public void setDateStartEmpty(boolean date_start_empty) {
+        this.date_start_empty = date_start_empty;
+    }
+
+    public boolean getDateStartEmpty() {
+        return date_start_empty;
+    }
+
+    public void setDateEndEmpty(boolean date_end_empty) {
+        this.date_end_empty = date_end_empty;
+    }
+
+    public boolean getDateEndEmpty() {
+        return date_end_empty;
+    }
+
+    public void setTimeStartEmpty(boolean time_start_empty) {
+        this.time_start_empty = time_start_empty;
+    }
+
+    public boolean getTimeStartEmpty() {
+        return time_start_empty;
+    }
+
+    public void setTimeEndEmpty(boolean time_end_empty) {
+        this.time_end_empty = time_end_empty;
+    }
+
+    public boolean getTimeEndEmpty() {
+        return time_end_empty;
+    }
 
     public String getTitle() {
         return title;

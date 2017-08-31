@@ -94,7 +94,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         mBackButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
 
-        m_title.setText(getResources().getString(R.string.profile_menu_invitations));
+        m_title.setText(getResources().getString(R.string.profile_menu_2));
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(true);

@@ -181,7 +181,7 @@
             android:paddingRight="5dp"
             android:paddingTop="7dp"
             android:text="@string/ignore"
-            android:textColor="@color/deep_purple_200"
+            android:textColor="@color/deep_purple_300"
             android:textSize="14sp" />
 
         <TextView

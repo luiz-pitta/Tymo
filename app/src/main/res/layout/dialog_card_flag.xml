@@ -164,9 +164,8 @@
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:text="Text"
-                    android:textAllCaps="true"
                     android:textColor="@color/deep_purple_300"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -197,9 +196,8 @@
                     android:gravity="center"
                     android:lines="1"
                     android:text="@string/fit"
-                    android:textAllCaps="true"
                     android:textColor="@color/green_600"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
             </LinearLayout>

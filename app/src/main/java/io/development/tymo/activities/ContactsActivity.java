@@ -14,7 +14,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,8 +38,6 @@ import io.development.tymo.view_holder.ContactViewHolder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static android.view.View.GONE;
 
 public class ContactsActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, SwipeRefreshLayout.OnRefreshListener, ContactViewHolder.RefreshLayoutPlansCallback {
 
@@ -127,7 +124,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(700);
 
         if (email.matches(my_email)) {
-            m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
+            m_title.setText(getResources().getString(R.string.profile_menu_3));
             adapter = new ContactsAdapter(this, true, false, this);
             recyclerView.setEmptyView(R.layout.empty_my_contacts_profile);
         } else {
@@ -144,7 +141,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
         if (email.matches(my_email)) {
-            m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
+            m_title.setText(getResources().getString(R.string.profile_menu_3));
             adapter = new ContactsAdapter(this, true, false, this);
             getContacts(email);
         } else {
@@ -247,7 +244,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
                 user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
 
                 if (email.matches(my_email)) {
-                    m_title.setText(getResources().getString(R.string.profile_menu_my_contacts));
+                    m_title.setText(getResources().getString(R.string.profile_menu_3));
                     getContacts(email);
                 } else {
                     m_title.setText(getResources().getString(R.string.contacts_of, fullNameToShortName(full_name)));

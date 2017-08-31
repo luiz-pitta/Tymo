@@ -94,6 +94,8 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                         CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
                         Utilities.TYPE_COMPARE, null);
 
+                createPopUpDialogFragment.setFromCompare(true);
+
                 if(!freeTime.isInPast()) {
                     createPopUpDialogFragment.setCallback(callback);
                     createPopUpDialogFragment.setListFriends(compareList.get(getAdapterPosition()).getListFriends());
@@ -204,6 +206,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                             createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                     CreatePopUpDialogFragment.Type.CUSTOM, obj, Utilities.TYPE_COMPARE, null);
 
+                            createPopUpDialogFragment.setFromCompare(true);
                             createPopUpDialogFragment.setCallback(callback);
                             createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
                         }
@@ -223,6 +226,8 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                         createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
                                 Utilities.TYPE_COMPARE, null);
+
+                        createPopUpDialogFragment.setFromCompare(true);
 
                         if(!freeTime.isInPast()) {
                             createPopUpDialogFragment.setCallback(callback);

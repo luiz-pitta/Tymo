@@ -202,7 +202,7 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(logo);
 
-        m_title.setText(getResources().getString(R.string.profile_menu_settings));
+        m_title.setText(getResources().getString(R.string.profile_menu_4));
 
         if(!user.getPhoto().matches("")) {
             Glide.clear(profilePhoto);

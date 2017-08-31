@@ -68,9 +68,8 @@
                             android:ellipsize="end"
                             android:lines="1"
                             android:text="@string/settings_edit_profile"
-                            android:textAllCaps="true"
                             android:textColor="@color/grey_500"
-                            android:textSize="12sp" />
+                            android:textSize="14sp" />
 
                         <TextView
                             android:id="@+id/fullName"

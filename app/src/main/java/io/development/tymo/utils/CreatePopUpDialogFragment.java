@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.AddActivity;
+import io.development.tymo.activities.CompareActivity;
 import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.activities.ShowActivity;
@@ -75,6 +76,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
     private static User friend;
     private static Object obj;
     private static boolean alone = false;
+    private static boolean compare = false;
     private static RefreshLayoutPlansCallback callback;
     private static ArrayList<User> listFriends = new ArrayList<>();
 
@@ -165,7 +167,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             }
 
             private void deleteFlagActReminder(long id, ActivityServer activity) {
-                if(screen == Utilities.TYPE_PLANS)
+                if (screen == Utilities.TYPE_PLANS)
                     refreshScreen(mContext);
 
                 mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activity)
@@ -183,7 +185,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             }
 
             private void updateInviteRequest(InviteRequest inviteRequest) {
-                if(screen == Utilities.TYPE_PLANS)
+                if (screen == Utilities.TYPE_PLANS)
                     refreshScreen(mContext);
 
                 mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)
@@ -216,25 +218,25 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                     updateFeedMessageToActivity(mContext);
 
-                    if(activityServer != null){
+                    if (activityServer != null) {
                         d = activityServer.getDayStart();
                         m = activityServer.getMonthStart();
                         y = activityServer.getYearStart();
-                    }else if(flagServer != null){
+                    } else if (flagServer != null) {
                         d = flagServer.getDayStart();
                         m = flagServer.getMonthStart();
                         y = flagServer.getYearStart();
-                    }else if(reminderServer != null){
+                    } else if (reminderServer != null) {
                         d = reminderServer.getDayStart();
                         m = reminderServer.getMonthStart();
                         y = reminderServer.getYearStart();
-                    }else {
+                    } else {
                         d = day;
                         m = month;
                         y = year;
                     }
 
-                    if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+                    if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
                         updateNotificationStartToday(mContext);
                 }
             }
@@ -311,7 +313,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             }
 
             private void handleError(Throwable error) {
-                if(Utilities.isDeviceOnline(mContext))
+                if (Utilities.isDeviceOnline(mContext))
                     Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
                 //else
                 //    Toast.makeText(mContext, mContext.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -422,8 +424,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         if (type == Constants.FLAG) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
@@ -442,13 +444,13 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             }
                         } else if (type == Constants.ACT) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             if (buttonText2.getTag().toString().matches(mContext.getResources().getString(R.string.remove))) {
                                 activity.setVisibility(Constants.ACT);
-                                if(activityServer.getIdFacebook() > 0 || activityServer.getIdGoogle() != null)
+                                if (activityServer.getIdFacebook() > 0 || activityServer.getIdGoogle() != null)
                                     activity.setInvitationType(1);
 
                                 deleteFlagActReminder(activityServer.getId(), activity);
@@ -466,8 +468,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             }
                         } else if (type == Constants.REMINDER) {
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             activity.setVisibility(Constants.REMINDER);
@@ -540,7 +542,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             icon.setImageResource(R.drawable.ic_flag_unavailable);
                             customView.findViewById(R.id.profilesPhotos).setVisibility(View.GONE);
 
-                            if(screen == Utilities.TYPE_FRIEND || (screen == Utilities.TYPE_COMPARE && !isMe)) {
+                            if (screen == Utilities.TYPE_FRIEND || (screen == Utilities.TYPE_COMPARE && !isMe)) {
                                 buttonsBox.setVisibility(View.GONE);
                                 horizontalLine.setVisibility(View.GONE);
                             }
@@ -613,8 +615,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 context.startActivity(myIntent);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                 dialog.dismiss();
@@ -637,7 +639,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                     updateInviteRequest(inviteRequest);
                                     dialog.dismiss();
                                 } else {
-                                    createDialogRemove(flagServer.getRepeatType() > 0  && activityServer.getCreator().equals(email), Constants.FLAG, dialog);
+                                    createDialogRemove(flagServer.getRepeatType() > 0 && activityServer.getCreator().equals(email), Constants.FLAG, dialog);
                                 }
 
 
@@ -708,8 +710,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 context.startActivity(myIntent);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                 dialog.dismiss();
@@ -839,8 +841,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                 context.startActivity(myIntent);
 
                                 Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actOpen" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                 dialog.dismiss();
@@ -892,9 +894,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         TextView dateMonthYear = (TextView) customView.findViewById(R.id.dateMonthYear);
 
                         Calendar calendar = Calendar.getInstance();
-                        calendar.set(holiday.getYear(), holiday.getMonth()-1, holiday.getDay());
+                        calendar.set(holiday.getYear(), holiday.getMonth() - 1, holiday.getDay());
                         String day = String.format("%02d", holiday.getDay());
-                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH)+1);
+                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH) + 1);
                         String year = String.valueOf(holiday.getYear());
                         dateMonthYear.setText(context.getResources().getString(R.string.date_format_10, day, month, year));
 
@@ -918,9 +920,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         TextView dateMonthYear = (TextView) customView.findViewById(R.id.dateMonthYear);
 
                         Calendar calendar = Calendar.getInstance();
-                        calendar.set(birthday.getYear(), birthday.getMonth()-1, birthday.getDay());
+                        calendar.set(birthday.getYear(), birthday.getMonth() - 1, birthday.getDay());
                         String day = String.format("%02d", birthday.getDay());
-                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH)+1);
+                        String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH) + 1);
                         String year = String.valueOf(birthday.getYear());
                         dateMonthYear.setText(context.getResources().getString(R.string.date_format_10, day, month, year));
                     }
@@ -961,16 +963,21 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     ImageView reminderIcon = (ImageView) customView.findViewById(R.id.reminderIcon);
                     TextView flagText = (TextView) customView.findViewById(R.id.flagText);
                     ImageView flagIcon = (ImageView) customView.findViewById(R.id.flagIcon);
+                    TextView mainText = (TextView) customView.findViewById(R.id.mainText);
 
-                    if(alone){
+                    if (alone) {
                         reminderBox.setVisibility(View.VISIBLE);
                         customView.findViewById(R.id.reminderLine).setVisibility(View.VISIBLE);
-                    }else if (screen != Utilities.TYPE_PLANS) {
+                    } else if (screen != Utilities.TYPE_PLANS) {
                         reminderBox.setVisibility(View.GONE);
                         customView.findViewById(R.id.reminderLine).setVisibility(View.GONE);
                     }
 
-
+                    if (compare) {
+                        mainText.setText(R.string.card_free_time_compare_text);
+                    } else {
+                        mainText.setText(R.string.card_free_time_text);
+                    }
 
                     activityBox.setOnTouchListener(new View.OnTouchListener() {
                         @Override
@@ -1036,16 +1043,16 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             intent.putExtra("act_free", new ActivityWrapper(activityServerFreeTime));
 
                             if (screen != Utilities.TYPE_PLANS) {
-                                if(friend != null)
+                                if (friend != null)
                                     intent.putExtra("act_free_friend_usr", new UserWrapper(friend));
-                                else if(listFriends.size() > 0){
+                                else if (listFriends.size() > 0) {
                                     intent.putExtra("ListCreateActivityCompare", new UserWrapper(listFriends));
                                 }
                             }
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_free" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_free" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
@@ -1071,8 +1078,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             intent.putExtra("reminder_free_time", new ReminderWrapper(reminderServerFreeTime));
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminder_free_time" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminder_free_time" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
@@ -1107,15 +1114,15 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             if (screen != Utilities.TYPE_PLANS) {
                                 intent.putExtra("flag_free_friend", true);
-                                if(friend != null)
+                                if (friend != null)
                                     intent.putExtra("flag_free_friend_usr", new UserWrapper(friend));
-                                else if(listFriends.size() > 0)
+                                else if (listFriends.size() > 0)
                                     intent.putExtra("ListCreateActivityCompare", new UserWrapper(listFriends));
                             }
 
                             Bundle bundle = new Bundle();
-                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_free" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_free" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                             context.startActivity(intent);
@@ -1184,5 +1191,9 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
     public void setAloneInCompare(boolean a) {
         alone = a;
+    }
+
+    public void setFromCompare(boolean compare) {
+        this.compare = compare;
     }
 }

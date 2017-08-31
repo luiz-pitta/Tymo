@@ -31,11 +31,11 @@
 
                 <LinearLayout
                     android:id="@+id/editProfile"
-                    android:layout_marginTop="20dp"
-                    android:padding="10dp"
-                    android:layout_alignParentRight="true"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="20dp"
+                    android:padding="10dp">
 
                     <TextView
                         android:id="@+id/editProfileText"
@@ -49,7 +49,7 @@
                         android:paddingTop="5dp"
                         android:text="@string/edit_profile"
                         android:textColor="@color/white"
-                        android:textSize="12sp" />
+                        android:textSize="14sp" />
 
                 </LinearLayout>
 
@@ -254,7 +254,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_person_add"
+                                android:src="@drawable/ic_add_reminder"
                                 android:tint="@color/deep_purple_400" />
 
                             <TextView
@@ -262,15 +262,15 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_toRightOf="@+id/pendingRequestsIcon"
-                                android:background="@drawable/box_qty_notification"
+                                android:background="@drawable/box_qty_contacts"
                                 android:gravity="center"
                                 android:paddingBottom="2dp"
                                 android:paddingLeft="8dp"
                                 android:paddingRight="8dp"
                                 android:paddingTop="2dp"
                                 android:text="0"
-                                android:textColor="@color/white"
-                                android:textSize="14sp"
+                                android:textColor="@color/deep_purple_400"
+                                android:textSize="16sp"
                                 android:textStyle="normal" />
 
                         </RelativeLayout>
@@ -285,7 +285,7 @@
                             android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/profile_menu_pending_requests"
+                            android:text="@string/profile_menu_1"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -315,7 +315,7 @@
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_centerInParent="true"
-                                android:src="@drawable/ic_invitation"
+                                android:src="@drawable/ic_settings_notification_center"
                                 android:tint="@color/deep_purple_400" />
 
                             <TextView
@@ -331,7 +331,7 @@
                                 android:paddingTop="2dp"
                                 android:text="0"
                                 android:textColor="@color/white"
-                                android:textSize="14sp"
+                                android:textSize="16sp"
                                 android:textStyle="normal" />
 
                         </RelativeLayout>
@@ -346,7 +346,7 @@
                             android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/profile_menu_invitations"
+                            android:text="@string/profile_menu_2"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />
@@ -406,7 +406,7 @@
                                     android:paddingTop="2dp"
                                     android:text="0"
                                     android:textColor="@color/deep_purple_400"
-                                    android:textSize="14sp"
+                                    android:textSize="16sp"
                                     android:textStyle="normal" />
 
                             </RelativeLayout>
@@ -421,7 +421,7 @@
                                 android:maxLines="2"
                                 android:paddingLeft="10dp"
                                 android:paddingRight="10dp"
-                                android:text="@string/profile_menu_my_contacts"
+                                android:text="@string/profile_menu_3"
                                 android:textColor="@color/deep_purple_400"
                                 android:textSize="14sp"
                                 android:textStyle="bold" />
@@ -462,7 +462,7 @@
                             android:maxLines="2"
                             android:paddingLeft="10dp"
                             android:paddingRight="10dp"
-                            android:text="@string/profile_menu_settings"
+                            android:text="@string/profile_menu_4"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="bold" />

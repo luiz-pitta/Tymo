@@ -124,7 +124,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private ImageView cubeLowerBoxIcon, cubeUpperBoxIcon, pieceIcon, customizeCubeLowerBoxIcon, customizeCubeUpperBoxIcon, customizePieceIcon;
     private ImageView mBackButton, privacyIcon, privacyArrowIcon, repeatAddIcon;
     private ImageView clearDateStart, clearDateEnd, clearTimeStart, clearTimeEnd;
-    private ImageView addImageIcon, addImageIcon2, loadedImageIcon, loadedImageIcon2, addTagIcon, locationIconAdd, locationIconAdd2, locationIcon, locationIcon2;
+    private ImageView addImageIcon, loadedImageIcon, addTagIcon, locationIconAdd, locationIcon, locationIcon2;
     private RelativeLayout pieceBox, addPersonButton, addTagBox, locationBox, repeatAdd;
     private LinearLayout privacyBox, addImage, loadedImage, repeatBox, repeatNumberBox, locationBoxAdd, guestBox;
     private View addGuestButtonDivider, profilesPhotos, progressLoadingBox;
@@ -172,11 +172,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         addImage = (LinearLayout) findViewById(R.id.addImage);
         addImageIcon = (ImageView) findViewById(R.id.addImageIcon);
         addImageText = (TextView) findViewById(R.id.addImageText);
-        addImageIcon2 = (ImageView) findViewById(R.id.addImageIcon2);
         loadedImage = (LinearLayout) findViewById(R.id.loadedImage);
         loadedImageIcon = (ImageView) findViewById(R.id.loadedImageIcon);
         loadedImageText = (TextView) findViewById(R.id.loadedImageText);
-        loadedImageIcon2 = (ImageView) findViewById(R.id.loadedImageIcon2);
         titleEditText = (EditText) findViewById(R.id.title);
         titleMax = (TextView) findViewById(R.id.titleMax);
         tagGroup = (TagView) findViewById(R.id.tagGroup);
@@ -202,7 +200,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         locationBoxAdd = (LinearLayout) findViewById(R.id.locationBoxAdd);
         locationIconAdd = (ImageView) findViewById(R.id.locationIconAdd);
         locationTextAdd = (TextView) findViewById(R.id.locationTextAdd);
-        locationIconAdd2 = (ImageView) findViewById(R.id.locationIconAdd2);
         locationBox = (RelativeLayout) findViewById(R.id.locationBox);
         locationIcon = (ImageView) findViewById(R.id.locationIcon);
         locationIcon2 = (ImageView) findViewById(R.id.locationIcon2);
@@ -558,21 +555,17 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 addImageText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
                 addImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
-                addImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 addImageText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
                 addImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
-                addImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         } else if (view == loadedImage) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 loadedImageText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
                 loadedImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
-                loadedImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 loadedImageText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
                 loadedImageIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
-                loadedImageIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         } else if (view == addTagBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
@@ -594,11 +587,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 locationTextAdd.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
                 locationIconAdd.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
-                locationIconAdd2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 locationTextAdd.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
                 locationIconAdd.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
-                locationIconAdd2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         } else if (view == locationBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {

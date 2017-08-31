@@ -57,7 +57,6 @@
                             android:gravity="center"
                             android:lines="1"
                             android:text="@string/create_activity"
-                            android:textAllCaps="true"
                             android:textColor="@color/grey_600"
                             android:textSize="16sp"
                             android:textStyle="bold" />
@@ -147,7 +146,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:padding="5dp"
-                            android:src="@drawable/ic_add"
+                            android:src="@drawable/ic_picture"
                             android:tint="@color/deep_purple_400" />
 
                         <TextView
@@ -157,14 +156,6 @@
                             android:text="@string/add_image"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/addImageIcon2"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_picture"
-                            android:tint="@color/deep_purple_400" />
 
                     </LinearLayout>
 
@@ -186,7 +177,7 @@
                             android:layout_width="35dp"
                             android:layout_height="35dp"
                             android:padding="5dp"
-                            android:src="@drawable/ic_check"
+                            android:src="@drawable/ic_picture"
                             android:tint="@color/grey_600" />
 
                         <TextView
@@ -196,14 +187,6 @@
                             android:text="@string/add_image_loaded"
                             android:textColor="@color/grey_600"
                             android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/loadedImageIcon2"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_picture"
-                            android:tint="@color/grey_600" />
 
                     </LinearLayout>
 
@@ -651,7 +634,7 @@
                             android:layout_height="35dp"
                             android:layout_centerVertical="true"
                             android:padding="5dp"
-                            android:src="@drawable/ic_add"
+                            android:src="@drawable/ic_location"
                             android:tint="@color/deep_purple_400" />
 
                         <TextView
@@ -663,15 +646,6 @@
                             android:text="@string/add_local"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp" />
-
-                        <ImageView
-                            android:id="@+id/locationIconAdd2"
-                            android:layout_width="35dp"
-                            android:layout_height="35dp"
-                            android:layout_centerVertical="true"
-                            android:padding="5dp"
-                            android:src="@drawable/ic_location"
-                            android:tint="@color/deep_purple_400" />
 
                     </LinearLayout>
 

@@ -143,7 +143,6 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         icon2.setImageResource(R.drawable.ic_add);
-        icon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
 
         icon2.setOnClickListener(this);
         icon2.setOnTouchListener(this);
@@ -910,6 +909,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             boolean inPast = isInThePast(year2,month2, day2,
                     now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH));
 
+            createPopUpDialogFragment.setFromCompare(true);
+
             if(!inPast) {
                 createPopUpDialogFragment.setCallback(this);
                 createPopUpDialogFragment.setAloneInCompare(listPerson.size() == 1);
@@ -1188,9 +1189,9 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         }
         else if (view == icon2) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                icon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
+                icon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                icon2.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+                icon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
         else if (view == deselectAll) {

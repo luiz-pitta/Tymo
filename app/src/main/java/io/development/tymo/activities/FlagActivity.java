@@ -514,7 +514,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         if(type == CREATE_EDIT_FLAG){
             titleText.setVisibility(View.GONE);
             FlagEditFragment flagEditFragment = (FlagEditFragment) mNavigator.getFragment(type);
-            flagEditFragment.setLayout(flagWrapper.getFlagServer(), invitedList, confirmedList, edit, act_free, user_friend != null || listUserCompare.size() > 0);
+            flagEditFragment.setLayout(flagWrapper.getFlagServer(), response.getWhatsGoingFlag(), invitedList, confirmedList, edit, act_free, user_friend != null || listUserCompare.size() > 0);
 
             if(flagWrapper.getFlagServer().getType() || act_free){
                 privacyIcon.setImageResource(R.drawable.ic_lock);

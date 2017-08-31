@@ -1091,7 +1091,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         String dayToday = String.format("%02d", day);
         String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
 
-        todayDate.setText(getResources().getString(R.string.date_format_today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
+        todayDate.setText(getResources().getString(R.string.date_format_today) + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
 
         if (commitments) {
             if (count_is_happening > 0) {

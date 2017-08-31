@@ -25,9 +25,8 @@
         android:layout_marginRight="50dp"
         android:gravity="center"
         android:text="@string/empty_feed_text_1"
-        android:textAllCaps="true"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView

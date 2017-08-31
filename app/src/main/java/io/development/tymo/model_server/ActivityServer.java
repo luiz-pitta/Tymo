@@ -50,6 +50,10 @@ public class ActivityServer implements Serializable {
     private int hour_start;
     private int minute_end;
     private int hour_end;
+    private boolean date_start_empty;
+    private boolean date_end_empty;
+    private boolean time_start_empty;
+    private boolean time_end_empty;
 
     private int minute_card;
     private int hour_card;
@@ -150,6 +154,11 @@ public class ActivityServer implements Serializable {
         this.distance = activityServer.getDistance();
 
         this.date_time_now = activityServer.getDateTimeNow();
+
+        this.date_end_empty = activityServer.getDateEndEmpty();
+        this.date_start_empty = activityServer.getDateStartEmpty();
+        this.time_end_empty = activityServer.getTimeEndEmpty();
+        this.time_start_empty = activityServer.getTimeStartEmpty();
     }
 
     public boolean isDeletedActivityImported() {
@@ -158,6 +167,38 @@ public class ActivityServer implements Serializable {
 
     public void setDeletedActivityImported(boolean deleted_activity_imported) {
         this.deleted_activity_imported = deleted_activity_imported;
+    }
+
+    public void setDateStartEmpty(boolean date_start_empty) {
+        this.date_start_empty = date_start_empty;
+    }
+
+    public boolean getDateStartEmpty() {
+        return date_start_empty;
+    }
+
+    public void setDateEndEmpty(boolean date_end_empty) {
+        this.date_end_empty = date_end_empty;
+    }
+
+    public boolean getDateEndEmpty() {
+        return date_end_empty;
+    }
+
+    public void setTimeStartEmpty(boolean time_start_empty) {
+        this.time_start_empty = time_start_empty;
+    }
+
+    public boolean getTimeStartEmpty() {
+        return time_start_empty;
+    }
+
+    public void setTimeEndEmpty(boolean time_end_empty) {
+        this.time_end_empty = time_end_empty;
+    }
+
+    public boolean getTimeEndEmpty() {
+        return time_end_empty;
     }
 
     public ArrayList<ActivityServer> getListRepeatedActvities() {

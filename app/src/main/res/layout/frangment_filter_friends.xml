@@ -78,9 +78,8 @@
             android:layout_toLeftOf="@+id/expandMoreIconFriends"
             android:gravity="center"
             android:text="@string/clean"
-            android:textAllCaps="true"
             android:textColor="@color/deep_purple_400"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <ImageView

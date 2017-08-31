@@ -42,6 +42,10 @@ public class FlagServer implements Serializable {
     private int hour_start;
     private int minute_end;
     private int hour_end;
+    private boolean date_start_empty;
+    private boolean date_end_empty;
+    private boolean time_start_empty;
+    private boolean time_end_empty;
 
     private int minute_card;
     private int hour_card;
@@ -119,6 +123,43 @@ public class FlagServer implements Serializable {
         this.popularity_points = flagServer.getPopularityPoints();
 
         this.date_time_now = flagServer.getDateTimeNow();
+
+        this.date_end_empty = flagServer.getDateEndEmpty();
+        this.date_start_empty = flagServer.getDateStartEmpty();
+        this.time_end_empty = flagServer.getTimeEndEmpty();
+        this.time_start_empty = flagServer.getTimeStartEmpty();
+    }
+
+    public void setDateStartEmpty(boolean date_start_empty) {
+        this.date_start_empty = date_start_empty;
+    }
+
+    public boolean getDateStartEmpty() {
+        return date_start_empty;
+    }
+
+    public void setDateEndEmpty(boolean date_end_empty) {
+        this.date_end_empty = date_end_empty;
+    }
+
+    public boolean getDateEndEmpty() {
+        return date_end_empty;
+    }
+
+    public void setTimeStartEmpty(boolean time_start_empty) {
+        this.time_start_empty = time_start_empty;
+    }
+
+    public boolean getTimeStartEmpty() {
+        return time_start_empty;
+    }
+
+    public void setTimeEndEmpty(boolean time_end_empty) {
+        this.time_end_empty = time_end_empty;
+    }
+
+    public boolean getTimeEndEmpty() {
+        return time_end_empty;
     }
 
     public ArrayList<FlagServer> getListRepeatedActvities() {

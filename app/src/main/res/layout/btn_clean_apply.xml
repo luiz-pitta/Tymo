@@ -39,9 +39,8 @@
             android:paddingRight="5dp"
             android:paddingTop="10dp"
             android:text="@string/clean_all"
-            android:textAllCaps="true"
             android:textColor="@color/grey_900"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
         <TextView
@@ -60,9 +59,8 @@
             android:paddingRight="5dp"
             android:paddingTop="10dp"
             android:text="@string/apply"
-            android:textAllCaps="true"
             android:textColor="@color/white"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textStyle="bold" />
 
     </LinearLayout>

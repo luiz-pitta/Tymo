@@ -132,7 +132,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
         String dayToday = String.format("%02d", day);
         String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
 
-        dateText.setText(getResources().getString(R.string.date_format_today).toUpperCase() + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
+        dateText.setText(getResources().getString(R.string.date_format_today) + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
 
         Query query = new Query();
         query.setEmail(email);

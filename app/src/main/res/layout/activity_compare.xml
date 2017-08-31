@@ -47,7 +47,7 @@
                             android:layout_marginRight="10dp"
                             android:text="@string/compare_people_selected"
                             android:textColor="@color/deep_purple_400"
-                            android:textSize="14sp"
+                            android:textSize="16sp"
                             android:textStyle="bold" />
 
                         <TextView
@@ -62,7 +62,7 @@
                             android:paddingTop="2dp"
                             android:text="0"
                             android:textColor="@color/white"
-                            android:textSize="14sp" />
+                            android:textSize="16sp" />
 
                     </LinearLayout>
 
@@ -74,9 +74,8 @@
                         android:layout_alignParentTop="true"
                         android:gravity="center"
                         android:text="@string/deselect_all"
-                        android:textAllCaps="true"
                         android:textColor="@color/deep_purple_400"
-                        android:textSize="14sp" />
+                        android:textSize="16sp" />
 
                 </RelativeLayout>
 
@@ -137,6 +136,7 @@
                     android:background="@color/horizontal_line" />
 
                 <FrameLayout
+                    android:background="@color/grey_100"
                     android:id="@+id/contentBox"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -144,10 +144,10 @@
 
                 </FrameLayout>
 
-                <Space
-                    android:id="@+id/space"
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="100dp" />
+                    android:layout_height="100dp"
+                    android:background="@color/grey_100" />
 
             </LinearLayout>
 

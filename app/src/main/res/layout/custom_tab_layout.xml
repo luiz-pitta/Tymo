@@ -8,7 +8,7 @@
         android:id="@+id/icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:padding="5dp"
+        android:padding="4dp"
         android:src="@drawable/ic_my_commitments"
         android:tint="@color/deep_purple_400"
         android:layout_gravity="center_horizontal" />

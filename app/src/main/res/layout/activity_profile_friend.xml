@@ -5,15 +5,10 @@
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <include
-        android:id="@+id/actionBar"
-        layout="@layout/action_bar" />
-
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/actionBar">
+        android:layout_height="match_parent">
 
         <android.support.v4.widget.NestedScrollView
             android:id="@+id/scrollView"
@@ -36,6 +31,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:background="@drawable/bg_profile_morning" />
+
+                    <ImageView
+                        android:id="@+id/actionBackIcon"
+                        android:layout_width="50dp"
+                        android:layout_height="50dp"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_action_back"
+                        android:tint="@color/grey_900" />
 
                     <RelativeLayout
                         android:id="@+id/profileAboutBox"

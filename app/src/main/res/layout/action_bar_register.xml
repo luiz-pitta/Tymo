@@ -29,7 +29,6 @@
             android:gravity="center"
             android:lines="1"
             android:text="Text"
-            android:textAllCaps="true"
             android:textColor="@color/white"
             android:textSize="16sp"
             android:textStyle="bold" />
