@@ -740,11 +740,12 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
                 boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
 
                 if(!login_type || AccessToken.getCurrentAccessToken() == null) {
-                    if(AccessToken.getCurrentAccessToken() != null)
-                        LoginManager.getInstance().logOut();
-
                     setProgress(true);
-                    LoginManager.getInstance().logInWithReadPermissions(SettingsActivity.this, Arrays.asList("email", "public_profile", "user_events"));
+
+                    if(AccessToken.getCurrentAccessToken() != null)
+                        importFromFacebookRequest();
+                    else
+                        LoginManager.getInstance().logInWithReadPermissions(SettingsActivity.this, Arrays.asList("email", "public_profile", "user_events"));
                 }else {
                     setProgress(true);
                     importFromFacebookRequest();
@@ -1110,8 +1111,13 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
             try {
                 place = jsonObject.getJSONObject("place");
                 name_place = place.getString("name");
-                lat = place.getJSONObject("location").getDouble("latitude");
-                lng = place.getJSONObject("location").getDouble("longitude");
+                try {
+                    lat = place.getJSONObject("location").getDouble("latitude");
+                    lng = place.getJSONObject("location").getDouble("longitude");
+                } catch (Exception e) {
+                    lat = -250.0;
+                    lng = -250.0;
+                }
             } catch (Exception e) {
                 name_place = "";
                 lat = -500.0;
