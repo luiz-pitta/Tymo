@@ -288,7 +288,7 @@
                         android:layout_height="wrap_content"
                         android:padding="10dp"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_act_edit_box"
+                        android:background="@drawable/bg_act_edit_box_local"
                         android:gravity="center_vertical"
                         android:hint="@string/hint_description"
                         android:inputType="textMultiLine"

@@ -825,7 +825,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
             Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
         } else if (date.size() == 0 || date.get(0) == -1 || date.get(6) == -1) {
             err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_date_hour_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
         } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();

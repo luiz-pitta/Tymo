@@ -549,7 +549,7 @@
     <string name="validation_field_act_max_lenght_days">A atividade não pode ter mais de 15 dias de duração</string>
     <string name="validation_field_birth_date_required">Preencha a data de nascimento corretamente</string>
     <string name="validation_field_compare_selected_required">Deve ter ao menos um usuário selecionado</string>
-    <string name="validation_field_date_hour_required">A data e a hora são obrigatórias</string>
+    <string name="validation_field_date_start_required">A data de início é obrigatória</string>
     <string name="validation_field_email_invalid_or_not_registered">Email inválido ou não cadastrado</string>
     <string name="validation_field_email_required">Preencha o email corretamente</string>
     <string name="validation_field_gender_required">Selecione um gênero</string>

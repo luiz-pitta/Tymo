@@ -30,7 +30,6 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -64,8 +63,6 @@ import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-
-import static io.development.tymo.utils.Validation.validateFields;
 
 public class FlagActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
@@ -663,6 +660,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         List<Integer> date;
         List<Integer> repeat;
         List<User> list_guest = new ArrayList<>();
+        boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
         String title = ((FlagEditFragment)mNavigator.getFragment(0)).getTitleFromView();
 
         date = ((FlagEditFragment) mNavigator.getFragment(0)).getDateFromView();
@@ -670,17 +668,52 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         boolean sendAll = ((FlagEditFragment) mNavigator.getFragment(0)).getSendToAll() == 0;
 
-        if(!sendAll)
+        if (date.get(0) == -1){
+            dateStartEmpty = true;
+        }
+        else{
+            dateStartEmpty = false;
+        }
+
+        if (date.get(3) == -1){
+            dateEndEmpty = true;
+            date.set(3, date.get(0));
+            date.set(4, date.get(1));
+            date.set(5, date.get(2));
+        }
+        else{
+            dateEndEmpty = false;
+        }
+
+        if (date.get(6) == -1){
+            timeStartEmpty = true;
+            date.set(6, 0);
+            date.set(7, 0);
+        }
+        else{
+            timeStartEmpty = false;
+        }
+
+        if (date.get(8) == -1){
+            timeEndEmpty = true;
+            date.set(8, 59);
+            date.set(9, 23);
+        }
+        else{
+            timeEndEmpty = false;
+        }
+
+        if(!sendAll) {
             list_guest = ((FlagEditFragment) mNavigator.getFragment(0)).getGuestFromView();
+        }
+        else{
+
+        }
 
         int err = 0;
-        if (!validateFields(title)) {
+        if(dateStartEmpty){
             err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
-        }
-        else if(date.size() == 0 || date.get(0) == -1 || date.get(6) == -1){
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_date_hour_required, Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
         }
         else if((repeat.get(0) != 0 && repeat.get(1) < 0)){
             err++;
@@ -693,6 +726,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         else if(!isActivityReadyRegister(date.get(2),date.get(1),date.get(0),date.get(5),date.get(4),date.get(3), repeat.get(0))){
             err++;
             Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2),date.get(1),date.get(0),date.get(5),date.get(4),date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
+        }
+        else{
+
         }
 
         if (err == 0) {
@@ -761,6 +797,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             m = date.get(1);
             y = date.get(2);
 
+            flagServer.setDateStartEmpty(dateStartEmpty);
+            flagServer.setDateEndEmpty(dateEndEmpty);
+            flagServer.setTimeStartEmpty(timeStartEmpty);
+            flagServer.setTimeEndEmpty(timeEndEmpty);
             flagServer.setDayStart(date.get(0));
             flagServer.setMonthStart(date.get(1)+1);
             flagServer.setYearStart(date.get(2));
@@ -809,7 +849,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             error = true;
             //requiredText.setVisibility(View.VISIBLE);
-            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
+            //showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
         }
     }
 
@@ -997,8 +1037,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         intent.putExtra("m",m);
         intent.putExtra("y",y);
         setResult(RESULT_OK, intent);
-        if(user_friend == null || listUserCompare.size() == 0)
+        if(user_friend == null || listUserCompare.size() == 0) {
             finish();
+        }
         else
             startActivity(intent);
 
@@ -1127,10 +1168,12 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(!edit)
+            if(!edit) {
                 register();
-            else
+            }
+            else {
                 edit_flag();
+            }
         }
         else if(v == editButton){
             Bundle bundle = new Bundle();
