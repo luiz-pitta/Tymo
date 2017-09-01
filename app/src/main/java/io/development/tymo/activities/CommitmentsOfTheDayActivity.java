@@ -132,7 +132,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
         String dayToday = String.format("%02d", day);
         String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
 
-        dateText.setText(getResources().getString(R.string.date_format_today) + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
+        dateText.setText(getResources().getString(R.string.date_format_today) + " - " + getResources().getString(R.string.date_format_03, dayOfWeek, dayToday, monthToday, year));
 
         Query query = new Query();
         query.setEmail(email);
@@ -582,6 +582,17 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
                     }
                 }
 
+                if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()){
+                    time = getResources().getString(R.string.date_format_13);
+                }
+                else if (flagServer.getTimeEndEmpty()){
+                    time = getResources().getString(R.string.date_format_11, hour, minute);
+                }
+                else if (flagServer.getTimeStartEmpty()){
+                    time = getResources().getString(R.string.date_format_18, hourEnd, minuteEnd);
+                }
+                else{}
+
                 String hourNow = String.format("%02d", calendar.get(Calendar.HOUR_OF_DAY));
                 String minuteNow = String.format("%02d", calendar.get(Calendar.MINUTE));
 
@@ -594,8 +605,20 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
                     statusText = getResources().getString(R.string.commitments_of_the_day_already_happened);
                 }
 
+                String title = flagServer.getTitle();
+
+                if (title.matches("") && flagServer.getType()) {
+                    title = getString(R.string.flag_available);
+                }
+                else if (title.matches("") && !flagServer.getType()) {
+                    title = getString(R.string.flag_unavailable);
+                }
+                else  {
+                    title = flagServer.getTitle();
+                }
+
                 listNotification.add(new NotificationModel(
-                        flagServer.getTitle(),
+                        title,
                         time,
                         statusText,
                         "",

@@ -15,14 +15,12 @@ import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.view_holder.SelectionRepeatActivitiesFeedViewHolder;
-import io.development.tymo.view_holder.SelectionTagViewHolder;
 
 public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<RecyclerView.ViewHolder> {
 
@@ -99,12 +97,12 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
 
         if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                dateHourText = context.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                dateHourText = context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             } else {
-                dateHourText = context.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                dateHourText = context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd);
             }
         } else {
-            dateHourText = context.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
+            dateHourText = context.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
         }
 
         selectionRepeatActivitiesFeedViewHolder.text1.setText(dateHourText);

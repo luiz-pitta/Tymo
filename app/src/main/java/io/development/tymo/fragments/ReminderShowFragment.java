@@ -85,7 +85,7 @@ public class ReminderShowFragment extends Fragment {
         String hourStart = String.format("%02d", reminderServer.getHourStart());
         String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
 
-        dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+        dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
 
         tittleText.setText(reminderServer.getTitle());
 
@@ -160,7 +160,7 @@ public class ReminderShowFragment extends Fragment {
         String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
         int yearStart = reminderServer.getYearStart();
 
-        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekStart.toLowerCase(), dayStart, monthStart, yearStart);
+        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart.toLowerCase(), dayStart, monthStart, yearStart);
 
         return date;
     }

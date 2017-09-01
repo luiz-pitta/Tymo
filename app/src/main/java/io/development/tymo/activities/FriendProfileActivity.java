@@ -298,10 +298,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
-        dateTextWeek.setText(getResources().getString(R.string.date_format_2, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
+        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
 
         String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH) + 1);
-        dateTextMonth.setText(getResources().getString(R.string.date_format_1, month_text, year_start));
+        dateTextMonth.setText(getResources().getString(R.string.date_format_01, month_text, year_start));
 
         getBgProfile();
 
@@ -1328,10 +1328,10 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
-        dateTextWeek.setText(getResources().getString(R.string.date_format_2, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
+        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
 
         String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH) + 1);
-        dateTextMonth.setText(getResources().getString(R.string.date_format_1, month_text, year_start));
+        dateTextMonth.setText(getResources().getString(R.string.date_format_01, month_text, year_start));
 
         setPlans(plans, progress);
     }

@@ -415,8 +415,14 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_end = String.format("%02d", activityServer.getMinuteEndCard());
                 String time;
 
-                if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
+                if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                    time = "-";
+                else if (activityServer.getTimeEndEmpty())
                     time = hour_start + ":" + minute_start + "\n" + "-";
+                else if (activityServer.getTimeStartEmpty())
+                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                else if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
+                    time = hour_start + ":" + minute_start;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
@@ -449,11 +455,16 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_end = String.format("%02d", flagServer.getMinuteEndCard());
                 String time;
 
-                if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
+                if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                    time = "-";
+                else if (flagServer.getTimeEndEmpty())
                     time = hour_start + ":" + minute_start + "\n" + "-";
+                else if (flagServer.getTimeStartEmpty())
+                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                else if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
+                    time = hour_start + ":" + minute_start;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
-
 
                 if (screen == Utilities.TYPE_FRIEND && flagServer.getType() && flagServer.getParticipates() == 0) {
                     FlagServer flag = new FlagServer();
@@ -477,9 +488,20 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 ReminderServer reminderServer = (ReminderServer) object;
                 String hour_start = String.format("%02d", reminderServer.getHourStart());
                 String minute_start = String.format("%02d", reminderServer.getMinuteStart());
+                String hour_end = String.format("%02d", reminderServer.getHourEnd());
+                String minute_end = String.format("%02d", reminderServer.getMinuteEnd());
                 String time;
 
-                time = hour_start + ":" + minute_start;
+                if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                    time = "-";
+                else if (reminderServer.getTimeEndEmpty())
+                    time = hour_start + ":" + minute_start + "\n" + "-";
+                else if (reminderServer.getTimeStartEmpty())
+                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                else if (reminderServer.getHourStart() == reminderServer.getHourEnd() && reminderServer.getMinuteStart() == reminderServer.getMinuteEnd())
+                    time = hour_start + ":" + minute_start;
+                else
+                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
                 list.add(new Reminder(reminderServer.getTitle(), time, reminderServer));
             } else if (object instanceof FreeTimeServer) {

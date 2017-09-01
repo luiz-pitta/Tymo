@@ -22,7 +22,6 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.location.LocationManager;
-import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
@@ -47,7 +46,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.facebook.rebound.SpringSystem;
-import com.google.firebase.analytics.FirebaseAnalytics;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 
@@ -352,12 +350,12 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
 
             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                 if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                    holder.date.setText(mContext.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                    holder.date.setText(mContext.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                 } else {
-                    holder.date.setText(mContext.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                    holder.date.setText(mContext.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                 }
             } else {
-                holder.date.setText(mContext.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                holder.date.setText(mContext.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
             }
 
             if (!feedCubeModel.getLocation().matches("")) {
@@ -466,12 +464,12 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
 
             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                 if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                    holder.date.setText(mContext.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                    holder.date.setText(mContext.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                 } else {
-                    holder.date.setText(mContext.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                    holder.date.setText(mContext.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                 }
             } else {
-                holder.date.setText(mContext.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                holder.date.setText(mContext.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
             }
 
             if (!feedFlagModel.getUser().getPhoto().matches("")) {

@@ -437,11 +437,16 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String time;
                 boolean act_as_red_flag = false;
 
-                if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard()) {
+                if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                    time = "-";
+                else if (activityServer.getTimeEndEmpty())
                     time = hour_start + ":" + minute_start + "\n" + "-";
-                } else {
+                else if (activityServer.getTimeStartEmpty())
+                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                else if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
+                    time = hour_start + ":" + minute_start;
+                else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
-                }
 
                 String email_user = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
 
@@ -478,11 +483,16 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String time;
                 boolean act_as_red_flag = false;
 
-                if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard()) {
+                if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                    time = "-";
+                else if (flagServer.getTimeEndEmpty())
                     time = hour_start + ":" + minute_start + "\n" + "-";
-                } else {
+                else if (flagServer.getTimeStartEmpty())
+                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                else if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
+                    time = hour_start + ":" + minute_start;
+                else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
-                }
 
                 if (flagServer.getType() && flagServer.getParticipates() == 0)
                     act_as_red_flag = true;
@@ -509,9 +519,20 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 ReminderServer reminderServer = (ReminderServer) object;
                 String hour_start = String.format("%02d", reminderServer.getHourStart());
                 String minute_start = String.format("%02d", reminderServer.getMinuteStart());
+                String hour_end = String.format("%02d", reminderServer.getHourEnd());
+                String minute_end = String.format("%02d", reminderServer.getMinuteEnd());
                 String time;
 
-                time = hour_start + ":" + minute_start;
+                if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                    time = "-";
+                else if (reminderServer.getTimeEndEmpty())
+                    time = hour_start + ":" + minute_start + "\n" + "-";
+                else if (reminderServer.getTimeStartEmpty())
+                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                else if (reminderServer.getHourStart() == reminderServer.getHourEnd() && reminderServer.getMinuteStart() == reminderServer.getMinuteEnd())
+                    time = hour_start + ":" + minute_start;
+                else
+                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
                 list.add(new Reminder(reminderServer.getTitle(), time, reminderServer));
             } else if (object instanceof FreeTimeServer) {

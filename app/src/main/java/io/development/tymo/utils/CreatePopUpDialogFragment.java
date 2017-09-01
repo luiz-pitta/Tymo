@@ -38,7 +38,6 @@ import java.util.Calendar;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.AddActivity;
-import io.development.tymo.activities.CompareActivity;
 import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.activities.ShowActivity;
@@ -572,12 +571,12 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                                dateText.setText(mContext.getResources().getString(R.string.date_format_7, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                dateText.setText(mContext.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
                             } else {
-                                dateText.setText(mContext.getResources().getString(R.string.date_format_8, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                                dateText.setText(mContext.getResources().getString(R.string.date_format_08, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
                             }
                         } else {
-                            dateText.setText(mContext.getResources().getString(R.string.date_format_9, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
+                            dateText.setText(mContext.getResources().getString(R.string.date_format_09, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
                         }
 
                         buttonText1.setOnTouchListener(new View.OnTouchListener() {
@@ -673,7 +672,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         String hourStart = String.format("%02d", reminderServer.getHourStart());
                         String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
 
-                        dateText.setText(mContext.getResources().getString(R.string.date_format_7, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                        dateText.setText(mContext.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
 
                         buttonText1.setOnTouchListener(new View.OnTouchListener() {
                             @Override
@@ -799,12 +798,12 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                                dateText.setText(mContext.getResources().getString(R.string.date_format_7, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                dateText.setText(mContext.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
                             } else {
-                                dateText.setText(mContext.getResources().getString(R.string.date_format_8, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                                dateText.setText(mContext.getResources().getString(R.string.date_format_08, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
                             }
                         } else {
-                            dateText.setText(mContext.getResources().getString(R.string.date_format_9, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
+                            dateText.setText(mContext.getResources().getString(R.string.date_format_09, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
                         }
 
                         buttonText1.setOnTouchListener(new View.OnTouchListener() {

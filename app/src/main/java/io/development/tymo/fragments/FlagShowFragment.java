@@ -244,14 +244,49 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
             String hourEnd = String.format("%02d", flagServer.getHourEnd());
             String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
-            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                    dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()){
+                dateHourText.setText(this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
+            }
+            else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()){
+                dateHourText.setText(this.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+            }
+            else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            }
+            else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+            }
+            else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                 } else {
-                    dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
                 }
-            } else {
-                dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+            }
+            else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                }
+            }
+            else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
+                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                }
+            }
+            else{
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                    } else {
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                    }
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                }
             }
 
             isInPast = isFlagInPast(flagServer);
@@ -484,7 +519,7 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
         String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
         int yearEnd = flagServer.getYearEnd();
 
-        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
+        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
 
         return date;
     }

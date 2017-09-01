@@ -995,20 +995,32 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
 
                 flagServer.setStatus(status);
 
+                String title = flagServer.getTitle();
+
+                if (title.matches("") && flagServer.getType()) {
+                    title = getString(R.string.flag_available);
+                }
+                else if (title.matches("") && !flagServer.getType()) {
+                    title = getString(R.string.flag_unavailable);
+                }
+                else  {
+                    title = flagServer.getTitle();
+                }
+
                 if (flagServer.getStatus() == 1) {
                     if (count_will_happen == 0) {
                         startsAtHour = flagServer.getHourStart();
                         startsAtMinute = flagServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = flagServer.getTitle();
+                        title_will_happen = title;
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = flagServer.getHourStart();
                             startsAtMinute = flagServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = flagServer.getTitle();
+                            title_will_happen = title;
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -1016,7 +1028,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
                     count_will_happen++;
                 } else if (flagServer.getStatus() == 0) {
                     count_is_happening++;
-                    title_is_happening = flagServer.getTitle();
+                    title_is_happening = title;
                 } else {
                     count_already_happened++;
                 }
@@ -1091,7 +1103,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         String dayToday = String.format("%02d", day);
         String monthToday = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(c.getTime().getTime());
 
-        todayDate.setText(getResources().getString(R.string.date_format_today) + " - " + getResources().getString(R.string.date_format_3, dayOfWeek, dayToday, monthToday, year));
+        todayDate.setText(getResources().getString(R.string.date_format_today) + " - " + getResources().getString(R.string.date_format_03, dayOfWeek, dayToday, monthToday, year));
 
         if (commitments) {
             if (count_is_happening > 0) {

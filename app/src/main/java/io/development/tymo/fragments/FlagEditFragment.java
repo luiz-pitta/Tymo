@@ -14,7 +14,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -70,7 +69,7 @@ import static android.content.Context.MODE_PRIVATE;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener,TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnTouchListener {
+public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnTouchListener {
 
     private RelativeLayout addPersonButton, sendBox, repeatAdd;
     private TextView guestsNumber, addGuestText, guestText, repeatMax;
@@ -119,7 +118,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         return fragment;
     }
 
-    public FlagEditFragment() {}
+    public FlagEditFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -143,23 +143,23 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
         guestsNumber = (TextView) view.findViewById(R.id.guestsNumber);
         titleMax = (TextView) view.findViewById(R.id.titleMax);
-        dateStart = (TextView)view.findViewById(R.id.dateStart);
-        dateEnd = (TextView)view.findViewById(R.id.dateEnd);
-        timeStart = (TextView)view.findViewById(R.id.timeStart);
-        timeEnd = (TextView)view.findViewById(R.id.timeEnd);
+        dateStart = (TextView) view.findViewById(R.id.dateStart);
+        dateEnd = (TextView) view.findViewById(R.id.dateEnd);
+        timeStart = (TextView) view.findViewById(R.id.timeStart);
+        timeEnd = (TextView) view.findViewById(R.id.timeEnd);
         clearDateStart = (ImageView) view.findViewById(R.id.clearDateStart);
         clearDateEnd = (ImageView) view.findViewById(R.id.clearDateEnd);
         clearTimeStart = (ImageView) view.findViewById(R.id.clearTimeStart);
         clearTimeEnd = (ImageView) view.findViewById(R.id.clearTimeEnd);
-        repeatEditLayout = (LinearLayout)view.findViewById(R.id.repeatNumberBox);
-        repeatEditText = (EditText)view.findViewById(R.id.repeatEditText);
+        repeatEditLayout = (LinearLayout) view.findViewById(R.id.repeatNumberBox);
+        repeatEditText = (EditText) view.findViewById(R.id.repeatEditText);
         repeatMax = (TextView) view.findViewById(R.id.repeatMax);
-        titleEditText = (EditText)view.findViewById(R.id.title);
+        titleEditText = (EditText) view.findViewById(R.id.title);
         whoCanInviteBox = (LinearLayout) view.findViewById(R.id.whoCanInviteBox);
         guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
         guestText = (TextView) view.findViewById(R.id.guestText);
         profilesPhotos = (LinearLayout) view.findViewById(R.id.profilesPhotos);
-        sendText = (TextView)view.findViewById(R.id.sendText);
+        sendText = (TextView) view.findViewById(R.id.sendText);
         sendBox = (RelativeLayout) view.findViewById(R.id.sendBox);
         repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
         recyclerView = (RecyclerView) view.findViewById(R.id.guestRow);
@@ -172,6 +172,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         repeatAdd = (RelativeLayout) view.findViewById(R.id.repeatAdd);
         repeatText = (TextView) view.findViewById(R.id.repeatText);
 
+        clearDateStart.setVisibility(View.GONE);
+        clearDateEnd.setVisibility(View.GONE);
+        clearTimeStart.setVisibility(View.GONE);
+        clearTimeEnd.setVisibility(View.GONE);
         repeatBox.setVisibility(View.GONE);
         repeatText.setVisibility(View.GONE);
 
@@ -201,8 +205,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 if (repeatEditText.getText().toString().matches("30")) {
                     repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
-                }
-                else {
+                } else {
                     repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
                 }
             }
@@ -215,8 +218,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 }
                 if (repeatEditText.getText().toString().matches("30")) {
                     repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
-                }
-                else {
+                } else {
                     repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
                 }
             }
@@ -225,8 +227,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             public void afterTextChanged(Editable s) {
                 if (repeatEditText.getText().toString().matches("30")) {
                     repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
-                }
-                else {
+                } else {
                     repeatMax.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_400));
                 }
             }
@@ -282,16 +283,16 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         spinner.setItems(getResources().getStringArray(R.array.array_repeat_type));
         spinner.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 repeat_type = position;
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 if (position != 0) {
                     repeatEditLayout.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     repeatEditLayout.setVisibility(View.GONE);
                     repeatEditText.setText("");
                 }
@@ -302,17 +303,17 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         sendPicker.setItems(getResources().getStringArray(R.array.array_who_will_be_signalized));
         sendPicker.setOnItemSelectedListener(new MaterialSpinner.OnItemSelectedListener<String>() {
 
-            @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
+            @Override
+            public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 send_toAll = position;
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendPicker" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "sendPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if(position != 0) {
+                if (position != 0) {
                     guestBox.setVisibility(View.VISIBLE);
                     profilesPhotos.setVisibility(View.VISIBLE);
-                }
-                else {
+                } else {
                     guestBox.setVisibility(View.GONE);
                     profilesPhotos.setVisibility(View.GONE);
                 }
@@ -339,7 +340,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String number = String.valueOf(s);
-                if(number.length() > 2)
+                if (number.length() > 2)
                     repeatEditText.setText("30");
             }
 
@@ -360,7 +361,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         addPersonButton.setActivated(false);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
     }
 
@@ -415,27 +416,25 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     }
 
     public void setSelectionSendBox(boolean type) {
-        if(!type){
-            if(guestBox.getVisibility() == View.GONE) {
+        if (!type) {
+            if (guestBox.getVisibility() == View.GONE) {
                 sendBox.setVisibility(View.GONE);
                 profilesPhotos.setVisibility(View.GONE);
                 sendText.setVisibility(View.GONE);
                 whoCanInviteBox.setVisibility(View.GONE);
-            }
-            else{
+            } else {
                 guestBox.setVisibility(View.GONE);
                 profilesPhotos.setVisibility(View.GONE);
                 sendText.setVisibility(View.GONE);
                 whoCanInviteBox.setVisibility(View.GONE);
                 sendBox.setVisibility(View.GONE);
             }
-        }else {
-            if(send_toAll == 0) {
+        } else {
+            if (send_toAll == 0) {
                 sendBox.setVisibility(View.VISIBLE);
                 sendText.setVisibility(View.VISIBLE);
                 whoCanInviteBox.setVisibility(View.GONE);
-            }
-            else{
+            } else {
                 guestBox.setVisibility(View.VISIBLE);
                 sendBox.setVisibility(View.VISIBLE);
                 profilesPhotos.setVisibility(View.VISIBLE);
@@ -451,21 +450,21 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         mSubscriptions.add(NetworkUtil.getRetrofit().getProfile(email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void handleResponse(User user) {
-        FlagActivity flagActivity = (FlagActivity)getActivity();
-        if(!isEdit) {
+        FlagActivity flagActivity = (FlagActivity) getActivity();
+        if (!isEdit) {
             data = new ArrayList<>();
             user.setDelete(false);
             data.add(user);
             User friend = flagActivity.getUserFriend();
             ArrayList<User> list = flagActivity.getListUserCompare();
-            if(friend != null) {
+            if (friend != null) {
                 friend.setDelete(false);
                 data.add(friend);
-            }else if(list.size() > 0){
+            } else if (list.size() > 0) {
                 for (int i = 0; i < list.size(); i++) {
                     User usr = list.get(i);
                     usr.setDelete(false);
@@ -480,35 +479,35 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     }
 
     private void handleError(Throwable error) {
-        if(Utilities.isDeviceOnline(getActivity()))
+        if (Utilities.isDeviceOnline(getActivity()))
             Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
     @Override
-    public  void onActivityResult(int requestCode, int resultCode, Intent intent) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
 
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == GUEST_UPDATE) {
                 FlagActivity flagActivity = (FlagActivity) getActivity();
                 flagActivity.refreshItems();
-            }else if (requestCode == ADD_GUEST) {
-                if(!isEdit) {
+            } else if (requestCode == ADD_GUEST) {
+                if (!isEdit) {
                     ArrayList<User> list = new ArrayList<>();
                     PersonModelWrapper wrap =
                             (PersonModelWrapper) intent.getSerializableExtra("guest_objs");
 
                     list.add(data.get(0));
                     list.addAll(wrap.getItemDetails());
-                    for(int i = 0; i<list.size();i++){
+                    for (int i = 0; i < list.size(); i++) {
                         User usr = list.get(i);
                         usr.setDelete(false);
                     }
                     adapter.swap(list);
                     guestsNumber.setText(String.valueOf(list.size()));
-                }else {
+                } else {
                     FlagActivity flagActivity = (FlagActivity) getActivity();
                     ActivityServer activityServer = new ActivityServer();
                     SharedPreferences mSharedPreferences = getActivity().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -516,7 +515,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                             (PersonModelWrapper) intent.getSerializableExtra("guest_objs");
 
 
-                    if(wrap.getItemDetails().size() > 0) {
+                    if (wrap.getItemDetails().size() > 0) {
                         activityServer.setId(flagActivity.getFlag().getId());
                         activityServer.setVisibility(Constants.FLAG);
                         activityServer.setCreator(mSharedPreferences.getString(Constants.EMAIL, ""));
@@ -539,27 +538,26 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     public void onResume() {
         super.onResume();
         DatePickerDialog dpd = (DatePickerDialog) getFragmentManager().findFragmentByTag("Datepickerdialog2");
-        if(dpd != null) dpd.setOnDateSetListener(this);
+        if (dpd != null) dpd.setOnDateSetListener(this);
 
         TimePickerDialog tpd = (TimePickerDialog) getFragmentManager().findFragmentByTag("Timepickerdialog");
-        if(tpd != null) tpd.setOnTimeSetListener(this);
+        if (tpd != null) tpd.setOnTimeSetListener(this);
     }
 
     @Override
-    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(year,monthOfYear,dayOfMonth);
-        String day= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String month= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        calendar.set(yearEnd,monthOfYearEnd,dayOfMonthEnd);
-        String day2= new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String month2= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-        String date = day+"/"+month+"/"+year;
-        String date2 = day2+"/"+month2+"/"+yearEnd;
+        calendar.set(year, monthOfYear, dayOfMonth);
+        String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        calendar.set(yearEnd, monthOfYearEnd, dayOfMonthEnd);
+        String day2 = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String month2 = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        String date = day + "/" + month + "/" + year;
+        String date2 = day2 + "/" + month2 + "/" + yearEnd;
 
 
-        if(validadeDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd))
-        {
+        if (validadeDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd)) {
             day_start = dayOfMonth;
             month_start = monthOfYear;
             year_start = year;
@@ -568,8 +566,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             year_end = yearEnd;
             dateStart.setText(date);
             dateEnd.setText(date2);
-        }
-        else{
+        } else {
             day_start = dayOfMonth;
             month_start = monthOfYear;
             year_start = year;
@@ -580,16 +577,28 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             dateEnd.setText(date);
         }
 
+        if (dateStart.getText().toString().matches("")) {
+            clearDateStart.setVisibility(View.GONE);
+        } else {
+            clearDateStart.setVisibility(View.VISIBLE);
+        }
+
+        if (dateEnd.getText().toString().matches("")) {
+            clearDateEnd.setVisibility(View.GONE);
+        } else {
+            clearDateEnd.setVisibility(View.VISIBLE);
+        }
+
     }
 
-    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
-        if(yearEnd < year)
+    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if (yearEnd < year)
             return false;
-        if(year == yearEnd){
-            if(monthOfYearEnd < monthOfYear)
+        if (year == yearEnd) {
+            if (monthOfYearEnd < monthOfYear)
                 return false;
-            else if(monthOfYearEnd == monthOfYear){
-                if(dayOfMonthEnd < dayOfMonth)
+            else if (monthOfYearEnd == monthOfYear) {
+                if (dayOfMonthEnd < dayOfMonth)
                     return false;
             }
         }
@@ -603,21 +612,19 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         String minuteString = String.format("%02d", minute);
         String hourStringEnd = String.format("%02d", hourOfDayEnd);
         String minuteStringEnd = String.format("%02d", minuteEnd);
-        String time = hourString+":"+minuteString;
-        String time2 = hourStringEnd+":"+minuteStringEnd;
+        String time = hourString + ":" + minuteString;
+        String time2 = hourStringEnd + ":" + minuteStringEnd;
 
-        if(day_start == -1)
+        if (day_start == -1)
             Toast.makeText(getActivity(), "Preencha primeiro a data!", Toast.LENGTH_LONG).show();
-        else if(validadeHour(hourOfDay, minute, hourOfDayEnd, minuteEnd))
-        {
+        else if (validadeHour(hourOfDay, minute, hourOfDayEnd, minuteEnd)) {
             minutes_start = minute;
             hour_start = hourOfDay;
             minutes_end = minuteEnd;
             hour_end = hourOfDayEnd;
             timeStart.setText(time);
             timeEnd.setText(time2);
-        }
-        else {
+        } else {
             minutes_start = minute;
             hour_start = hourOfDay;
             minutes_end = minute;
@@ -626,10 +633,22 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             timeEnd.setText(time);
         }
 
+        if (timeStart.getText().toString().matches("")) {
+            clearTimeStart.setVisibility(View.GONE);
+        } else {
+            clearTimeStart.setVisibility(View.VISIBLE);
+        }
+
+        if (timeEnd.getText().toString().matches("")) {
+            clearTimeEnd.setVisibility(View.GONE);
+        } else {
+            clearTimeEnd.setVisibility(View.VISIBLE);
+        }
+
     }
 
-    private boolean validadeHour(int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd){
-        if(sameDay() && day_start != -1){
+    private boolean validadeHour(int hourOfDay, int minute, int hourOfDayEnd, int minuteEnd) {
+        if (sameDay() && day_start != -1) {
             if (hourOfDayEnd < hourOfDay)
                 return false;
             if (hourOfDayEnd == hourOfDay) {
@@ -641,7 +660,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         return true;
     }
 
-    private boolean sameDay(){
+    private boolean sameDay() {
         return day_start == day_end && month_start == month_end && year_start == year_end;
     }
 
@@ -680,9 +699,9 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     public List<Integer> getRepeatFromView() {
         List<Integer> list = new ArrayList<>();
         String temp = repeatEditText.getText().toString();
-        if(repeat_type == 0)
+        if (repeat_type == 0)
             repeat_qty = -1;
-        else if(temp.length() > 0)
+        else if (temp.length() > 0)
             repeat_qty = Integer.parseInt(temp);
 
         list.add(repeat_type);
@@ -692,7 +711,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
     @Override
     public void onClick(View v) {
-        if(v == repeatAdd){
+        if (v == repeatAdd) {
             v.findViewById(R.id.progressRepeatAdd).setVisibility(View.VISIBLE);
             repeatAddIcon.setVisibility(View.INVISIBLE);
             repeatAddText.setVisibility(View.INVISIBLE);
@@ -705,8 +724,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     repeatBox.setVisibility(View.VISIBLE);
                 }
             }, 1000);
-        }
-        else if(v == timeStart){
+        } else if (v == timeStart) {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
                     FlagEditFragment.this,
@@ -716,17 +734,16 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             );
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeStart" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(hour_start != -1)
+            if (hour_start != -1)
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
-            tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            tpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             tpd.show(getFragmentManager(), "Timepickerdialog");
-        }
-        else if(v == timeEnd){
+        } else if (v == timeEnd) {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
                     FlagEditFragment.this,
@@ -735,17 +752,17 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     true
             );
 
-            if(hour_start != -1)
+            if (hour_start != -1)
                 tpd.setStartTime(hour_start, minutes_start, hour_end, minutes_end);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "timeEnd" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            tpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            tpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             tpd.show(getFragmentManager(), "Timepickerdialog");
-        }else if(v == dateStart){
+        } else if (v == dateStart) {
             Calendar now = Calendar.getInstance();
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     FlagEditFragment.this,
@@ -756,16 +773,16 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             dpd.setMinDate(now);
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateStart" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(year_start != -1)
+            if (year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
-            dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             dpd.show(getFragmentManager(), "Datepickerdialog2");
-        }else if(v == dateEnd){
+        } else if (v == dateEnd) {
             Calendar now = Calendar.getInstance();
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     FlagEditFragment.this,
@@ -776,51 +793,55 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             dpd.setMinDate(now);
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateEnd" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(year_start != -1)
+            if (year_start != -1)
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
-            dpd.setAccentColor(ContextCompat.getColor(getActivity(),R.color.deep_purple_400), ContextCompat.getColor(getActivity(),R.color.grey_100));
+            dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400), ContextCompat.getColor(getActivity(), R.color.grey_100));
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         } else if (v == clearDateStart || v == clearDateEnd || v == clearTimeStart || v == clearTimeEnd) {
 
-            if (v == clearDateStart){
+            if (v == clearDateStart) {
                 day_start = -1;
                 month_start = -1;
                 year_start = -1;
                 dateStart.setText("");
-            } else if (v == clearDateEnd){
+                clearDateStart.setVisibility(View.GONE);
+            } else if (v == clearDateEnd) {
                 day_end = -1;
                 month_end = -1;
                 year_end = -1;
                 dateEnd.setText("");
-            } else if (v == clearTimeStart){
+                clearDateEnd.setVisibility(View.GONE);
+            } else if (v == clearTimeStart) {
                 hour_start = -1;
                 minutes_start = -1;
                 timeStart.setText("");
-            } else if (v == clearTimeEnd){
+                clearTimeStart.setVisibility(View.GONE);
+            } else if (v == clearTimeEnd) {
                 minutes_end = -1;
                 hour_end = -1;
                 timeEnd.setText("");
+                clearTimeEnd.setVisibility(View.GONE);
             }
 
-        } else if((v == addPersonButton || v == guestBox) && addPersonButton.isActivated()){
+        } else if ((v == addPersonButton || v == guestBox) && addPersonButton.isActivated()) {
             Intent intent = new Intent(getActivity(), SelectPeopleActivity.class);
             ArrayList<String> list = new ArrayList<>();
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addPersonButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(!isEdit) {
+            if (!isEdit) {
                 for (int i = 0; i < data.size(); i++) {
                     list.add(data.get(i).getEmail());
                 }
-            }else {
+            } else {
                 for (int i = 0; i < listPerson.size(); i++) {
                     list.add(listPerson.get(i).getEmail());
                 }
@@ -829,21 +850,22 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             intent.putStringArrayListExtra("guest_list", list);
 
-            if(isInPast){
+            if (isInPast) {
                 Calendar now = Calendar.getInstance();
 
                 createDialogMessageAddInPast(flagServer.getYearEnd(), flagServer.getMonthEnd(), flagServer.getDayEnd(), flagServer.getHourEnd(), flagServer.getMinuteEnd(),
                         now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
-            }
-            else{
+            } else {
                 startActivityForResult(intent, ADD_GUEST);
             }
         }
     }
 
-    public void setLayout(FlagServer flagServer, ArrayList<FlagServer> flagServers, ArrayList<User> users, ArrayList<User> confirmed,  boolean edit, boolean free, boolean friend){
+    public void setLayout(FlagServer flagServer, ArrayList<FlagServer> flagServers, ArrayList<User> users, ArrayList<User> confirmed, boolean edit, boolean free, boolean friend) {
+
         this.flagServer = flagServer;
-        if(recyclerView!=null) {
+
+        if (recyclerView != null) {
             Calendar calendar = Calendar.getInstance();
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
 
@@ -857,7 +879,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             String date = day + "/" + month + "/" + flagServer.getYearStart();
             String date2 = day2 + "/" + month2 + "/" + flagServer.getYearEnd();
 
-            if(flagServer.getHourStart() >= 0) {
+            if (flagServer.getHourStart() >= 0) {
                 String hourString = String.format("%02d", flagServer.getHourStart());
 
                 String minuteString = String.format("%02d", flagServer.getMinuteStart());
@@ -891,6 +913,44 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             titleEditText.setText(flagServer.getTitle());
 
             isInPast = isFlagInPast(flagServer);
+
+            if (flagServer.getDateStartEmpty()) {
+                day_start = -1;
+                month_start = -1;
+                year_start = -1;
+                dateStart.setText("");
+                clearDateStart.setVisibility(View.GONE);
+            } else {
+                clearDateStart.setVisibility(View.VISIBLE);
+            }
+
+            if (flagServer.getDateEndEmpty()) {
+                day_end = -1;
+                month_end = -1;
+                year_end = -1;
+                dateEnd.setText("");
+                clearDateEnd.setVisibility(View.GONE);
+            } else {
+                clearDateEnd.setVisibility(View.VISIBLE);
+            }
+
+            if (flagServer.getTimeStartEmpty()) {
+                hour_start = -1;
+                minutes_start = -1;
+                timeStart.setText("");
+                clearTimeStart.setVisibility(View.GONE);
+            } else {
+                clearTimeStart.setVisibility(View.VISIBLE);
+            }
+
+            if (flagServer.getTimeEndEmpty()) {
+                minutes_end = -1;
+                hour_end = -1;
+                timeEnd.setText("");
+                clearTimeEnd.setVisibility(View.GONE);
+            } else {
+                clearTimeEnd.setVisibility(View.VISIBLE);
+            }
 
             if (edit) {
                 repeatBox.setVisibility(View.GONE);
@@ -948,39 +1008,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     profilesPhotos.setVisibility(View.GONE);
                 }
 
-                if(dateStart.getText().toString().matches("")){
-                    clearDateStart.setVisibility(View.GONE);
-                }
-                else{
-                    clearDateStart.setVisibility(View.VISIBLE);
-                }
-
-                if(dateEnd.getText().toString().matches("")){
-                    clearDateEnd.setVisibility(View.GONE);
-                }
-                else{
-                    clearDateEnd.setVisibility(View.VISIBLE);
-                }
-
-                if(timeStart.getText().toString().matches("")){
-                    clearTimeStart.setVisibility(View.GONE);
-                }
-                else{
-                    clearTimeStart.setVisibility(View.VISIBLE);
-                }
-
-                if(timeEnd.getText().toString().matches("")){
-                    clearTimeEnd.setVisibility(View.GONE);
-                }
-                else{
-                    clearTimeEnd.setVisibility(View.VISIBLE);
-                }
-
                 if (flagServer.getRepeatType() == 0) {
                     repeatAdd.setVisibility(View.VISIBLE);
                     repeatText.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     String repeatly;
                     switch (flagServer.getRepeatType()) {
                         case Constants.DAYLY:
@@ -1018,8 +1049,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
                 if (flagServer.getRepeatType() == 0) {
                     spinner.setSelectedIndex(flagServer.getRepeatType());
-                }
-                else {
+                } else {
                     spinner.setSelectedIndex(flagServer.getRepeatType());
                     repeatEditLayout.setVisibility(View.VISIBLE);
                     repeatEditText.setText(String.valueOf(flagServer.getRepeatQty()));
@@ -1088,12 +1118,12 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
         int yearEnd = flagServer.getYearEnd();
 
-        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
+        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
 
         return date;
     }
 
-    private boolean isFlagInPast(FlagServer flagServer){
+    private boolean isFlagInPast(FlagServer flagServer) {
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
@@ -1107,14 +1137,14 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         return (isHourBefore && isDateBefore) || isDateBefore;
     }
 
-    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
-        if(yearEnd < year)
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if (yearEnd < year)
             return false;
-        if(year == yearEnd){
-            if(monthOfYearEnd < monthOfYear)
+        if (year == yearEnd) {
+            if (monthOfYearEnd < monthOfYear)
                 return false;
-            else if(monthOfYearEnd == monthOfYear){
-                if(dayOfMonthEnd <= dayOfMonth)
+            else if (monthOfYearEnd == monthOfYear) {
+                if (dayOfMonthEnd <= dayOfMonth)
                     return false;
             }
         }
@@ -1141,7 +1171,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mSubscriptions != null)
+        if (mSubscriptions != null)
             mSubscriptions.dispose();
     }
 
@@ -1155,8 +1185,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 repeatAddText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
                 repeatAddIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.deep_purple_200));
             }
-        }
-        else if (view == guestBox) {
+        } else if (view == guestBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 guestText.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
                 guestsNumber.setBackground(ContextCompat.getDrawable(getActivity(), R.drawable.box_qty_guests));

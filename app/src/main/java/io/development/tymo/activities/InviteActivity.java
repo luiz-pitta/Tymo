@@ -216,7 +216,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             
             InviteModel inviteModel = new InviteModel(activityServer.getTitle(), date, inviter_name, activityServer.getCubeIcon(), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer);
             listInvite.add(inviteModel);
@@ -236,7 +236,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
 
             InviteModel inviteModel = new InviteModel(flagServer.getTitle(), date, inviter_name, "",0,0, flagServer);
             listInvite.add(inviteModel);

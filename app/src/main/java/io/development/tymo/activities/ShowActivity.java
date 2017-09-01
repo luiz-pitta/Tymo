@@ -762,12 +762,12 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                     if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                        dateHourText.setText(this.getResources().getString(R.string.date_format_4, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                     } else {
-                        dateHourText.setText(this.getResources().getString(R.string.date_format_5, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                     }
                 } else {
-                    dateHourText.setText(this.getResources().getString(R.string.date_format_6, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
                 }
 
                 if (activityServer.getLocation() == null || activityServer.getLocation().matches(""))
@@ -1062,7 +1062,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
         int yearEnd = activityServer.getYearEnd();
 
-        String date = this.getResources().getString(R.string.date_format_3, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
+        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
 
         return date;
     }

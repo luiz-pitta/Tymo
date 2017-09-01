@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
-import android.media.Image;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
@@ -28,7 +27,6 @@ import android.widget.Toast;
 import com.aspsine.fragmentnavigator.FragmentNavigator;
 import com.facebook.rebound.SpringSystem;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 import com.tumblr.backboard.Actor;
 import com.tumblr.backboard.imitator.ToggleImitator;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
@@ -44,10 +42,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import io.development.tymo.adapters.PlansAdapter;
 import io.development.tymo.model_server.DateTymo;
-import io.development.tymo.models.WeekModel;
-import io.development.tymo.models.cards.FreeTime;
 import io.development.tymo.utils.CreatePopUpDialogFragment;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
@@ -309,7 +304,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         String month_text= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(cal.getTime().getTime());
         String day_text= dateFormat.formatDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
 
-        mDateText.setText(getResources().getString(R.string.date_format_3, day_text, String.format("%02d", day_start), month_text, year_start));
+        mDateText.setText(getResources().getString(R.string.date_format_03, day_text, String.format("%02d", day_start), month_text, year_start));
 
         setProgress(true);
         setCompare(plans);
@@ -1090,7 +1085,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         String month_text= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(cal.getTime().getTime());
         String day_text= dateFormat.formatDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
 
-        mDateText.setText(getResources().getString(R.string.date_format_3, day_text, String.format("%02d", day_start), month_text, year_start));
+        mDateText.setText(getResources().getString(R.string.date_format_03, day_text, String.format("%02d", day_start), month_text, year_start));
 
         setCompare(plans);
     }
@@ -1157,7 +1152,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
         String month_text= new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(cal.getTime().getTime());
         String day_text= dateFormat.formatDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
 
-        mDateText.setText(getResources().getString(R.string.date_format_3, day_text, String.format("%02d", day_start), month_text, year_start));
+        mDateText.setText(getResources().getString(R.string.date_format_03, day_text, String.format("%02d", day_start), month_text, year_start));
 
         setCompare(plans);
     }
