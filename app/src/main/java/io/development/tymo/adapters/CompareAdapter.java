@@ -443,8 +443,6 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                     time = hour_start + ":" + minute_start + "\n" + "-";
                 else if (activityServer.getTimeStartEmpty())
                     time = "-" + "\n" + hour_end + ":" + minute_end;
-                else if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
-                    time = hour_start + ":" + minute_start;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 

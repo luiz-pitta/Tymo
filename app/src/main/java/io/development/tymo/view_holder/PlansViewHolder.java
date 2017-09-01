@@ -416,13 +416,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String time;
 
                 if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
-                    time = "-";
+                    time = "...";
                 else if (activityServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + "-";
+                    time = hour_start + ":" + minute_start + "\n" + "...";
                 else if (activityServer.getTimeStartEmpty())
-                    time = "-" + "\n" + hour_end + ":" + minute_end;
-                else if (activityServer.getHourCard() == activityServer.getHourEndCard() && activityServer.getMinuteCard() == activityServer.getMinuteEndCard())
-                    time = hour_start + ":" + minute_start;
+                    time = "..." + "\n" + hour_end + ":" + minute_end;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
@@ -456,13 +454,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String time;
 
                 if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
-                    time = "-";
+                    time = "...";
                 else if (flagServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + "-";
+                    time = hour_start + ":" + minute_start + "\n" + "...";
                 else if (flagServer.getTimeStartEmpty())
-                    time = "-" + "\n" + hour_end + ":" + minute_end;
-                else if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
-                    time = hour_start + ":" + minute_start;
+                    time = "..." + "\n" + hour_end + ":" + minute_end;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
@@ -493,13 +489,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String time;
 
                 if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
-                    time = "-";
+                    time = "...";
                 else if (reminderServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + "-";
+                    time = hour_start + ":" + minute_start + "\n" + "...";
                 else if (reminderServer.getTimeStartEmpty())
-                    time = "-" + "\n" + hour_end + ":" + minute_end;
-                else if (reminderServer.getHourStart() == reminderServer.getHourEnd() && reminderServer.getMinuteStart() == reminderServer.getMinuteEnd())
-                    time = hour_start + ":" + minute_start;
+                    time = "..." + "\n" + hour_end + ":" + minute_end;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
