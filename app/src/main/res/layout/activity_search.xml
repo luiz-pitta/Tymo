@@ -20,7 +20,7 @@
             app:tabIndicatorHeight="4dp"
             app:tabMode="fixed"
             app:tabSelectedTextColor="@color/deep_purple_400"
-            app:tabTextAppearance="@style/MineCustomTabText" />
+            app:tabTextAppearance="@style/MyCustomTabText" />
 
         <View
             android:id="@+id/horizontalBottomLine"

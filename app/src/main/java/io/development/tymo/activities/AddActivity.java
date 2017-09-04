@@ -153,7 +153,7 @@ public class AddActivity extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_act);
+        setContentView(R.layout.xxx_old_activity_act);
 
         findViewById(R.id.buttonsBar).setVisibility(View.GONE);
         findViewById(R.id.icon1).setVisibility(View.GONE);

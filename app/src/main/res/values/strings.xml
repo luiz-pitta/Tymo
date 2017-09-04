@@ -608,4 +608,5 @@
 
     <string name="dialog_fit_multiple_repeat_activity_title">Atividade com repetição</string>
     <string name="dialog_fit_multiple_repeat_activity_text">Selecione quais você deseja encaixar</string>
+    <string name="local_edit_name">Editar nome do local</string>
 </resources>

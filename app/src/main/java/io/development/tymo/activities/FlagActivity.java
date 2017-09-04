@@ -73,7 +73,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
     private TextView confirmationButton;
 
-    private int d,m,y;
+    private int d, m, y;
 
     private TextView actionText, titleText, privacyText, editButton, agendaStatus, agendaStatusNeedInvitation;
     private ImageView mBackButton, privacyIcon;
@@ -122,10 +122,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         availableBox = (LinearLayout) findViewById(R.id.availableBox);
         unavailableBox = (LinearLayout) findViewById(R.id.unavailableBox);
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
-        availableText = (TextView)findViewById(R.id.availableText);
-        unavailableText = (TextView)findViewById(R.id.unavailableText);
-        availableButton = (ImageView)findViewById(R.id.availableIcon);
-        unavailableButton = (ImageView)findViewById(R.id.unavailableIcon);
+        availableText = (TextView) findViewById(R.id.availableText);
+        unavailableText = (TextView) findViewById(R.id.unavailableText);
+        availableButton = (ImageView) findViewById(R.id.availableIcon);
+        unavailableButton = (ImageView) findViewById(R.id.unavailableIcon);
         availableCorners = findViewById(R.id.availableCorners);
         unavailableCorners = findViewById(R.id.unavailableCorners);
         bottomBarBox = (RelativeLayout) findViewById(R.id.confirmationButtonBar);
@@ -153,22 +153,22 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         mSwipeRefreshLayout.setDistanceToTriggerSync(700);
 
-        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this,R.color.deep_purple_400));
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
 
         checkButtonBox = findViewById(R.id.checkButtonBox);
         deleteButtonBox = findViewById(R.id.deleteButtonBox);
-        checkButton = (ImageView)findViewById(R.id.checkButton);
-        deleteButton = (ImageView)findViewById(R.id.deleteButton);
-        checkText = (TextView)findViewById(R.id.checkText);
-        deleteText = (TextView)findViewById(R.id.deleteText);
+        checkButton = (ImageView) findViewById(R.id.checkButton);
+        deleteButton = (ImageView) findViewById(R.id.deleteButton);
+        checkText = (TextView) findViewById(R.id.checkText);
+        deleteText = (TextView) findViewById(R.id.deleteText);
 
         error = false;
 
-        type = getIntent().getIntExtra("type_flag",0);
+        type = getIntent().getIntExtra("type_flag", 0);
 
         editButton.setVisibility(View.GONE);
 
-        if(type == CREATE_EDIT_FLAG) {
+        if (type == CREATE_EDIT_FLAG) {
             titleText.setVisibility(View.GONE);
             mSwipeRefreshLayout.setEnabled(false);
             confirmationButton.setText(R.string.create);
@@ -178,25 +178,25 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             mBackButton.setRotation(45);
             findViewById(R.id.checkDeleteButtonBar).setVisibility(View.GONE);
 
-            flagWrapper = (FlagWrapper)getIntent().getSerializableExtra("flag_edit");
-            if(flagWrapper != null) {
+            flagWrapper = (FlagWrapper) getIntent().getSerializableExtra("flag_edit");
+            if (flagWrapper != null) {
                 actionText.setText(getResources().getString(R.string.edit_flag));
                 mBackButton.setImageResource(R.drawable.ic_add);
                 mBackButton.setRotation(45);
                 edit = true;
                 confirmationButton.setText(R.string.save_updates);
-            }else {
+            } else {
                 flagWrapper = (FlagWrapper) getIntent().getSerializableExtra("flag_free");
-                if(flagWrapper != null) {
+                if (flagWrapper != null) {
                     act_free = true;
-                    if(friend_free) {
+                    if (friend_free) {
                         unavailableBox.setVisibility(View.GONE);
                         UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("flag_free_friend_usr");
-                        if(userWrapper != null)
+                        if (userWrapper != null)
                             user_friend = userWrapper.getUser();
                         else {
                             userWrapper = (UserWrapper) getIntent().getSerializableExtra("ListCreateActivityCompare");
-                            if(userWrapper != null) {
+                            if (userWrapper != null) {
                                 listUserCompare = userWrapper.getUsers();
                                 listUserCompare.remove(0);
                             }
@@ -206,7 +206,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
 
-            if(flagWrapper != null) {
+            if (flagWrapper != null) {
                 setProgress(true);
                 FlagServer flagServer = new FlagServer();
                 SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -214,42 +214,39 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 flagServer.setId(0);
                 flagServer.setCreator(email);
                 flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-                setFlagInformation(flagWrapper.getFlagServer().getId(),flagServer);
+                setFlagInformation(flagWrapper.getFlagServer().getId(), flagServer);
             }
 
             privacyIcon.setImageResource(R.drawable.ic_lock);
             privacyText.setText(getResources().getString(R.string.flag_privacy));
 
-            if(edit){
-                if (flagWrapper.getFlagServer().getType()){
+            if (edit) {
+                if (flagWrapper.getFlagServer().getType()) {
                     paintMainBox(true);
                     unavailableBox.setVisibility(View.GONE);
-                }
-                else {
+                } else {
                     paintMainBox(false);
                     availableBox.setVisibility(View.GONE);
                 }
             }
-        }
-        else {
+        } else {
             mSwipeRefreshLayout.setEnabled(true);
             actionText.setText(getResources().getString(R.string.flag));
             bottomBarBox.setVisibility(View.GONE);
-            flagWrapper = (FlagWrapper)getIntent().getSerializableExtra("flag_show");
+            flagWrapper = (FlagWrapper) getIntent().getSerializableExtra("flag_show");
             FlagServer flagServer = new FlagServer();
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
             flagServer.setId(0);
             flagServer.setCreator(email);
             flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-            setFlagInformation(flagWrapper.getFlagServer().getId(),flagServer);
+            setFlagInformation(flagWrapper.getFlagServer().getId(), flagServer);
             setProgress(true);
 
-            if (flagWrapper.getFlagServer().getType()){
+            if (flagWrapper.getFlagServer().getType()) {
                 paintMainBox(true);
                 unavailableBox.setVisibility(View.GONE);
-            }
-            else {
+            } else {
                 paintMainBox(false);
                 availableBox.setVisibility(View.GONE);
             }
@@ -287,10 +284,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mBackButton.setOnClickListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
     }
 
-    public void paintMainBox(boolean free){
+    public void paintMainBox(boolean free) {
         mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
         actionText.setTextColor(ContextCompat.getColor(this, R.color.white));
         editButton.setTextColor(ContextCompat.getColor(this, R.color.white));
@@ -303,20 +300,19 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         actionColor = ContextCompat.getColor(this, R.color.white);
 
-        if(free) {
+        if (free) {
             actionText.setText(getString(R.string.flag_menu_available_action_text));
             mainBox.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_flag_main_box_available));
             actionColorPressed = ContextCompat.getColor(this, R.color.green_100);
-        }
-        else{
+        } else {
             actionText.setText(getString(R.string.flag_menu_unavailable_action_text));
             mainBox.setBackground(ContextCompat.getDrawable(this, R.drawable.bg_flag_main_box_unavailable));
             actionColorPressed = ContextCompat.getColor(this, R.color.red_100);
         }
     }
 
-    public NestedScrollView getScrollView(){
-        return (NestedScrollView)findViewById(R.id.scrollView);
+    public NestedScrollView getScrollView() {
+        return (NestedScrollView) findViewById(R.id.scrollView);
     }
 
     public void refreshItems() {
@@ -325,25 +321,24 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void run() {
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 mSwipeRefreshLayout.setRefreshing(false);
-                if(type == SHOW_FLAG){
+                if (type == SHOW_FLAG) {
                     FlagServer flagServer = new FlagServer();
                     SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                     String email = mSharedPreferences.getString(Constants.EMAIL, "");
                     flagServer.setId(0);
                     flagServer.setCreator(email);
                     flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-                    setFlagInformation(flagWrapper.getFlagServer().getId(),flagServer);
+                    setFlagInformation(flagWrapper.getFlagServer().getId(), flagServer);
                     setProgress(true);
 
-                    if (flagWrapper.getFlagServer().getType()){
+                    if (flagWrapper.getFlagServer().getType()) {
                         unavailableBox.setVisibility(View.GONE);
-                    }
-                    else {
+                    } else {
                         availableBox.setVisibility(View.GONE);
                     }
                 }
@@ -354,23 +349,23 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void setProgress(boolean progress) {
-        if(progress)
+        if (progress)
             findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
         else
             findViewById(R.id.progressBox).setVisibility(View.GONE);
     }
 
-    public FlagServer getFlag(){
-        if(flagWrapper!=null)
+    public FlagServer getFlag() {
+        if (flagWrapper != null)
             return flagWrapper.getFlagServer();
         else
             return null;
     }
 
     @Nullable
-    private User getCreator(ArrayList<User> users, User creator){
-        for(int i=0;i<users.size();i++){
-            if(users.get(i).getEmail().contains(creator.getEmail()))
+    private User getCreator(ArrayList<User> users, User creator) {
+        for (int i = 0; i < users.size(); i++) {
+            if (users.get(i).getEmail().contains(creator.getEmail()))
                 return users.get(i);
         }
         return null;
@@ -384,9 +379,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 String name1 = c1.getName();
                 String name2 = c2.getName();
 
-                if(name1.compareTo(name2) > 0)
+                if (name1.compareTo(name2) > 0)
                     return 1;
-                else if(name1.compareTo(name2) < 0)
+                else if (name1.compareTo(name2) < 0)
                     return -1;
                 else
                     return 0;
@@ -399,9 +394,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 long id1 = c1.getCountKnows();
                 long id2 = c2.getCountKnows();
 
-                if(id1 > id2)
+                if (id1 > id2)
                     return -1;
-                else if(id1 < id2)
+                else if (id1 < id2)
                     return 1;
                 else
                     return 0;
@@ -414,9 +409,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 long id1 = c1.getCountFavorite();
                 long id2 = c2.getCountFavorite();
 
-                if(id1 > id2)
+                if (id1 > id2)
                     return -1;
-                else if(id1 < id2)
+                else if (id1 < id2)
                     return 1;
                 else
                     return 0;
@@ -429,11 +424,11 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 long id1 = c1.getInvitation();
                 long id2 = c2.getInvitation();
 
-                if(id1 == 2 || id2 == 2)
+                if (id1 == 2 || id2 == 2)
                     return 1;
-                else if(id1 > id2)
+                else if (id1 > id2)
                     return -1;
-                else if(id1 < id2)
+                else if (id1 < id2)
                     return 1;
                 else
                     return 0;
@@ -443,19 +438,19 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         return users;
     }
 
-    private ArrayList<User> getConfirmed(ArrayList<User> users){
+    private ArrayList<User> getConfirmed(ArrayList<User> users) {
         ArrayList<User> confirmed = new ArrayList<>();
-        for(int i=0;i<users.size();i++){
-            if(!users.get(i).getEmail().equals(creator_flag.getEmail()) && users.get(i).getInvitation() == 1)
+        for (int i = 0; i < users.size(); i++) {
+            if (!users.get(i).getEmail().equals(creator_flag.getEmail()) && users.get(i).getInvitation() == 1)
                 confirmed.add(users.get(i));
         }
         return setOrderGuests(confirmed);
     }
 
-    private ArrayList<User> getInvited(ArrayList<User> users){
+    private ArrayList<User> getInvited(ArrayList<User> users) {
         ArrayList<User> confirmed = new ArrayList<>();
-        for(int i=0;i<users.size();i++){
-            if((users.get(i).getInvitation() == 0 ||  users.get(i).getInvitation() == 2) && !users.get(i).getEmail().equals(creator_flag.getEmail()))
+        for (int i = 0; i < users.size(); i++) {
+            if ((users.get(i).getInvitation() == 0 || users.get(i).getInvitation() == 2) && !users.get(i).getEmail().equals(creator_flag.getEmail()))
                 confirmed.add(users.get(i));
         }
         return setOrderGuests(confirmed);
@@ -471,7 +466,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().getFlag2(id, flagServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleFlagInformation,this::handleError));
+                .subscribe(this::handleFlagInformation, this::handleError));
     }
 
     public User getUserFriend() {
@@ -491,13 +486,13 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         userList = response.getPeople();
 
         creator_flag = getCreator(userList, response.getUser());
-        if(creator_flag != null)
+        if (creator_flag != null)
             creator_flag.setCreator(true);
 
         invitedList.add(creator_flag);
-        if(user_friend != null)
+        if (user_friend != null)
             invitedList.add(user_friend);
-        else if(listUserCompare.size() > 0)
+        else if (listUserCompare.size() > 0)
             invitedList.addAll(listUserCompare);
 
         invitedList.addAll(getConfirmed(userList));
@@ -508,37 +503,35 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         permissionInvite = response.getUser() != null && checkIfCreator(response.getUser().getEmail());
 
-        if(type == CREATE_EDIT_FLAG){
+        if (type == CREATE_EDIT_FLAG) {
             titleText.setVisibility(View.GONE);
             FlagEditFragment flagEditFragment = (FlagEditFragment) mNavigator.getFragment(type);
             flagEditFragment.setLayout(flagWrapper.getFlagServer(), response.getWhatsGoingFlag(), invitedList, confirmedList, edit, act_free, user_friend != null || listUserCompare.size() > 0);
 
-            if(flagWrapper.getFlagServer().getType() || act_free){
+            if (flagWrapper.getFlagServer().getType() || act_free) {
                 privacyIcon.setImageResource(R.drawable.ic_lock);
                 privacyText.setText(getResources().getString(R.string.flag_privacy));
-            }else {
+            } else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
                 privacyText.setText(getResources().getString(R.string.flag_privacy_public));
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
                 unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
                 unavailableButton.clearColorFilter();
             }
-        }else {
+        } else {
             FlagShowFragment flagShowFragment = (FlagShowFragment) mNavigator.getFragment(type);
             flagShowFragment.setLayout(flagWrapper.getFlagServer(), invitedList, confirmedList, response.getWhatsGoingFlag(), permissionInvite);
 
-            if(flagWrapper.getFlagServer().getType()){
+            if (flagWrapper.getFlagServer().getType()) {
                 paintMainBox(true);
-            }
-            else {
+            } else {
                 paintMainBox(false);
             }
 
-            if(!flagWrapper.getFlagServer().getTitle().matches("")){
+            if (!flagWrapper.getFlagServer().getTitle().matches("")) {
                 titleText.setVisibility(View.VISIBLE);
                 titleText.setText(flagWrapper.getFlagServer().getTitle());
-            }
-            else{
+            } else {
                 titleText.setVisibility(View.GONE);
             }
 
@@ -548,23 +541,22 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             checkButtonBox.setVisibility(View.GONE);
             agendaStatus.setText(getString(R.string.agenda_status_fitted));
 
-            if(!flagWrapper.getFlagServer().getType()){
+            if (!flagWrapper.getFlagServer().getType()) {
                 editButton.setVisibility(View.VISIBLE);
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
                 unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
                 unavailableButton.clearColorFilter();
-            }else if(permissionInvite) {
+            } else if (permissionInvite) {
                 editButton.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 editButton.setVisibility(View.GONE);
 
-                if(user != null){
-                    if(user.getInvitation() == 1) {
+                if (user != null) {
+                    if (user.getInvitation() == 1) {
                         deleteButtonBox.setVisibility(View.VISIBLE);
                         checkButtonBox.setVisibility(View.GONE);
                         agendaStatus.setText(getString(R.string.agenda_status_fitted));
-                    }
-                    else {
+                    } else {
                         checkButtonBox.setVisibility(View.VISIBLE);
                         deleteButtonBox.setVisibility(View.GONE);
                         agendaStatus.setText(getString(R.string.agenda_status_signalized));
@@ -573,21 +565,20 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             }
 
 
-            if(flagWrapper.getFlagServer().getType()){
+            if (flagWrapper.getFlagServer().getType()) {
                 privacyIcon.setImageResource(R.drawable.ic_lock);
                 privacyText.setText(getResources().getString(R.string.flag_privacy));
-            }else {
+            } else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
                 privacyText.setText(getResources().getString(R.string.flag_privacy_public));
             }
 
-            if (flagWrapper.getFlagServer().getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && deleteButtonBox.getVisibility() == View.GONE){
+            if (flagWrapper.getFlagServer().getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && deleteButtonBox.getVisibility() == View.GONE) {
                 agendaStatus.setVisibility(View.GONE);
                 checkButtonBox.setVisibility(View.GONE);
                 agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
                 agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_past));
-            }
-            else{
+            } else {
                 agendaStatusNeedInvitation.setVisibility(View.GONE);
             }
         }
@@ -599,8 +590,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
-        for(int i = 0; i < usr.size(); i++){
-            if(email.equals(usr.get(i).getEmail()))
+        for (int i = 0; i < usr.size(); i++) {
+            if (email.equals(usr.get(i).getEmail()))
                 return usr.get(i);
         }
 
@@ -614,36 +605,36 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         return email.equals(email_creator);
     }
 
-    private boolean isActivityReadyRegister(int y1, int m1, int d1,int y2, int m2, int d2, int period){
-        LocalDate start = new LocalDate (y1, m1+1, d1);
-        LocalDate end = new LocalDate(y2, m2+1, d2);
+    private boolean isActivityReadyRegister(int y1, int m1, int d1, int y2, int m2, int d2, int period) {
+        LocalDate start = new LocalDate(y1, m1 + 1, d1);
+        LocalDate end = new LocalDate(y2, m2 + 1, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
-        if(timePeriod.getDays() > 15)
+        if (timePeriod.getDays() > 15)
             return false;
 
-        switch (period){
+        switch (period) {
             case 1:
-                if(timePeriod.getDays() > 0)
+                if (timePeriod.getDays() > 0)
                     return false;
             case 2:
-                if(timePeriod.getDays() > 6)
+                if (timePeriod.getDays() > 6)
                     return false;
             case 3:
-                if(timePeriod.getDays() > 29)
+                if (timePeriod.getDays() > 29)
                     return false;
             default:
                 return true;
         }
     }
 
-    private String getErrorMessage(int y1, int m1, int d1,int y2, int m2, int d2, int period){
-        LocalDate start = new LocalDate (y1, m1+1, d1);
-        LocalDate end = new LocalDate(y2, m2+1, d2);
+    private String getErrorMessage(int y1, int m1, int d1, int y2, int m2, int d2, int period) {
+        LocalDate start = new LocalDate(y1, m1 + 1, d1);
+        LocalDate end = new LocalDate(y2, m2 + 1, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
-        if(timePeriod.getDays() > 15)
+        if (timePeriod.getDays() > 15)
             return getResources().getString(R.string.validation_field_act_max_lenght_days);
 
-        switch (period){
+        switch (period) {
             case 1:
                 return getResources().getString(R.string.validation_field_act_max_lenght_days_daily);
             case 2:
@@ -661,73 +652,64 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         List<Integer> repeat;
         List<User> list_guest = new ArrayList<>();
         boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
-        String title = ((FlagEditFragment)mNavigator.getFragment(0)).getTitleFromView();
+        String title = ((FlagEditFragment) mNavigator.getFragment(0)).getTitleFromView();
 
         date = ((FlagEditFragment) mNavigator.getFragment(0)).getDateFromView();
         repeat = ((FlagEditFragment) mNavigator.getFragment(0)).getRepeatFromView();
 
         boolean sendAll = ((FlagEditFragment) mNavigator.getFragment(0)).getSendToAll() == 0;
 
-        if (date.get(0) == -1){
+        if (date.get(0) == -1) {
             dateStartEmpty = true;
-        }
-        else{
+        } else {
             dateStartEmpty = false;
         }
 
-        if (date.get(3) == -1){
+        if (date.get(3) == -1) {
             dateEndEmpty = true;
             date.set(3, date.get(0));
             date.set(4, date.get(1));
             date.set(5, date.get(2));
-        }
-        else{
+        } else {
             dateEndEmpty = false;
         }
 
-        if (date.get(6) == -1){
+        if (date.get(6) == -1) {
             timeStartEmpty = true;
             date.set(6, 0);
             date.set(7, 0);
-        }
-        else{
+        } else {
             timeStartEmpty = false;
         }
 
-        if (date.get(8) == -1){
+        if (date.get(8) == -1) {
             timeEndEmpty = true;
             date.set(8, 59);
             date.set(9, 23);
-        }
-        else{
+        } else {
             timeEndEmpty = false;
         }
 
-        if(!sendAll) {
+        if (!sendAll) {
             list_guest = ((FlagEditFragment) mNavigator.getFragment(0)).getGuestFromView();
-        }
-        else{
+        } else {
 
         }
 
         int err = 0;
-        if(dateStartEmpty){
+        if (dateStartEmpty) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
-        }
-        else if((repeat.get(0) != 0 && repeat.get(1) < 0)){
+        } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-        }
-        else if(repeat.get(1) == 0 || repeat.get(1) > 30) {
+        } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
-        }
-        else if(!isActivityReadyRegister(date.get(2),date.get(1),date.get(0),date.get(5),date.get(4),date.get(3), repeat.get(0))){
+        } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
             err++;
-            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2),date.get(1),date.get(0),date.get(5),date.get(4),date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
-        }
-        else{
+            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
+        } else {
 
         }
 
@@ -744,7 +726,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             List<Long> date_time_list_start = new ArrayList<>();
             List<Long> date_time_list_end = new ArrayList<>();
 
-            if(repeat_type > 0){
+            if (repeat_type > 0) {
                 int repeat_adder = getRepeatAdder(repeat_type);
 
                 Calendar cal = Calendar.getInstance();
@@ -762,22 +744,21 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
                 cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
 
-                for(int i=0;i<repeat_qty;i++){
+                for (int i = 0; i < repeat_qty; i++) {
                     day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH)+1);
+                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
                     year_list_start.add(cal.get(Calendar.YEAR));
                     day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH)+1);
+                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
                     year_list_end.add(cal2.get(Calendar.YEAR));
 
                     date_time_list_start.add(cal.getTimeInMillis());
                     date_time_list_end.add(cal2.getTimeInMillis());
 
-                    if(repeat_type == Constants.MONTHLY) {
+                    if (repeat_type == Constants.MONTHLY) {
                         cal.add(Calendar.MONTH, 1);
                         cal2.add(Calendar.MONTH, 1);
-                    }
-                    else {
+                    } else {
                         cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
                         cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
                     }
@@ -802,10 +783,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             flagServer.setTimeStartEmpty(timeStartEmpty);
             flagServer.setTimeEndEmpty(timeEndEmpty);
             flagServer.setDayStart(date.get(0));
-            flagServer.setMonthStart(date.get(1)+1);
+            flagServer.setMonthStart(date.get(1) + 1);
             flagServer.setYearStart(date.get(2));
             flagServer.setDayEnd(date.get(3));
-            flagServer.setMonthEnd(date.get(4)+1);
+            flagServer.setMonthEnd(date.get(4) + 1);
             flagServer.setYearEnd(date.get(5));
             flagServer.setMinuteStart(date.get(6));
             flagServer.setHourStart(date.get(7));
@@ -834,12 +815,12 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             flagServer.setDateTimeListEnd(date_time_list_end);
 
             flagServer.setType(free);
-            if(free)
+            if (free)
                 flagServer.setToAll(sendAll);
             else
                 flagServer.setToAll(true);
 
-            for(int i=1;i<list_guest.size();i++){
+            for (int i = 1; i < list_guest.size(); i++) {
                 flagServer.addGuest(list_guest.get(i).getEmail());
             }
 
@@ -853,8 +834,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private int getRepeatAdder(int type){
-        switch (type){
+    private int getRepeatAdder(int type) {
+        switch (type) {
             case Constants.DAYLY:
                 return 1;
             case Constants.WEEKLY:
@@ -869,7 +850,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().registerFlag(flagServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void editFlag(ActivityServer activityServer) {
@@ -877,7 +858,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().editFlag(getFlag().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void editFlagRepeatSingle(ActivityServer activityServer) {
@@ -885,11 +866,12 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().editFlagRepeatSingle(getFlag().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void edit_flag() {
-        String title = ((FlagEditFragment)mNavigator.getFragment(0)).getTitleFromView();
+        boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
+        String title = ((FlagEditFragment) mNavigator.getFragment(0)).getTitleFromView();
         List<Integer> repeat_single = ((FlagEditFragment) mNavigator.getFragment(0)).getRepeatFromView();
         List<Integer> date = ((FlagEditFragment) mNavigator.getFragment(0)).getDateFromView();
 
@@ -897,7 +879,41 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         int repeat_type = getFlag().getRepeatType();
         boolean repeat_single_changed = false;
 
-        if(repeat_type == 0 && repeat_type != repeat_single.get(0)) {
+        if (date.get(0) == -1) {
+            dateStartEmpty = true;
+        } else {
+            dateStartEmpty = false;
+        }
+
+        if (date.get(3) == -1) {
+            dateEndEmpty = true;
+            date.set(3, date.get(0));
+            date.set(4, date.get(1));
+            date.set(5, date.get(2));
+        } else {
+            dateEndEmpty = false;
+        }
+
+        if (date.get(6) == -1) {
+            timeStartEmpty = true;
+            date.set(6, 0);
+            date.set(7, 0);
+        } else {
+            timeStartEmpty = false;
+        }
+
+        if (date.get(8) == -1) {
+            timeEndEmpty = true;
+            date.set(8, 59);
+            date.set(9, 23);
+        } else {
+            timeEndEmpty = false;
+        }
+
+        if (dateStartEmpty) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
+        } else if (repeat_type == 0 && repeat_type != repeat_single.get(0)) {
             repeat_type = repeat_single.get(0);
             repeat_single_changed = true;
             if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
@@ -913,7 +929,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             ActivityServer activityServer = new ActivityServer();
             activityServer.setTitle(title);
-            int repeat_left=-1;
+            int repeat_left = -1;
 
             List<Integer> day_list_start = new ArrayList<>();
             List<Integer> month_list_start = new ArrayList<>();
@@ -926,7 +942,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             activityServer.setRepeatType(repeat_type);
 
-            if(repeat_single_changed){
+            if (repeat_single_changed) {
                 int repeat_adder = getRepeatAdder(repeat_type);
 
                 Calendar cal = Calendar.getInstance();
@@ -946,32 +962,35 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
                 repeat_left = repeat_single.get(1);
 
-                for(int i=0;i<repeat_left;i++){
+                for (int i = 0; i < repeat_left; i++) {
                     day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH)+1);
+                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
                     year_list_start.add(cal.get(Calendar.YEAR));
                     day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH)+1);
+                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
                     year_list_end.add(cal2.get(Calendar.YEAR));
 
                     date_time_list_start.add(cal.getTimeInMillis());
                     date_time_list_end.add(cal2.getTimeInMillis());
 
-                    if(repeat_type == Constants.MONTHLY) {
+                    if (repeat_type == Constants.MONTHLY) {
                         cal.add(Calendar.MONTH, 1);
                         cal2.add(Calendar.MONTH, 1);
-                    }
-                    else {
+                    } else {
                         cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
                         cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
                     }
                 }
 
+                activityServer.setDateStartEmpty(dateStartEmpty);
+                activityServer.setDateEndEmpty(dateEndEmpty);
+                activityServer.setTimeStartEmpty(timeStartEmpty);
+                activityServer.setTimeEndEmpty(timeEndEmpty);
                 activityServer.setDayStart(date.get(0));
-                activityServer.setMonthStart(date.get(1)+1);
+                activityServer.setMonthStart(date.get(1) + 1);
                 activityServer.setYearStart(date.get(2));
                 activityServer.setDayEnd(date.get(3));
-                activityServer.setMonthEnd(date.get(4)+1);
+                activityServer.setMonthEnd(date.get(4) + 1);
                 activityServer.setYearEnd(date.get(5));
                 activityServer.setMinuteStart(date.get(6));
                 activityServer.setHourStart(date.get(7));
@@ -1000,7 +1019,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 activityServer.setRepeatQty(repeat_left);
             }
 
-            if(!repeat_single_changed)
+            if (!repeat_single_changed)
                 editFlag(activityServer);
             else
                 editFlagRepeatSingle(activityServer);
@@ -1026,28 +1045,27 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         int month2 = c2.get(Calendar.MONTH);
         int year2 = c2.get(Calendar.YEAR);
 
-        if(getFlag()!=null) {
+        if (getFlag() != null) {
             if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
                 getActivityStartToday();
         }
 
 
         Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("d",d);
-        intent.putExtra("m",m);
-        intent.putExtra("y",y);
+        intent.putExtra("d", d);
+        intent.putExtra("m", m);
+        intent.putExtra("y", y);
         setResult(RESULT_OK, intent);
-        if(user_friend == null || listUserCompare.size() == 0) {
+        if (user_friend == null || listUserCompare.size() == 0) {
             finish();
-        }
-        else
+        } else
             startActivity(intent);
 
     }
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1057,7 +1075,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if (findViewById(android.R.id.content) != null) {
 
-            Snackbar.make(findViewById(android.R.id.content),message,Snackbar.LENGTH_LONG).show();
+            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
         }
     }
 
@@ -1066,7 +1084,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleFlag,this::handleError));
+                .subscribe(this::handleFlag, this::handleError));
     }
 
     public void addGuestToFlag(ActivityServer activityServer) {
@@ -1074,7 +1092,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().addNewGuest(activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleFlag,this::handleError));
+                .subscribe(this::handleFlag, this::handleError));
     }
 
     private void handleFlag(Response response) {
@@ -1086,7 +1104,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         flagServer.setId(0);
         flagServer.setCreator(email);
         flagServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-        setFlagInformation(getFlag().getId(),flagServer);
+        setFlagInformation(getFlag().getId(), flagServer);
 
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
@@ -1104,16 +1122,16 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         int m = flag.getMonthStart();
         int y = flag.getYearStart();
 
-        if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+        if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
     }
 
     @Override
-    public void onClick(View v){
-        if(type == CREATE_EDIT_FLAG && !edit) {
+    public void onClick(View v) {
+        if (type == CREATE_EDIT_FLAG && !edit) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "type" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "type" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             LinearLayout linearLayout = (LinearLayout) mNavigator.getCurrentFragment().getView();
@@ -1132,7 +1150,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 availableButton.setImageResource(R.drawable.ic_flag_available);
                 unavailableButton.setImageResource(R.drawable.ic_flag);
                 availableButton.clearColorFilter();
-            } else if (v ==  unavailableText || v == unavailableButton) {
+            } else if (v == unavailableText || v == unavailableButton) {
                 controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
                 textInputLayout.setHint(R.string.hint_title_opcional);
                 free = false;
@@ -1145,50 +1163,46 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        if(v == mBackButton) {
+        if (v == mBackButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(edit){
+            if (edit) {
                 Intent intent = new Intent(this, FlagActivity.class);
                 intent.putExtra("type_flag", 1);
                 intent.putExtra("flag_show", flagWrapper);
                 startActivity(intent);
                 finish();
-            }
-            else {
+            } else {
                 onBackPressed();
             }
-        }
-        else if(v == confirmationButton) {
+        } else if (v == confirmationButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            if(!edit) {
+            if (!edit) {
                 register();
-            }
-            else {
+            } else {
                 edit_flag();
             }
-        }
-        else if(v == editButton){
+        } else if (v == editButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent myIntent = new Intent(FlagActivity.this, FlagActivity.class);
             myIntent.putExtra("flag_edit", flagWrapper);
             startActivity(myIntent);
             finish();
-        }else if(v == checkButtonBox){
+        } else if (v == checkButtonBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             InviteRequest inviteRequest = new InviteRequest();
@@ -1204,15 +1218,15 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             inviteRequest.setIdAct(getFlag().getId());
 
             updateInviteRequest(inviteRequest);
-        }else if(v == deleteButtonBox){
+        } else if (v == deleteButtonBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if (checkIfCreator(creator_flag.getEmail())) {
                 createDialogRemove(getFlag().getRepeatType() > 0);
-            } else{
+            } else {
                 InviteRequest inviteRequest = new InviteRequest();
 
                 SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -1256,7 +1270,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         int m = flag.getMonthStart();
         int y = flag.getYearStart();
 
-        if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+        if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
 
         setProgress(false);
@@ -1354,8 +1368,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 activity.setId(idx);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 activity.setVisibility(Constants.FLAG);
@@ -1374,7 +1388,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.dispose();
     }
 
-    private void getActivityStartToday(){
+    private void getActivityStartToday() {
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -1407,7 +1421,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponseToday(Response response) {
 
         JobManager mJobManager = JobManager.instance();
-        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+        if (mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
             mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
 
         ArrayList<Object> list = new ArrayList<>();
@@ -1415,13 +1429,13 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
-            for(int i=0;i<activityServers.size();i++){
+            for (int i = 0; i < activityServers.size(); i++) {
                 list.add(activityServers.get(i));
             }
         }
         if (response.getMyCommitFlag() != null) {
             ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
-            for(int i=0;i<flagServers.size();i++){
+            for (int i = 0; i < flagServers.size(); i++) {
                 list.add(flagServers.get(i));
             }
         }
@@ -1553,19 +1567,19 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
                 list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
-                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
+                        activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getYearStart()));
             }
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
                 list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
-                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
+                        flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
                 list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
-                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
+                        reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }
 
@@ -1590,7 +1604,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             Calendar c2 = Calendar.getInstance();
 
             c1.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
-            c1.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+            c1.set(Calendar.MONTH, activityOfDay.getMonth() - 1);
             c1.set(Calendar.YEAR, activityOfDay.getYear());
             c1.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
             c1.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
@@ -1598,35 +1612,34 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             c1.set(Calendar.MILLISECOND, 0);
 
             c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-            c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+            c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
             c2.set(Calendar.YEAR, activityOfDayNext.getYear());
             c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
             c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
             c2.set(Calendar.SECOND, 0);
             c2.set(Calendar.MILLISECOND, 0);
 
-            while(activityOfDayNext !=null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
+            while (activityOfDayNext != null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
                 j++;
                 count_same++;
-                if(j < list_notify.size()) {
+                if (j < list_notify.size()) {
                     activityOfDayNext = list_notify.get(j);
                     c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
                     c2.set(Calendar.YEAR, activityOfDayNext.getYear());
                     c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
                     c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
                     c2.set(Calendar.SECOND, 0);
                     c2.set(Calendar.MILLISECOND, 0);
-                }
-                else
+                } else
                     activityOfDayNext = null;
             }
             activityOfDay.setCommitmentSameHour(count_same);
 
-            time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+            time_exact = (int) (c1.getTimeInMillis() - c3.getTimeInMillis()) / (1000 * 60);
+            if (time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
                 c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras)
@@ -1635,9 +1648,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            if(time_exact >= 1440) {
+            if (time_exact >= 1440) {
                 c1.add(Calendar.MINUTE, -1380);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras2)
@@ -1646,7 +1659,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            i=j-1;
+            i = j - 1;
         }
 
         if (list_notify.size() > 0) {
@@ -1669,8 +1682,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(actionColorPressed);
             }
-        }
-        else if (view == editButton) {
+        } else if (view == editButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 editButton.setTextColor(actionColor);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {

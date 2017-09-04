@@ -97,8 +97,6 @@ public class ShowGuestViewHolder extends BaseViewHolder<User> implements View.On
         $(R.id.pieceBox).setVisibility(View.GONE);
         $(R.id.text4).setVisibility(View.GONE);
 
-        text4.setAllCaps(true);
-
         itemBox.setOnClickListener(this);
         actionIcon.setOnClickListener(this);
         moreVerticalIcon.setOnClickListener(this);

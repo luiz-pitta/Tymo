@@ -236,71 +236,6 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:id="@+id/addTagBox"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content">
-
-                            <ImageView
-                                android:id="@+id/addTagIcon"
-                                android:layout_width="35dp"
-                                android:layout_height="35dp"
-                                android:layout_alignParentLeft="true"
-                                android:layout_alignParentStart="true"
-                                android:layout_alignParentTop="true"
-                                android:padding="5dp"
-                                android:src="@drawable/ic_add"
-                                android:tint="@color/deep_purple_400" />
-
-                            <TextView
-                                android:id="@+id/addTagText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_toRightOf="@+id/addTagIcon"
-                                android:text="@string/act_tags"
-                                android:textColor="@color/deep_purple_400"
-                                android:textSize="14sp" />
-
-                        </RelativeLayout>
-
-                        <android.support.v4.widget.NestedScrollView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="10dp"
-                            android:visibility="visible">
-
-                            <com.cunoraz.tagview.TagView
-                                android:id="@+id/tagGroup"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent" />
-
-                        </android.support.v4.widget.NestedScrollView>
-
-                    </LinearLayout>
-
-                    <EditText
-                        android:id="@+id/description"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:padding="10dp"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_act_edit_box_local"
-                        android:gravity="center_vertical"
-                        android:hint="@string/hint_description"
-                        android:inputType="textMultiLine"
-                        android:minHeight="40dp"
-                        android:textColor="@color/grey_600"
-                        android:textColorHint="@color/grey_400"
-                        android:textSize="14sp"
-                        android:textStyle="normal" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:orientation="horizontal">
 
@@ -537,6 +472,19 @@
 
                     </LinearLayout>
 
+                    <TextView
+                        android:id="@+id/repeatText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="45dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="right"
+                        android:text="Repeat Text"
+                        android:textColor="@color/grey_600"
+                        android:textSize="12sp"
+                        android:textStyle="normal" />
+
                     <LinearLayout
                         android:id="@+id/repeatBox"
                         android:layout_width="match_parent"
@@ -626,6 +574,71 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:id="@+id/addTagBox"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content">
+
+                            <ImageView
+                                android:id="@+id/addTagIcon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentTop="true"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_add"
+                                android:tint="@color/deep_purple_400" />
+
+                            <TextView
+                                android:id="@+id/addTagText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_toRightOf="@+id/addTagIcon"
+                                android:text="@string/act_tags"
+                                android:textColor="@color/deep_purple_400"
+                                android:textSize="14sp" />
+
+                        </RelativeLayout>
+
+                        <android.support.v4.widget.NestedScrollView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:visibility="visible">
+
+                            <com.cunoraz.tagview.TagView
+                                android:id="@+id/tagGroup"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent" />
+
+                        </android.support.v4.widget.NestedScrollView>
+
+                    </LinearLayout>
+
+                    <EditText
+                        android:id="@+id/description"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_act_edit_box_local"
+                        android:gravity="center_vertical"
+                        android:hint="@string/hint_description"
+                        android:inputType="textMultiLine"
+                        android:minHeight="40dp"
+                        android:textColor="@color/grey_600"
+                        android:textColorHint="@color/grey_400"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                    <LinearLayout
                         android:id="@+id/locationBoxAdd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -709,7 +722,7 @@
                             android:layout_marginRight="45dp"
                             android:paddingBottom="4dp"
                             android:paddingTop="4dp"
-                            android:text="Editar nome do local"
+                            android:text="@string/local_edit_name"
                             android:textColor="@color/deep_purple_400"
                             android:textSize="14sp"
                             android:textStyle="normal" />
