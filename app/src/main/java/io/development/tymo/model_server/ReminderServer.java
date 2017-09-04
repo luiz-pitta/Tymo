@@ -8,6 +8,7 @@ public class ReminderServer implements Serializable {
     private static final long serialVersionUID = 5L;
 
     private String title;
+    private String text;
     private String creator;
     private long id;
 
@@ -27,6 +28,9 @@ public class ReminderServer implements Serializable {
     private boolean date_end_empty;
     private boolean time_start_empty;
     private boolean time_end_empty;
+    private boolean note;
+    private boolean date_time_alert;
+    private boolean title_empty;
 
     private long date_time_creation;
     private long date_time_start;
@@ -42,6 +46,30 @@ public class ReminderServer implements Serializable {
     private List<Integer> month_list_end = new ArrayList<>();
     private List<Integer> year_list_end = new ArrayList<>();
     private List<Long> date_time_list_end = new ArrayList<>();
+
+    public void setNote(boolean note) {
+        this.note = note;
+    }
+
+    public boolean getNote() {
+        return note;
+    }
+
+    public void setDateTimeAlert(boolean date_time_alert) {
+        this.date_time_alert = date_time_alert;
+    }
+
+    public boolean getDateTimeAlert() {
+        return date_time_alert;
+    }
+
+    public void setTitleEmpty(boolean title_empty) {
+        this.title_empty = title_empty;
+    }
+
+    public boolean getTitleEmpty() {
+        return title_empty;
+    }
 
     public void setDateStartEmpty(boolean date_start_empty) {
         this.date_start_empty = date_start_empty;
@@ -115,6 +143,10 @@ public class ReminderServer implements Serializable {
         return title;
     }
 
+    public String getText() {
+        return text;
+    }
+
     public int getDayStart() {
         return day_start;
     }
@@ -158,6 +190,11 @@ public class ReminderServer implements Serializable {
     public void setTitle(String title) {
         this.title = title;
     }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
 
     public void setCreator(String creator) {
         this.creator = creator;
