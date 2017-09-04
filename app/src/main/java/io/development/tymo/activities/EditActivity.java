@@ -83,6 +83,7 @@ import io.development.tymo.model_server.User;
 import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.RecyclerItemClickListener;
 import io.development.tymo.utils.SecureStringPropertyConverter;
@@ -104,6 +105,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private String urlIcon = "", urlIconTemp = "", email = "";
     private int d, m, y, selected = 0, invite = 0;
     private boolean first_open = true, permissionInvite = false;
+    private DateFormat dateFormat;
 
     private ArrayList<ActivityServer> activityServers;
     private ArrayList<IconServer> iconList;
@@ -271,6 +273,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         clearTimeEnd.setVisibility(View.GONE);
         repeatBox.setVisibility(View.GONE);
         repeatText.setVisibility(View.GONE);
+
+        dateFormat = new DateFormat(this);
 
         titleEditText.addTextChangedListener(new TextWatcher() {
             @Override
@@ -947,6 +951,33 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             }
 
             activityServers = response.getWhatsGoingAct();
+
+            if (activityServer.getRepeatType() == 0) {
+                repeatText.setVisibility(View.GONE);
+            } else {
+                String repeatly;
+                repeatText.setVisibility(View.VISIBLE);
+                switch (activityServer.getRepeatType()) {
+                    case Constants.DAYLY:
+                        repeatly = this.getString(R.string.repeat_daily);
+                        break;
+                    case Constants.WEEKLY:
+                        repeatly = this.getString(R.string.repeat_weekly);
+                        break;
+                    case Constants.MONTHLY:
+                        repeatly = this.getString(R.string.repeat_monthly);
+                        break;
+                    default:
+                        repeatly = "";
+                        break;
+                }
+
+                if (activityServer.getRepeatType() == 5) {
+                    repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
+                } else {
+                    repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
+                }
+            }
         }
 
         findViewById(R.id.progressBox).setVisibility(View.GONE);
@@ -2825,6 +2856,61 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 clearTimeEnd.setVisibility(View.VISIBLE);
             }
         }
+    }
+
+    private String getLastActivity(ArrayList<ActivityServer> activityServers) {
+
+        Collections.sort(activityServers, new Comparator<ActivityServer>() {
+            @Override
+            public int compare(ActivityServer c1, ActivityServer c2) {
+                ActivityServer activityServer;
+                int day = 0, month = 0, year = 0;
+                int day2 = 0, month2 = 0, year2 = 0;
+
+                day = c1.getDayStart();
+                month = c1.getMonthStart();
+                year = c1.getYearStart();
+
+                day2 = c2.getDayStart();
+                month2 = c2.getMonthStart();
+                year2 = c2.getYearStart();
+
+
+                if (year < year2)
+                    return -1;
+                else if (year > year2)
+                    return 1;
+                else if (month < month2)
+                    return -1;
+                else if (month > month2)
+                    return 1;
+                else if (day < day2)
+                    return -1;
+                else if (day > day2)
+                    return 1;
+                else
+                    return 0;
+
+            }
+        });
+
+        ActivityServer activityServer = activityServers.get(activityServers.size() - 1);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.clear(Calendar.MINUTE);
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        cal.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+
+        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(cal.get(Calendar.DAY_OF_WEEK), cal);
+        String dayEnd = String.format("%02d", activityServer.getDayEnd());
+        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
+        int yearEnd = activityServer.getYearEnd();
+
+        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
+
+        return date;
     }
 
     @Override
