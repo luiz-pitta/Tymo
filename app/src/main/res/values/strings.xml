@@ -299,6 +299,7 @@
     <string name="hint_time">Horário</string>
     <string name="hint_title">Título</string>
     <string name="hint_title_opcional">Título (opcional)</string>
+    <string name="hint_reminder_note">Digite aqui o que você quiser...</string>
     <string name="hint_whatsapp_group_link">Link do grupo no WhatsApp (opcional)</string>
     <string name="ignore">Ignorar</string>
     <string name="invitation_accepted_more_others_one">aceitou seu convite</string>
@@ -420,7 +421,7 @@
     <string name="reminder_btn_add">Lembretes e\nNotas</string>
     <string name="reminder_date">Data</string>
     <string name="reminder_hour">Hora</string>
-    <string name="reminder_privacy">Privada</string>
+    <string name="reminder_privacy">Somente você pode ver</string>
     <string name="reminder">Lembrete</string>
     <string name="remove">Remover</string>
     <string name="repeat_daily">diariamente</string>
@@ -521,6 +522,7 @@
     <string name="site">Site</string>
     <string name="skip">Pular</string>
     <string name="tag_example">Show, Restaurante, Esporte, Médico, Cupom ...</string>
+    <string name="reminder_note">Lembretes e Notas</string>
     <string name="token">Token</string>
     <string name="try_again">Tente Novamente</string>
     <string name="tutorial_1_text_1">Atividade</string>
@@ -556,14 +558,16 @@
     <string name="validation_field_birth_date_required">Preencha a data de nascimento corretamente</string>
     <string name="validation_field_compare_selected_required">Deve ter ao menos um usuário selecionado</string>
     <string name="validation_field_date_start_required">A data de início é obrigatória</string>
+    <string name="validation_field_date_end_before_start">A data término está antes da data de início</string>
+    <string name="validation_field_time_end_before_start">O horário de término está antes do horário de início</string>
     <string name="validation_field_email_invalid_or_not_registered">Email inválido ou não cadastrado</string>
     <string name="validation_field_email_required">Preencha o email corretamente</string>
     <string name="validation_field_gender_required">Selecione um gênero</string>
     <string name="validation_field_invalid_required_field">Campo obrigatório inválido</string>
     <string name="validation_field_login_password_invalid">Senha inválida</string>
-    <string name="signalize_past_dialog_text_1">Ops! Você não pode sinalizar usuários para algo do passado</string>
+    <string name="signalize_past_dialog_text_1">Ops! Você não pode sinalizar usuários para algo que já passou</string>
     <string name="signalize_past_dialog_text_2">Término do sinalizador:\n%1$s\n\nHoje:\n%2$s</string>
-    <string name="invite_past_dialog_text_1">Ops! Você não pode convidar usuários para algo do passado</string>
+    <string name="invite_past_dialog_text_1">Ops! Você não pode convidar usuários para uma atividade que já terminou</string>
     <string name="invite_past_dialog_text_2">Término da atividade:\n%1$s\n\nHoje:\n%2$s</string>
     <string name="free_time_past_dialog_text_1">Ops! Você está tentando criar algo no passado</string>
     <string name="free_time_past_dialog_text_2">Intervalo selecionado:\n%1$s\n\nHoje:\n%2$s</string>

@@ -646,6 +646,14 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    private boolean validateDateTime(Calendar calendarStart, Calendar calendarEnd) {
+        if (calendarEnd.getTimeInMillis() < calendarStart.getTimeInMillis()){
+            return false;
+        }
+
+        return true;
+    }
+
     private void register() {
 
         List<Integer> date;
@@ -696,10 +704,27 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         }
 
+        Calendar calendarStart = Calendar.getInstance();
+        Calendar calendarEnd = Calendar.getInstance();
+
+        calendarStart.set(date.get(2), date.get(1), date.get(0));
+        calendarEnd.set(date.get(5), date.get(4), date.get(3));
+        boolean validateDate = validateDateTime(calendarStart, calendarEnd);
+
+        calendarStart.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
+        calendarEnd.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
+        boolean validateTime = validateDateTime(calendarStart, calendarEnd);
+
         int err = 0;
         if (dateStartEmpty) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
+        } else if (!validateDate) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_end_before_start, Toast.LENGTH_LONG).show();
+        } else if (!validateTime) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_time_end_before_start, Toast.LENGTH_LONG).show();
         } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
@@ -910,9 +935,26 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             timeEndEmpty = false;
         }
 
+        Calendar calendarStart = Calendar.getInstance();
+        Calendar calendarEnd = Calendar.getInstance();
+
+        calendarStart.set(date.get(2), date.get(1), date.get(0));
+        calendarEnd.set(date.get(5), date.get(4), date.get(3));
+        boolean validateDate = validateDateTime(calendarStart, calendarEnd);
+
+        calendarStart.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
+        calendarEnd.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
+        boolean validateTime = validateDateTime(calendarStart, calendarEnd);
+
         if (dateStartEmpty) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
+        } else if (!validateDate) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_date_end_before_start, Toast.LENGTH_LONG).show();
+        } else if (!validateTime) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_time_end_before_start, Toast.LENGTH_LONG).show();
         } else if (repeat_type == 0 && repeat_type != repeat_single.get(0)) {
             repeat_type = repeat_single.get(0);
             repeat_single_changed = true;

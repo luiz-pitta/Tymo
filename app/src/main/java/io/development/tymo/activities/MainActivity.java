@@ -766,7 +766,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                     bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                                    startActivityForResult(new Intent(v.getContext(), AddActivity.class), Constants.REGISTER_ACT);
+                                    startActivityForResult(new Intent(v.getContext(), AddPart1Activity.class), Constants.REGISTER_ACT);
                                     Revealator.unreveal(addView)
                                             .start();
                                 }

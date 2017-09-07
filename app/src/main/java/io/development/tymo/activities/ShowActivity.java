@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -77,6 +78,7 @@ import io.reactivex.schedulers.Schedulers;
 public class ShowActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
+    private boolean isInPast = false;
 
     private TextView privacyText, editButton, agendaStatus, agendaStatusNeedInvitation;
     private ImageView privacyIcon, privacyArrowIcon;
@@ -955,7 +957,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             recyclerView.setAdapter(adapter);
             guestsNumber.setText(String.valueOf(listPerson.size()));
 
-            if (permissionInvite && !isActivityInPast(activityServer)) {
+            isInPast = isActivityInPast(activityServer);
+
+            if (permissionInvite) {
                 addGuestIcon.setImageResource(R.drawable.btn_add_person);
                 addGuestButton.setOnClickListener(this);
             } else {
@@ -968,7 +972,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private boolean isActivityInPast(ActivityServer activityServer){
         Calendar c = Calendar.getInstance();
-        c.add(Calendar.DATE, -7);
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
         int year = c.get(Calendar.YEAR);
@@ -1192,7 +1195,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            startActivityForResult(intent, ADD_GUEST);
+            if (isInPast) {
+                Calendar now = Calendar.getInstance();
+                ActivityServer activityServer = this.getActivity();
+                createDialogMessageAddInPast(activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd(),
+                        now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
+            } else {
+                startActivityForResult(intent, ADD_GUEST);
+            }
         }
         else if(v == guestBox){
             SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -1924,6 +1934,56 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return false;
+    }
+
+    private void createDialogMessageAddInPast(int y1, int m1, int d1, int h1, int min1, int y2, int m2, int d2, int h2, int min2) {
+        LayoutInflater inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        LinearLayout button1 = (LinearLayout) customView.findViewById(R.id.button1);
+        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+
+        button1.setVisibility(View.GONE);
+        editText.setVisibility(View.GONE);
+
+        Dialog dg = new Dialog(this, R.style.NewDialog);
+
+        dg.setContentView(customView);
+        dg.setCanceledOnTouchOutside(true);
+
+        String date = String.format("%02d", d1) + "/" + String.format("%02d", m1) + "/" + String.valueOf(y1);
+        String dateNow = String.format("%02d", d2) + "/" + String.format("%02d", m2) + "/" + String.valueOf(y2);
+        String time = String.format("%02d", h1) + ":" + String.format("%02d", min1);
+        String timeNow = String.format("%02d", h2) + ":" + String.format("%02d", min2);
+
+        text1.setText(R.string.invite_past_dialog_text_1);
+        text2.setText(this.getString(R.string.invite_past_dialog_text_2, date + " - " + time, dateNow + " - " + timeNow));
+        buttonText2.setText(R.string.close);
+
+        buttonText2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dg.dismiss();
+            }
+        });
+
+        buttonText2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    buttonText2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_radius));
+                }
+
+                return false;
+            }
+        });
+
+        dg.show();
     }
 
 

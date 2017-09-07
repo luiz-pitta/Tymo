@@ -38,6 +38,7 @@ import java.util.Calendar;
 
 import io.development.tymo.R;
 import io.development.tymo.activities.AddActivity;
+import io.development.tymo.activities.AddPart1Activity;
 import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.activities.ShowActivity;
@@ -1037,7 +1038,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             activityServerFreeTime.setMinuteEnd(dateTymo.getMinuteEnd());
                             activityServerFreeTime.setHourEnd(dateTymo.getHourEnd());
 
-                            Intent intent = new Intent(context, AddActivity.class);
+                            Intent intent = new Intent(context, AddPart1Activity.class);
 
                             intent.putExtra("act_free", new ActivityWrapper(activityServerFreeTime));
 

@@ -16,7 +16,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -291,7 +290,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
         String date2 = d2+"/"+m2+"/"+yearEnd;
 
 
-        if(validadeDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd))
+        if(validateDate(year, monthOfYear, dayOfMonth, yearEnd, monthOfYearEnd, dayOfMonthEnd))
         {
             day_start = dayOfMonth;
             month_start = monthOfYear;
@@ -319,7 +318,7 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
 
     }
 
-    private boolean validadeDate(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
+    private boolean validateDate(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
         if(yearEnd < year)
             return false;
         if(year == yearEnd){

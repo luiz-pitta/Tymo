@@ -295,7 +295,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
         text1.setText(R.string.free_time_past_dialog_text_1);
         text2.setText(context.getString(R.string.free_time_past_dialog_text_2, date, dateNow));
-        buttonText2.setText(R.string.close);
+        buttonText2.setText(R.string.try_again);
 
         buttonText2.setOnClickListener(new View.OnClickListener() {
             @Override

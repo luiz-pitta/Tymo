@@ -627,6 +627,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:padding="10dp"
+                        android:maxLines="20"
                         android:layout_marginTop="20dp"
                         android:background="@drawable/bg_act_edit_box_local"
                         android:gravity="center_vertical"

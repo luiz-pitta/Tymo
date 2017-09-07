@@ -11,6 +11,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -25,6 +26,8 @@ import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -278,7 +281,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleResponseFriend(Response response) {
-
         User user = response.getUser();
 
         if(user.getCountKnows() == 0 && user.getPrivacy() == 1) {
@@ -326,6 +328,9 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         listContact = new ArrayList<>();
         listContactQuery = new ArrayList<>();
+
+        users = setOrderContacts(users);
+
         listContact.addAll(users);
         listContactQuery.addAll(users);
         adapter.clear();
@@ -355,6 +360,41 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
             contactsQty.setText(getResources().getString(R.string.contacts_qty, m_contacts_qty));
         }
 
+    }
+
+    private ArrayList<User> setOrderContacts(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountKnows();
+                long id2 = c2.getCountKnows();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     private void handleError(Throwable error) {
