@@ -28,7 +28,6 @@ public class ReminderServer implements Serializable {
     private boolean date_end_empty;
     private boolean time_start_empty;
     private boolean time_end_empty;
-    private boolean note;
     private boolean date_time_alert;
     private boolean title_empty;
 
@@ -46,14 +45,6 @@ public class ReminderServer implements Serializable {
     private List<Integer> month_list_end = new ArrayList<>();
     private List<Integer> year_list_end = new ArrayList<>();
     private List<Long> date_time_list_end = new ArrayList<>();
-
-    public void setNote(boolean note) {
-        this.note = note;
-    }
-
-    public boolean getNote() {
-        return note;
-    }
 
     public void setDateTimeAlert(boolean date_time_alert) {
         this.date_time_alert = date_time_alert;
