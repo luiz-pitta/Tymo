@@ -118,7 +118,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private ArrayList<User> confirmedList = new ArrayList<>();
 
     private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton, repeatMax, repeatAddText, repeatText;
-    private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationText2, locationTextAdd;
+    private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationTextAdd;
     private TextView guestText, guestsNumber, addGuestText, feedVisibility;
     private EditText titleEditText, descriptionEditText, whatsAppEditText, repeatEditText;
     private ImageView cubeLowerBoxIcon, cubeUpperBoxIcon, pieceIcon, customizeCubeLowerBoxIcon, customizeCubeUpperBoxIcon, customizePieceIcon;
@@ -210,7 +210,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         locationIcon = (ImageView) findViewById(R.id.locationIcon);
         locationIcon2 = (ImageView) findViewById(R.id.locationIcon2);
         locationText = (TextView) findViewById(R.id.locationText);
-        locationText2 = (TextView) findViewById(R.id.locationText2);
         whatsAppEditText = (EditText) findViewById(R.id.whatsAppGroupLink);
         guestBox = (LinearLayout) findViewById(R.id.guestBox);
         guestText = (TextView) findViewById(R.id.guestText);
@@ -246,7 +245,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         locationBox.setOnClickListener(this);
         locationBox.setOnLongClickListener(this);
         locationIcon2.setOnClickListener(this);
-        locationText2.setOnClickListener(this);
         guestBox.setOnClickListener(this);
         addPersonButton.setOnClickListener(this);
 
@@ -259,7 +257,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         locationBoxAdd.setOnTouchListener(this);
         locationBox.setOnTouchListener(this);
         locationIcon2.setOnTouchListener(this);
-        locationText2.setOnTouchListener(this);
         guestBox.setOnTouchListener(this);
 
         mSwipeRefreshLayout.setEnabled(false);
@@ -663,12 +660,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 locationIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 locationIcon2.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
-            }
-        } else if (view == locationText2) {
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                locationText2.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                locationText2.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         } else if (view == guestBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
@@ -1199,7 +1190,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                     repeatAdd.setVisibility(View.GONE);
                     repeatBox.setVisibility(View.VISIBLE);
                 }
-            }, 1000);
+            }, 700);
 
         } else if ((v == locationBox || v == locationBoxAdd) && !locationNotWorking) {
             setProgress(true);
@@ -1229,7 +1220,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         } else if (v == locationIcon2) {
             findViewById(R.id.progressLocation).setVisibility(View.VISIBLE);
             locationText.setVisibility(View.INVISIBLE);
-            locationText2.setVisibility(View.INVISIBLE);
             locationIcon.setVisibility(View.INVISIBLE);
             locationIcon2.setVisibility(View.INVISIBLE);
 
@@ -1241,20 +1231,12 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                     lng = -500;
                     locationBoxAdd.setVisibility(View.VISIBLE);
                     locationText.setVisibility(View.VISIBLE);
-                    locationText2.setVisibility(View.VISIBLE);
                     locationIcon.setVisibility(View.VISIBLE);
                     locationIcon2.setVisibility(View.VISIBLE);
                     locationBox.setVisibility(View.GONE);
                     findViewById(R.id.progressLocation).setVisibility(View.GONE);
                 }
-            }, 1000);
-
-        } else if (v == locationText2) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationText" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            createDialogLocation(locationText.getText().toString());
+            }, 700);
 
         } else if (v == timeStart) {
             Calendar now = Calendar.getInstance();

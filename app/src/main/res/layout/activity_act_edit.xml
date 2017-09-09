@@ -208,9 +208,12 @@
                     android:layout_height="match_parent"
                     android:background="@color/white"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
 
                     <EditText
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/title"
                         android:layout_width="match_parent"
                         android:layout_height="40dp"
@@ -225,6 +228,8 @@
                         android:textSize="16sp" />
 
                     <TextView
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/titleMax"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -234,6 +239,8 @@
                         android:textSize="14sp" />
 
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -476,8 +483,8 @@
                         android:id="@+id/repeatText"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="45dp"
-                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="65dp"
+                        android:layout_marginRight="40dp"
                         android:layout_marginTop="10dp"
                         android:gravity="right"
                         android:text="Repeat Text"
@@ -486,6 +493,8 @@
                         android:textStyle="normal" />
 
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/repeatBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -531,6 +540,8 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/repeatNumberBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -574,6 +585,8 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -623,6 +636,8 @@
                     </LinearLayout>
 
                     <EditText
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/description"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -639,7 +654,15 @@
                         android:textSize="14sp"
                         android:textStyle="normal" />
 
+                    <View
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/horizontal_line_height"
+                        android:background="@color/horizontal_line" />
+
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/locationBoxAdd"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -670,6 +693,8 @@
                     </LinearLayout>
 
                     <RelativeLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/locationBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -713,24 +738,17 @@
                             android:src="@drawable/ic_add"
                             android:tint="@color/grey_600" />
 
-
-                        <TextView
-                            android:id="@+id/locationText2"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_below="@+id/locationText"
-                            android:layout_marginLeft="45dp"
-                            android:layout_marginRight="45dp"
-                            android:paddingBottom="4dp"
-                            android:paddingTop="4dp"
-                            android:text="@string/local_edit_name"
-                            android:textColor="@color/deep_purple_400"
-                            android:textSize="14sp"
-                            android:textStyle="normal" />
-
                     </RelativeLayout>
 
+                    <View
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/horizontal_line_height"
+                        android:background="@color/horizontal_line" />
+
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/whatsAppGroupLinkBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -761,7 +779,15 @@
 
                     </LinearLayout>
 
+                    <View
+                        android:layout_marginTop="20dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/horizontal_line_height"
+                        android:background="@color/horizontal_line" />
+
                     <TextView
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
@@ -771,6 +797,8 @@
                         android:textStyle="bold" />
 
                     <RelativeLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="7dp">
@@ -808,6 +836,8 @@
                     </RelativeLayout>
 
                     <LinearLayout
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/guestBox"
                         android:layout_width="wrap_content"
                         android:layout_height="40dp"
@@ -842,6 +872,8 @@
                     </LinearLayout>
 
                     <include
+                        android:layout_marginRight="20dp"
+                        android:layout_marginLeft="20dp"
                         android:id="@+id/profilesPhotos"
                         layout="@layout/list_profiles"
                         android:layout_width="wrap_content"

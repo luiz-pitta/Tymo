@@ -1030,8 +1030,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
             dpd.setAccentColor(ContextCompat.getColor(this,R.color.deep_purple_400), ContextCompat.getColor(this,R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.date_start));
-            dpd.setEndTitle(getResources().getString(R.string.date_end));
+            dpd.setStartTitle(getResources().getString(R.string.filter_date_from));
+            dpd.setEndTitle(getResources().getString(R.string.filter_date_to));
             dpd.setCurrentTab(0);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == dateEnd){
@@ -1053,8 +1053,8 @@ public class FilterActivity extends AppCompatActivity implements DatePickerDialo
                 dpd.setStartDate(year_start, month_start, day_start, year_end, month_end, day_end);
 
             dpd.setAccentColor(ContextCompat.getColor(this,R.color.deep_purple_400), ContextCompat.getColor(this,R.color.grey_100));
-            dpd.setStartTitle(getResources().getString(R.string.date_start));
-            dpd.setEndTitle(getResources().getString(R.string.date_end));
+            dpd.setStartTitle(getResources().getString(R.string.filter_date_from));
+            dpd.setEndTitle(getResources().getString(R.string.filter_date_to));
             dpd.setCurrentTab(1);
             dpd.show(getFragmentManager(), "Datepickerdialog2");
         }else if(v == addPersonButton){

@@ -671,7 +671,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     repeatAdd.setVisibility(View.GONE);
                     repeatBox.setVisibility(View.VISIBLE);
                 }
-            }, 1000);
+            }, 700);
         } else if (v == timeStart) {
             Calendar now = Calendar.getInstance();
             TimePickerDialog tpd = TimePickerDialog.newInstance(
