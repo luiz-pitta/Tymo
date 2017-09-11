@@ -114,7 +114,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private ArrayList<User> listConfirmed = new ArrayList<>();
     private ArrayList<User> listToInvite = new ArrayList<>();
 
-    private ImageView pieceIcon;
+    private ImageView pieceIcon, locationIcon;
     private ImageView cubeLowerBoxIcon;
     private ImageView cubeUpperBoxIcon;
 
@@ -180,6 +180,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         repeatText = (TextView) findViewById(R.id.repeatText);
         locationText = (TextView) findViewById(R.id.locationText);
         locationBox = (LinearLayout) findViewById(R.id.locationBox);
+        locationIcon = (ImageView) findViewById(R.id.locationIcon);
 
         whoCanInvite = (TextView) findViewById(R.id.whoCanInvite);
 
@@ -217,12 +218,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         privacyBox.setOnClickListener(this);
         addGuestButton.setOnClickListener(this);
         guestBox.setOnClickListener(this);
+        locationBox.setOnClickListener(this);
 
         checkButtonBox.setOnTouchListener(this);
         deleteButtonBox.setOnTouchListener(this);
         privacyBox.setOnTouchListener(this);
         addGuestButton.setOnTouchListener(this);
         guestBox.setOnTouchListener(this);
+        locationBox.setOnTouchListener(this);
 
         privacyBox.setVisibility(View.GONE);
 
@@ -1221,6 +1224,33 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
             startActivityForResult(intent, GUEST_UPDATE);
         }
+        else if(v == locationBox){
+            Intent intent = null;
+            if(this.getActivity().getLat() != -500) {
+                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                        "geo:" + this.getActivity().getLat() +
+                                "," + this.getActivity().getLng() +
+                                "?q=" + this.getActivity().getLat() +
+                                "," + this.getActivity().getLng() +
+                                "(" + this.getActivity().getLocation() + ")"));
+            }else {
+
+                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                        "http://maps.google.co.in/maps?q=" + this.getActivity().getLocation()));
+            }
+
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+            intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException ex) {
+                Toast.makeText(this, this.getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
+            }
+        }
     }
 
     private void createDialogRemove(boolean repeat) {
@@ -1930,6 +1960,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_200));
                 deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_200));
+            }
+        } else if (view == locationBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                locationText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                locationIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                locationText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                locationIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
 
