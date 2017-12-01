@@ -327,11 +327,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         dayMonth.setText(week.getM_month_text());
         adapter.clear();
 
-        Calendar before3Months = Calendar.getInstance();
-        before3Months.add(Calendar.MONTH, -3);
+        Calendar before24Months = Calendar.getInstance();
+        before24Months.add(Calendar.MONTH, -24);
 
         boolean isStored = !isInThePast(week.getYear(), week.getMonth(), week.getDay(),
-                before3Months.get(Calendar.YEAR), before3Months.get(Calendar.MONTH) + 1, before3Months.get(Calendar.DAY_OF_MONTH));
+                before24Months.get(Calendar.YEAR), before24Months.get(Calendar.MONTH) + 1, before24Months.get(Calendar.DAY_OF_MONTH));
 
         if (!free) {
             if(isStored){

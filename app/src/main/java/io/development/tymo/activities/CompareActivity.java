@@ -745,8 +745,8 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            Calendar before3Months = Calendar.getInstance();
-            before3Months.add(Calendar.MONTH, -3);
+            Calendar before24Months = Calendar.getInstance();
+            before24Months.add(Calendar.MONTH, -24);
 
             Calendar now = Calendar.getInstance();
 
@@ -759,7 +759,7 @@ public class CompareActivity extends AppCompatActivity implements DatePickerDial
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
-            dpd.setMinDate(before3Months);
+            dpd.setMinDate(before24Months);
 
             dpd.setAccentColor(ContextCompat.getColor(CompareActivity.this,R.color.deep_purple_400));
             dpd.show(getFragmentManager(), "Datepickerdialog");

@@ -169,7 +169,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         initSearchView();
 
         mSuggestionsListView.setVisibility(GONE);
-        mFilterBtn.setVisibility(VISIBLE);
+        mFilterBtn.setVisibility(GONE);
         setAnimationDuration(AnimationUtil.ANIMATION_DURATION_MEDIUM);
     }
 
@@ -276,7 +276,7 @@ public class MaterialSearchView extends FrameLayout implements Filter.FilterList
         if (query != null && TextUtils.getTrimmedLength(query) > 0) {
             if (mOnQueryChangeListener == null || !mOnQueryChangeListener.onQueryTextSubmit(query.toString())) {
                 hideKeyboard(MaterialSearchView.this);
-                mFilterBtn.setVisibility(VISIBLE);
+                //mFilterBtn.setVisibility(VISIBLE);
                 //mSearchSrcTextView.setText(null);
             }
         }

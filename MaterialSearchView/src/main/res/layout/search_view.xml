@@ -25,6 +25,7 @@
             android:background="@android:color/white">
 
             <EditText
+                android:layout_toRightOf="@+id/action_up_btn"
                 android:id="@+id/searchTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -32,8 +33,6 @@
                 android:hint="@string/hint_search"
                 android:imeOptions="actionSearch"
                 android:inputType="textNoSuggestions"
-                android:paddingLeft="@dimen/search_view_text_padding"
-                android:paddingRight="85dp"
                 android:maxLines="1"
                 android:textColor="#212121"
                 android:textColorHint="#727272"
@@ -58,9 +57,9 @@
             <ImageButton
                 android:id="@+id/action_empty_btn"
                 style="@style/MSV_ImageButton"
+                android:layout_toLeftOf="@+id/action_filter_btn"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="30dp"
                 android:src="@drawable/ic_action_navigation_close"
                 android:background="?attr/selectableItemBackground"
                 android:visibility="gone"/>

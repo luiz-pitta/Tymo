@@ -675,49 +675,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addView = findViewById(R.id.addView);
         closeButton = (ImageView) findViewById(R.id.closeButton);
 
-        SharedPreferences mSharedPreferences = this.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-        Calendar c = Calendar.getInstance();
-        int day = c.get(Calendar.DAY_OF_MONTH);
-        int month = c.get(Calendar.MONTH) + 1;
-        int year = c.get(Calendar.YEAR);
-        int minute = c.get(Calendar.MINUTE);
-        int hour = c.get(Calendar.HOUR_OF_DAY);
-
-        Query query = new Query();
-        query.setEmail(email);
-        query.setDay(day);
-        query.setMonth(month);
-        query.setYear(year);
-        query.setHourStart(hour);
-        query.setMinuteStart(minute);
-
-        getProfileMainInformation(query);
-
-        /*if (!user.getPhoto().matches("")) {
-            Glide.clear(icon3);
-            Glide.with(this)
-                    .load(user.getPhoto())
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(new BitmapImageViewTarget(icon3) {
-                        @Override
-                        protected void setResource(Bitmap resource) {
-                            RoundedBitmapDrawable circularBitmapDrawable =
-                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
-                            circularBitmapDrawable.setCircular(true);
-                            icon3.setImageDrawable(circularBitmapDrawable);
-                        }
-                    });
-        } else
-            icon3.setImageResource(R.drawable.ic_profile_photo_empty);*/
-
         //set button controller
         controller = new UpdateButtonController(this);
         controller.attach(false, null, icon1, null);
         controller.attach(false, null, icon2, null);
-        //controller.attach(false, null, icon3, null);
+        controller.attach(false, null, icon3, null);
         controller.attach(false, null, icon4, null);
         controller.setMultiple(false);
         controller.updateAll(FEED,0,R.color.deep_purple_400, 0);
@@ -736,6 +698,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (savedInstanceState != null) {
             if(mNavigator!=null) {
                 controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
+                icon3.clearColorFilter();
                 setCurrentTab(mNavigator.getCurrentPosition());
             }
 
@@ -757,8 +720,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
-        //SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        //email = mSharedPreferences.getString(Constants.EMAIL, "");
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        Query query = new Query();
+        query.setEmail(email);
+        query.setDay(day);
+        query.setMonth(month);
+        query.setYear(year);
+        query.setHourStart(hour);
+        query.setMinuteStart(minute);
+
+        getProfileMainInformation(query);
+
+        icon3.clearColorFilter();
 
         updateProfileMainInformation();
 
@@ -778,6 +760,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleResponseUser(Response response) {
         user = response.getUser();
+
+        if (!user.getPhoto().matches("")) {
+            Glide.clear(icon3);
+            Glide.with(this)
+                    .load(user.getPhoto())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(new BitmapImageViewTarget(icon3) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            icon3.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        } else
+            icon3.setImageResource(R.drawable.ic_profile_photo_empty);
     }
 
     private void initAnimation() {
@@ -935,6 +935,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             controller.updateAll(FEED, 0, R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             FeedFragment feedFragment = (FeedFragment)mNavigator.getFragment(FEED);
 
             if(mNavigator.getCurrentPosition() == FEED)
@@ -949,6 +950,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
 
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
 
@@ -963,7 +965,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            //controller.updateAll(ABOUT, 0, R.color.deep_purple_400, 0);
+            controller.updateAll(ABOUT, 0, R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             ProfileFragment profileFragment = (ProfileFragment)mNavigator.getFragment(ABOUT);
 
             if (profileFragment!=null)
@@ -982,6 +985,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 searchFragment.doSearch(".");
 
             controller.updateAll(SEARCH,0,R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             mainMenu.setVisibility(View.INVISIBLE);
             searchView.showSearch(true);
             setCurrentTab(SEARCH);
@@ -1006,6 +1010,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onRestoreInstanceState(savedInstanceState);
         if(mNavigator!=null) {
             controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             setCurrentTab(mNavigator.getCurrentPosition());
         }
 
@@ -1025,6 +1030,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 lastPosition = FEED;
             setCurrentTab(lastPosition);
             controller.updateAll(lastPosition,0,R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             mainMenu.setVisibility(View.VISIBLE);
         }else
             moveTaskToBack(true);
@@ -1056,6 +1062,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if(resultCode == RESULT_OK && requestCode == Constants.REGISTER_ACT){
             controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             setCurrentTab(PLANS);
 
             PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
@@ -1137,6 +1144,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     lastPosition = FEED;
                 setCurrentTab(lastPosition);
                 controller.updateAll(lastPosition,0,R.color.deep_purple_400, 0);
+                icon3.clearColorFilter();
                 mainMenu.setVisibility(View.VISIBLE);
                 return true;
             }
@@ -1220,6 +1228,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 updateSearch();
 
             controller.updateAll(mNavigator.getCurrentPosition(),0,R.color.deep_purple_400, 0);
+            icon3.clearColorFilter();
             setCurrentTab(mNavigator.getCurrentPosition());
 
             int d = getIntent().getIntExtra("d",0);
@@ -1241,6 +1250,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     plansFragment.updateLayout(d, m, y, true);
 
                 controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
+                icon3.clearColorFilter();
                 setCurrentTab(PLANS);
             }
         }
