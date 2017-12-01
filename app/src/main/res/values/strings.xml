@@ -222,7 +222,7 @@
     <string name="empty_feed_text_1">Você não tem convites pendentes...</string>
     <string name="empty_feed_text_2">Seja o primeiro a criar atividades e sinalizadores!</string>
     <string name="empty_free_time">Ocupado o dia inteiro</string>
-    <string name="empty_plans_past">Expirou! Terminado há mais de 2 anos</string>
+    <string name="empty_plans_past">Expirado! Passou-se mais de 1 ano</string>
     <string name="empty_invitations">Não há convites para você no momento</string>
     <string name="empty_my_contacts_profile_friend_text_1">Esse usuário ainda não possui contatos</string>
     <string name="empty_my_contacts_profile_friend_text_2">Seja o primeiro dessa lista</string>
