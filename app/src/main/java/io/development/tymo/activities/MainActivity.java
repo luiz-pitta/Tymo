@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -16,9 +17,12 @@ import android.speech.RecognizerIntent;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +32,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
@@ -88,6 +95,7 @@ import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserPushNotification;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.ActivitySyncJob;
@@ -111,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private RelativeLayout mainMenu;
 
     private GraphRequest request = null;
+    private User user;
 
     private MaterialSearchView searchView;
     private FloatingActionButton fab;
@@ -666,11 +675,49 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         addView = findViewById(R.id.addView);
         closeButton = (ImageView) findViewById(R.id.closeButton);
 
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        Query query = new Query();
+        query.setEmail(email);
+        query.setDay(day);
+        query.setMonth(month);
+        query.setYear(year);
+        query.setHourStart(hour);
+        query.setMinuteStart(minute);
+
+        getProfileMainInformation(query);
+
+        /*if (!user.getPhoto().matches("")) {
+            Glide.clear(icon3);
+            Glide.with(this)
+                    .load(user.getPhoto())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(new BitmapImageViewTarget(icon3) {
+                        @Override
+                        protected void setResource(Bitmap resource) {
+                            RoundedBitmapDrawable circularBitmapDrawable =
+                                    RoundedBitmapDrawableFactory.create(getResources(), resource);
+                            circularBitmapDrawable.setCircular(true);
+                            icon3.setImageDrawable(circularBitmapDrawable);
+                        }
+                    });
+        } else
+            icon3.setImageResource(R.drawable.ic_profile_photo_empty);*/
+
         //set button controller
         controller = new UpdateButtonController(this);
         controller.attach(false, null, icon1, null);
         controller.attach(false, null, icon2, null);
-        controller.attach(false, null, icon3, null);
+        //controller.attach(false, null, icon3, null);
         controller.attach(false, null, icon4, null);
         controller.setMultiple(false);
         controller.updateAll(FEED,0,R.color.deep_purple_400, 0);
@@ -710,8 +757,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
 
-        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        email = mSharedPreferences.getString(Constants.EMAIL, "");
+        //SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        //email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         updateProfileMainInformation();
 
@@ -720,6 +767,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiverNotification, new IntentFilter("notification_update"));
 
         setActivityPeriodicJob();
+    }
+
+    private void getProfileMainInformation(Query query) {
+        mSubscriptions.add(NetworkUtil.getRetrofit().getProfileMain(query)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseUser, this::handleError));
+    }
+
+    private void handleResponseUser(Response response) {
+        user = response.getUser();
     }
 
     private void initAnimation() {
@@ -905,7 +963,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            controller.updateAll(ABOUT, 0, R.color.deep_purple_400, 0);
+            //controller.updateAll(ABOUT, 0, R.color.deep_purple_400, 0);
             ProfileFragment profileFragment = (ProfileFragment)mNavigator.getFragment(ABOUT);
 
             if (profileFragment!=null)

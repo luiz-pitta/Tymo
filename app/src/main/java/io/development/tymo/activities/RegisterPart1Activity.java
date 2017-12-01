@@ -101,7 +101,7 @@ public class RegisterPart1Activity extends AppCompatActivity implements DatePick
             setLayoutError();
 
         m_title.setText(getResources().getString(R.string.register));
-        m_title2.setText(getResources().getString(R.string.register_steps, 1, 3));
+        m_title2.setText(getResources().getString(R.string.register_steps, 1, 2));
 
         final List<String> list = new ArrayList<String>();
         list.add(getResources().getString(R.string.register_not_specified));

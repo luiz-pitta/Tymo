@@ -62,8 +62,6 @@ public class IntroActivity extends MaterialIntroActivity {
 
             addSlide(new CustomSlide2());
 
-            addSlide(new CustomSlide3());
-
             addSlide(new CustomSlide4());
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);

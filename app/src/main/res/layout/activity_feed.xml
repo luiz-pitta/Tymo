@@ -63,6 +63,7 @@
                 android:layout_gravity="end" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/zoomButtonBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -114,6 +115,7 @@
                 android:layout_gravity="end" />
 
             <LinearLayout
+                android:visibility="gone"
                 android:id="@+id/filterButtonBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
