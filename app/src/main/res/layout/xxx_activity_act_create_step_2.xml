@@ -94,7 +94,12 @@
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="7dp">
+                        android:layout_marginTop="7dp"
+                        android:background="@drawable/bg_act_edit_box_2"
+                        android:paddingBottom="7dp"
+                        android:paddingLeft="10dp"
+                        android:paddingRight="10dp"
+                        android:paddingTop="7dp">
 
                         <com.jaredrummler.materialspinner.MaterialSpinner
                             android:id="@+id/visibilityCalendarPicker"
@@ -104,27 +109,21 @@
                             android:textSize="14sp"
                             android:textStyle="bold"
                             app:ms_arrow_tint="@color/grey_900"
-                            app:ms_background_color="@color/white"
+                            app:ms_background_color="@color/grey_50"
                             app:ms_dropdown_height="wrap_content"
                             app:ms_dropdown_max_height="120dp"
                             app:ms_text_color="@color/grey_900" />
-
-                        <View
-                            android:id="@+id/horizontalBottomLine"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/horizontal_line_height"
-                            android:layout_below="@+id/visibilityCalendarPicker"
-                            android:background="@color/horizontal_line" />
 
                         <TextView
                             android:id="@+id/feedVisibility"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/horizontalBottomLine"
+                            android:layout_below="@+id/visibilityCalendarPicker"
                             android:layout_marginTop="2dp"
                             android:text="@string/feed_visibility_1"
                             android:textColor="@color/grey_600"
-                            android:textSize="12sp" />
+                            android:textSize="12sp"
+                            android:visibility="gone" />
 
                     </RelativeLayout>
 

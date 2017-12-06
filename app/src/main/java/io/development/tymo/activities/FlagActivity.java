@@ -10,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.widget.Space;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -68,14 +69,14 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
     private FragmentNavigator mNavigator;
     private UpdateButtonController controller;
-    private RelativeLayout bottomBarBox, mainBox;
+    private RelativeLayout bottomBarBox, bottomBarBoxFitRemove, mainBox;
     private int actionColor, actionColorPressed;
 
     private TextView confirmationButton;
 
     private int d, m, y;
 
-    private TextView actionText, titleText, privacyText, editButton, agendaStatus, agendaStatusNeedInvitation;
+    private TextView actionText, titleText, privacyText, editButton;
     private ImageView mBackButton, privacyIcon;
     private TextView availableText;
     private TextView unavailableText;
@@ -90,9 +91,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private FlagWrapper flagWrapper;
     private boolean permissionInvite = false;
 
-    private View checkButtonBox, deleteButtonBox;
-    private ImageView checkButton, deleteButton;
-    private TextView checkText, deleteText;
+    private int avaliableIcon, avaliableBg, unavaliableIcon, unavaliableBg;
 
     private CompositeDisposable mSubscriptions;
 
@@ -107,7 +106,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private Handler handler = new Handler();
 
-    private LinearLayout availableBox, unavailableBox;
+    private LinearLayout availableBox, unavailableBox, confirmationButtonFit, confirmationButtonRemove, confirmationButtonPast;
+    private TextView invitationText;
+    private Space spaceBox;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -129,14 +130,18 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         availableCorners = findViewById(R.id.availableCorners);
         unavailableCorners = findViewById(R.id.unavailableCorners);
         bottomBarBox = (RelativeLayout) findViewById(R.id.confirmationButtonBar);
+        bottomBarBoxFitRemove = (RelativeLayout) findViewById(R.id.confirmationButtonBarFitRemove);
         actionText = (TextView) findViewById(R.id.text);
         confirmationButton = (TextView) findViewById(R.id.confirmationButton);
+        confirmationButtonFit = (LinearLayout) findViewById(R.id.confirmationButtonFit);
+        confirmationButtonRemove = (LinearLayout) findViewById(R.id.confirmationButtonRemove);
+        confirmationButtonPast = (LinearLayout) findViewById(R.id.confirmationButtonPast);
         privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
         privacyText = (TextView) findViewById(R.id.privacyText);
         editButton = (TextView) findViewById(R.id.editButton);
-        agendaStatus = (TextView) findViewById(R.id.agendaStatus);
-        agendaStatusNeedInvitation = (TextView) findViewById(R.id.agendaStatusNeedInvitation);
         titleText = (TextView) findViewById(R.id.title);
+        invitationText = (TextView) findViewById(R.id.invitationText);
+        spaceBox = (Space) findViewById(R.id.spaceBox);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
@@ -155,13 +160,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
 
-        checkButtonBox = findViewById(R.id.checkButtonBox);
-        deleteButtonBox = findViewById(R.id.deleteButtonBox);
-        checkButton = (ImageView) findViewById(R.id.checkButton);
-        deleteButton = (ImageView) findViewById(R.id.deleteButton);
-        checkText = (TextView) findViewById(R.id.checkText);
-        deleteText = (TextView) findViewById(R.id.deleteText);
-
         error = false;
 
         type = getIntent().getIntExtra("type_flag", 0);
@@ -169,6 +167,13 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         editButton.setVisibility(View.GONE);
 
         if (type == CREATE_EDIT_FLAG) {
+            bottomBarBoxFitRemove.setVisibility(View.GONE);
+            spaceBox.setVisibility(View.GONE);
+            invitationText.setVisibility(View.GONE);
+            avaliableBg = R.drawable.bg_shape_oval_available_corners_2;
+            unavaliableBg = R.drawable.bg_shape_oval_unavailable_corners_2;
+            avaliableIcon = R.drawable.ic_flag;
+            unavaliableIcon = R.drawable.ic_flag;
             titleText.setVisibility(View.GONE);
             mSwipeRefreshLayout.setEnabled(false);
             confirmationButton.setText(R.string.create);
@@ -176,7 +181,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             actionText.setText(getResources().getString(R.string.create_flag));
             mBackButton.setImageResource(R.drawable.ic_add);
             mBackButton.setRotation(45);
-            findViewById(R.id.checkDeleteButtonBar).setVisibility(View.GONE);
 
             flagWrapper = (FlagWrapper) getIntent().getSerializableExtra("flag_edit");
             if (flagWrapper != null) {
@@ -221,6 +225,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             privacyText.setText(getResources().getString(R.string.flag_privacy));
 
             if (edit) {
+                avaliableBg = R.drawable.bg_shape_oval_available_corners;
+                unavaliableBg = R.drawable.bg_shape_oval_unavailable_corners;
+                avaliableIcon = R.drawable.ic_flag_available;
+                unavaliableIcon = R.drawable.ic_flag_unavailable;
                 if (flagWrapper.getFlagServer().getType()) {
                     paintMainBox(true);
                     unavailableBox.setVisibility(View.GONE);
@@ -230,6 +238,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         } else {
+            avaliableBg = R.drawable.bg_shape_oval_available_corners;
+            unavaliableBg = R.drawable.bg_shape_oval_unavailable_corners;
+            avaliableIcon = R.drawable.ic_flag_available;
+            unavaliableIcon = R.drawable.ic_flag_unavailable;
             mSwipeRefreshLayout.setEnabled(true);
             actionText.setText(getResources().getString(R.string.flag));
             bottomBarBox.setVisibility(View.GONE);
@@ -261,18 +273,16 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         editButton.setOnClickListener(this);
         editButton.setOnTouchListener(this);
 
-        checkButtonBox.setOnClickListener(this);
-        deleteButtonBox.setOnClickListener(this);
-        checkButtonBox.setOnTouchListener(this);
-        deleteButtonBox.setOnTouchListener(this);
+        confirmationButtonFit.setOnClickListener(this);
+        confirmationButtonRemove.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
 
         //set button controller
         controller = new UpdateButtonController(this);
         controller.attach(true, availableText, availableButton, availableCorners);
         controller.attach(false, unavailableText, unavailableButton, unavailableCorners);
-        controller.updateAll(0, R.color.flag_available, R.color.flag_available, R.drawable.bg_shape_oval_available_corners);
-        availableButton.setImageResource(R.drawable.ic_flag_available);
+        controller.updateAll(0, R.color.flag_available, R.color.flag_available, avaliableBg);
+        availableButton.setImageResource(avaliableIcon);
         availableButton.clearColorFilter();
 
 
@@ -514,8 +524,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 privacyIcon.setImageResource(R.drawable.ic_public);
                 privacyText.setText(getResources().getString(R.string.flag_privacy_public));
-                controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
-                unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
+                controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, unavaliableBg);
+                unavailableButton.setImageResource(unavaliableIcon);
                 unavailableButton.clearColorFilter();
             }
         } else {
@@ -537,14 +547,15 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             User user = checkIfInFlag(userList);
 
-            deleteButtonBox.setVisibility(View.VISIBLE);
-            checkButtonBox.setVisibility(View.GONE);
-            agendaStatus.setText(getString(R.string.agenda_status_fitted));
+            confirmationButtonRemove.setVisibility(View.VISIBLE);
+            confirmationButtonFit.setVisibility(View.GONE);
+            spaceBox.setVisibility(View.GONE);
+            invitationText.setVisibility(View.GONE);
 
             if (!flagWrapper.getFlagServer().getType()) {
                 editButton.setVisibility(View.VISIBLE);
-                controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
-                unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
+                controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, unavaliableBg);
+                unavailableButton.setImageResource(unavaliableIcon);
                 unavailableButton.clearColorFilter();
             } else if (permissionInvite) {
                 editButton.setVisibility(View.VISIBLE);
@@ -553,13 +564,20 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (user != null) {
                     if (user.getInvitation() == 1) {
-                        deleteButtonBox.setVisibility(View.VISIBLE);
-                        checkButtonBox.setVisibility(View.GONE);
-                        agendaStatus.setText(getString(R.string.agenda_status_fitted));
+                        confirmationButtonRemove.setVisibility(View.VISIBLE);
+                        confirmationButtonFit.setVisibility(View.GONE);
+                        spaceBox.setVisibility(View.GONE);
+                        invitationText.setVisibility(View.GONE);
                     } else {
-                        checkButtonBox.setVisibility(View.VISIBLE);
-                        deleteButtonBox.setVisibility(View.GONE);
-                        agendaStatus.setText(getString(R.string.agenda_status_signalized));
+                        confirmationButtonRemove.setVisibility(View.GONE);
+                        confirmationButtonFit.setVisibility(View.VISIBLE);
+                        invitationText.setVisibility(View.VISIBLE);
+                        invitationText.setText(getString(R.string.act_invited_by, flagWrapper.getFlagServer().getNameInviter()));
+                        if (!flagWrapper.getFlagServer().getTitle().matches("")) {
+                            spaceBox.setVisibility(View.GONE);
+                        } else {
+                            spaceBox.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
@@ -573,13 +591,11 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 privacyText.setText(getResources().getString(R.string.flag_privacy_public));
             }
 
-            if (flagWrapper.getFlagServer().getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && deleteButtonBox.getVisibility() == View.GONE) {
-                agendaStatus.setVisibility(View.GONE);
-                checkButtonBox.setVisibility(View.GONE);
-                agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
-                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_past));
+            if (flagWrapper.getFlagServer().getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && confirmationButtonRemove.getVisibility() == View.GONE) {
+                confirmationButtonFit.setVisibility(View.GONE);
+                confirmationButtonPast.setVisibility(View.VISIBLE);
             } else {
-                agendaStatusNeedInvitation.setVisibility(View.GONE);
+                confirmationButtonPast.setVisibility(View.GONE);
             }
         }
 
@@ -1183,24 +1199,24 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
 
             if (v == availableText || v == availableButton) {
-                controller.updateAll(0, R.color.flag_available, R.color.flag_available, R.drawable.bg_shape_oval_available_corners);
+                controller.updateAll(0, R.color.flag_available, R.color.flag_available, avaliableBg);
                 textInputLayout.setHint(R.string.hint_title_opcional);
                 free = true;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_lock);
                 privacyText.setText(getResources().getString(R.string.flag_privacy));
-                availableButton.setImageResource(R.drawable.ic_flag_available);
-                unavailableButton.setImageResource(R.drawable.ic_flag);
+                availableButton.setImageResource(avaliableIcon);
+                unavailableButton.setImageResource(unavaliableIcon);
                 availableButton.clearColorFilter();
             } else if (v == unavailableText || v == unavailableButton) {
-                controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, R.drawable.bg_shape_oval_unavailable_corners);
+                controller.updateAll(1, R.color.flag_unavailable, R.color.flag_unavailable, unavaliableBg);
                 textInputLayout.setHint(R.string.hint_title_opcional);
                 free = false;
                 flagEditFragment.setSelectionSendBox(free);
                 privacyIcon.setImageResource(R.drawable.ic_public);
                 privacyText.setText(getResources().getString(R.string.flag_privacy_public));
-                availableButton.setImageResource(R.drawable.ic_flag);
-                unavailableButton.setImageResource(R.drawable.ic_flag_unavailable);
+                availableButton.setImageResource(avaliableIcon);
+                unavailableButton.setImageResource(unavaliableIcon);
                 unavailableButton.clearColorFilter();
             }
         }
@@ -1241,7 +1257,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             myIntent.putExtra("flag_edit", flagWrapper);
             startActivity(myIntent);
             finish();
-        } else if (v == checkButtonBox) {
+        } else if (v == confirmationButtonFit) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButtonBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1260,7 +1276,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             inviteRequest.setIdAct(getFlag().getId());
 
             updateInviteRequest(inviteRequest);
-        } else if (v == deleteButtonBox) {
+        } else if (v == confirmationButtonRemove) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButtonBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1729,22 +1745,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 editButton.setTextColor(actionColor);
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 editButton.setTextColor(actionColorPressed);
-            }
-        } else if (view == checkButtonBox) {
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_200));
-                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_200));
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_400));
-                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_400));
-            }
-        } else if (view == deleteButtonBox) {
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                deleteText.setTextColor(ContextCompat.getColor(this, R.color.white));
-                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_200));
-                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_200));
             }
         }
 

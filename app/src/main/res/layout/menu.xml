@@ -66,11 +66,11 @@
 
                 <View
                     android:id="@+id/notificationView"
-                    android:layout_width="10dp"
-                    android:layout_height="10dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="21.5dp"
-                    android:layout_marginTop="6dp"
+                    android:layout_marginRight="15dp"
+                    android:layout_marginTop="4dp"
                     android:background="@drawable/box_notification"
                     android:visibility="visible" />
 

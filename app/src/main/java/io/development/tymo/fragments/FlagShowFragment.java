@@ -57,7 +57,7 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class FlagShowFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
-    private TextView guestsNumber, repeatText, dateHourText, addGuestText, guestText;
+    private TextView guestsNumber, repeatText, dateHourText, addGuestText, guestText, feedVisibility;
     private RelativeLayout addGuestButton;
     private ImageView addGuestIcon;
     private LinearLayout repeatBox, guestBox, whoCanInviteBox, profilesPhotos;
@@ -109,6 +109,7 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
         repeatBox = (LinearLayout) view.findViewById(R.id.repeatBox);
         guestBox = (LinearLayout) view.findViewById(R.id.guestBox);
         whoCanInviteBox = (LinearLayout) view.findViewById(R.id.whoCanInviteBox);
+        feedVisibility = (TextView) view.findViewById(R.id.feedVisibility);
         profilesPhotos = (LinearLayout) view.findViewById(R.id.profilesPhotos);
         repeatText = (TextView) view.findViewById(R.id.repeatText);
         addGuestIcon = (ImageView) view.findViewById(R.id.addGuestIcon);

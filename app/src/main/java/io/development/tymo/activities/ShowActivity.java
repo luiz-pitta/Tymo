@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
+import android.widget.Space;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -80,7 +81,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView mBackButton;
     private boolean isInPast = false;
 
-    private TextView privacyText, editButton, agendaStatus, agendaStatusNeedInvitation;
+    private TextView privacyText, editButton;
     private ImageView privacyIcon, privacyArrowIcon;
 
     private Context context;
@@ -90,10 +91,10 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private ReadMoreTextView descriptionReadMore;
     private LinearLayout whatsAppGroupLinkBox;
 
-    private TextView dateHourText, guestText;
+    private TextView dateHourText, guestText, buttonTextPast;
     private TextView locationText, repeatText;
     private LinearLayout locationBox;
-    private LinearLayout repeatBox, guestBox;
+    private LinearLayout repeatBox, guestBox, confirmationButtonFit, confirmationButtonRemove, confirmationButtonPast;
 
     private DateFormat dateFormat;
 
@@ -118,9 +119,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView cubeLowerBoxIcon;
     private ImageView cubeUpperBoxIcon;
 
-    private LinearLayout checkButtonBox, deleteButtonBox, privacyBox;
-    private ImageView checkButton, deleteButton;
-    private TextView checkText, deleteText;
+    private LinearLayout privacyBox;
+    private TextView invitationText;
 
     private ActivityWrapper activityWrapper;
     private int selected = 0;
@@ -148,14 +148,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         mSubscriptions = new CompositeDisposable();
 
-        checkButtonBox = (LinearLayout) findViewById(R.id.checkButtonBox);
-        deleteButtonBox = (LinearLayout) findViewById(R.id.deleteButtonBox);
-        checkButton = (ImageView) findViewById(R.id.checkButton);
-        deleteButton = (ImageView) findViewById(R.id.deleteButton);
-        checkText = (TextView) findViewById(R.id.checkText);
-        deleteText = (TextView) findViewById(R.id.deleteText);
-        agendaStatusNeedInvitation = (TextView) findViewById(R.id.agendaStatusNeedInvitation);
-        agendaStatus = (TextView) findViewById(R.id.agendaStatus);
         privacyBox = (LinearLayout) findViewById(R.id.textsBox);
         privacyText = (TextView) findViewById(R.id.text);
         privacyIcon = (ImageView) findViewById(R.id.privacyIcon);
@@ -172,6 +164,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         descriptionShort = (TextView) findViewById(R.id.descriptionShort);
         whatsAppGroupLinkBox = (LinearLayout) findViewById(R.id.whatsAppGroupLinkBox);
         whatsAppGroupLink = (TextView) findViewById(R.id.whatsAppGroupLink);
+        buttonTextPast = (TextView) findViewById(R.id.buttonTextPast);
 
         dateFormat = new DateFormat(this);
 
@@ -194,6 +187,10 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         addGuestButtonDivider = (View) findViewById(R.id.addGuestButtonDivider);
         guestBox = (LinearLayout) findViewById(R.id.guestBox);
         guestText = (TextView) findViewById(R.id.guestText);
+        invitationText = (TextView) findViewById(R.id.invitationText);
+        confirmationButtonFit = (LinearLayout) findViewById(R.id.confirmationButtonFit);
+        confirmationButtonRemove = (LinearLayout) findViewById(R.id.confirmationButtonRemove);
+        confirmationButtonPast = (LinearLayout) findViewById(R.id.confirmationButtonPast);
 
         editButton.setVisibility(View.GONE);
 
@@ -213,15 +210,13 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
 
-        checkButtonBox.setOnClickListener(this);
-        deleteButtonBox.setOnClickListener(this);
+        confirmationButtonFit.setOnClickListener(this);
+        confirmationButtonRemove.setOnClickListener(this);
         privacyBox.setOnClickListener(this);
         addGuestButton.setOnClickListener(this);
         guestBox.setOnClickListener(this);
         locationBox.setOnClickListener(this);
 
-        checkButtonBox.setOnTouchListener(this);
-        deleteButtonBox.setOnTouchListener(this);
         privacyBox.setOnTouchListener(this);
         addGuestButton.setOnTouchListener(this);
         guestBox.setOnTouchListener(this);
@@ -573,11 +568,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         confirmedList.addAll(getInvitedAdm(userList, admList, creator_activity));
         confirmedList.addAll(getConfirmedNoAdm(userList, admList));
 
-        if (response.getTags().size() == 0) {
-            finish();
-            Toast.makeText(this, getString(R.string.act_not_found), Toast.LENGTH_LONG).show();
-        } else {
-
             ActivityServer activityServer = activityWrapper.getActivityServer();
 
             User user = checkIfInActivity(userList);
@@ -619,63 +609,60 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
                 if (checkIfCreator(response.getUser().getEmail())) {
                     editButton.setVisibility(View.VISIBLE);
-                    agendaStatus.setVisibility(View.VISIBLE);
-                    agendaStatusNeedInvitation.setVisibility(View.GONE);
-                    agendaStatus.setText(getString(R.string.agenda_status_fitted));
-                    deleteButtonBox.setVisibility(View.VISIBLE);
-                    checkButtonBox.setVisibility(View.GONE);
+                    confirmationButtonRemove.setVisibility(View.VISIBLE);
+                    confirmationButtonFit.setVisibility(View.GONE);
+                    invitationText.setVisibility(View.GONE);
                 } else if (user.getInvited() > 0) {
                     if (user.getInvitation() == 1) {
-                        agendaStatus.setVisibility(View.VISIBLE);
-                        agendaStatusNeedInvitation.setVisibility(View.GONE);
-                        agendaStatus.setText(getString(R.string.agenda_status_fitted));
-                        deleteButtonBox.setVisibility(View.VISIBLE);
-                        checkButtonBox.setVisibility(View.GONE);
+                        confirmationButtonRemove.setVisibility(View.VISIBLE);
+                        confirmationButtonFit.setVisibility(View.GONE);
+                        invitationText.setVisibility(View.GONE);
                     } else {
                         privacyBox.setVisibility(View.GONE);
-                        agendaStatus.setVisibility(View.VISIBLE);
-                        agendaStatusNeedInvitation.setVisibility(View.GONE);
-                        agendaStatus.setText(getString(R.string.agenda_status_invited));
-                        checkButtonBox.setVisibility(View.VISIBLE);
-                        deleteButtonBox.setVisibility(View.GONE);
+                        confirmationButtonRemove.setVisibility(View.GONE);
+                        confirmationButtonFit.setVisibility(View.VISIBLE);
+                        invitationText.setVisibility(View.VISIBLE);
+                        invitationText.setText(getString(R.string.act_invited_by, activityServer.getNameInviter()));
                     }
                 } else if (activityServer.getInvitationType() == 2) {
                     privacyBox.setVisibility(View.GONE);
-                    agendaStatus.setVisibility(View.VISIBLE);
-                    agendaStatusNeedInvitation.setVisibility(View.GONE);
-                    agendaStatus.setText(getString(R.string.agenda_status_anyone_can_participate));
-                    checkButtonBox.setVisibility(View.VISIBLE);
-                    deleteButtonBox.setVisibility(View.GONE);
+                    confirmationButtonRemove.setVisibility(View.GONE);
+                    confirmationButtonFit.setVisibility(View.VISIBLE);
+                    invitationText.setVisibility(View.VISIBLE);
+                    invitationText.setText(getString(R.string.agenda_status_anyone_can_participate));
                 } else {
                     privacyBox.setVisibility(View.GONE);
-                    agendaStatus.setVisibility(View.GONE);
-                    agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
-                    checkButtonBox.setVisibility(View.GONE);
-                    deleteButtonBox.setVisibility(View.GONE);
+                    confirmationButtonPast.setVisibility(View.VISIBLE);
+                    confirmationButtonRemove.setVisibility(View.GONE);
+                    confirmationButtonFit.setVisibility(View.GONE);
+                    invitationText.setVisibility(View.GONE);
+                    buttonTextPast.setText(getString(R.string.agenda_status_need_invitation));
                 }
 
             } else {
-                agendaStatus.setVisibility(View.GONE);
-                agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
-                deleteButtonBox.setVisibility(View.GONE);
-                checkButtonBox.setVisibility(View.GONE);
+                confirmationButtonPast.setVisibility(View.VISIBLE);
+                confirmationButtonRemove.setVisibility(View.GONE);
+                confirmationButtonFit.setVisibility(View.GONE);
+                invitationText.setVisibility(View.GONE);
+                buttonTextPast.setText(getString(R.string.agenda_status_need_invitation));
                 if (activityServer.getInvitationType() == 2) {
-                    agendaStatus.setVisibility(View.VISIBLE);
-                    agendaStatusNeedInvitation.setVisibility(View.GONE);
-                    agendaStatus.setText(getString(R.string.agenda_status_anyone_can_participate));
-                    checkButtonBox.setVisibility(View.VISIBLE);
+                    confirmationButtonRemove.setVisibility(View.GONE);
+                    confirmationButtonFit.setVisibility(View.VISIBLE);
+                    invitationText.setVisibility(View.VISIBLE);
+                    invitationText.setText(getString(R.string.agenda_status_anyone_can_participate));
                 }
                 privacyBox.setVisibility(View.GONE);
             }
 
-            if (activityServer.getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && deleteButtonBox.getVisibility() == View.GONE && checkButtonBox.getVisibility() == View.VISIBLE){
-                agendaStatus.setVisibility(View.GONE);
-                checkButtonBox.setVisibility(View.GONE);
-                agendaStatusNeedInvitation.setVisibility(View.VISIBLE);
-                agendaStatusNeedInvitation.setText(getResources().getString(R.string.agenda_status_past));
+            if (activityServer.getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && confirmationButtonRemove.getVisibility() == View.GONE && confirmationButtonFit.getVisibility() == View.VISIBLE){
+                confirmationButtonPast.setVisibility(View.VISIBLE);
+                confirmationButtonRemove.setVisibility(View.GONE);
+                confirmationButtonFit.setVisibility(View.GONE);
+                invitationText.setVisibility(View.GONE);
+                buttonTextPast.setText(getString(R.string.agenda_status_past));
             }
             else{
-                agendaStatusNeedInvitation.setVisibility(View.GONE);
+                confirmationButtonPast.setVisibility(View.GONE);
             }
 
             Glide.clear(pieceIcon);
@@ -774,6 +761,11 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 } else {
                     dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
                 }
+
+                if (activityServer.getLocation().matches(""))
+                    Log.d("xxx", "NÃO TEM LOCAL");
+                else
+                    Log.d("xxx", activityServer.getLocation());
 
                 if (activityServer.getLocation() == null || activityServer.getLocation().matches(""))
                     locationBox.setVisibility(View.GONE);
@@ -897,8 +889,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             }));
 
             setLayout(this.getActivity(), this.getUserList(), this.getUserConfirmedList(), this.getPermissionInvite());
-
-        }
 
         setProgress(false);
 
@@ -1944,22 +1934,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 guestText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
                 guestsNumber.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_guests_pressed));
-            }
-        } else if (view == checkButtonBox) {
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_200));
-                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_200));
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                checkText.setTextColor(ContextCompat.getColor(this, R.color.green_400));
-                checkButton.setColorFilter(ContextCompat.getColor(this, R.color.green_400));
-            }
-        } else if (view == deleteButtonBox) {
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                deleteText.setTextColor(ContextCompat.getColor(this, R.color.white));
-                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.white));
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                deleteText.setTextColor(ContextCompat.getColor(this, R.color.red_200));
-                deleteButton.setColorFilter(ContextCompat.getColor(this, R.color.red_200));
             }
         } else if (view == locationBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {

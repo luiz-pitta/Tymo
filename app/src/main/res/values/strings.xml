@@ -268,6 +268,7 @@
     <string name="finish_register">Finalizar Cadastro</string>
     <string name="finish">Finalizar</string>
     <string name="fit">Encaixar</string>
+    <string name="remove_from_my_agenda">Remover da minha agenda</string>
     <string name="flag_available">Estou livre!</string>
     <string name="flag_menu_available">Livre</string>
     <string name="flag_menu_unavailable">Ocupado</string>
@@ -307,6 +308,8 @@
     <string name="invite_guest_btn">Convidar</string>
     <string name="signalize_guest_btn">Sinalizar</string>
     <string name="invited_by">Convidado por %1$s</string>
+    <string name="act_invited_by">(Convidado por %1$s)</string>
+    <string name="suspension_points">&#183;&#183;&#183;</string>
     <string name="location">Localização</string>
     <string name="login_connect_with_facebook">Conectar com o Facebook</string>
     <string name="login_forgot_password">Esqueceu sua senha?</string>
@@ -604,8 +607,7 @@
     <string name="agenda_status_need_invitation">Você precisa ser convidado para poder encaixar!</string>
     <string name="agenda_status_fitted">Está na sua agenda!</string>
     <string name="agenda_status_invited">Você foi convidado!</string>
-    <string name="agenda_status_signalized">Você foi sinalizado!</string>
-    <string name="agenda_status_anyone_can_participate">Qualquer um pode entrar!</string>
+    <string name="agenda_status_anyone_can_participate">(Qualquer um pode entrar)</string>
     <string name="title_max_caract">%1$d de 100</string>
 
     <string name="dialog_fit_multiple_repeat_activity_title">Atividade com repetição</string>

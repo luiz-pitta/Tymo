@@ -210,7 +210,6 @@ public class AddPart3Activity extends AppCompatActivity implements DatePickerDia
         locationIcon = (ImageView) findViewById(R.id.locationIcon);
         locationIcon2 = (ImageView) findViewById(R.id.locationIcon2);
         locationText = (TextView) findViewById(R.id.locationText);
-        locationText2 = (TextView) findViewById(R.id.locationText2);
         whatsAppEditText = (EditText) findViewById(R.id.whatsAppGroupLink);
         guestBox = (LinearLayout) findViewById(R.id.guestBox);
         guestText = (TextView) findViewById(R.id.guestText);

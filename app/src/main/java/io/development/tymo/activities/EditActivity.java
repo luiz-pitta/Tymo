@@ -885,91 +885,85 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         confirmedList.addAll(getInvitedAdm(userList, admList, creator_activity));
         confirmedList.addAll(getConfirmedNoAdm(userList, admList));
 
-        if (response.getTags().size() == 0) {
-            finish();
-            Toast.makeText(this, getString(R.string.act_not_found), Toast.LENGTH_LONG).show();
+        ActivityServer activityServer = activityWrapper.getActivityServer();
+        User userEdit = checkIfInActivity(invitedList);
+
+        if (!activityServer.getCubeIcon().matches("")) {
+
+            Glide.clear(pieceIcon);
+            Glide.with(EditActivity.this)
+                    .load(activityServer.getCubeIcon())
+                    .asBitmap()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(pieceIcon);
+
+            cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
+            cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
+        }
+
+        if (userEdit != null) {
+
+            switch (userEdit.getPrivacy()) {
+                case 0:
+                    privacyIcon.setImageResource(R.drawable.ic_public);
+                    privacyText.setText(getResources().getString(R.string.visibility_public));
+                    selected = 0;
+                    break;
+                case 1:
+                    privacyIcon.setImageResource(R.drawable.ic_people_two);
+                    privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
+                    selected = 1;
+                    break;
+                case 2:
+                    privacyIcon.setImageResource(R.drawable.ic_lock);
+                    privacyText.setText(getResources().getString(R.string.visibility_private));
+                    selected = 2;
+                    break;
+            }
+        }
+
+        if (titleEditText != null) {
+            titleEditText.setText(activityServer.getTitle());
+
+            if (activityServer.getDescription() != null)
+                descriptionEditText.setText(activityServer.getDescription());
+            else
+                descriptionEditText.setText("");
+
+            if (activityServer.getDescription() != null)
+                whatsAppEditText.setText(activityServer.getWhatsappGroupLink());
+            else
+                whatsAppEditText.setText("");
+
+            loadTags(response.getTags());
+        }
+
+        activityServers = response.getWhatsGoingAct();
+
+        if (activityServer.getRepeatType() == 0) {
+            repeatText.setVisibility(View.GONE);
         } else {
-
-            ActivityServer activityServer = activityWrapper.getActivityServer();
-            User userEdit = checkIfInActivity(invitedList);
-
-            if (!activityServer.getCubeIcon().matches("")) {
-
-                Glide.clear(pieceIcon);
-                Glide.with(EditActivity.this)
-                        .load(activityServer.getCubeIcon())
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(pieceIcon);
-
-                cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
-                cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
+            String repeatly;
+            repeatText.setVisibility(View.VISIBLE);
+            switch (activityServer.getRepeatType()) {
+                case Constants.DAYLY:
+                    repeatly = this.getString(R.string.repeat_daily);
+                    break;
+                case Constants.WEEKLY:
+                    repeatly = this.getString(R.string.repeat_weekly);
+                    break;
+                case Constants.MONTHLY:
+                    repeatly = this.getString(R.string.repeat_monthly);
+                    break;
+                default:
+                    repeatly = "";
+                    break;
             }
 
-            if (userEdit != null) {
-
-                switch (userEdit.getPrivacy()) {
-                    case 0:
-                        privacyIcon.setImageResource(R.drawable.ic_public);
-                        privacyText.setText(getResources().getString(R.string.visibility_public));
-                        selected = 0;
-                        break;
-                    case 1:
-                        privacyIcon.setImageResource(R.drawable.ic_people_two);
-                        privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
-                        selected = 1;
-                        break;
-                    case 2:
-                        privacyIcon.setImageResource(R.drawable.ic_lock);
-                        privacyText.setText(getResources().getString(R.string.visibility_private));
-                        selected = 2;
-                        break;
-                }
-            }
-
-            if (titleEditText != null) {
-                titleEditText.setText(activityServer.getTitle());
-
-                if (activityServer.getDescription() != null)
-                    descriptionEditText.setText(activityServer.getDescription());
-                else
-                    descriptionEditText.setText("");
-
-                if (activityServer.getDescription() != null)
-                    whatsAppEditText.setText(activityServer.getWhatsappGroupLink());
-                else
-                    whatsAppEditText.setText("");
-
-                loadTags(response.getTags());
-            }
-
-            activityServers = response.getWhatsGoingAct();
-
-            if (activityServer.getRepeatType() == 0) {
-                repeatText.setVisibility(View.GONE);
+            if (activityServer.getRepeatType() == 5) {
+                repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
             } else {
-                String repeatly;
-                repeatText.setVisibility(View.VISIBLE);
-                switch (activityServer.getRepeatType()) {
-                    case Constants.DAYLY:
-                        repeatly = this.getString(R.string.repeat_daily);
-                        break;
-                    case Constants.WEEKLY:
-                        repeatly = this.getString(R.string.repeat_weekly);
-                        break;
-                    case Constants.MONTHLY:
-                        repeatly = this.getString(R.string.repeat_monthly);
-                        break;
-                    default:
-                        repeatly = "";
-                        break;
-                }
-
-                if (activityServer.getRepeatType() == 5) {
-                    repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
-                } else {
-                    repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
-                }
+                repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
             }
         }
 
@@ -3052,7 +3046,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private boolean validateDateTime(Calendar calendarStart, Calendar calendarEnd) {
-        if (calendarEnd.getTimeInMillis() < calendarStart.getTimeInMillis()){
+        if (calendarEnd.getTimeInMillis() < calendarStart.getTimeInMillis()) {
             return false;
         }
 

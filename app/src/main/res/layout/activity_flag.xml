@@ -26,11 +26,11 @@
 
                 <RelativeLayout
                     android:id="@+id/mainBox"
-                    android:paddingBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_act_main_box"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingBottom="20dp">
 
                     <ImageView
                         android:id="@+id/actionBackIcon"
@@ -216,18 +216,38 @@
 
                     <TextView
                         android:id="@+id/title"
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/flagButtonsBox"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
+                        android:layout_marginTop="20dp"
                         android:gravity="center"
                         android:text="Title"
-                        android:textIsSelectable="true"
                         android:textColor="@color/grey_600"
+                        android:textIsSelectable="true"
                         android:textSize="18sp"
                         android:textStyle="bold" />
+
+                    <Space
+                        android:id="@+id/spaceBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="10dp"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/invitationText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/title"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:text="Invitation Text"
+                        android:textColor="@color/white"
+                        android:textIsSelectable="true"
+                        android:textSize="14sp" />
 
                 </RelativeLayout>
 
@@ -256,7 +276,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include
-        layout="@layout/btn_act_check_delete"
+        layout="@layout/btn_fit_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />
