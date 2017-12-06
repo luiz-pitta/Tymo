@@ -91,7 +91,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private ReadMoreTextView descriptionReadMore;
     private LinearLayout whatsAppGroupLinkBox;
 
-    private TextView dateHourText, guestText, buttonTextPast;
+    private TextView dateHourText, guestText, confirmationButtonPastText;
     private TextView locationText, repeatText;
     private LinearLayout locationBox;
     private LinearLayout repeatBox, guestBox, confirmationButtonFit, confirmationButtonRemove, confirmationButtonPast;
@@ -120,7 +120,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     private ImageView cubeUpperBoxIcon;
 
     private LinearLayout privacyBox;
-    private TextView invitationText;
 
     private ActivityWrapper activityWrapper;
     private int selected = 0;
@@ -164,7 +163,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         descriptionShort = (TextView) findViewById(R.id.descriptionShort);
         whatsAppGroupLinkBox = (LinearLayout) findViewById(R.id.whatsAppGroupLinkBox);
         whatsAppGroupLink = (TextView) findViewById(R.id.whatsAppGroupLink);
-        buttonTextPast = (TextView) findViewById(R.id.buttonTextPast);
+        confirmationButtonPastText = (TextView) findViewById(R.id.confirmationButtonPastText);
 
         dateFormat = new DateFormat(this);
 
@@ -187,7 +186,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         addGuestButtonDivider = (View) findViewById(R.id.addGuestButtonDivider);
         guestBox = (LinearLayout) findViewById(R.id.guestBox);
         guestText = (TextView) findViewById(R.id.guestText);
-        invitationText = (TextView) findViewById(R.id.invitationText);
         confirmationButtonFit = (LinearLayout) findViewById(R.id.confirmationButtonFit);
         confirmationButtonRemove = (LinearLayout) findViewById(R.id.confirmationButtonRemove);
         confirmationButtonPast = (LinearLayout) findViewById(R.id.confirmationButtonPast);
@@ -237,7 +235,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_show");
 
-        if(activityWrapper != null) {
+        if (activityWrapper != null) {
             ActivityServer activityServer = new ActivityServer();
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -245,7 +243,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             activityServer.setCreator(email);
             activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             setActivityInformation(activityWrapper.getActivityServer().getId(), activityServer);
-        }else {
+        } else {
             act_id = getIntent().getLongExtra("act_id", -1);
             getActivityInformation(act_id);
         }
@@ -568,327 +566,305 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         confirmedList.addAll(getInvitedAdm(userList, admList, creator_activity));
         confirmedList.addAll(getConfirmedNoAdm(userList, admList));
 
-            ActivityServer activityServer = activityWrapper.getActivityServer();
+        ActivityServer activityServer = activityWrapper.getActivityServer();
 
-            User user = checkIfInActivity(userList);
+        User user = checkIfInActivity(userList);
 
-            if (user != null) {
-                privacyBox.setVisibility(View.VISIBLE);
-                privacyBox.setOnClickListener(this);
-                privacyBox.setOnTouchListener(this);
-                switch (user.getPrivacy()) {
-                    case 0:
-                        privacyIcon.setImageResource(R.drawable.ic_public);
-                        privacyText.setText(getResources().getString(R.string.visibility_public));
-                        selected = 0;
-                        break;
-                    case 1:
-                        privacyIcon.setImageResource(R.drawable.ic_people_two);
-                        privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
-                        selected = 1;
-                        break;
-                    case 2:
-                        privacyIcon.setImageResource(R.drawable.ic_lock);
-                        privacyText.setText(getResources().getString(R.string.visibility_private));
-                        selected = 2;
-                        break;
-                }
+        if (user != null) {
+            privacyBox.setVisibility(View.VISIBLE);
+            privacyBox.setOnClickListener(this);
+            privacyBox.setOnTouchListener(this);
+            switch (user.getPrivacy()) {
+                case 0:
+                    privacyIcon.setImageResource(R.drawable.ic_public);
+                    privacyText.setText(getResources().getString(R.string.visibility_public));
+                    selected = 0;
+                    break;
+                case 1:
+                    privacyIcon.setImageResource(R.drawable.ic_people_two);
+                    privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
+                    selected = 1;
+                    break;
+                case 2:
+                    privacyIcon.setImageResource(R.drawable.ic_lock);
+                    privacyText.setText(getResources().getString(R.string.visibility_private));
+                    selected = 2;
+                    break;
+            }
 
-                SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
-                if (checkIfAdm(response.getAdms(), email)) {
-                    editButton.setVisibility(View.VISIBLE);
-                } else {
-                    editButton.setVisibility(View.GONE);
-                }
+            if (checkIfAdm(response.getAdms(), email)) {
+                editButton.setVisibility(View.VISIBLE);
+            } else {
+                editButton.setVisibility(View.GONE);
+            }
 
-                privacyBox.setVisibility(View.VISIBLE);
-                privacyBox.setOnClickListener(this);
-                privacyBox.setOnTouchListener(this);
+            privacyBox.setVisibility(View.VISIBLE);
+            privacyBox.setOnClickListener(this);
+            privacyBox.setOnTouchListener(this);
 
-                if (checkIfCreator(response.getUser().getEmail())) {
-                    editButton.setVisibility(View.VISIBLE);
+            if (checkIfCreator(response.getUser().getEmail())) {
+                editButton.setVisibility(View.VISIBLE);
+                confirmationButtonRemove.setVisibility(View.VISIBLE);
+                confirmationButtonFit.setVisibility(View.GONE);
+            } else if (user.getInvited() > 0) {
+                if (user.getInvitation() == 1) {
                     confirmationButtonRemove.setVisibility(View.VISIBLE);
                     confirmationButtonFit.setVisibility(View.GONE);
-                    invitationText.setVisibility(View.GONE);
-                } else if (user.getInvited() > 0) {
-                    if (user.getInvitation() == 1) {
-                        confirmationButtonRemove.setVisibility(View.VISIBLE);
-                        confirmationButtonFit.setVisibility(View.GONE);
-                        invitationText.setVisibility(View.GONE);
-                    } else {
-                        privacyBox.setVisibility(View.GONE);
-                        confirmationButtonRemove.setVisibility(View.GONE);
-                        confirmationButtonFit.setVisibility(View.VISIBLE);
-                        invitationText.setVisibility(View.VISIBLE);
-                        invitationText.setText(getString(R.string.act_invited_by, activityServer.getNameInviter()));
-                    }
-                } else if (activityServer.getInvitationType() == 2) {
+                } else {
                     privacyBox.setVisibility(View.GONE);
                     confirmationButtonRemove.setVisibility(View.GONE);
                     confirmationButtonFit.setVisibility(View.VISIBLE);
-                    invitationText.setVisibility(View.VISIBLE);
-                    invitationText.setText(getString(R.string.agenda_status_anyone_can_participate));
-                } else {
-                    privacyBox.setVisibility(View.GONE);
-                    confirmationButtonPast.setVisibility(View.VISIBLE);
-                    confirmationButtonRemove.setVisibility(View.GONE);
-                    confirmationButtonFit.setVisibility(View.GONE);
-                    invitationText.setVisibility(View.GONE);
-                    buttonTextPast.setText(getString(R.string.agenda_status_need_invitation));
                 }
+            } else if (activityServer.getInvitationType() == 2) {
+                privacyBox.setVisibility(View.GONE);
+                confirmationButtonRemove.setVisibility(View.GONE);
+                confirmationButtonFit.setVisibility(View.VISIBLE);
+            } else {
+                privacyBox.setVisibility(View.GONE);
+                confirmationButtonPast.setVisibility(View.VISIBLE);
+                confirmationButtonRemove.setVisibility(View.GONE);
+                confirmationButtonFit.setVisibility(View.GONE);
+                confirmationButtonPastText.setText(getString(R.string.agenda_status_need_invitation));
+            }
+
+        } else {
+            confirmationButtonPast.setVisibility(View.VISIBLE);
+            confirmationButtonRemove.setVisibility(View.GONE);
+            confirmationButtonFit.setVisibility(View.GONE);
+            confirmationButtonPastText.setText(getString(R.string.agenda_status_need_invitation));
+            if (activityServer.getInvitationType() == 2) {
+                confirmationButtonRemove.setVisibility(View.GONE);
+                confirmationButtonFit.setVisibility(View.VISIBLE);
+            }
+            privacyBox.setVisibility(View.GONE);
+        }
+
+        if (activityServer.getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && confirmationButtonRemove.getVisibility() == View.GONE && confirmationButtonFit.getVisibility() == View.VISIBLE) {
+            confirmationButtonPast.setVisibility(View.VISIBLE);
+            confirmationButtonRemove.setVisibility(View.GONE);
+            confirmationButtonFit.setVisibility(View.GONE);
+            confirmationButtonPastText.setText(getString(R.string.agenda_status_past));
+        } else {
+            confirmationButtonPast.setVisibility(View.GONE);
+        }
+
+        Glide.clear(pieceIcon);
+        Glide.with(this)
+                .load(activityServer.getCubeIcon())
+                .asBitmap()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(pieceIcon);
+
+        cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
+        cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
+
+        //m_title.setText(activityServer.getTitle());
+
+        activityServers = response.getWhatsGoingAct();
+
+        permissionInvite = checkIfCanInvite(getActivity().getInvitationType());
+
+        if (tittleText != null) {
+            tittleText.setText(activityServer.getTitle());
+
+            if (activityServer.getWhatsappGroupLink() == null || activityServer.getWhatsappGroupLink().matches(""))
+                whatsAppGroupLinkBox.setVisibility(View.GONE);
+            else
+                whatsAppGroupLink.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
+
+            if (activityServer.getDescription() != null && activityServer.getDescription().length() <= 240) {
+                descriptionShort.setVisibility(View.VISIBLE);
+                descriptionReadMore.setVisibility(View.GONE);
+
+                if (!activityServer.getDescription().matches("")) {
+                    descriptionShort.setText(activityServer.getDescription());
+                    descriptionShort.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            if (descriptionShort.getLineCount() >= 6) {
+                                descriptionShort.setVisibility(View.GONE);
+                                descriptionReadMore.setVisibility(View.VISIBLE);
+                                String description = activityServer.getDescription() + "  " + "\n\n";
+                                descriptionReadMore.setText(description);
+                                descriptionReadMore.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        descriptionReadMore.setText();
+                                    }
+                                });
+                            }
+                        }
+                    });
+                } else
+                    descriptionShort.setVisibility(View.GONE);
 
             } else {
-                confirmationButtonPast.setVisibility(View.VISIBLE);
-                confirmationButtonRemove.setVisibility(View.GONE);
-                confirmationButtonFit.setVisibility(View.GONE);
-                invitationText.setVisibility(View.GONE);
-                buttonTextPast.setText(getString(R.string.agenda_status_need_invitation));
-                if (activityServer.getInvitationType() == 2) {
-                    confirmationButtonRemove.setVisibility(View.GONE);
-                    confirmationButtonFit.setVisibility(View.VISIBLE);
-                    invitationText.setVisibility(View.VISIBLE);
-                    invitationText.setText(getString(R.string.agenda_status_anyone_can_participate));
-                }
-                privacyBox.setVisibility(View.GONE);
-            }
-
-            if (activityServer.getDateTimeEnd() < Calendar.getInstance().getTimeInMillis() && confirmationButtonRemove.getVisibility() == View.GONE && confirmationButtonFit.getVisibility() == View.VISIBLE){
-                confirmationButtonPast.setVisibility(View.VISIBLE);
-                confirmationButtonRemove.setVisibility(View.GONE);
-                confirmationButtonFit.setVisibility(View.GONE);
-                invitationText.setVisibility(View.GONE);
-                buttonTextPast.setText(getString(R.string.agenda_status_past));
-            }
-            else{
-                confirmationButtonPast.setVisibility(View.GONE);
-            }
-
-            Glide.clear(pieceIcon);
-            Glide.with(this)
-                    .load(activityServer.getCubeIcon())
-                    .asBitmap()
-                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                    .into(pieceIcon);
-
-            cubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
-            cubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
-
-            //m_title.setText(activityServer.getTitle());
-
-            activityServers = response.getWhatsGoingAct();
-
-            permissionInvite = checkIfCanInvite(getActivity().getInvitationType());
-
-            if (tittleText != null) {
-                tittleText.setText(activityServer.getTitle());
-
-                if (activityServer.getWhatsappGroupLink() == null || activityServer.getWhatsappGroupLink().matches(""))
-                    whatsAppGroupLinkBox.setVisibility(View.GONE);
-                else
-                    whatsAppGroupLink.setText(converter.toEntityAttribute(activityServer.getWhatsappGroupLink()));
-
-                if (activityServer.getDescription() != null && activityServer.getDescription().length() <= 240) {
-                    descriptionShort.setVisibility(View.VISIBLE);
-                    descriptionReadMore.setVisibility(View.GONE);
-
-                    if (!activityServer.getDescription().matches("")) {
-                        descriptionShort.setText(activityServer.getDescription());
-                        descriptionShort.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                if(descriptionShort.getLineCount() >= 6) {
-                                    descriptionShort.setVisibility(View.GONE);
-                                    descriptionReadMore.setVisibility(View.VISIBLE);
-                                    String description = activityServer.getDescription() + "  " + "\n\n";
-                                    descriptionReadMore.setText(description);
-                                    descriptionReadMore.post(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            descriptionReadMore.setText();
-                                        }
-                                    });
-                                }
-                            }
-                        });
-                    }
-                    else
-                        descriptionShort.setVisibility(View.GONE);
-
-                } else {
-                    if (activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
-                        String description = activityServer.getDescription() + " " + "\n\n";
-                        descriptionReadMore.setText(description);
-                        descriptionReadMore.post(new Runnable() {
-                            @Override
-                            public void run() {
-                                descriptionReadMore.setText();
-                            }
-                        });
-                    } else
-                        descriptionReadMore.setVisibility(View.GONE);
-                }
-
-                loadTags(response.getTags());
-            }
-
-            if (locationText != null) {
-                Calendar calendar = Calendar.getInstance();
-                Calendar calendar2 = Calendar.getInstance();
-                calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
-                calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
-
-                String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
-                String dayStart = String.format("%02d", activityServer.getDayStart());
-                String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-                int yearStart = activityServer.getYearStart();
-                String hourStart = String.format("%02d", activityServer.getHourStart());
-                String minuteStart = String.format("%02d", activityServer.getMinuteStart());
-                String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
-                String dayEnd = String.format("%02d", activityServer.getDayEnd());
-                String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
-                int yearEnd = activityServer.getYearEnd();
-                String hourEnd = String.format("%02d", activityServer.getHourEnd());
-                String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
-
-                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-                    if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                        dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
-                    } else {
-                        dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
-                    }
-                } else {
-                    dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
-                }
-
-                if (activityServer.getLocation().matches(""))
-                    Log.d("xxx", "NÃO TEM LOCAL");
-                else
-                    Log.d("xxx", activityServer.getLocation());
-
-                if (activityServer.getLocation() == null || activityServer.getLocation().matches(""))
-                    locationBox.setVisibility(View.GONE);
-                else
-                    locationText.setText(activityServer.getLocation());
-
-                if (activityServer.getRepeatType() == 0) {
-                    repeatBox.setVisibility(View.GONE);
-                } else {
-                    String repeatly;
-                    repeatBox.setVisibility(View.VISIBLE);
-                    switch (activityServer.getRepeatType()) {
-                        case Constants.DAYLY:
-                            repeatly = this.getString(R.string.repeat_daily);
-                            break;
-                        case Constants.WEEKLY:
-                            repeatly = this.getString(R.string.repeat_weekly);
-                            break;
-                        case Constants.MONTHLY:
-                            repeatly = this.getString(R.string.repeat_monthly);
-                            break;
-                        default:
-                            repeatly = "";
-                            break;
-                    }
-
-                    if (activityServer.getRepeatType() == 5) {
-                        repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
-                    } else {
-                        repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
-                    }
-                }
-
-                locationBox.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent;
-
-                        if(activityServer.getLat() != -500) {
-                            if(activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
-                                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                                        "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
-                            }
-                            else {
-                                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                                        "geo:" + activityServer.getLat() +
-                                                "," + activityServer.getLng() +
-                                                "?q=" + activityServer.getLat() +
-                                                "," + activityServer.getLng() +
-                                                "(" + activityServer.getLocation() + ")"));
-                            }
-                        }else {
-                            intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                                    "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
-                        }
-
-                        Bundle bundle = new Bundle();
-                        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-                        try {
-                            startActivity(intent);
-                        } catch (ActivityNotFoundException ex) {
-                            Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-
-            }
-
-            new Actor.Builder(SpringSystem.create(), addGuestButton)
-                    .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
-                    .onTouchListener(new View.OnTouchListener() {
+                if (activityServer.getDescription() != null && !activityServer.getDescription().matches("")) {
+                    String description = activityServer.getDescription() + " " + "\n\n";
+                    descriptionReadMore.setText(description);
+                    descriptionReadMore.post(new Runnable() {
                         @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            switch (event.getAction()) {
-                                case MotionEvent.ACTION_UP:
-                                    if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-
-                                    }
-                                    break;
-                                case MotionEvent.ACTION_DOWN:
-                                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                                    break;
-                            }
-                            return true;
+                        public void run() {
+                            descriptionReadMore.setText();
                         }
-                    })
-                    .build();
+                    });
+                } else
+                    descriptionReadMore.setVisibility(View.GONE);
+            }
 
-            recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-            recyclerView.setNestedScrollingEnabled(false);
+            loadTags(response.getTags());
+        }
 
-            context = recyclerView.getContext();
+        Calendar calendar = Calendar.getInstance();
+        Calendar calendar2 = Calendar.getInstance();
+        calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+        calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
 
-            recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position, MotionEvent e) {
-                    SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                    String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+        String dayStart = String.format("%02d", activityServer.getDayStart());
+        String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+        int yearStart = activityServer.getYearStart();
+        String hourStart = String.format("%02d", activityServer.getHourStart());
+        String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+        String dayEnd = String.format("%02d", activityServer.getDayEnd());
+        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+        int yearEnd = activityServer.getYearEnd();
+        String hourEnd = String.format("%02d", activityServer.getHourEnd());
+        String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
-                    Intent intent = new Intent(context, ShowGuestsActivity.class);
-                    intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
-                    intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
-                    intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
-                    intent.putExtra("id_act", getActivity().getId());
+        if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+            if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            } else {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+            }
+        } else {
+            dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+        }
 
-                    Bundle bundle = new Bundle();
-                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                    mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+        if (activityServer.getLat() == -500)
+            locationBox.setVisibility(View.GONE);
+        else
+            locationText.setText(activityServer.getLocation());
 
-                    startActivityForResult(intent, GUEST_UPDATE);
+        if (activityServer.getRepeatType() == 0) {
+            repeatBox.setVisibility(View.GONE);
+        } else {
+            String repeatly;
+            repeatBox.setVisibility(View.VISIBLE);
+            switch (activityServer.getRepeatType()) {
+                case Constants.DAYLY:
+                    repeatly = this.getString(R.string.repeat_daily);
+                    break;
+                case Constants.WEEKLY:
+                    repeatly = this.getString(R.string.repeat_weekly);
+                    break;
+                case Constants.MONTHLY:
+                    repeatly = this.getString(R.string.repeat_monthly);
+                    break;
+                default:
+                    repeatly = "";
+                    break;
+            }
+
+            if (activityServer.getRepeatType() == 5) {
+                repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
+            } else {
+                repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
+            }
+        }
+
+        locationBox.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
+
+                if (activityServer.getLat() != -500) {
+                    if (activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
+                        intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+                    } else {
+                        intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                "geo:" + activityServer.getLat() +
+                                        "," + activityServer.getLng() +
+                                        "?q=" + activityServer.getLat() +
+                                        "," + activityServer.getLng() +
+                                        "(" + activityServer.getLocation() + ")"));
+                    }
+                } else {
+                    intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                            "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
                 }
 
-                @Override
-                public void onLongItemClick(View view, int position, MotionEvent e) {
-                }
-            }));
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            setLayout(this.getActivity(), this.getUserList(), this.getUserConfirmedList(), this.getPermissionInvite());
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        new Actor.Builder(SpringSystem.create(), addGuestButton)
+                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .onTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View v, MotionEvent event) {
+                        switch (event.getAction()) {
+                            case MotionEvent.ACTION_UP:
+                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                }
+                                break;
+                            case MotionEvent.ACTION_DOWN:
+                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                break;
+                        }
+                        return true;
+                    }
+                })
+                .build();
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerView.setNestedScrollingEnabled(false);
+
+        context = recyclerView.getContext();
+
+        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, MotionEvent e) {
+                SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                Intent intent = new Intent(context, ShowGuestsActivity.class);
+                intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+                intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+                intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
+                intent.putExtra("id_act", getActivity().getId());
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                startActivityForResult(intent, GUEST_UPDATE);
+            }
+
+            @Override
+            public void onLongItemClick(View view, int position, MotionEvent e) {
+            }
+        }));
+
+        setLayout(this.getActivity(), this.getUserList(), this.getUserConfirmedList(), this.getPermissionInvite());
 
         setProgress(false);
 
@@ -898,7 +874,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-        if(resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
             if (requestCode == GUEST_UPDATE) {
                 setProgress(true);
                 updateLayout();
@@ -910,7 +886,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
                 listToInvite.clear();
                 listToInvite.addAll(wrap.getItemDetails());
-                if(listToInvite.size() > 0) {
+                if (listToInvite.size() > 0) {
                     activityServer.setId(getActivity().getId());
                     activityServer.setVisibility(Constants.ACT);
                     activityServer.setCreator(mSharedPreferences.getString(Constants.EMAIL, ""));
@@ -923,9 +899,9 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean permissionInvite){
+    public void setLayout(ActivityServer activityServer, ArrayList<User> users, ArrayList<User> confirmed, boolean permissionInvite) {
 
-        if(recyclerView!=null) {
+        if (recyclerView != null) {
             String[] stringArray = this.getResources().getStringArray(R.array.array_who_can_invite_show);
 
             whoCanInvite.setText(stringArray[activityServer.getInvitationType()]);
@@ -963,7 +939,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
-    private boolean isActivityInPast(ActivityServer activityServer){
+    private boolean isActivityInPast(ActivityServer activityServer) {
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
@@ -977,14 +953,14 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         return (isHourBefore && isDateBefore) || isDateBefore;
     }
 
-    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth,int yearEnd, int monthOfYearEnd, int dayOfMonthEnd){
-        if(yearEnd < year)
+    private boolean isDateInBefore(int year, int monthOfYear, int dayOfMonth, int yearEnd, int monthOfYearEnd, int dayOfMonthEnd) {
+        if (yearEnd < year)
             return false;
-        if(year == yearEnd){
-            if(monthOfYearEnd < monthOfYear)
+        if (year == yearEnd) {
+            if (monthOfYearEnd < monthOfYear)
                 return false;
-            else if(monthOfYearEnd == monthOfYear){
-                if(dayOfMonthEnd <= dayOfMonth)
+            else if (monthOfYearEnd == monthOfYear) {
+                if (dayOfMonthEnd <= dayOfMonth)
                     return false;
             }
         }
@@ -1097,7 +1073,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1172,11 +1148,10 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             createDialogPrivacy();
-        }
-        else if(v == addGuestButton){
+        } else if (v == addGuestButton) {
             int i;
             ArrayList<String> list = new ArrayList<>();
-            for(i = 0; i < listPerson.size(); i++){
+            for (i = 0; i < listPerson.size(); i++) {
                 list.add(listPerson.get(i).getEmail());
             }
             Intent intent = new Intent(this, SelectPeopleActivity.class);
@@ -1184,8 +1159,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("erase_from_list", true);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addGuestButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addGuestButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if (isInPast) {
@@ -1196,8 +1171,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             } else {
                 startActivityForResult(intent, ADD_GUEST);
             }
-        }
-        else if(v == guestBox){
+        } else if (v == guestBox) {
             SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -1208,30 +1182,29 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             intent.putExtra("id_act", getActivity().getId());
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivityForResult(intent, GUEST_UPDATE);
-        }
-        else if(v == locationBox){
+        } else if (v == locationBox) {
             Intent intent = null;
-            if(this.getActivity().getLat() != -500) {
+            if (this.getActivity().getLat() != -500) {
                 intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
                         "geo:" + this.getActivity().getLat() +
                                 "," + this.getActivity().getLng() +
                                 "?q=" + this.getActivity().getLat() +
                                 "," + this.getActivity().getLng() +
                                 "(" + this.getActivity().getLocation() + ")"));
-            }else {
+            } else {
 
                 intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
                         "http://maps.google.co.in/maps?q=" + this.getActivity().getLocation()));
             }
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
@@ -1335,7 +1308,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                if(getActivity().getIdFacebook() > 0 || getActivity().getIdGoogle() != null)
+                if (getActivity().getIdFacebook() > 0 || getActivity().getIdGoogle() != null)
                     activity.setInvitationType(1);
 
                 activity.setVisibility(Constants.ACT);

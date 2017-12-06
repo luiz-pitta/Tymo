@@ -87,6 +87,7 @@
                         android:layout_height="95dp"
                         android:layout_below="@+id/textsBox"
                         android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="20dp"
                         android:layout_marginTop="30dp">
 
                         <ImageView
@@ -144,7 +145,7 @@
                         android:orientation="horizontal"
                         android:paddingBottom="5dp"
                         android:paddingTop="5dp"
-                        android:visibility="visible">
+                        android:visibility="gone">
 
                         <ImageView
                             android:id="@+id/addImageIcon"

@@ -2778,6 +2778,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             if (activityServer.getLat() == -500) {
                 locationBoxAdd.setVisibility(View.VISIBLE);
                 locationBox.setVisibility(View.GONE);
+                locationText.setText("");
             } else {
                 locationBoxAdd.setVisibility(View.GONE);
                 locationBox.setVisibility(View.VISIBLE);

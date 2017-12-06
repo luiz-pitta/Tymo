@@ -388,7 +388,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         }
     }
 
-    public void setBefore3Months(){
+    public void setBefore12Months(){
         mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
         mRecyclerView.showEmpty();
     }

@@ -26,11 +26,11 @@
 
                 <RelativeLayout
                     android:id="@+id/mainBox"
-                    android:paddingBottom="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_reminder_main_box"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:paddingBottom="20dp">
 
                     <ImageView
                         android:id="@+id/actionBackIcon"
@@ -97,16 +97,16 @@
 
                     <TextView
                         android:id="@+id/title"
-                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/privacyBox"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
+                        android:layout_marginTop="20dp"
                         android:gravity="center"
                         android:text="Title"
-                        android:textIsSelectable="true"
                         android:textColor="@color/grey_900"
+                        android:textIsSelectable="true"
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
@@ -139,8 +139,8 @@
                             android:gravity="center_vertical"
                             android:maxLines="2"
                             android:text="Date"
-                            android:textIsSelectable="true"
                             android:textColor="@color/grey_600"
+                            android:textIsSelectable="true"
                             android:textSize="14sp" />
 
                         <LinearLayout
@@ -157,8 +157,8 @@
                                 android:layout_height="wrap_content"
                                 android:text="Text"
                                 android:textColor="@color/grey_600"
-                                android:textSize="12sp"
                                 android:textIsSelectable="true"
+                                android:textSize="12sp"
                                 android:textStyle="normal" />
 
                         </LinearLayout>
@@ -174,14 +174,14 @@
 
                 <EditText
                     android:id="@+id/reminderText"
-                    android:layout_margin="20dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/grey_300"
+                    android:layout_margin="20dp"
+                    android:background="@drawable/bg_act_edit_box_2"
                     android:hint="@string/hint_reminder_note"
-                    android:background="@color/transparent"
                     android:imeOptions="actionDone"
                     android:inputType="textMultiLine"
+                    android:padding="10dp"
                     android:textColor="@color/grey_600"
                     android:textColorHint="@color/grey_400"
                     android:textSize="16sp" />
@@ -198,7 +198,7 @@
     </android.support.v4.widget.SwipeRefreshLayout>
 
     <include
-        layout="@layout/btn_act_check_delete"
+        layout="@layout/btn_fit_remove"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true" />

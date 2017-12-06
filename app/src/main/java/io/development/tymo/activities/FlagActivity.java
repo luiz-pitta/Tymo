@@ -107,8 +107,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private Handler handler = new Handler();
 
     private LinearLayout availableBox, unavailableBox, confirmationButtonFit, confirmationButtonRemove, confirmationButtonPast;
-    private TextView invitationText;
-    private Space spaceBox;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -140,8 +138,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         privacyText = (TextView) findViewById(R.id.privacyText);
         editButton = (TextView) findViewById(R.id.editButton);
         titleText = (TextView) findViewById(R.id.title);
-        invitationText = (TextView) findViewById(R.id.invitationText);
-        spaceBox = (Space) findViewById(R.id.spaceBox);
 
         mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
@@ -168,8 +164,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if (type == CREATE_EDIT_FLAG) {
             bottomBarBoxFitRemove.setVisibility(View.GONE);
-            spaceBox.setVisibility(View.GONE);
-            invitationText.setVisibility(View.GONE);
             avaliableBg = R.drawable.bg_shape_oval_available_corners_2;
             unavaliableBg = R.drawable.bg_shape_oval_unavailable_corners_2;
             avaliableIcon = R.drawable.ic_flag;
@@ -549,8 +543,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             confirmationButtonRemove.setVisibility(View.VISIBLE);
             confirmationButtonFit.setVisibility(View.GONE);
-            spaceBox.setVisibility(View.GONE);
-            invitationText.setVisibility(View.GONE);
 
             if (!flagWrapper.getFlagServer().getType()) {
                 editButton.setVisibility(View.VISIBLE);
@@ -566,18 +558,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                     if (user.getInvitation() == 1) {
                         confirmationButtonRemove.setVisibility(View.VISIBLE);
                         confirmationButtonFit.setVisibility(View.GONE);
-                        spaceBox.setVisibility(View.GONE);
-                        invitationText.setVisibility(View.GONE);
                     } else {
                         confirmationButtonRemove.setVisibility(View.GONE);
                         confirmationButtonFit.setVisibility(View.VISIBLE);
-                        invitationText.setVisibility(View.VISIBLE);
-                        invitationText.setText(getString(R.string.act_invited_by, flagWrapper.getFlagServer().getNameInviter()));
-                        if (!flagWrapper.getFlagServer().getTitle().matches("")) {
-                            spaceBox.setVisibility(View.GONE);
-                        } else {
-                            spaceBox.setVisibility(View.VISIBLE);
-                        }
                     }
                 }
             }

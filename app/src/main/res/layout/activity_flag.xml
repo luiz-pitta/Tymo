@@ -229,26 +229,6 @@
                         android:textSize="18sp"
                         android:textStyle="bold" />
 
-                    <Space
-                        android:id="@+id/spaceBox"
-                        android:layout_width="match_parent"
-                        android:layout_height="10dp"
-                        android:visibility="gone" />
-
-                    <TextView
-                        android:id="@+id/invitationText"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/title"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:text="Invitation Text"
-                        android:textColor="@color/white"
-                        android:textIsSelectable="true"
-                        android:textSize="14sp" />
-
                 </RelativeLayout>
 
                 <View
