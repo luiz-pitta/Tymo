@@ -41,13 +41,15 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         super.onBindViewHolder(holder, position);
-        SelectionRepeatActivitiesFeedViewHolder selectionRepeatActivitiesFeedViewHolder = (SelectionRepeatActivitiesFeedViewHolder)holder;
+        SelectionRepeatActivitiesFeedViewHolder selectionRepeatActivitiesFeedViewHolder = (SelectionRepeatActivitiesFeedViewHolder) holder;
         Object activity = ActivitiesList.get(position);
         String dateHourText = "";
         int year_start = 0, month_start = 0, day_start = 0, minute_start = 0, hour_start = 0;
         int year_end = 0, month_end = 0, day_end = 0, minute_end = 0, hour_end = 0;
-        if(activity instanceof ActivityServer){
-            ActivityServer activityServer = (ActivityServer)activity;
+        boolean dateStartEmpty = true, dateEndEmpty = true, timeStartEmpty = true, timeEndEmpty = true;
+
+        if (activity instanceof ActivityServer) {
+            ActivityServer activityServer = (ActivityServer) activity;
 
             year_start = activityServer.getYearStart();
             month_start = activityServer.getMonthStart();
@@ -60,8 +62,14 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
             day_end = activityServer.getDayEnd();
             minute_end = activityServer.getMinuteEnd();
             hour_end = activityServer.getHourEnd();
-        }else if(activity instanceof FlagServer){
-            FlagServer flagServer = (FlagServer)activity;
+
+            dateStartEmpty = activityServer.getDateStartEmpty();
+            dateEndEmpty = activityServer.getDateEndEmpty();
+            timeStartEmpty = activityServer.getTimeStartEmpty();
+            timeEndEmpty = activityServer.getTimeEndEmpty();
+
+        } else if (activity instanceof FlagServer) {
+            FlagServer flagServer = (FlagServer) activity;
 
             year_start = flagServer.getYearStart();
             month_start = flagServer.getMonthStart();
@@ -74,6 +82,11 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
             day_end = flagServer.getDayEnd();
             minute_end = flagServer.getMinuteEnd();
             hour_end = flagServer.getHourEnd();
+
+            dateStartEmpty = flagServer.getDateStartEmpty();
+            dateEndEmpty = flagServer.getDateEndEmpty();
+            timeStartEmpty = flagServer.getTimeStartEmpty();
+            timeEndEmpty = flagServer.getTimeEndEmpty();
         }
 
         DateFormat dateFormat = new DateFormat(context);
@@ -95,14 +108,42 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
         String hourEnd = String.format("%02d", hour_end);
         String minuteEnd = String.format("%02d", minute_end);
 
-        if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+        if (dateEndEmpty && timeStartEmpty && timeEndEmpty) {
+            dateHourText = context.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+        } else if (!dateEndEmpty && timeStartEmpty && timeEndEmpty) {
+            dateHourText = context.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd);
+        } else if (dateEndEmpty && !timeStartEmpty && timeEndEmpty) {
+            dateHourText = context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+        } else if (dateEndEmpty && timeStartEmpty && !timeEndEmpty) {
+            dateHourText = context.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd);
+        } else if (!dateEndEmpty && !timeStartEmpty && timeEndEmpty) {
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                dateHourText = context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            } else {
+                dateHourText = context.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd);
+            }
+        } else if (!dateEndEmpty && timeStartEmpty && !timeEndEmpty) {
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                dateHourText = context.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd);
+            } else {
+                dateHourText = context.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
+            }
+        } else if (dateEndEmpty && !timeStartEmpty && !timeEndEmpty) {
             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
                 dateHourText = context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             } else {
                 dateHourText = context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd);
             }
         } else {
-            dateHourText = context.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                    dateHourText = context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                } else {
+                    dateHourText = context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                }
+            } else {
+                dateHourText = context.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
+            }
         }
 
         selectionRepeatActivitiesFeedViewHolder.text1.setText(dateHourText);
@@ -112,14 +153,14 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
     @Override
     public void setActive(@NonNull View view, boolean state) {
 
-        ImageView checkBoxActivated  = view.findViewById(R.id.checkBoxActivated);
-        RelativeLayout repeatBox  = view.findViewById(R.id.repeatBox);
+        ImageView checkBoxActivated = view.findViewById(R.id.checkBoxActivated);
+        RelativeLayout repeatBox = view.findViewById(R.id.repeatBox);
 
-        if(checkBoxActivated != null){
-            if(state){
+        if (checkBoxActivated != null) {
+            if (state) {
                 checkBoxActivated.setVisibility(View.VISIBLE);
                 repeatBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
-            }else{
+            } else {
                 checkBoxActivated.setVisibility(View.GONE);
                 repeatBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
             }
@@ -135,11 +176,11 @@ public class SelectionRepeatActivitiesFeedAdapter extends MultiChoiceAdapter<Rec
         }
     }
 
-    public void swap(ArrayList<ActivityServer> newActivitiesList){
+    public void swap(ArrayList<ActivityServer> newActivitiesList) {
         clearData();
-        if(newActivitiesList.size() > 0) {
+        if (newActivitiesList.size() > 0) {
             ActivitiesList.addAll(newActivitiesList);
-            notifyItemRangeInserted(0,newActivitiesList.size());
+            notifyItemRangeInserted(0, newActivitiesList.size());
         }
     }
 
