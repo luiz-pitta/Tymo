@@ -1499,9 +1499,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         } else if (!validateTime) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_time_end_before_start, Toast.LENGTH_LONG).show();
-        } else if (tags.size() == 0) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_tag_required, Toast.LENGTH_LONG).show();
         } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType())) {
             err++;
             Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType()), Toast.LENGTH_LONG).show();

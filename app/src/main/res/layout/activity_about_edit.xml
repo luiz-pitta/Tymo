@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/grey_100"
@@ -41,7 +42,7 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_centerHorizontal="true"
-                        android:src="@drawable/ic_profile_photo_empty"/>
+                        android:src="@drawable/ic_profile_photo_empty" />
 
                     <View
                         android:layout_width="100dp"
@@ -91,58 +92,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:inputType="text"
                     android:imeOptions="actionDone"
-                    android:paddingBottom="10dp"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:paddingTop="10dp"
-                    android:text="Text"
-                    android:textColor="@color/grey_900"
-                    android:textColorHint="@color/grey_900"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/horizontal_line_height"
-                    android:background="@color/horizontal_line" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/surnameBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:orientation="vertical"
-                android:visibility="gone">
-
-                <TextView
-                    android:id="@+id/textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="5dp"
-                    android:ellipsize="end"
-                    android:lines="1"
-                    android:paddingLeft="20dp"
-                    android:paddingRight="20dp"
-                    android:text="@string/about_surname"
-                    android:textAllCaps="true"
-                    android:textColor="@color/grey_500"
-                    android:textSize="12sp" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/horizontal_line_height"
-                    android:background="@color/horizontal_line" />
-
-                <EditText
-                    android:id="@+id/surname"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/white"
-                    android:inputType="textMultiLine"
+                    android:inputType="text"
                     android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
@@ -237,14 +188,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:hint="@string/about_info_to_contact_example"
                     android:inputType="textMultiLine"
                     android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
-                    android:hint="@string/about_info_to_contact_example"
-                    android:textColorHint="@color/grey_400"
                     android:textColor="@color/grey_900"
+                    android:textColorHint="@color/grey_400"
                     android:textSize="16sp" />
 
                 <View
@@ -280,18 +231,18 @@
                     android:background="@color/horizontal_line" />
 
                 <RelativeLayout
+                    android:id="@+id/birthDateBar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/white">
+                    android:background="@drawable/bg_select_item_white"
+                    android:clickable="true">
 
                     <TextView
                         android:id="@+id/birthDate"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_toLeftOf="@+id/age"
-                        android:background="@color/white"
                         android:ellipsize="end"
-                        android:inputType="date"
                         android:lines="1"
                         android:paddingBottom="10dp"
                         android:paddingLeft="20dp"
@@ -348,20 +299,24 @@
                     android:layout_height="@dimen/horizontal_line_height"
                     android:background="@color/horizontal_line" />
 
-                <TextView
-                    android:id="@+id/gender"
+                <com.jaredrummler.materialspinner.MaterialSpinner
+                    android:id="@+id/genderPicker"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
-                    android:inputType="text"
+                    android:clickable="true"
+                    android:gravity="center_vertical"
                     android:paddingBottom="10dp"
                     android:paddingLeft="20dp"
                     android:paddingRight="20dp"
                     android:paddingTop="10dp"
-                    android:text="Text"
-                    android:textColor="@color/grey_900"
-                    android:textColorHint="@color/grey_900"
-                    android:textSize="16sp" />
+                    android:textSize="16sp"
+                    android:textStyle="normal"
+                    app:ms_arrow_tint="@color/grey_900"
+                    app:ms_background_color="@color/white"
+                    app:ms_dropdown_height="wrap_content"
+                    app:ms_dropdown_max_height="120dp"
+                    app:ms_text_color="@color/grey_900" />
 
                 <View
                     android:layout_width="match_parent"
@@ -371,12 +326,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/locationWhereLivesBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -419,12 +374,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/whereWorksBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"
@@ -467,12 +422,12 @@
             </LinearLayout>
 
             <LinearLayout
-                android:visibility="gone"
                 android:id="@+id/whereStudiedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="gone">
 
                 <TextView
                     android:layout_width="match_parent"

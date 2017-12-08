@@ -29,7 +29,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_reminder_main_box"
-                    android:gravity="center"
                     android:paddingBottom="20dp">
 
                     <ImageView
@@ -52,7 +51,6 @@
                             android:id="@+id/text"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
                             android:ellipsize="end"
                             android:gravity="center"
                             android:lines="1"
@@ -72,7 +70,8 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:visibility="visible">
 
                         <ImageView
                             android:id="@+id/privacyIcon"
@@ -85,17 +84,32 @@
                         <TextView
                             android:id="@+id/privacyText"
                             android:layout_width="wrap_content"
+                            android:layout_height="50dp"
+                            android:ellipsize="end"
+                            android:gravity="center"
+                            android:lines="1"
+                            android:text="@string/reminder_privacy"
+                            android:textColor="@color/grey_700"
+                            android:textSize="14sp"
+                            android:textStyle="normal"
+                            android:visibility="gone" />
+
+                        <TextView
+                            android:id="@+id/privacyTextCreate"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:ellipsize="end"
                             android:lines="1"
                             android:text="@string/reminder_privacy"
                             android:textColor="@color/grey_700"
                             android:textSize="14sp"
-                            android:textStyle="normal" />
+                            android:textStyle="normal"
+                            android:visibility="visible" />
 
                     </LinearLayout>
 
                     <TextView
+                        android:visibility="visible"
                         android:id="@+id/title"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -111,6 +125,7 @@
                         android:textStyle="bold" />
 
                     <RelativeLayout
+                        android:visibility="visible"
                         android:id="@+id/dateBox"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -118,8 +133,7 @@
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="10dp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
+                        android:gravity="center">
 
                         <ImageView
                             android:id="@+id/dateIcon"
@@ -131,7 +145,7 @@
 
                         <TextView
                             android:id="@+id/dateHourText"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
                             android:layout_toRightOf="@+id/dateIcon"
@@ -145,7 +159,7 @@
 
                         <LinearLayout
                             android:id="@+id/repeatBox"
-                            android:layout_width="match_parent"
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/dateHourText"
                             android:layout_marginLeft="45dp"
@@ -172,25 +186,114 @@
                     android:layout_height="@dimen/horizontal_line_height"
                     android:background="@color/horizontal_line" />
 
-                <EditText
-                    android:id="@+id/reminderText"
+                <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="20dp"
-                    android:background="@drawable/bg_act_edit_box_2"
-                    android:hint="@string/hint_reminder_note"
-                    android:imeOptions="actionDone"
-                    android:inputType="textMultiLine"
-                    android:padding="10dp"
-                    android:textColor="@color/grey_600"
-                    android:textColorHint="@color/grey_400"
-                    android:textSize="16sp" />
+                    android:layout_height="match_parent">
 
-                <Space
-                    android:id="@+id/space"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:visibility="visible" />
+                    <EditText
+                        android:id="@+id/reminderText"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_above="@+id/addButtonsBox"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_act_edit_box_2"
+                        android:gravity="top"
+                        android:hint="@string/hint_reminder_note"
+                        android:imeOptions="actionDone"
+                        android:inputType="textMultiLine"
+                        android:padding="10dp"
+                        android:scrollbars="vertical"
+                        android:textColor="@color/grey_600"
+                        android:textColorHint="@color/grey_400"
+                        android:textSize="16sp" />
+
+                    <LinearLayout
+                        android:id="@+id/addButtonsBox"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@+id/space"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginBottom="10dp"
+                        android:layout_marginLeft="20dp"
+                        android:layout_marginRight="20dp"
+                        android:divider="@drawable/divider_reminder_add_buttons"
+                        android:dividerPadding="8dp"
+                        android:orientation="horizontal"
+                        android:showDividers="middle"
+                        android:visibility="visible">
+
+                        <LinearLayout
+                            android:id="@+id/addTitleButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginRight="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/addTitleButtonIcon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_centerVertical="true"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_notepad"
+                                android:tint="@color/deep_purple_400" />
+
+                            <TextView
+                                android:id="@+id/addTitleButtonText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@string/add_title"
+                                android:textColor="@color/deep_purple_400"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/addDateHourButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:gravity="center_vertical"
+                            android:orientation="horizontal">
+
+                            <ImageView
+                                android:id="@+id/addDateHourButtonIcon"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_centerVertical="true"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_calendar_clock"
+                                android:tint="@color/deep_purple_400" />
+
+                            <TextView
+                                android:id="@+id/addDateHourButtonText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="40dp"
+                                android:gravity="center_vertical"
+                                android:lines="1"
+                                android:text="@string/add_date_hour"
+                                android:textColor="@color/deep_purple_400"
+                                android:textSize="14sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <Space
+                        android:id="@+id/space"
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:layout_alignParentBottom="true"
+                        android:visibility="visible" />
+
+                </RelativeLayout>
 
             </LinearLayout>
         </android.support.v4.widget.NestedScrollView>

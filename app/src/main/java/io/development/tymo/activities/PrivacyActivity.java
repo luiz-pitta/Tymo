@@ -28,7 +28,7 @@ import io.reactivex.schedulers.Schedulers;
 public class PrivacyActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
-    private TextView text, cancelButton, updatingButton;
+    private TextView text;
     private LinearLayout progressBox;
     private MaterialSpinner spinner;
 
@@ -50,12 +50,8 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         text = (TextView) findViewById(R.id.text);
-        cancelButton = (TextView) findViewById(R.id.cancelButton);
-        updatingButton = (TextView) findViewById(R.id.updatingButton);
 
         mBackButton.setOnClickListener(this);
-        cancelButton.setOnClickListener(this);
-        updatingButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
 
         spinner = (MaterialSpinner) findViewById(R.id.visibilityCalendarPicker);
@@ -64,6 +60,24 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
 
             @Override public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 privacy_type = position;
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updatingButton");
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                User user = new User();
+
+                SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                progressBox.setVisibility(View.VISIBLE);
+
+                user.setPrivacy(privacy_type);
+                user.setEmail(email);
+                user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+
+                setPrivacy(user);
             }
         });
 
@@ -125,32 +139,6 @@ public class PrivacyActivity extends AppCompatActivity implements View.OnClickLi
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             onBackPressed();
-        }
-        else if(view == cancelButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cancelButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            finish();
-        }
-        else if(view == updatingButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "updatingButton");
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            User user = new User();
-
-            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-            String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-            progressBox.setVisibility(View.VISIBLE);
-
-            user.setPrivacy(privacy_type);
-            user.setEmail(email);
-            user.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-
-            setPrivacy(user);
         }
     }
 

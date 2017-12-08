@@ -74,6 +74,7 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
         cancelButton.setOnClickListener(this);
         forgot.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
+        forgot.setOnTouchListener(this);
 
         m_title.setText(getResources().getString(R.string.password_reset_text_1));
         progressBox.setVisibility(View.GONE);
@@ -229,6 +230,12 @@ public class ChangePasswordActivity extends AppCompatActivity implements View.On
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+            }
+        } else if (view == forgot) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                forgot.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                forgot.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
             }
         }
 

@@ -98,6 +98,7 @@
     <string name="about_birth_date">Data de nascimento</string>
     <string name="about_description">Descrição</string>
     <string name="about_facebook_text">Os dados abaixo foram importados do Facebook e não podem ser alterados. Eles são sincronizados automaticamente.</string>
+    <string name="settings_account_facebook_text">Você se cadastrou pelo Facebook. Sua conta é sincronizada automaticamente.</string>
     <string name="about_full_name">Nome completo</string>
     <string name="about_gender">Gênero</string>
     <string name="about_info_to_contact_example">Instagram, Facebook, Email, LinkedIn, etc.</string>
@@ -216,7 +217,7 @@
     <string name="edit_profile">Editar Perfil</string>
     <string name="edit_reminder">Editar nota</string>
     <string name="edit">Editar</string>
-    <string name="empty_blocked_users">Não há usuários bloqueados</string>
+    <string name="empty_blocked_users">Nenhum usuário bloqueado</string>
     <string name="empty_commitments_of_the_day">Você não tem compromissos registrados para hoje</string>
     <string name="empty_commitments">Sem compromissos</string>
     <string name="empty_feed_text_1">Você não tem convites pendentes...</string>
@@ -228,7 +229,7 @@
     <string name="empty_my_contacts_profile_friend_text_2">Seja o primeiro dessa lista</string>
     <string name="empty_my_contacts_profile_text_1">Você não possui contatos</string>
     <string name="empty_my_contacts_profile_text_2">Acesse a tela de busca e adicione usuários à sua rede</string>
-    <string name="empty_pending_requests">Não há solicitações para adicionarem você no momento</string>
+    <string name="empty_pending_requests">Nenhuma solicitação para adicionar você como um contato</string>
     <string name="empty_profile_privated_text_1">Essa conta é privada</string>
     <string name="empty_profile_privated_text_2">Adicione aos seus contatos para ver o conteúdo desse perfil</string>
     <string name="empty_search">Nenhum item encontrado</string>
@@ -309,6 +310,8 @@
     <string name="signalize_guest_btn">Sinalizar</string>
     <string name="invited_by">Convidado por %1$s</string>
     <string name="suspension_points">&#183;&#183;&#183;</string>
+    <string name="add_title">Add. Título</string>
+    <string name="add_date_hour">Add. Data/Hora</string>
     <string name="location">Localização</string>
     <string name="login_connect_with_facebook">Conectar com o Facebook</string>
     <string name="login_forgot_password">Esqueceu sua senha?</string>
@@ -551,6 +554,7 @@
     <string name="user_blocked_one">Usuário bloqueado</string>
     <string name="user_blocked">Usuários bloqueados</string>
     <string name="user_unblocked">Usuário desbloqueado</string>
+    <string name="back_without_saving">Você tem alterações não salvas. Tem certeza que deseja sair?</string>
     <string name="validation_field_act_max_lenght_days_daily">Para repetir diariamente a atividade não pode passar de 1 dia de duração</string>
     <string name="validation_field_act_max_lenght_days_monthly">Para repetir mensalmente a atividade não pode passar de 30 dias de duração</string>
     <string name="validation_field_act_max_lenght_days_weekly">Para repetir semanalmente a atividade não pode passar de 7 dias de duração</string>

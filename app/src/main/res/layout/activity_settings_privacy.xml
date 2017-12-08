@@ -80,40 +80,6 @@
 
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/updatingButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/btn_accept"
-            android:clickable="true"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/update"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/cancelButton"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/btn_clean"
-            android:clickable="true"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:lines="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:text="@string/cancel"
-            android:textColor="@color/grey_900"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
         <LinearLayout
             android:id="@+id/progressBox"
             android:layout_width="wrap_content"

@@ -100,6 +100,10 @@ public class AlgorithmFeedSearch {
             return -1;
         else if (time_left_to_end < 0 && time_left_to_end2 >= 0)
             return 1;
+        else if (rank_points > rank_points2)
+            return -1;
+        else if (rank_points < rank_points2)
+            return 1;
         else if (start_date_time > start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0)
             return -1;
         else if (start_date_time < start_date_time2 && time_left_to_end < 0 && time_left_to_end2 < 0)
@@ -127,10 +131,6 @@ public class AlgorithmFeedSearch {
         else if (start_date_time < start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0 && orderByDateHour == true)
             return -1;
         else if (start_date_time > start_date_time2 && time_left_to_end > 0 && time_left_to_end2 > 0 && orderByDateHour == true)
-            return 1;
-        else if (rank_points > rank_points2)
-            return -1;
-        else if (rank_points < rank_points2)
             return 1;
         else
             return 0;

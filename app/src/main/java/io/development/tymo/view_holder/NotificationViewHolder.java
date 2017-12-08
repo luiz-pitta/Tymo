@@ -15,6 +15,7 @@ import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.models.NotificationModel;
+import io.development.tymo.utils.Utilities;
 
 
 public class NotificationViewHolder extends BaseViewHolder<NotificationModel> {
@@ -39,8 +40,9 @@ public class NotificationViewHolder extends BaseViewHolder<NotificationModel> {
         pieceBox = $(R.id.pieceBox);
         this.context = context;
 
-        //itemBox.getLayoutParams().height = (int) Utilities.convertDpToPixel(70, context);
+        itemBox.getLayoutParams().height = (int) Utilities.convertDpToPixel(70, context);
 
+        text2.setVisibility(View.GONE);
         text3.setVisibility(View.GONE);
         $(R.id.actionIcon).setVisibility(View.GONE);
         $(R.id.moreVerticalIcon).setVisibility(View.GONE);

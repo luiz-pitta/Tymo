@@ -985,7 +985,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
         text1.setText(getResources().getString(R.string.dialog_fit_multiple_repeat_activity_title));
         text2.setText(getResources().getString(R.string.dialog_fit_multiple_repeat_activity_text));
         buttonText1.setText(getResources().getString(R.string.cancel));
-        buttonText2.setText(getResources().getString(R.string.ok));
+        buttonText2.setText(getResources().getString(R.string.fit));
 
         mMultiChoiceRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMultiChoiceRecyclerView.setNestedScrollingEnabled(false);

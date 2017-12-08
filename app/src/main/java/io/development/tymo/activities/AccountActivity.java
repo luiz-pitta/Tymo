@@ -96,12 +96,15 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         email.setText(user.getEmail());
 
         if(user.getFromFacebook()) {
+            findViewById(R.id.textFromFacebook).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalLine).setVisibility(View.GONE);
             findViewById(R.id.emailActionForwardIcon).setVisibility(View.GONE);
+            emailBox.setBackgroundColor(getResources().getColor(R.color.white));
             passwordBox.setVisibility(View.GONE);
             emailBox.setOnClickListener(null);
             passwordBox.setOnClickListener(null);
         }else {
+            findViewById(R.id.textFromFacebook).setVisibility(View.GONE);
             if(!user.getPhoto().matches("")) {
                 String[] split = user.getPhoto().split("/");
                 oldUrl = split[split.length - 1];
