@@ -30,6 +30,7 @@ public class FlagServer implements Serializable {
     private int status; // -1 = already happened ; 0 = is happening ; 1 = will happen
 
     private String title;
+    private String text;
     private boolean type;
 
     private int day_start;
@@ -85,6 +86,7 @@ public class FlagServer implements Serializable {
         this.hour_end_card = flagServer.getHourEndCard();
 
         this.title = flagServer.getTitle();
+        this.text = flagServer.getText();
         this.type = flagServer.getType();
 
         this.count_my_contacts = flagServer.getCountMyContacts();
@@ -270,6 +272,10 @@ public class FlagServer implements Serializable {
         return title;
     }
 
+    public String getText() {
+        return text;
+    }
+
     public int getDayStart() {
         return day_start;
     }
@@ -356,6 +362,10 @@ public class FlagServer implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public void setText(String text) {
+        this.text = text;
     }
 
     public void setType(Boolean type) {

@@ -288,8 +288,16 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
 
             String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            
+            String text1;
+            
+            if (flagServer.getTitle().matches("")){
+                text1 = flagServer.getText();
+            } else {
+                text1 = flagServer.getTitle();
+            }
 
-            listWhats.add(new FlagSearch(flagServer.getTitle(), date, this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
+            listWhats.add(new FlagSearch(text1, date, this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
         }
 
         for (i = 0; i < my_commit_act.size(); i++) {
@@ -339,7 +347,15 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 creator = this.getResources().getString(R.string.created_by, flagServer.getCreator());
             }
 
-            listMyCommitment.add(new FlagSearch(flagServer.getTitle(), date, creator, flagServer.getType(), flagServer));
+            String text1;
+
+            if (flagServer.getTitle().matches("")){
+                text1 = flagServer.getText();
+            } else {
+                text1 = flagServer.getTitle();
+            }
+
+            listMyCommitment.add(new FlagSearch(text1, date, creator, flagServer.getType(), flagServer));
         }
 
         for (i = 0; i < my_commit_reminderServer.size(); i++) {
@@ -362,7 +378,15 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
-            listMyCommitment.add(new ReminderSearch(reminderServer.getTitle(), date, this.getResources().getString(R.string.my_reminder), reminderServer));
+            String text1;
+
+            if (reminderServer.getTitle().matches("")){
+                text1 = reminderServer.getText();
+            } else {
+                text1 = reminderServer.getTitle();
+            }
+
+            listMyCommitment.add(new ReminderSearch(text1, date, this.getResources().getString(R.string.my_reminder), reminderServer));
         }
 
         Collections.sort(listWhats, new Comparator<Object>() {
@@ -446,7 +470,15 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
 
-            listWhats.add(new FlagSearch(flagServer.getTitle(), date, this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
+            String text1;
+
+            if (flagServer.getTitle().matches("")){
+                text1 = flagServer.getText();
+            } else {
+                text1 = flagServer.getTitle();
+            }
+
+            listWhats.add(new FlagSearch(text1, date, this.getResources().getString(R.string.created_by, flagServer.getCreator()), flagServer.getType(), flagServer));
         }
 
         Collections.sort(listWhats, new Comparator<Object>() {
@@ -506,7 +538,15 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 creator = this.getResources().getString(R.string.created_by, flagServer.getCreator());
             }
 
-            listMyCommitment.add(new FlagSearch(flagServer.getTitle(), date, creator, flagServer.getType(), flagServer));
+            String text1;
+
+            if (flagServer.getTitle().matches("")){
+                text1 = flagServer.getText();
+            } else {
+                text1 = flagServer.getTitle();
+            }
+
+            listMyCommitment.add(new FlagSearch(text1, date, creator, flagServer.getType(), flagServer));
         }
 
         for (int i = 0; i < my_commit_reminderServer.size(); i++) {
@@ -529,7 +569,15 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
-            listMyCommitment.add(new ReminderSearch(reminderServer.getTitle(), date, this.getResources().getString(R.string.my_reminder), reminderServer));
+            String text1;
+
+            if (reminderServer.getTitle().matches("")){
+                text1 = reminderServer.getText();
+            } else {
+                text1 = reminderServer.getTitle();
+            }
+
+            listMyCommitment.add(new ReminderSearch(text1, date, this.getResources().getString(R.string.my_reminder), reminderServer));
         }
 
         Collections.sort(listMyCommitment, new Comparator<Object>() {

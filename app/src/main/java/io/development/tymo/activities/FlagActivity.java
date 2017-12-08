@@ -646,7 +646,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private boolean validateDateTime(Calendar calendarStart, Calendar calendarEnd) {
-        if (calendarEnd.getTimeInMillis() < calendarStart.getTimeInMillis()){
+        if (calendarEnd.getTimeInMillis() < calendarStart.getTimeInMillis()) {
             return false;
         }
 
@@ -839,10 +839,13 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             flagServer.setDateTimeListEnd(date_time_list_end);
 
             flagServer.setType(free);
-            if (free)
+            if (free) {
                 flagServer.setToAll(sendAll);
-            else
+                flagServer.setText(getResources().getString(R.string.flag_available));
+            } else {
                 flagServer.setToAll(true);
+                flagServer.setText(getResources().getString(R.string.flag_unavailable));
+            }
 
             for (int i = 1; i < list_guest.size(); i++) {
                 flagServer.addGuest(list_guest.get(i).getEmail());

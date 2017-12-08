@@ -29,7 +29,6 @@ public class ReminderServer implements Serializable {
     private boolean time_start_empty;
     private boolean time_end_empty;
     private boolean date_time_alert;
-    private boolean title_empty;
 
     private long date_time_creation;
     private long date_time_start;
@@ -52,14 +51,6 @@ public class ReminderServer implements Serializable {
 
     public boolean getDateTimeAlert() {
         return date_time_alert;
-    }
-
-    public void setTitleEmpty(boolean title_empty) {
-        this.title_empty = title_empty;
-    }
-
-    public boolean getTitleEmpty() {
-        return title_empty;
     }
 
     public void setDateStartEmpty(boolean date_start_empty) {
