@@ -270,7 +270,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (activityServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             listWhats.add(new ActivitySearch(activityServer.getTitle(), date, this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
@@ -287,7 +294,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (flagServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
             
             String text1;
             
@@ -312,7 +326,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (activityServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             String creator;
 
@@ -337,7 +358,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (flagServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             String creator;
 
@@ -372,9 +400,10 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date;
 
-            if (hourStart.matches("00") && minuteStart.matches("00")) {
+            if (reminderServer.getTimeStartEmpty()){
                 date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
-            } else {
+            }
+            else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
@@ -451,7 +480,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (activityServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             listWhats.add(new ActivitySearch(activityServer.getTitle(), date, this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
@@ -468,7 +504,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (flagServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             String text1;
 
@@ -503,7 +546,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (activityServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             String creator;
 
@@ -528,7 +578,14 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
 
-            String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            String date;
+
+            if (flagServer.getTimeStartEmpty()){
+                date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
+            else {
+                date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
 
             String creator;
 
@@ -563,9 +620,10 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String date;
 
-            if (hourStart.matches("00") && minuteStart.matches("00")) {
+            if (reminderServer.getTimeStartEmpty()){
                 date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
-            } else {
+            }
+            else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
