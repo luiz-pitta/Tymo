@@ -137,7 +137,7 @@
     <string name="back_without_saving">Você tem alterações não salvas. Tem certeza que deseja sair?</string>
     <string name="back">Voltar</string>
     <string name="block_user">Bloquear usuário</string>
-    <string name="blocked_users">Usuários bloqueados</string>
+    <string name="blocked_users">Usuários Bloqueados</string>
     <string name="cancel">Cancelar</string>
     <string name="card_birthday_text_1">Aniversariantes</string>
     <string name="card_birthday_text_2">Comemore esta data especial :)</string>
@@ -361,7 +361,7 @@
     <string name="password_new_again">Digite novamente a nova senha</string>
     <string name="password_new">Nova senha</string>
     <string name="password_reset_success">Redefinição de senha feita com sucesso!</string>
-    <string name="password_reset_text_1">Redefinição de senha</string>
+    <string name="password_reset_text_1">Redefinição de Senha</string>
     <string name="password_reset_text_2">Insira o token que você recebeu no seu email e digite a nova senha:</string>
     <string name="password_reset_text_3">Digite a nova senha:</string>
     <string name="permission_import_from_google_agenda">Você precisa dessa permissão para importar do Google Agenda</string>

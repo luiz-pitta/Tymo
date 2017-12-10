@@ -14,6 +14,8 @@ import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -83,12 +85,63 @@ public class InvitedPeopleFragment extends Fragment {
     }
 
     public void setAdapterItens(List<User> list){
+        list = setOrderPeople(list);
         listPeople.clear();
         listPeople.addAll(list);
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(listPeople);
         }
+    }
+
+    private List<User> setOrderPeople(List<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                boolean isAdm1 = c1.isAdm();
+                boolean isAdm2 = c2.isAdm();
+
+                if (isAdm1 && !isAdm2)
+                    return -1;
+                else if (!isAdm1 && isAdm2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                boolean isCreator1 = c1.isCreator();
+                boolean isCreator2 = c2.isCreator();
+
+                if (isCreator1 && !isCreator2)
+                    return -1;
+                else if (!isCreator1 && isCreator2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     public void showProgress(boolean search){

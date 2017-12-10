@@ -334,7 +334,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 before12Months.get(Calendar.YEAR), before12Months.get(Calendar.MONTH) + 1, before12Months.get(Calendar.DAY_OF_MONTH));
 
         if (!free) {
-            if(isStored){
+            if (isStored) {
                 adapter.addAll(setPlansItemData(week.getActivities(), week.getPaint()));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments);
 
@@ -342,24 +342,22 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
                 else
                     dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-            }
-            else{
+            } else {
                 dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_50));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
                 mRecyclerView.showEmpty();
             }
-        }
-        else {
-            if(isStored){
+        } else {
+            if (isStored) {
                 boolean freeAllDay = false;
-                if(week.getFree().size() == 1)
-                    freeAllDay = isFreeAllDay((FreeTimeServer)week.getFree().get(0));
+                if (week.getFree().size() == 1)
+                    freeAllDay = isFreeAllDay((FreeTimeServer) week.getFree().get(0));
 
-                if(!freeAllDay) {
+                if (!freeAllDay) {
                     mRecyclerView.setEmptyView(R.layout.empty_free_time);
                     adapter.addAll(setPlansItemData(week.getFree(), false));
                     mRecyclerView.getEmptyView().setOnClickListener(null);
-                }else {
+                } else {
                     adapter.addAll(setPlansItemData(week.getFree(), false));
                     mRecyclerView.setEmptyView(R.layout.empty_free_all_day);
                     mRecyclerView.getEmptyView().setOnClickListener(onClickListener);
@@ -379,8 +377,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.select));
                 else
                     dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.white));
-            }
-            else{
+            } else {
                 dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_50));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
                 mRecyclerView.showEmpty();
@@ -388,16 +385,16 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         }
     }
 
-    public void setBefore12Months(){
+    public void setBefore12Months() {
         mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
         mRecyclerView.showEmpty();
     }
 
-    private boolean isFreeAllDay(FreeTimeServer freeTimeServer){
+    private boolean isFreeAllDay(FreeTimeServer freeTimeServer) {
         int minute_start = freeTimeServer.getMinuteStart();
         int hour_start = freeTimeServer.getHourStart();
         int minute_end = freeTimeServer.getMinuteEnd();
-        int hour_end  = freeTimeServer.getHourEnd();
+        int hour_end = freeTimeServer.getHourEnd();
         return minute_start == 0 && minute_end == 59
                 && hour_start == 0 && hour_end == 23;
     }
@@ -415,14 +412,29 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_end = String.format("%02d", activityServer.getMinuteEndCard());
                 String time;
 
-                if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                if ((activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) || (activityServer.getTimeStartEmptyCard() && activityServer.getTimeEndEmptyCard())) {
                     time = context.getResources().getString(R.string.suspension_points);
-                else if (activityServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                else if (activityServer.getTimeStartEmpty())
-                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                else
-                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
+                else if (!activityServer.getTimeStartEmptyCard() && activityServer.getTimeEndEmptyCard()){
+                    if (activityServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                }
+                else if (activityServer.getTimeStartEmptyCard() && !activityServer.getTimeEndEmptyCard()){
+                    if (activityServer.getTimeEndEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                }
+                else{
+                    if (activityServer.getTimeEndEmpty())
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                    else if (activityServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
 
                 if ((screen == Utilities.TYPE_FRIEND && activityServer.getParticipates() == 0) &&
                         ((activityServer.getKnowCreator() == 0 && activityServer.getVisibility() > 0) ||
@@ -453,14 +465,29 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_end = String.format("%02d", flagServer.getMinuteEndCard());
                 String time;
 
-                if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                if ((flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) || (flagServer.getTimeStartEmptyCard() && flagServer.getTimeEndEmptyCard())) {
                     time = context.getResources().getString(R.string.suspension_points);
-                else if (flagServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                else if (flagServer.getTimeStartEmpty())
-                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                else
-                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
+                else if (!flagServer.getTimeStartEmptyCard() && flagServer.getTimeEndEmptyCard()){
+                    if (flagServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                }
+                else if (flagServer.getTimeStartEmptyCard() && !flagServer.getTimeEndEmptyCard()){
+                    if (flagServer.getTimeEndEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                }
+                else{
+                    if (flagServer.getTimeEndEmpty())
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                    else if (flagServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
 
                 if (screen == Utilities.TYPE_FRIEND && flagServer.getType() && flagServer.getParticipates() == 0) {
                     FlagServer flag = new FlagServer();
@@ -488,14 +515,29 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String minute_end = String.format("%02d", reminderServer.getMinuteEnd());
                 String time;
 
-                if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                if ((reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty()) || (reminderServer.getTimeStartEmptyCard() && reminderServer.getTimeEndEmptyCard())) {
                     time = context.getResources().getString(R.string.suspension_points);
-                else if (reminderServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                else if (reminderServer.getTimeStartEmpty())
-                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                else
-                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
+                else if (!reminderServer.getTimeStartEmptyCard() && reminderServer.getTimeEndEmptyCard()){
+                    if (reminderServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                }
+                else if (reminderServer.getTimeStartEmptyCard() && !reminderServer.getTimeEndEmptyCard()){
+                    if (reminderServer.getTimeEndEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                }
+                else{
+                    if (reminderServer.getTimeEndEmpty())
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                    else if (reminderServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
 
                 list.add(new Reminder(reminderServer.getTitle(), time, reminderServer));
             } else if (object instanceof FreeTimeServer) {

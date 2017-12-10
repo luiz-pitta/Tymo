@@ -57,6 +57,9 @@ public class FlagServer implements Serializable {
     private long date_time_start;
     private long date_time_end;
 
+    private boolean time_start_empty_card;
+    private boolean time_end_empty_card;
+
     private int repeat_type;
     private int repeat_qty;
     private List<Integer> day_list_start = new ArrayList<>();
@@ -84,6 +87,8 @@ public class FlagServer implements Serializable {
         this.hour_card = flagServer.getHourCard();
         this.minute_end_card = flagServer.getMinuteEndCard();
         this.hour_end_card = flagServer.getHourEndCard();
+        this.time_start_empty_card = flagServer.getTimeStartEmptyCard();
+        this.time_end_empty_card = flagServer.getTimeEndEmptyCard();
 
         this.title = flagServer.getTitle();
         this.text = flagServer.getText();
@@ -482,5 +487,21 @@ public class FlagServer implements Serializable {
 
     public int getRepeatQty() {
         return repeat_qty;
+    }
+
+    public void setTimeStartEmptyCard(boolean time_start_empty_card) {
+        this.time_start_empty_card = time_start_empty_card;
+    }
+
+    public void setTimeEndEmptyCard(boolean time_end_empty_card) {
+        this.time_end_empty_card = time_end_empty_card;
+    }
+
+    public boolean getTimeStartEmptyCard() {
+        return time_start_empty_card;
+    }
+
+    public boolean getTimeEndEmptyCard() {
+        return time_end_empty_card;
     }
 }

@@ -84,6 +84,9 @@ public class ActivityServer implements Serializable {
     private double lat;
     private double lng;
 
+    private boolean time_start_empty_card;
+    private boolean time_end_empty_card;
+
     private int status; // -1 = already happened ; 0 = is happening ; 1 = will happen
 
     private String invite_date;
@@ -99,6 +102,8 @@ public class ActivityServer implements Serializable {
         this.hour_card = activityServer.getHourCard();
         this.minute_end_card = activityServer.getMinuteEndCard();
         this.hour_end_card = activityServer.getHourEndCard();
+        this.time_start_empty_card = activityServer.getTimeStartEmptyCard();
+        this.time_end_empty_card = activityServer.getTimeEndEmptyCard();
 
         this.title = activityServer.getTitle();
 
@@ -551,6 +556,22 @@ public class ActivityServer implements Serializable {
 
     public void setMinuteEndCard(int time) {
         this.minute_end_card = time;
+    }
+
+    public void setTimeStartEmptyCard(boolean time_start_empty_card) {
+        this.time_start_empty_card = time_start_empty_card;
+    }
+
+    public void setTimeEndEmptyCard(boolean time_end_empty_card) {
+        this.time_end_empty_card = time_end_empty_card;
+    }
+
+    public boolean getTimeStartEmptyCard() {
+        return time_start_empty_card;
+    }
+
+    public boolean getTimeEndEmptyCard() {
+         return time_end_empty_card;
     }
 
     public void setHourCard(int time) {

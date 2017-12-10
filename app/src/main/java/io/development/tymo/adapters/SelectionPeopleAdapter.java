@@ -17,6 +17,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.target.BitmapImageViewTarget;
 import com.davidecirillo.multichoicerecyclerview.MultiChoiceAdapter;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -35,8 +38,29 @@ public class SelectionPeopleAdapter extends MultiChoiceAdapter<RecyclerView.View
     private static final int TYPE_FOOTER = 2;
 
     public SelectionPeopleAdapter(List<User> personList, Context context) {
+        personList = setOrderContacts(personList);
         this.personList = personList;
         this.context = context;
+    }
+
+    private List<User> setOrderContacts(List<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     @Override

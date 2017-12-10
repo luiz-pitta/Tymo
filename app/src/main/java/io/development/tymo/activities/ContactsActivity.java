@@ -46,7 +46,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
     private EasyRecyclerView recyclerView;
     private ContactsAdapter adapter;
-    private String email, full_name;
+    private String email, full_name, my_email;
     private SearchView searchView;
 
     private ImageView mBackButton;
@@ -112,7 +112,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         full_name = getIntent().getStringExtra("contact_full_name");
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        String my_email = mSharedPreferences.getString(Constants.EMAIL, "");
+        my_email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this, R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(true);
@@ -329,7 +329,12 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         listContact = new ArrayList<>();
         listContactQuery = new ArrayList<>();
 
-        users = setOrderContacts(users);
+        if (email.matches(my_email)){
+            users = setOrderMyContacts(users);
+        }
+        else{
+            users = setOrderContacts(users);
+        }
 
         listContact.addAll(users);
         listContactQuery.addAll(users);
@@ -363,6 +368,26 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private ArrayList<User> setOrderContacts(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
+    }
+
+    private ArrayList<User> setOrderMyContacts(ArrayList<User> users) {
 
         Collections.sort(users, new Comparator<User>() {
             @Override

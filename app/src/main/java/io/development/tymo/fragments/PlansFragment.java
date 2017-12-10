@@ -440,21 +440,29 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                     boolean start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
                     boolean finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
                     if (!start && finish) {
+                        activityServer.setTimeStartEmptyCard(true);
+                        activityServer.setTimeEndEmptyCard(false);
                         activityServer.setMinuteCard(0);
                         activityServer.setHourCard(0);
                         activityServer.setMinuteEndCard(activityServer.getMinuteEnd());
                         activityServer.setHourEndCard(activityServer.getHourEnd());
                     } else if (start && !finish) {
+                        activityServer.setTimeStartEmptyCard(false);
+                        activityServer.setTimeEndEmptyCard(true);
                         activityServer.setMinuteCard(activityServer.getMinuteStart());
                         activityServer.setHourCard(activityServer.getHourStart());
                         activityServer.setMinuteEndCard(59);
                         activityServer.setHourEndCard(23);
                     } else if (!start && !finish) {
+                        activityServer.setTimeStartEmptyCard(true);
+                        activityServer.setTimeEndEmptyCard(true);
                         activityServer.setMinuteCard(0);
                         activityServer.setHourCard(0);
                         activityServer.setMinuteEndCard(59);
                         activityServer.setHourEndCard(23);
                     } else {
+                        activityServer.setTimeStartEmptyCard(false);
+                        activityServer.setTimeEndEmptyCard(false);
                         activityServer.setMinuteCard(activityServer.getMinuteStart());
                         activityServer.setHourCard(activityServer.getHourStart());
                         activityServer.setMinuteEndCard(activityServer.getMinuteEnd());
@@ -471,21 +479,29 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                     boolean start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
                     boolean finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
                     if (!start && finish) {
+                        flagServer.setTimeStartEmptyCard(true);
+                        flagServer.setTimeEndEmptyCard(false);
                         flagServer.setMinuteCard(0);
                         flagServer.setHourCard(0);
                         flagServer.setMinuteEndCard(flagServer.getMinuteEnd());
                         flagServer.setHourEndCard(flagServer.getHourEnd());
                     } else if (start && !finish) {
+                        flagServer.setTimeStartEmptyCard(false);
+                        flagServer.setTimeEndEmptyCard(true);
                         flagServer.setMinuteCard(flagServer.getMinuteStart());
                         flagServer.setHourCard(flagServer.getHourStart());
                         flagServer.setMinuteEndCard(59);
                         flagServer.setHourEndCard(23);
                     } else if (!start && !finish) {
+                        flagServer.setTimeStartEmptyCard(true);
+                        flagServer.setTimeEndEmptyCard(true);
                         flagServer.setMinuteCard(0);
                         flagServer.setHourCard(0);
                         flagServer.setMinuteEndCard(59);
                         flagServer.setHourEndCard(23);
                     } else {
+                        flagServer.setTimeStartEmptyCard(false);
+                        flagServer.setTimeEndEmptyCard(false);
                         flagServer.setMinuteCard(flagServer.getMinuteStart());
                         flagServer.setHourCard(flagServer.getHourStart());
                         flagServer.setMinuteEndCard(flagServer.getMinuteEnd());
@@ -495,8 +511,40 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 }
             }
             for (j = 0; j < response.getMyCommitReminder().size(); j++) {
-                ReminderServer reminderServer = response.getMyCommitReminder().get(j);
-                if (reminderServer.getDayStart() == day && reminderServer.getMonthStart() == month && reminderServer.getYearStart() == year) {
+                ReminderServer reminder = response.getMyCommitReminder().get(j);
+                ReminderServer reminderServer = new ReminderServer(reminder);
+                if (Utilities.isActivityInRange(reminderServer.getYearStart(), reminderServer.getYearEnd(),reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getDayEnd(), reminderServer.getMonthEnd(), day)) {
+                    boolean start = Utilities.isStartedFinishedToday(day, reminderServer.getDayStart());
+                    boolean finish = Utilities.isStartedFinishedToday(day, reminderServer.getDayEnd());
+                    if (!start && finish) {
+                        reminderServer.setTimeStartEmptyCard(true);
+                        reminderServer.setTimeEndEmptyCard(false);
+                        reminderServer.setMinuteCard(0);
+                        reminderServer.setHourCard(0);
+                        reminderServer.setMinuteEndCard(reminderServer.getMinuteEnd());
+                        reminderServer.setHourEndCard(reminderServer.getHourEnd());
+                    } else if (start && !finish) {
+                        reminderServer.setTimeStartEmptyCard(false);
+                        reminderServer.setTimeEndEmptyCard(true);
+                        reminderServer.setMinuteCard(reminderServer.getMinuteStart());
+                        reminderServer.setHourCard(reminderServer.getHourStart());
+                        reminderServer.setMinuteEndCard(59);
+                        reminderServer.setHourEndCard(23);
+                    } else if (!start && !finish) {
+                        reminderServer.setTimeStartEmptyCard(true);
+                        reminderServer.setTimeEndEmptyCard(true);
+                        reminderServer.setMinuteCard(0);
+                        reminderServer.setHourCard(0);
+                        reminderServer.setMinuteEndCard(59);
+                        reminderServer.setHourEndCard(23);
+                    } else {
+                        reminderServer.setTimeStartEmptyCard(false);
+                        reminderServer.setTimeEndEmptyCard(false);
+                        reminderServer.setMinuteCard(reminderServer.getMinuteStart());
+                        reminderServer.setHourCard(reminderServer.getHourStart());
+                        reminderServer.setMinuteEndCard(reminderServer.getMinuteEnd());
+                        reminderServer.setHourEndCard(reminderServer.getHourEnd());
+                    }
                     weekModel.addPlans(reminderServer);
                 }
             }

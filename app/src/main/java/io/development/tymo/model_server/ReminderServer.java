@@ -34,6 +34,14 @@ public class ReminderServer implements Serializable {
     private long date_time_start;
     private long date_time_end;
 
+    private int minute_card;
+    private int hour_card;
+    private int minute_end_card;
+    private int hour_end_card;
+
+    private boolean time_start_empty_card;
+    private boolean time_end_empty_card;
+
     private int repeat_type;
     private int repeat_qty;
     private List<Integer> day_list_start = new ArrayList<>();
@@ -45,6 +53,18 @@ public class ReminderServer implements Serializable {
     private List<Integer> year_list_end = new ArrayList<>();
     private List<Long> date_time_list_end = new ArrayList<>();
 
+    public ReminderServer() {
+    }
+
+    public ReminderServer(ReminderServer reminderServer) {
+        this.minute_card = reminderServer.getMinuteCard();
+        this.hour_card = reminderServer.getHourCard();
+        this.minute_end_card = reminderServer.getMinuteEndCard();
+        this.hour_end_card = reminderServer.getHourEndCard();
+        this.time_start_empty_card = reminderServer.getTimeStartEmptyCard();
+        this.time_end_empty_card = reminderServer.getTimeEndEmptyCard();
+    }
+    
     public void setDateTimeAlert(boolean date_time_alert) {
         this.date_time_alert = date_time_alert;
     }
@@ -268,5 +288,53 @@ public class ReminderServer implements Serializable {
 
     public int getRepeatQty() {
         return repeat_qty;
+    }
+
+    public void setTimeStartEmptyCard(boolean time_start_empty_card) {
+        this.time_start_empty_card = time_start_empty_card;
+    }
+
+    public void setTimeEndEmptyCard(boolean time_end_empty_card) {
+        this.time_end_empty_card = time_end_empty_card;
+    }
+
+    public boolean getTimeStartEmptyCard() {
+        return time_start_empty_card;
+    }
+
+    public boolean getTimeEndEmptyCard() {
+        return time_end_empty_card;
+    }
+
+    public int getMinuteCard() {
+        return minute_card;
+    }
+
+    public int getHourCard() {
+        return hour_card;
+    }
+
+    public int getMinuteEndCard() {
+        return minute_end_card;
+    }
+
+    public int getHourEndCard() {
+        return hour_end_card;
+    }
+
+    public void setMinuteCard(int time) {
+        this.minute_card = time;
+    }
+
+    public void setMinuteEndCard(int time) {
+        this.minute_end_card = time;
+    }
+
+    public void setHourCard(int time) {
+        this.hour_card = time;
+    }
+
+    public void setHourEndCard(int time) {
+        this.hour_end_card = time;
     }
 }

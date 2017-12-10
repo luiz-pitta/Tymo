@@ -19,6 +19,8 @@ import com.jude.easyrecyclerview.EasyRecyclerView;
 import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.ContactsAdapter;
@@ -118,6 +120,7 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
     }
 
     private void handleResponse(ArrayList<User> users) {
+        users = setOrderContacts(users);
         adapter.clear();
         adapter.addAll(users);
     }
@@ -127,6 +130,26 @@ public class BlockedUsersActivity extends AppCompatActivity implements View.OnCl
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
+    }
+
+    private ArrayList<User> setOrderContacts(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     @Override
