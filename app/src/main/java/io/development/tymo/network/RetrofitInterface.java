@@ -210,6 +210,9 @@ public interface RetrofitInterface {
     @POST("get_invite_request/{email}")
     Observable<Response> getInviteRequest(@Path("email") String email, @Body DateTymo date);
 
+    @POST("get_my_reminders/{email}")
+    Observable<Response> getMyReminders(@Path("email") String email, @Body DateTymo date);
+
     @GET("get_friends/{email}")
     Observable<ArrayList<User>> getUsers(@Path("email") String email);
 

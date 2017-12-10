@@ -283,7 +283,7 @@
                 android:layout_height="wrap_content"
                 android:background="@color/facebook_light_blue"
                 android:orientation="vertical"
-                android:paddingBottom="40dp">
+                android:paddingBottom="20dp">
 
                 <LinearLayout
                     android:id="@+id/birthDateBox"
@@ -312,8 +312,7 @@
 
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@color/white">
+                        android:layout_height="wrap_content">
 
                         <TextView
                             android:id="@+id/birthDate"
@@ -323,13 +322,10 @@
                             android:layout_alignParentStart="true"
                             android:layout_alignParentTop="true"
                             android:layout_toLeftOf="@+id/age"
-                            android:background="@color/white"
                             android:ellipsize="end"
                             android:lines="1"
-                            android:paddingBottom="10dp"
                             android:paddingLeft="20dp"
                             android:paddingRight="20dp"
-                            android:paddingTop="10dp"
                             android:text="Date"
                             android:textColor="@color/facebook_dark_blue"
                             android:textColorHint="@color/facebook_dark_blue"
@@ -385,11 +381,8 @@
                         android:id="@+id/gender"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingTop="10dp"
                         android:text="Text"
                         android:textColor="@color/facebook_dark_blue"
                         android:textColorHint="@color/facebook_dark_blue"
@@ -432,11 +425,8 @@
                         android:id="@+id/locationWhereLives"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingTop="10dp"
                         android:text="Text"
                         android:textColor="@color/facebook_dark_blue"
                         android:textColorHint="@color/facebook_dark_blue"
@@ -479,11 +469,8 @@
                         android:id="@+id/whereWorks"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingTop="10dp"
                         android:text="Text"
                         android:textColor="@color/facebook_dark_blue"
                         android:textColorHint="@color/facebook_dark_blue"
@@ -526,11 +513,8 @@
                         android:id="@+id/whereStudied"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@color/white"
-                        android:paddingBottom="10dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
-                        android:paddingTop="10dp"
                         android:text="Text"
                         android:textColor="@color/facebook_dark_blue"
                         android:textColorHint="@color/facebook_dark_blue"

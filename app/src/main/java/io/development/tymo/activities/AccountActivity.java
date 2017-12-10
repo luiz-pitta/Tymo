@@ -49,8 +49,8 @@ import static io.development.tymo.utils.Validation.validateEmail;
 public class AccountActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
     private ImageView mBackButton;
-    private TextView m_title, email;
-    private LinearLayout deleteAccount;
+    private TextView m_title, email, emailFacebook;
+    private LinearLayout deleteAccount, emailFacebookBox;
     private RelativeLayout passwordBox, emailBox;
 
     private CompositeDisposable mSubscriptions;
@@ -80,9 +80,11 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
         email = (TextView) findViewById(R.id.email);
+        emailFacebook = (TextView) findViewById(R.id.emailFacebook);
         deleteAccount = (LinearLayout) findViewById(R.id.deleteAccount);
         passwordBox = (RelativeLayout) findViewById(R.id.passwordBox);
         emailBox = (RelativeLayout) findViewById(R.id.emailBox);
+        emailFacebookBox = (LinearLayout) findViewById(R.id.emailFacebookBox);
 
 
         mBackButton.setOnClickListener(this);
@@ -94,16 +96,19 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
         m_title.setText(getResources().getString(R.string.settings_account));
 
         email.setText(user.getEmail());
+        emailFacebook.setText(user.getEmail());
 
         if(user.getFromFacebook()) {
             findViewById(R.id.textFromFacebook).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalLine).setVisibility(View.GONE);
             findViewById(R.id.emailActionForwardIcon).setVisibility(View.GONE);
-            emailBox.setBackgroundColor(getResources().getColor(R.color.white));
+            findViewById(R.id.emailPasswordBox).setVisibility(View.GONE);
+            emailFacebookBox.setVisibility(View.VISIBLE);
             passwordBox.setVisibility(View.GONE);
             emailBox.setOnClickListener(null);
             passwordBox.setOnClickListener(null);
         }else {
+            emailFacebookBox.setVisibility(View.GONE);
             findViewById(R.id.textFromFacebook).setVisibility(View.GONE);
             if(!user.getPhoto().matches("")) {
                 String[] split = user.getPhoto().split("/");

@@ -48,6 +48,7 @@ import java.util.Comparator;
 import java.util.Date;
 
 import info.abdolahi.CircularMusicProgressBar;
+import io.development.tymo.activities.MyRemindersActivity;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
 import io.development.tymo.activities.AboutActivity;
@@ -79,13 +80,13 @@ import static android.content.Context.MODE_PRIVATE;
  */
 public class ProfileFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
 
-    private LinearLayout settingsBox, pendingRequestsBox, invitationsBox, timerBox;
+    private LinearLayout settingsBox, myRemindersBox, notificationsBox, timerBox;
     private RelativeLayout contactsBox, profilePhotoBox;
     private ImageView profilePhoto, timerIcon;
     private LinearLayout editProfile;
     private CircularMusicProgressBar progressBar;
     private Rect rect;
-    private TextView profileName, profileDescription, pendingRequestsQty, invitationsQty, editProfileText;
+    private TextView profileName, profileDescription, myRemindersQty, notificationsQty, editProfileText;
     private TextView commitmentStartTime, commitmentTitle, timer, todayDate, numberContacts;
     private View progressBox;
     private User user;
@@ -143,8 +144,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         progressBar = (CircularMusicProgressBar) view.findViewById(R.id.clockAlarm);
         settingsBox = (LinearLayout) view.findViewById(R.id.settingsBox);
         contactsBox = (RelativeLayout) view.findViewById(R.id.myContactsBox);
-        pendingRequestsBox = (LinearLayout) view.findViewById(R.id.pendingRequestsBox);
-        invitationsBox = (LinearLayout) view.findViewById(R.id.invitationsBox);
+        myRemindersBox = (LinearLayout) view.findViewById(R.id.myRemindersBox);
+        notificationsBox = (LinearLayout) view.findViewById(R.id.notificationsBox);
         timerBox = (LinearLayout) view.findViewById(R.id.timerBox);
         profilePhoto = (ImageView) view.findViewById(R.id.profilePhoto);
         timerIcon = (ImageView) view.findViewById(R.id.timerIcon);
@@ -156,8 +157,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         backgroundProfile = (ImageView) view.findViewById(R.id.backgroundProfile);
         profileName = (TextView) view.findViewById(R.id.profileName);
         profileDescription = (TextView) view.findViewById(R.id.profileDescription);
-        pendingRequestsQty = (TextView) view.findViewById(R.id.pendingRequestsQty);
-        invitationsQty = (TextView) view.findViewById(R.id.invitationsQty);
+        myRemindersQty = (TextView) view.findViewById(R.id.myRemindersQty);
+        notificationsQty = (TextView) view.findViewById(R.id.notificationsQty);
         commitmentStartTime = (TextView) view.findViewById(R.id.commitmentStartTime);
         commitmentTitle = (TextView) view.findViewById(R.id.commitmentTitle);
         numberContacts = (TextView) view.findViewById(R.id.myContactsQty);
@@ -180,8 +181,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         timerBox.setOnClickListener(this);
         contactsBox.setOnClickListener(this);
         settingsBox.setOnClickListener(this);
-        pendingRequestsBox.setOnClickListener(this);
-        invitationsBox.setOnClickListener(this);
+        myRemindersBox.setOnClickListener(this);
+        notificationsBox.setOnClickListener(this);
         profilePhotoBox.setOnClickListener(this);
         editProfile.setOnClickListener(this);
 
@@ -459,16 +460,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
 
 
         if (response.getNumberInvitationRequest() > 0) {
-            invitationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));
-            invitationsQty.setVisibility(View.VISIBLE);
+            notificationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));
+            notificationsQty.setVisibility(View.VISIBLE);
         } else
-            invitationsQty.setVisibility(View.GONE);
+            notificationsQty.setVisibility(View.GONE);
 
-        if (response.getNumberFriendRequest() > 0) {
-            pendingRequestsQty.setText(String.valueOf(response.getNumberFriendRequest()));
-            pendingRequestsQty.setVisibility(View.VISIBLE);
+        if (response.getNumberMyReminders() > 0) {
+            myRemindersQty.setText(String.valueOf(response.getNumberMyReminders()));
+            myRemindersQty.setVisibility(View.VISIBLE);
         } else
-            pendingRequestsQty.setVisibility(View.GONE);
+            myRemindersQty.setVisibility(View.GONE);
 
         profileName.setText(user.getName());
 
@@ -1251,15 +1252,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             startActivity(intent);
-        } else if (v == pendingRequestsBox) {
+        } else if (v == myRemindersBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "pendingRequestsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "myRemindersBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(getActivity(), FriendRequestActivity.class));
-        } else if (v == invitationsBox) {
+            startActivity(new Intent(getActivity(), MyRemindersActivity.class));
+        } else if (v == notificationsBox) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "invitationsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "notificationsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             startActivity(new Intent(getActivity(), InviteActivity.class));

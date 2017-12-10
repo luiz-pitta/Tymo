@@ -232,7 +232,7 @@
                     android:orientation="horizontal">
 
                     <LinearLayout
-                        android:id="@+id/pendingRequestsBox"
+                        android:id="@+id/myRemindersBox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="1dp"
@@ -250,7 +250,7 @@
                             android:layout_height="40dp">
 
                             <ImageView
-                                android:id="@+id/pendingRequestsIcon"
+                                android:id="@+id/myRemindersIcon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_centerInParent="true"
@@ -258,10 +258,10 @@
                                 android:tint="@color/deep_purple_400" />
 
                             <TextView
-                                android:id="@+id/pendingRequestsQty"
+                                android:id="@+id/myRemindersQty"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/pendingRequestsIcon"
+                                android:layout_toRightOf="@+id/myRemindersIcon"
                                 android:background="@drawable/box_qty_contacts"
                                 android:gravity="center"
                                 android:paddingBottom="2dp"
@@ -276,7 +276,7 @@
                         </RelativeLayout>
 
                         <TextView
-                            android:id="@+id/pendingRequestsText"
+                            android:id="@+id/myRemindersText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"
@@ -293,7 +293,7 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/invitationsBox"
+                        android:id="@+id/notificationsBox"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="1dp"
@@ -311,7 +311,7 @@
                             android:layout_height="40dp">
 
                             <ImageView
-                                android:id="@+id/invitationsIcon"
+                                android:id="@+id/notificationsIcon"
                                 android:layout_width="40dp"
                                 android:layout_height="40dp"
                                 android:layout_centerInParent="true"
@@ -319,10 +319,10 @@
                                 android:tint="@color/deep_purple_400" />
 
                             <TextView
-                                android:id="@+id/invitationsQty"
+                                android:id="@+id/notificationsQty"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toRightOf="@+id/invitationsIcon"
+                                android:layout_toRightOf="@+id/notificationsIcon"
                                 android:background="@drawable/box_qty_notification"
                                 android:gravity="center"
                                 android:paddingBottom="2dp"
@@ -337,7 +337,7 @@
                         </RelativeLayout>
 
                         <TextView
-                            android:id="@+id/invitationsText"
+                            android:id="@+id/notificationsText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="5dp"

@@ -20,6 +20,20 @@
             android:orientation="vertical"
             android:paddingBottom="40dp">
 
+            <TextView
+                android:id="@+id/textFromFacebook"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/facebook_dark_blue"
+                android:paddingBottom="10dp"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="10dp"
+                android:text="@string/settings_facebook_text"
+                android:textColor="@color/facebook_light_blue"
+                android:textSize="14sp" />
+
             <LinearLayout
                 android:id="@+id/profileAboutBox"
                 android:layout_width="match_parent"
@@ -184,6 +198,7 @@
                 </LinearLayout>
 
                 <View
+                    android:id="@+id/importFromFacebookHorizontalLine"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/horizontal_line_height"
                     android:layout_marginLeft="50dp"

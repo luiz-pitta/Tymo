@@ -14,10 +14,10 @@ import agency.tango.materialintroscreen.MaterialIntroActivity;
 import agency.tango.materialintroscreen.animations.IViewTranslation;
 import io.development.tymo.R;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.CustomSlide;
-import io.development.tymo.utils.CustomSlide2;
-import io.development.tymo.utils.CustomSlide3;
-import io.development.tymo.utils.CustomSlide4;
+import io.development.tymo.utils.CustomSlideCreate;
+import io.development.tymo.utils.CustomSlideFeed;
+import io.development.tymo.utils.CustomSlideImport;
+import io.development.tymo.utils.CustomSlidePlans;
 import io.development.tymo.utils.CustomSlideWelcome;
 
 
@@ -56,13 +56,13 @@ public class IntroActivity extends MaterialIntroActivity {
                         }
                     });
 
-            addSlide(new CustomSlideWelcome());
+            addSlide(new CustomSlideImport());
 
-            addSlide(new CustomSlide());
+            addSlide(new CustomSlideCreate());
 
-            addSlide(new CustomSlide2());
+            addSlide(new CustomSlideFeed());
 
-            addSlide(new CustomSlide4());
+            addSlide(new CustomSlidePlans());
 
             mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
             mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);

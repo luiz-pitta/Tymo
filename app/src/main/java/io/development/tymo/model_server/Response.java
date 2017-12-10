@@ -24,6 +24,7 @@ public class Response {
     private int n_all_request_act;
     private int n_all_request_flag;
     private int n_contacts;
+    private int n_my_reminders;
 
     public ActivityServer getActivityServer() {
         return activityServer;
@@ -91,6 +92,10 @@ public class Response {
 
     public User getUser() {
         return user;
+    }
+
+    public int getNumberMyReminders() {
+        return n_my_reminders;
     }
 
     public int getNumberFriendRequest() {

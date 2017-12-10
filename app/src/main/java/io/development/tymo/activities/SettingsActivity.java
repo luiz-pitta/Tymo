@@ -105,7 +105,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
 
     private ImageView mBackButton, profilePhoto, logo;
     private TextView m_title, fullName;
-    private TextView versionName;
+    private TextView versionName, textFromFacebook;
+    private View importFromFacebookHorizontalLine;
 
     private CallbackManager callbackManager;
     private GoogleAccountCredential mCredential;
@@ -161,6 +162,8 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         fullName = (TextView) findViewById(R.id.fullName);
         notificationsSwitch = (Switch) findViewById(R.id.notificationCenterSwitch);
         locationSwitch = (Switch) findViewById(R.id.locationSwitch);
+        textFromFacebook = (TextView) findViewById(R.id.textFromFacebook);
+        importFromFacebookHorizontalLine = (View) findViewById(R.id.importFromFacebookHorizontalLine);
 
         account = (LinearLayout) findViewById(R.id.account);
         importFromFacebook = (LinearLayout) findViewById(R.id.importFromFacebook);
@@ -240,6 +243,14 @@ public class SettingsActivity extends AppCompatActivity implements View.OnClickL
         fullName.setText(user.getName());
         locationSwitch.setChecked(user.isLocationGps());
         notificationsSwitch.setChecked(user.isNotifications());
+
+        if(user.getFromFacebook()){
+            importFromFacebookHorizontalLine.setVisibility(View.GONE);
+            importFromFacebook.setVisibility(View.GONE);
+        }
+        else{
+            textFromFacebook.setVisibility(View.GONE);
+        }
 
         boolean login_type = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.LOGIN_TYPE, false);
 

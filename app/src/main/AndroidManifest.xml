@@ -322,6 +322,18 @@
         </activity>
 
         <activity
+            android:name=".activities.MyRemindersActivity"
+            android:label="MyRemindersActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:parentActivityName=".activities.MainActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.MainActivity" />
+        </activity>
+
+        <activity
             android:name=".activities.FriendRequestActivity"
             android:label="FriendRequestActivity"
             android:screenOrientation="portrait"

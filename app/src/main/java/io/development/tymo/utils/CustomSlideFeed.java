@@ -10,13 +10,13 @@ import android.widget.CheckBox;
 import agency.tango.materialintroscreen.SlideFragment;
 import io.development.tymo.R;
 
-public class CustomSlide extends SlideFragment {
+public class CustomSlideFeed extends SlideFragment {
     private CheckBox checkBox;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        final View view = inflater.inflate(R.layout.dialog_tutorial_1, container, false);
+        final View view = inflater.inflate(R.layout.dialog_tutorial_feed, container, false);
         return view;
     }
 
