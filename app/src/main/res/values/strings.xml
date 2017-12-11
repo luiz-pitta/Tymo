@@ -441,7 +441,10 @@
     <string name="repeat_daily">diariamente</string>
     <string name="repeat_frequence">Repetir com que frequência?</string>
     <string name="repeat_how_many_times">Repetir quantas vezes?</string>
-    <string name="repeat_max_times">(máx. 30)</string>
+    <string name="repeat_max_time">(não é possível repetir por mais de 1 ano)</string>
+    <string name="repeat_max_time_1">Limite ultrapassado (máx. 365 dias)</string>
+    <string name="repeat_max_time_2">Limite ultrapassado (máx. 53 semanas)</string>
+    <string name="repeat_max_time_3">Limite ultrapassado (máx. 12 meses)</string>
     <string name="repeat_monthly">mensalmente</string>
     <string name="repeat_not">Não se repete</string>
     <string name="repeat_qty">%1$dx</string>
@@ -596,7 +599,7 @@
     <string name="validation_field_password_old_wrong">A senha atual está incorreta!</string>
     <string name="validation_field_passwords_diff">O campo está diferente da nova senha</string>
     <string name="validation_field_register_minimum_age">Esse aplicativo só é permitido para maiores de 13 anos</string>
-    <string name="validation_field_repetitions_min_max">O número de repetições deve ser maior que 0 e não pode passar de 30</string>
+    <string name="validation_field_repetitions_min_max">Não é possível repetir por mais de 1 ano</string>
     <string name="validation_field_repetitions_required">É necessário dizer quantas vezes se repete</string>
     <string name="validation_field_required_fill_correctly">Preencha os campos obrigatórios corretamente!</string>
     <string name="validation_field_required_name">Preencha o nome completo corretamente</string>

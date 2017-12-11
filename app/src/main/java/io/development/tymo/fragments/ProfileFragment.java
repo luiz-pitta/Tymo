@@ -49,6 +49,7 @@ import java.util.Date;
 
 import info.abdolahi.CircularMusicProgressBar;
 import io.development.tymo.activities.MyRemindersActivity;
+import io.development.tymo.activities.NotificationsActivity;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.R;
 import io.development.tymo.activities.AboutActivity;
@@ -460,7 +461,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
 
 
         if (response.getNumberInvitationRequest() > 0) {
-            notificationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));
+            notificationsQty.setText(String.valueOf(response.getNumberInvitationRequest()+response.getNumberFriendRequest()));
             notificationsQty.setVisibility(View.VISIBLE);
         } else
             notificationsQty.setVisibility(View.GONE);
@@ -1263,7 +1264,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "notificationsBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            startActivity(new Intent(getActivity(), InviteActivity.class));
+            startActivity(new Intent(getActivity(), NotificationsActivity.class));
         }
     }
 

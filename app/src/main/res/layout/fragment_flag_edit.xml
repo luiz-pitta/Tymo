@@ -19,7 +19,7 @@
         android:padding="10dp"
         android:textColor="@color/grey_600"
         android:textColorHint="@color/grey_400"
-        android:textSize="16sp" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/titleMax"
@@ -289,15 +289,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:gravity="center"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="20dp"
             android:text="@string/repeat_frequence"
             android:textColor="@color/grey_600"
             android:textSize="14sp" />
@@ -305,8 +303,8 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
             android:background="@drawable/bg_act_edit_box_2"
-            android:gravity="center_vertical"
             android:paddingBottom="5dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
@@ -316,12 +314,14 @@
                 android:id="@+id/repeatPicker"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
                 android:clickable="true"
                 android:textSize="14sp"
                 app:ms_arrow_tint="@color/grey_600"
                 app:ms_background_color="@color/grey_50"
                 app:ms_dropdown_height="wrap_content"
-                app:ms_dropdown_max_height="120dp"
                 app:ms_text_color="@color/grey_600" />
 
         </RelativeLayout>
@@ -333,44 +333,45 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:visibility="visible">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:layout_marginRight="10dp"
             android:text="@string/repeat_how_many_times"
             android:textColor="@color/grey_600"
-            android:textSize="14sp" />
-
-        <EditText
-            android:id="@+id/repeatEditText"
-            android:layout_width="50dp"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="5dp"
-            android:background="@drawable/bg_act_edit_box_2"
-            android:gravity="center"
-            android:hint="0"
-            android:imeOptions="actionDone"
-            android:inputType="number"
-            android:lines="1"
-            android:paddingBottom="7dp"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
-            android:paddingTop="7dp"
-            android:textColor="@color/grey_600"
-            android:textColorHint="@color/grey_400"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/repeatMax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="@string/repeat_max_times"
+            android:layout_marginTop="3dp"
+            android:text="@string/repeat_max_time"
             android:textColor="@color/grey_400"
+            android:textSize="12sp" />
+
+        <EditText
+            android:id="@+id/repeatEditText"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="7dp"
+            android:background="@drawable/bg_act_edit_box_2"
+            android:gravity="center"
+            android:hint="0"
+            android:imeOptions="actionDone"
+            android:inputType="number"
+            android:lines="1"
+            android:maxLength="3"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/grey_600"
+            android:textColorHint="@color/grey_400"
             android:textSize="14sp" />
 
     </LinearLayout>
@@ -391,10 +392,10 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="7dp"
         android:background="@drawable/bg_act_edit_box_2"
-        android:paddingBottom="7dp"
+        android:paddingBottom="5dp"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="7dp">
+        android:paddingTop="5dp">
 
         <com.jaredrummler.materialspinner.MaterialSpinner
             android:id="@+id/sendPicker"
@@ -406,7 +407,6 @@
             app:ms_arrow_tint="@color/grey_900"
             app:ms_background_color="@color/grey_50"
             app:ms_dropdown_height="wrap_content"
-            app:ms_dropdown_max_height="120dp"
             app:ms_text_color="@color/grey_900" />
 
         <TextView

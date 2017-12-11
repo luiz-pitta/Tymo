@@ -69,7 +69,6 @@ import java.util.List;
 import io.development.tymo.R;
 import io.development.tymo.adapters.CustomizeAddActivityAdapter;
 import io.development.tymo.adapters.PersonAdapter;
-import io.development.tymo.fragments.FlagEditFragment;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
@@ -295,32 +294,100 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (repeatEditText.getText().toString().matches("30")) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_600));
+                int limit;
+                int numberS;
+                String maxText;
+
+                if (String.valueOf(s).matches("")){
+                    numberS = 0;
+                }else{
+                    numberS = Integer.valueOf(String.valueOf(s));
+                }
+
+                if (repeat_type == 2) {
+                    limit = 53;
+                    maxText = getString(R.string.repeat_max_time_2);
+                } else if (repeat_type == 3) {
+                    limit = 12;
+                    maxText = getString(R.string.repeat_max_time_3);
+                }
+                else{
+                    limit = 365;
+                    maxText = getString(R.string.repeat_max_time_1);
+                }
+
+                if (numberS > limit) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatMax.setText(maxText);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String number = String.valueOf(s);
-                if (number.length() > 2) {
-                    repeatEditText.setText("30");
+                int limit;
+                int numberS;
+                String maxText;
+
+                if (String.valueOf(s).matches("")){
+                    numberS = 0;
+                }else{
+                    numberS = Integer.valueOf(String.valueOf(s));
                 }
-                if (repeatEditText.getText().toString().matches("30")) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_600));
+
+                if (repeat_type == 2) {
+                    limit = 53;
+                    maxText = getString(R.string.repeat_max_time_2);
+                } else if (repeat_type == 3) {
+                    limit = 12;
+                    maxText = getString(R.string.repeat_max_time_3);
+                }
+                else{
+                    limit = 365;
+                    maxText = getString(R.string.repeat_max_time_1);
+                }
+
+                if (numberS > limit) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatMax.setText(maxText);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (repeatEditText.getText().toString().matches("30")) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_600));
+                int limit;
+                int numberS;
+                String maxText;
+
+                if (String.valueOf(s).matches("")){
+                    numberS = 0;
+                }else{
+                    numberS = Integer.valueOf(String.valueOf(s));
+                }
+
+                if (repeat_type == 2) {
+                    limit = 53;
+                    maxText = getString(R.string.repeat_max_time_2);
+                } else if (repeat_type == 3) {
+                    limit = 12;
+                    maxText = getString(R.string.repeat_max_time_3);
+                }
+                else{
+                    limit = 365;
+                    maxText = getString(R.string.repeat_max_time_1);
+                }
+
+                if (numberS > limit) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatMax.setText(maxText);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
         });
@@ -395,6 +462,37 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             @Override
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 repeat_type = position;
+
+                int limit;
+                int numberS;
+                String maxText;
+
+                if (repeatEditText.getText().toString().matches("")){
+                    numberS = 0;
+                }else{
+                    numberS = Integer.parseInt(repeatEditText.getText().toString());
+                }
+
+                if (repeat_type == 2) {
+                    limit = 53;
+                    maxText = getString(R.string.repeat_max_time_2);
+                } else if (repeat_type == 3) {
+                    limit = 12;
+                    maxText = getString(R.string.repeat_max_time_3);
+                }
+                else{
+                    limit = 365;
+                    maxText = getString(R.string.repeat_max_time_1);
+                }
+
+                if (numberS > limit) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatMax.setText(maxText);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                    repeatMax.setText(getString(R.string.repeat_max_time));
+                }
+
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));

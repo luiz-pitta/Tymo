@@ -724,10 +724,10 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         } else if (!validateTime) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_time_end_before_start, Toast.LENGTH_LONG).show();
-        } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
+        } else if ((repeat.get(0) != 0 && repeat.get(1) <= 0)) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-        } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
+        } else if ((repeat.get(0) == 1 && repeat.get(1) > 365) || (repeat.get(0) == 2 && repeat.get(1) > 53) || (repeat.get(0) == 3 && repeat.get(1) > 12)) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
