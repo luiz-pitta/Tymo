@@ -156,7 +156,7 @@
     <string name="commitments_of_the_day_starts_at_one">Inicia às %1$s:%2$s</string>
     <string name="commitments_of_the_day_starts_at">Iniciam às %1$s:%2$s</string>
     <string name="commitments_of_the_day_will_happen">Vai acontecer</string>
-    <string name="commitments_of_the_day">Compromissos do dia!</string>
+    <string name="commitments_of_the_day">Compromissos do Dia</string>
     <string name="commitments">Compromissos</string>
     <string name="compare_agendas">Comparar Agendas</string>
     <string name="compare_people_selected">Selecionados</string>
@@ -217,7 +217,7 @@
     <string name="delete_plans_question_text_3">Tem certeza que deseja remover esse compromisso da sua agenda?</string>
     <string name="delete">Excluir</string>
     <string name="deselect_all">Desmarcar todos</string>
-    <string name="dialog_fit_multiple_repeat_activity_text">Selecione quais você deseja encaixar</string>
+    <string name="dialog_fit_multiple_repeat_activity_text">Selecione quais você deseja encaixar:</string>
     <string name="dialog_fit_multiple_repeat_activity_title">Atividade com repetição</string>
     <string name="distance_km">%1$d km de você -</string>
     <string name="distance_meters">%1$d metros de você -</string>
