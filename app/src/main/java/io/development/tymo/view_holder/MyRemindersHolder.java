@@ -93,6 +93,10 @@ public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implemen
         text2.setText(reminder.getText2());
         text3.setText(reminder.getText3());
 
+        if(reminder.getText1().matches("")){
+            text1.setVisibility(View.GONE);
+        }
+
     }
 
 

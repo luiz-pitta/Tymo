@@ -173,6 +173,8 @@
     <string name="contacts_of">Contatos de %1$s</string>
     <string name="contacts_qty_one">1 contato</string>
     <string name="contacts_qty">%1$d contatos</string>
+    <string name="my_reminders_qty_one">1 nota</string>
+    <string name="my_reminders_qty">%1$d notas</string>
     <string name="create_activity_recover_with_repeat_text">Atividade resgatada possui repetições. Deseja criar com as repetições da original?</string>
     <string name="create_activity">Criar atividade</string>
     <string name="create_flag">Criar sinalizador</string>

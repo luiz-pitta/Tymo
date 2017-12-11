@@ -50,11 +50,13 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
     private EasyRecyclerView recyclerView;
     private MyRemindersAdapter adapter;
+    
+    private int my_reminders_qty;
 
     private Handler handler = new Handler();
 
     private ImageView mBackButton;
-    private TextView m_title;
+    private TextView m_title, remindersQty;
 
     private CompositeDisposable mSubscriptions;
     private SharedPreferences mSharedPreferences;
@@ -70,11 +72,10 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         mSubscriptions = new CompositeDisposable();
 
-        findViewById(R.id.searchSelection).setVisibility(View.GONE);
-
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
         recyclerView = (EasyRecyclerView) findViewById(R.id.recycler_view);
+        remindersQty = (TextView) findViewById(R.id.remindersQty);
 
         mBackButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
@@ -176,6 +177,22 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             listMyReminders.add(myRemindersModel);
         }
 
+        my_reminders_qty = response.getMyCommitReminder().size();
+
+        if(my_reminders_qty == 0){
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
+            findViewById(R.id.searchSelection).setVisibility(View.GONE);
+            recyclerView.showEmpty();
+        }
+        else if(my_reminders_qty == 1){
+            remindersQty.setText(R.string.my_reminders_qty_one);
+        }
+        else{
+            remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
+        }
+        
         adapter.clear();
         adapter.addAll(listMyReminders);
     }
