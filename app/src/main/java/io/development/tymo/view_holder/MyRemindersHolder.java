@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
 import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -52,11 +53,12 @@ public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implemen
     private TextView text1, text2, text3;
     private Context context;
     private Object object;
+    private RefreshLayoutPlansCallback callback;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
 
-    public MyRemindersHolder(ViewGroup parent, final Context context) {
+    public MyRemindersHolder(ViewGroup parent, final Context context, RefreshLayoutPlansCallback callback) {
         super(parent, R.layout.list_item_reminder);
 
         reminderItemBox = $(R.id.reminderItemBox);
@@ -64,6 +66,7 @@ public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implemen
         text2 = $(R.id.text2);
         text3 = $(R.id.text3);
         this.context = context;
+        this.callback = callback;
 
         reminderItemBox.setOnClickListener(this);
 
@@ -93,10 +96,16 @@ public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implemen
         text2.setText(reminder.getText2());
         text3.setText(reminder.getText3());
 
-        if(reminder.getText1().matches("")){
+        if(reminder.getText1().matches(""))
             text1.setVisibility(View.GONE);
-        }
+        else
+            text1.setVisibility(View.VISIBLE);
 
+    }
+
+    public interface RefreshLayoutPlansCallback {
+
+        void refreshLayout();
     }
 
 

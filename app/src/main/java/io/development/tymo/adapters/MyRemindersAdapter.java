@@ -15,15 +15,17 @@ import io.development.tymo.view_holder.MyRemindersHolder;
 public class MyRemindersAdapter extends RecyclerArrayAdapter<MyRemindersModel> {
 
     Context context;
+    private MyRemindersHolder.RefreshLayoutPlansCallback callback;
 
-    public MyRemindersAdapter(Context context) {
+    public MyRemindersAdapter(Context context, MyRemindersHolder.RefreshLayoutPlansCallback callback) {
         super(context);
         this.context = context;
+        this.callback = callback;
     }
 
     @Override
     public BaseViewHolder OnCreateViewHolder(ViewGroup parent, int viewType) {
-        return new MyRemindersHolder(parent, context);
+        return new MyRemindersHolder(parent, context, callback);
     }
 
 }

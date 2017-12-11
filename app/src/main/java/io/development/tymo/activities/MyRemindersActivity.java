@@ -1,7 +1,5 @@
 package io.development.tymo.activities;
 
-import android.app.NotificationManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,25 +9,20 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 import com.jude.easyrecyclerview.EasyRecyclerView;
-import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -40,16 +33,17 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.models.MyRemindersModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
-import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.Utilities;
+import io.development.tymo.view_holder.MyRemindersHolder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class MyRemindersActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, SwipeRefreshLayout.OnRefreshListener {
+public class MyRemindersActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener, SwipeRefreshLayout.OnRefreshListener, MyRemindersHolder.RefreshLayoutPlansCallback {
 
     private EasyRecyclerView recyclerView;
     private MyRemindersAdapter adapter;
+    private SearchView searchView;
     
     private int my_reminders_qty;
 
@@ -61,7 +55,7 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
     private CompositeDisposable mSubscriptions;
     private SharedPreferences mSharedPreferences;
 
-    private List<MyRemindersModel> listMyReminders;
+    private List<MyRemindersModel> listMyReminders, listMyRemindersQuery;
 
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -76,19 +70,21 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
         m_title = (TextView) findViewById(R.id.text);
         recyclerView = (EasyRecyclerView) findViewById(R.id.recycler_view);
         remindersQty = (TextView) findViewById(R.id.remindersQty);
+        searchView = (SearchView) findViewById(R.id.searchSelectionView);
 
         mBackButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
+        searchView.setOnQueryTextListener(mOnQueryTextListener);
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
 
         m_title.setText(getResources().getString(R.string.profile_menu_1));
 
-        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(400);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapterWithProgress(adapter = new MyRemindersAdapter(this));
+        recyclerView.setAdapterWithProgress(adapter = new MyRemindersAdapter(this, this));
+
+        recyclerView.getSwipeToRefresh().setDistanceToTriggerSync(700);
 
         recyclerView.setRefreshListener(this);
         recyclerView.setRefreshingColor(ContextCompat.getColor(this, R.color.deep_purple_400));
@@ -148,6 +144,95 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
     }
 
+    private SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
+        @Override
+        public boolean onQueryTextSubmit(String query) {
+            return false;
+        }
+
+        @Override
+        public boolean onQueryTextChange(String query) {
+            if(adapter.getCount() > 60 || query.equals(""))
+                recyclerView.showProgress();
+            executeFilter(query);
+            return true;
+        }
+    };
+
+    public void executeFilter(String query) {
+        // Load items
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                List<MyRemindersModel> filteredModelList = filter(listMyReminders, query);
+                adapter.clear();
+                adapter.addAll(filteredModelList);
+
+                my_reminders_qty = adapter.getCount();
+
+                if(my_reminders_qty == 0){
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+                    findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
+                    recyclerView.showEmpty();
+                }
+                else if(my_reminders_qty == 1){
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+                    remindersQty.setText(R.string.my_reminders_qty_one);
+                }
+                else{
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+                    findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+                    remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
+                }
+
+                recyclerView.scrollToPosition(0);
+            }
+        });
+        // Load complete
+    }
+
+    private ArrayList<MyRemindersModel> filter(List<MyRemindersModel> models, String query) {
+        if(models == null)
+            return new ArrayList<>();
+
+        ArrayList<MyRemindersModel> filteredModelList = new ArrayList<>();
+        for (MyRemindersModel model : models) {
+            String text;
+            text = model.getText1().toLowerCase() + " " + model.getText2().toLowerCase();
+
+            if (Utilities.isListContainsQuery(text, query))
+                filteredModelList.add(model);
+
+        }
+
+        return filteredModelList;
+    }
+
+    @Override
+    public void refreshLayout() {
+
+        listMyReminders.clear();
+        listMyRemindersQuery.clear();
+        listMyReminders.addAll(adapter.getAllData());
+        listMyRemindersQuery.addAll(adapter.getAllData());
+
+        my_reminders_qty = adapter.getCount();
+
+        if(my_reminders_qty == 0){
+            recyclerView.setEmptyView(null);
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
+            recyclerView.showEmpty();
+        }
+        else if(my_reminders_qty == 1){
+            remindersQty.setText(R.string.my_reminders_qty_one);
+        }
+        else{
+            remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
+        }
+    }
+
     private void retrieveMyReminders(String email, DateTymo dateTymo) {
 
         mSubscriptions.add(NetworkUtil.getRetrofit().getMyReminders(email, dateTymo)
@@ -157,9 +242,9 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void handleResponse(Response response) {
-
         int i;
         listMyReminders = new ArrayList<>();
+        listMyRemindersQuery = new ArrayList<>();
 
         for (i = 0; i < response.getMyCommitReminder().size(); i++) {
             ReminderServer reminderServer = response.getMyCommitReminder().get(i);
@@ -175,7 +260,15 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
             MyRemindersModel myRemindersModel = new MyRemindersModel(reminderServer.getTitle(), reminderServer.getText(), date, reminderServer);
             listMyReminders.add(myRemindersModel);
+            listMyRemindersQuery.add(myRemindersModel);
         }
+        
+        adapter.clear();
+        adapter.addAll(listMyReminders);
+
+        String query = searchView.getQuery().toString();
+        if(!query.equals(""))
+            executeFilter(query);
 
         my_reminders_qty = response.getMyCommitReminder().size();
 
@@ -187,14 +280,15 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+            findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
         }
         else{
             remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
         }
-        
-        adapter.clear();
-        adapter.addAll(listMyReminders);
     }
 
     private void handleError(Throwable error) {
