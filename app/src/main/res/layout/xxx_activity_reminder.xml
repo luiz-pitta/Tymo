@@ -123,7 +123,7 @@
                         android:textIsSelectable="true"
                         android:textSize="18sp"
                         android:textStyle="bold"
-                        android:visibility="visible" />
+                        android:visibility="gone" />
 
                     <RelativeLayout
                         android:id="@+id/dateBox"
@@ -196,18 +196,17 @@
                         android:id="@+id/reminderText"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_above="@+id/addButtonsBox"
+                        android:layout_above="@+id/space"
                         android:layout_alignParentTop="true"
                         android:layout_marginBottom="10dp"
                         android:layout_marginLeft="20dp"
                         android:layout_marginRight="20dp"
                         android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_act_edit_box_2"
+                        android:background="@color/white"
                         android:gravity="top"
                         android:hint="@string/hint_reminder_note"
                         android:imeOptions="actionDone"
                         android:inputType="textMultiLine"
-                        android:padding="10dp"
                         android:scrollbars="vertical"
                         android:textColor="@color/grey_600"
                         android:textColorHint="@color/grey_400"
@@ -229,7 +228,7 @@
                         android:visibility="visible">
 
                         <LinearLayout
-                            android:visibility="visible"
+                            android:visibility="gone"
                             android:id="@+id/addTitleButton"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
