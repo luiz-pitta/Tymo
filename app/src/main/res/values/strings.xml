@@ -240,7 +240,7 @@
     <string name="empty_my_contacts_profile_text_1">Você não possui contatos</string>
     <string name="empty_my_contacts_profile_text_2">Acesse a tela de busca e adicione usuários à sua rede</string>
     <string name="empty_pending_requests">Nenhuma solicitação para adicionar você como um contato</string>
-    <string name="empty_plans_past">Expirado! Passou mais de 1 ano</string>
+    <string name="empty_plans_past">Expirado! Passou mais de 3 meses</string>
     <string name="empty_profile_privated_text_1">Essa conta é privada</string>
     <string name="empty_profile_privated_text_2">Adicione aos seus contatos para ver o conteúdo desse perfil</string>
     <string name="empty_search">Nenhum item encontrado</string>
@@ -549,11 +549,11 @@
     <string name="title_max_caract">%1$d de 100</string>
     <string name="token">Token</string>
     <string name="try_again">Tente Novamente</string>
-    <string name="tutorial_create_text_1">Atividade</string>
+    <string name="tutorial_create_text_1">Atividades</string>
     <string name="tutorial_create_text_2">Monte desde pequenos momentos a grandes eventos.</string>
     <string name="tutorial_create_text_3">Notas</string>
     <string name="tutorial_create_text_4">Sem esquecimento! Registre qualquer informação rapidamente.</string>
-    <string name="tutorial_create_text_5">Sinalizador</string>
+    <string name="tutorial_create_text_5">Sinalizadores</string>
     <string name="tutorial_create_text_6">Informe de forma direta e simples se você está OCUPADO ou LIVRE para fazer algo.</string>
     <string name="tutorial_create_title">Crie</string>
     <string name="tutorial_feed_text_1">Visualize e capture as atividades que você foi convidado</string>

@@ -327,11 +327,11 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         dayMonth.setText(week.getM_month_text());
         adapter.clear();
 
-        Calendar before12Months = Calendar.getInstance();
-        before12Months.add(Calendar.MONTH, -12);
+        Calendar before3Months = Calendar.getInstance();
+        before3Months.add(Calendar.MONTH, -3);
 
         boolean isStored = !isInThePast(week.getYear(), week.getMonth(), week.getDay(),
-                before12Months.get(Calendar.YEAR), before12Months.get(Calendar.MONTH) + 1, before12Months.get(Calendar.DAY_OF_MONTH));
+                before3Months.get(Calendar.YEAR), before3Months.get(Calendar.MONTH) + 1, before3Months.get(Calendar.DAY_OF_MONTH));
 
         if (!free) {
             if (isStored) {
@@ -385,7 +385,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
         }
     }
 
-    public void setBefore12Months() {
+    public void setBefore3Months() {
         mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
         mRecyclerView.showEmpty();
     }
