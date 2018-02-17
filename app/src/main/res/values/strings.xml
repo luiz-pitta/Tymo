@@ -472,13 +472,14 @@
     <string name="server_message_activity_registered_successfully">Atividade registrada com sucesso</string>
     <string name="server_message_activity_updated_successfully">Atividade atualizada com sucesso</string>
     <string name="server_message_already_exists_a_request_to_add">Já existe um pedido de amizade</string>
-    <string name="server_message_check_mail_for_instructions">Verificar e-mail para instruções</string>
+    <string name="server_message_check_mail_for_instructions">Verificar email para instruções</string>
     <string name="server_message_contact_deleted">Contato excluído com sucesso</string>
     <string name="server_message_does_not_exist_app_info">Não existem App Info :(</string>
     <string name="server_message_does_not_exist_background">Não existem Backgrounds :(</string>
     <string name="server_message_does_not_exist_icon">Não existem Ícones :(</string>
     <string name="server_message_does_not_exist_interest">Não existem Interesses :(</string>
     <string name="server_message_does_not_exist_tag">Não existem TAGS de interesses :(</string>
+    <string name="server_message_email_already_registered">Email já cadastrado</string>
     <string name="server_message_facebook_error">Conta existente cadastrada pelo facebook com esse email</string>
     <string name="server_message_flag_registered_successfully">Sinalizador registrado com sucesso</string>
     <string name="server_message_flag_updated_successfully">Sinalizador atualizado com sucesso</string>

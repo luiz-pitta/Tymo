@@ -353,10 +353,8 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
 
         if(m_contacts_qty == 0){
-            findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
-            findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
         }
         else if(m_contacts_qty == 1){
             contactsQty.setText(R.string.contacts_qty_one);

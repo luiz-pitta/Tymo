@@ -95,7 +95,9 @@ public class AccountActivity extends AppCompatActivity implements View.OnClickLi
 
         m_title.setText(getResources().getString(R.string.settings_account));
 
-        email.setText(user.getEmail());
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+
+        email.setText(mSharedPreferences.getString(Constants.EMAIL, ""));
         emailFacebook.setText(user.getEmail());
 
         if(user.getFromFacebook()) {

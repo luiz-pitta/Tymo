@@ -72,7 +72,7 @@
                     android:layout_marginRight="10dp"
                     android:layout_marginTop="4dp"
                     android:background="@drawable/box_notification"
-                    android:visibility="visible" />
+                    android:visibility="gone" />
 
             </RelativeLayout>
 

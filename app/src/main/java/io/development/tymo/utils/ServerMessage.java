@@ -31,6 +31,8 @@ public class ServerMessage {
                 return context.getResources().getString(R.string.server_message_does_not_exist_interest);
             case "DOES_NOT_EXIST_TAG":
                 return context.getResources().getString(R.string.server_message_does_not_exist_tag);
+            case "EMAIL_ALREADY_REGISTERED":
+                return context.getResources().getString(R.string.server_message_email_already_registered);
             case "FLAG_REGISTERED_SUCCESSFULLY":
                 return context.getResources().getString(R.string.server_message_flag_registered_successfully);
             case "FLAG_UPDATED_SUCCESSFULLY":

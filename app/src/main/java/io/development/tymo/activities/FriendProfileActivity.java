@@ -19,6 +19,7 @@ import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -648,6 +649,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             contactsBox.setVisibility(View.VISIBLE);
             aboutBox.setVisibility(View.VISIBLE);
         }
+
+        Log.d("xxx11111", String.valueOf(user.getPhoto()));
 
         if (!user.getPhoto().matches("")) {
             Glide.clear(profilePhoto);

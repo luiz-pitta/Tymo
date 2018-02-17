@@ -22,6 +22,8 @@ import com.jude.easyrecyclerview.decoration.DividerDecoration;
 
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -100,7 +102,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
-        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this,R.color.deep_purple_400));
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
 
         applyButton.setOnClickListener(this);
         cleanButton.setOnClickListener(this);
@@ -126,7 +128,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         applyButton.setText(getResources().getString(R.string.ok));
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
     }
 
@@ -137,8 +139,8 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             public void run() {
                 mSwipeRefreshLayout.setRefreshing(false);
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refreshItems" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
                 SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -155,7 +157,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void run() {
                 List<User> filteredModelList = filter(personList, query);
-                if(selectionPeopleAdapter !=null) {
+                if (selectionPeopleAdapter != null) {
                     selectionPeopleAdapter.swap(filteredModelList);
                     selectionPeopleAdapter.deselectAll();
                     setSelectionQuery();
@@ -168,7 +170,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
     }
 
     public void setProgress(boolean progress) {
-        if(progress)
+        if (progress)
             findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
         else
             findViewById(R.id.progressBox).setVisibility(View.GONE);
@@ -179,7 +181,27 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         mSubscriptions.add(NetworkUtil.getRetrofit().getUsers(email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
+    }
+
+    private ArrayList<User> setOrderContacts(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     private void handleResponse(ArrayList<User> users) {
@@ -188,11 +210,11 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         personQueryList = new ArrayList<>();
         List<String> stock_list = getIntent().getStringArrayListExtra("guest_list");
         boolean erase_from_list = getIntent().getBooleanExtra("erase_from_list", false);
-        UserWrapper userWrapper = (UserWrapper)getIntent().getSerializableExtra("user_friend_exclude");
+        UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("user_friend_exclude");
 
-        if(userWrapper == null)
+        if (userWrapper == null)
             personQueryList.addAll(users);
-        else{
+        else {
             User userFriend = userWrapper.getUser();
             for (i = 0; i < users.size(); i++) {
                 if (!users.get(i).getEmail().equals(userFriend.getEmail()))
@@ -200,7 +222,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        if(erase_from_list && stock_list != null){
+        if (erase_from_list && stock_list != null) {
             for (i = 0; i < personQueryList.size() && stock_list.size() > 0; i++) {
                 User friend = personQueryList.get(i);
                 if (stock_list.contains(friend.getEmail())) {
@@ -210,9 +232,11 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
+        personQueryList = setOrderContacts(personQueryList);
+
         personList = new ArrayList<>();
         personList.addAll(personQueryList);
-        selectionPeopleAdapter = new SelectionPeopleAdapter(personQueryList, getApplication()) ;
+        selectionPeopleAdapter = new SelectionPeopleAdapter(personQueryList, getApplication());
         mMultiChoiceRecyclerView.setAdapter(selectionPeopleAdapter);
         selectionPeopleAdapter.setSingleClickMode(true);
 
@@ -220,14 +244,14 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
                 int position = getPositionSelected(personQueryList.get(selectedPosition).getEmail());
-                if(position == -1)
+                if (position == -1)
                     personListSelected.add(personQueryList.get(selectedPosition));
             }
 
             @Override
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
                 int position = getPositionSelected(personQueryList.get(deselectedPosition).getEmail());
-                if(position >= 0)
+                if (position >= 0)
                     personListSelected.remove(position);
             }
 
@@ -242,13 +266,13 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             }
         });
 
-        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
+        DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this, R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(false);
 
         mMultiChoiceRecyclerView.addItemDecoration(itemDecoration);
         mMultiChoiceRecyclerView.setHasFixedSize(true);
 
-        if(stock_list != null) {
+        if (stock_list != null) {
             for (i = 0; i < personList.size() && stock_list.size() > 0; i++) {
                 User personModel = personList.get(i);
                 if (stock_list.contains(personModel.getEmail()))
@@ -257,7 +281,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             }
         }
 
-        if(selectionPeopleAdapter.getItemCount() > 60) {
+        if (selectionPeopleAdapter.getItemCount() > 60) {
             Handler handler = new Handler();
             handler.postDelayed(new Runnable() {
                 @Override
@@ -265,17 +289,17 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
                     setProgress(false);
                 }
             }, 1500);
-        }else
+        } else
             setProgress(false);
 
         String query = searchView.getQuery().toString();
-        if(!query.equals(""))
+        if (!query.equals(""))
             executeFilter(query);
     }
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -283,10 +307,10 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     public void onClick(View view) {
-        if(view == applyButton){
+        if (view == applyButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "applyButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "applyButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent = new Intent();
@@ -294,10 +318,10 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
             intent.putExtra("guest_objs", wrapper);
             setResult(RESULT_OK, intent);
             finish();
-        }else if(view == cleanButton) {
+        } else if (view == cleanButton) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "cleanButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             finish();
@@ -310,7 +334,7 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
     }
 
     private ArrayList<User> filter(List<User> models, String query) {
-        if(models == null)
+        if (models == null)
             return new ArrayList<>();
 
         ArrayList<User> filteredModelList = new ArrayList<>();
@@ -322,23 +346,23 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         return filteredModelList;
     }
 
-    private void setSelectionQuery(){
+    private void setSelectionQuery() {
         int i;
         int pos;
-        for(i=0;i<personQueryList.size();i++){
+        for (i = 0; i < personQueryList.size(); i++) {
             pos = getPositionSelected(personQueryList.get(i).getEmail());
-            if(pos >= 0)
+            if (pos >= 0)
                 selectionPeopleAdapter.select(i);
 
         }
 
     }
 
-    private int getPositionSelected(String name){
+    private int getPositionSelected(String name) {
         int i;
-        for(i=0;i<personListSelected.size();i++){
+        for (i = 0; i < personListSelected.size(); i++) {
             String text = personListSelected.get(i).getEmail();
-            if(text.equals(name))
+            if (text.equals(name))
                 return i;
         }
         return -1;
