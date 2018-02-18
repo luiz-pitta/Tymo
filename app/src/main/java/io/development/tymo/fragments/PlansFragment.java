@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -30,6 +31,9 @@ import android.widget.Toast;
 
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -83,6 +87,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     private String email;
     private int linePaint = -1;
+    private boolean isOnViewCreated, isOnStart, isSwipeRefresh;
 
     private int day_start, month_start, year_start;
     private List<WeekModel> listPlans = new ArrayList<>();
@@ -118,13 +123,15 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.activity_plans, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        isOnViewCreated = true;
+        isSwipeRefresh = false;
 
         dateFormat = new DateFormat(getActivity());
 
@@ -261,6 +268,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                isSwipeRefresh = true;
                 mSwipeRefreshLayout.setRefreshing(false);
                 refreshLayout(true);
 
@@ -1130,6 +1138,61 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     @Override
     public void refreshLayout(boolean showRefresh) {
         mSwipeRefreshLayout.setRefreshing(false);
-        updateLayout(day_start, month_start - 1, year_start, showRefresh);
+
+        if ((isOnViewCreated || (!isOnViewCreated && !isOnStart)) && !isSwipeRefresh) {
+            // get today and clear time of day
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.HOUR_OF_DAY, 0); // ! clear would not reset the hour of day !
+            cal.clear(Calendar.MINUTE);
+            cal.clear(Calendar.SECOND);
+            cal.clear(Calendar.MILLISECOND);
+
+            while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY)
+                cal.add(Calendar.DATE, -1);
+
+            cal.add(Calendar.DAY_OF_WEEK, -15);
+            int month = cal.get(Calendar.MONTH) + 1;
+
+            cal.add(Calendar.DAY_OF_WEEK, 21);
+            int month2 = cal.get(Calendar.MONTH) + 1;
+
+            if (month != month2) {
+                Calendar cal2 = Calendar.getInstance();
+                cal2.set(Calendar.HOUR_OF_DAY, 0);
+                cal2.clear(Calendar.MINUTE);
+                cal2.clear(Calendar.SECOND);
+                cal2.clear(Calendar.MILLISECOND);
+                cal2.set(Calendar.DAY_OF_WEEK, cal2.getFirstDayOfWeek());
+                cal2.add(Calendar.DAY_OF_WEEK, 1);
+                int day3 = cal2.get(Calendar.DAY_OF_MONTH);
+                while (day3 != 1) {
+                    cal2.add(Calendar.DAY_OF_WEEK, 1);
+                    day3 = cal2.get(Calendar.DAY_OF_MONTH);
+                }
+            }
+
+            int day_start_temp = cal.get(Calendar.DAY_OF_MONTH);
+            int month_start_temp = cal.get(Calendar.MONTH) + 1;
+
+            cal.add(Calendar.DAY_OF_WEEK, -6);
+            day_start = cal.get(Calendar.DAY_OF_MONTH);
+            month_start = cal.get(Calendar.MONTH) + 1;
+            year_start = cal.get(Calendar.YEAR);
+
+            updateLayout(day_start, month_start - 1, year_start, true);
+        }
+        else {
+            updateLayout(day_start, month_start - 1, year_start, showRefresh);
+        }
+
+        isOnViewCreated = false;
+        isOnStart = false;
+        isSwipeRefresh = false;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        isOnStart = true;
     }
 }
