@@ -78,11 +78,11 @@ public class FlagViewHolder extends BaseViewHolder<Flag> {
         time.setTextColor(ContextCompat.getColor(mContext,color));
 
         if(card.getPaint()) {
-            box.setBackgroundColor(ContextCompat.getColor(mContext, R.color.grey_100));
-            time.setBackgroundColor(ContextCompat.getColor(mContext, R.color.grey_100));
+            box.setBackgroundColor(ContextCompat.getColor(mContext, R.color.transparent));
+            time.setBackgroundColor(ContextCompat.getColor(mContext, R.color.transparent));
         }else {
-            box.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
-            time.setBackgroundColor(ContextCompat.getColor(mContext, R.color.white));
+            box.setBackgroundColor(ContextCompat.getColor(mContext, R.color.transparent));
+            time.setBackgroundColor(ContextCompat.getColor(mContext, R.color.transparent));
         }
     }
 }

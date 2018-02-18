@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -243,16 +244,20 @@ public class SelectPeopleActivity extends AppCompatActivity implements View.OnCl
         selectionPeopleAdapter.setMultiChoiceSelectionListener(new MultiChoiceAdapter.Listener() {
             @Override
             public void OnItemSelected(int selectedPosition, int itemSelectedCount, int allItemCount) {
-                int position = getPositionSelected(personQueryList.get(selectedPosition).getEmail());
-                if (position == -1)
-                    personListSelected.add(personQueryList.get(selectedPosition));
+                if (!personQueryList.isEmpty()) {
+                    int position = getPositionSelected(personQueryList.get(selectedPosition).getEmail());
+                    if (position == -1)
+                        personListSelected.add(personQueryList.get(selectedPosition));
+                }
             }
 
             @Override
             public void OnItemDeselected(int deselectedPosition, int itemSelectedCount, int allItemCount) {
-                int position = getPositionSelected(personQueryList.get(deselectedPosition).getEmail());
-                if (position >= 0)
-                    personListSelected.remove(position);
+                if (!personQueryList.isEmpty()) {
+                    int position = getPositionSelected(personQueryList.get(deselectedPosition).getEmail());
+                    if (position >= 0)
+                        personListSelected.remove(position);
+                }
             }
 
             @Override

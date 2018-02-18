@@ -217,8 +217,8 @@
     <string name="delete_plans_question_text_3">Tem certeza que deseja remover esse compromisso da sua agenda?</string>
     <string name="delete">Excluir</string>
     <string name="deselect_all">Desmarcar todos</string>
-    <string name="dialog_fit_multiple_repeat_activity_text">Selecione quais você deseja encaixar:</string>
-    <string name="dialog_fit_multiple_repeat_activity_title">Atividade com repetição</string>
+    <string name="dialog_fit_multiple_repeat_activity_text">Quais dias você deseja encaixar?</string>
+    <string name="dialog_fit_multiple_repeat_activity_title">Esse compromisso se repete</string>
     <string name="distance_km">%1$d km de você -</string>
     <string name="distance_meters">%1$d metros de você -</string>
     <string name="edit_activity">Editar atividade</string>
@@ -240,7 +240,7 @@
     <string name="empty_my_contacts_profile_text_1">Você não possui contatos</string>
     <string name="empty_my_contacts_profile_text_2">Acesse a tela de busca e adicione usuários à sua rede</string>
     <string name="empty_pending_requests">Nenhuma solicitação para adicionar você como um contato</string>
-    <string name="empty_plans_past">Expirado! Passou mais de 3 meses</string>
+    <string name="empty_plans_past">Expirado! Passaram mais de 3 meses</string>
     <string name="empty_profile_privated_text_1">Essa conta é privada</string>
     <string name="empty_profile_privated_text_2">Adicione aos seus contatos para ver o conteúdo desse perfil</string>
     <string name="empty_search">Nenhum item encontrado</string>
@@ -447,7 +447,7 @@
     <string name="repeat_max_time_3">Limite ultrapassado (máx. 12 meses)</string>
     <string name="repeat_monthly">mensalmente</string>
     <string name="repeat_not">Não se repete</string>
-    <string name="repeat_qty">%1$dx</string>
+    <string name="repeat_qty">+%1$d</string>
     <string name="repeat_text_imported_google_agenda">(atividade importada sem as repetições, edite para criá-las!)</string>
     <string name="repeat_text">(repete %1$s até %2$s)</string>
     <string name="repeat_weekly">semanalmente</string>

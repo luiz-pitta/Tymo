@@ -81,6 +81,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         View.OnTouchListener, CreatePopUpDialogFragment.RefreshLayoutPlansCallback {
 
     private int mBackButtonColor, mBackButtonColorPressed;
+    private int linePaint = -1;
 
     private ImageView mBackButton;
     private TextView friendshipRequestsText, progressText, btnCompare, aboutText, contactsText;
@@ -406,7 +407,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void handleErrorBgProfile(Throwable error) {
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -423,7 +424,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                 mSwipeRefreshLayout.setRefreshing(false);
-                updatePlansFriend(year_start, month_start - 1, day_start, true);
+                updatePlansFriend(year_start, month_start - 1, day_start, true, false);
             }
         }, 500);
 
@@ -580,7 +581,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         int m = cal.get(Calendar.MONTH);
         int y = cal.get(Calendar.YEAR);
 
-        updatePlansFriend(y, m, d, false);
+        updatePlansFriend(y, m, d, false, false);
     }
 
     private void sendFriendRequest(String email, User user) {
@@ -649,8 +650,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             contactsBox.setVisibility(View.VISIBLE);
             aboutBox.setVisibility(View.VISIBLE);
         }
-
-        Log.d("xxx11111", String.valueOf(user.getPhoto()));
 
         if (!user.getPhoto().matches("")) {
             Glide.clear(profilePhoto);
@@ -936,8 +935,26 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         if (freeFragment != null)
             freeFragment.setDataAdapter(listPlans);
 
+        cleanPaintRow();
+        setPaintRow();
+
         setProgress(false);
         setProgressFriendRequest(false);
+    }
+
+    private void setPaintRow() {
+        if (linePaint != -1) {
+            for (int i = 0; i < listPlans.size(); i++) {
+                if (listPlans.get(i).getDay() == linePaint)
+                    listPlans.get(i).setPaint(true);
+            }
+        }
+    }
+
+    private void cleanPaintRow() {
+        for (int i = 0; i < listPlans.size(); i++) {
+            listPlans.get(i).setPaint(false);
+        }
     }
 
     public boolean isFreeTimeOneMinute(int start_hour, int start_minute, int end_hour, int end_minute) {
@@ -952,7 +969,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         //setProgress(false);
         //setProgressFriendRequest(false);
         friendshipRequestsBox.setOnClickListener(this);
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -984,13 +1001,21 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Calendar now = Calendar.getInstance();
-            now.set(year_start, month_start - 1, day_start);
+
+            if (linePaint != -1)
+                now.set(year_start, month_start - 1, linePaint);
+            else
+                now.set(year_start, month_start - 1, day_start);
+
             DatePickerDialog dpd = DatePickerDialog.newInstance(
                     FriendProfileActivity.this,
                     now.get(Calendar.YEAR),
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
+            Calendar before3Months = Calendar.getInstance();
+            before3Months.add(Calendar.MONTH, -3);
+            dpd.setMinDate(before3Months);
             dpd.setAccentColor(ContextCompat.getColor(FriendProfileActivity.this, R.color.deep_purple_400));
             dpd.show(getFragmentManager(), "Datepickerdialog");
         } else if (view == freeTimeButton) {
@@ -1043,7 +1068,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
 
-            updatePlansFriend(year_start, month_start - 1, day_start, false);
+            updatePlansFriend(year_start, month_start - 1, day_start, false, false);
 
         } else if (view == nextWeek) {
             Bundle bundle = new Bundle();
@@ -1063,7 +1088,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
             month_start = cal.get(Calendar.MONTH) + 1;
             year_start = cal.get(Calendar.YEAR);
 
-            updatePlansFriend(year_start, month_start - 1, day_start, false);
+            updatePlansFriend(year_start, month_start - 1, day_start, false, false);
         } else if (view == friendshipRequestsBox) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "friendshipRequestsBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1261,10 +1286,15 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
         if (dpd != null) dpd.setOnDateSetListener(this);
     }
 
-    public void updatePlansFriend(int year, int monthOfYear, int dayOfMonth, boolean progress) {
+    public void updatePlansFriend(int year, int monthOfYear, int dayOfMonth, boolean progress, boolean select) {
         isTimeToChangeBackground();
 
         listPlans.clear();
+
+        if (select)
+            linePaint = dayOfMonth;
+        else
+            linePaint = -1;
 
         Calendar cal = Calendar.getInstance();
         cal.set(year, monthOfYear, dayOfMonth);
@@ -1341,7 +1371,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
     @Override
     public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
-        updatePlansFriend(year, monthOfYear, dayOfMonth, false);
+        updatePlansFriend(year, monthOfYear, dayOfMonth, false, true);
     }
 
     private class SingleTapConfirm extends GestureDetector.SimpleOnGestureListener {
@@ -1365,6 +1395,6 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
 
     @Override
     public void refreshLayout(boolean showRefresh) {
-        updatePlansFriend(year_start, month_start - 1, day_start, false);
+        updatePlansFriend(year_start, month_start - 1, day_start, false, false);
     }
 }

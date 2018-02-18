@@ -149,8 +149,12 @@
 
             <RelativeLayout
                 android:id="@+id/repeatBox"
-                android:layout_width="30dp"
-                android:layout_height="25dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="2dp"
+                android:paddingLeft="8dp"
+                android:paddingRight="8dp"
+                android:paddingTop="2dp"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/box_qty_contacts"
                 android:layout_alignParentRight="true"
@@ -161,12 +165,11 @@
                     android:id="@+id/repeatText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textStyle="bold"
-                    android:textSize="12sp"
+                    android:textSize="16sp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:textColor="@color/deep_purple_400"
-                    android:text="5x" />
+                    android:text="+0" />
 
             </RelativeLayout>
 
