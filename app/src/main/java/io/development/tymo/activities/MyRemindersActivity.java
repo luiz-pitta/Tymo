@@ -78,6 +78,8 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
+        findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+        findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
 
         m_title.setText(getResources().getString(R.string.profile_menu_1));
 
@@ -171,8 +173,8 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
                 my_reminders_qty = adapter.getCount();
 
                 if(my_reminders_qty == 0){
-                    //findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
-                    //findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
+                    findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+                    findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
                     recyclerView.showEmpty();
                 }
                 else if(my_reminders_qty == 1){
@@ -221,8 +223,8 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         if(my_reminders_qty == 0){
             recyclerView.setEmptyView(null);
-            //findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
-            //findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){
@@ -273,10 +275,8 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
         my_reminders_qty = response.getMyCommitReminder().size();
 
         if(my_reminders_qty == 0){
-            //findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
-            //findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
-            //findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
-            //findViewById(R.id.searchSelection).setVisibility(View.GONE);
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){

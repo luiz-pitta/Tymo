@@ -182,10 +182,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
-
-        findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
-        findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
-        findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
     }
 
     private String fullNameToShortName(String fullName){
