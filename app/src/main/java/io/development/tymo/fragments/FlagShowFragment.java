@@ -312,6 +312,8 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
                     listPerson.add(usr);
                 }
 
+                listPerson = setOrderGuests(listPerson);
+
                 adapter = new PersonAdapter(listPerson, getActivity());
                 recyclerView.setAdapter(adapter);
                 guestsNumber.setText(String.valueOf(listPerson.size()));
@@ -344,6 +346,86 @@ public class FlagShowFragment extends Fragment implements View.OnClickListener, 
                 repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(flagServers)));
             }
         }
+    }
+
+    private ArrayList<User> setOrderGuests(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getInvitation();
+                long id2 = c2.getInvitation();
+
+                if (id1 == 1)
+                    return -1;
+                else if (id2 == 1)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountKnows();
+                long id2 = c2.getCountKnows();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountFavorite();
+                long id2 = c2.getCountFavorite();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                boolean id1 = c1.isCreator();
+                boolean id2 = c2.isCreator();
+
+                if (id1 && !id2)
+                    return -1;
+                else if (!id1 && id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     private boolean isFlagInPast(FlagServer flagServer) {

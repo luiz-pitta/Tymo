@@ -139,7 +139,7 @@
     <string name="block_user">Bloquear usuário</string>
     <string name="blocked_users">Usuários Bloqueados</string>
     <string name="cancel">Cancelar</string>
-    <string name="card_birthday_text_1">Aniversariantes</string>
+    <string name="card_birthday_text_1">Aniversariantes (%1$d)</string>
     <string name="card_birthday_text_2">Comemore esta data especial :)</string>
     <string name="card_free_time_compare_text">Crie com os usuários comparados:</string>
     <string name="card_free_time_text">Crie nesse intervalo de tempo:</string>

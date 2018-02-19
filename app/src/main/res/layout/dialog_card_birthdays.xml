@@ -39,7 +39,7 @@
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="2"
-                android:text="@string/card_birthday_text_1"
+                android:text="Title"
                 android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold" />

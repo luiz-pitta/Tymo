@@ -447,6 +447,86 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
     }
 
+    private ArrayList<User> setOrderGuests(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getInvitation();
+                long id2 = c2.getInvitation();
+
+                if (id1 == 1)
+                    return -1;
+                else if (id2 == 1)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountKnows();
+                long id2 = c2.getCountKnows();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountFavorite();
+                long id2 = c2.getCountFavorite();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                boolean id1 = c1.isCreator();
+                boolean id2 = c2.isCreator();
+
+                if (id1 && !id2)
+                    return -1;
+                else if (!id1 && id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
+    }
+
     private void createDialogMessageAddInPast(int y1, int m1, int d1, int h1, int min1, int y2, int m2, int d2, int h2, int min2) {
         LayoutInflater inflater = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.dialog_message, null);
@@ -553,6 +633,9 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     data.add(usr);
                 }
             }
+
+            data = setOrderGuests(data);
+
             adapter = new PersonAdapter(data, getActivity());
             recyclerView.setAdapter(adapter);
             guestsNumber.setText(String.valueOf(data.size()));
@@ -1038,6 +1121,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                         listPerson.add(usr);
                     }
 
+                    listPerson = setOrderGuests(listPerson);
+
                     adapter = new PersonAdapter(listPerson, getActivity());
                     recyclerView.setAdapter(adapter);
                     guestsNumber.setText(String.valueOf(listPerson.size()));
@@ -1081,6 +1166,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     usr.setDelete(false);
                     listPerson.add(usr);
                 }
+
+                listPerson = setOrderGuests(listPerson);
 
                 adapter = new PersonAdapter(listPerson, getActivity());
                 recyclerView.setAdapter(adapter);

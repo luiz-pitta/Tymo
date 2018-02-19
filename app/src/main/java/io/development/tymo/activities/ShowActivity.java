@@ -398,6 +398,21 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         Collections.sort(users, new Comparator<User>() {
             @Override
             public int compare(User c1, User c2) {
+                long id1 = c1.getInvitation();
+                long id2 = c2.getInvitation();
+
+                if (id1 == 1)
+                    return -1;
+                else if (id2 == 1)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
                 long id1 = c1.getCountKnows();
                 long id2 = c2.getCountKnows();
 
@@ -417,23 +432,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
                 long id2 = c2.getCountFavorite();
 
                 if (id1 > id2)
-                    return -1;
-                else if (id1 < id2)
-                    return 1;
-                else
-                    return 0;
-            }
-        });
-
-        Collections.sort(users, new Comparator<User>() {
-            @Override
-            public int compare(User c1, User c2) {
-                long id1 = c1.getInvitation();
-                long id2 = c2.getInvitation();
-
-                if (id1 == 2 || id2 == 2)
-                    return 1;
-                else if (id1 > id2)
                     return -1;
                 else if (id1 < id2)
                     return 1;

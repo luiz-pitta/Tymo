@@ -7,12 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.Space;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -35,15 +37,16 @@ import com.labo.kaji.swipeawaydialog.SwipeAwayDialogFragment;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 
 import io.development.tymo.R;
-import io.development.tymo.activities.AddActivity;
 import io.development.tymo.activities.AddPart1Activity;
 import io.development.tymo.activities.FlagActivity;
 import io.development.tymo.activities.ReminderActivity;
 import io.development.tymo.activities.ShowActivity;
 import io.development.tymo.adapters.HolidayCardAdapter;
-import io.development.tymo.adapters.PersonSmallAdapter;
+import io.development.tymo.adapters.PersonAdapter;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
 import io.development.tymo.model_server.Birthday;
@@ -289,7 +292,18 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     } else
                         activity_buttons = setLayout(response.getPeople(), email, true);
 
-                    PersonSmallAdapter adapter = new PersonSmallAdapter(response.getPeople(), mContext);
+                    ArrayList<User> listPerson = new ArrayList<>();
+
+                    for (int i = 0; i < response.getPeople().size(); i++) {
+                        User usr = response.getPeople().get(i);
+                        usr.setDelete(false);
+                        usr.setCreator(usr.getEmail().contains(response.getUser().getEmail()));
+                        listPerson.add(usr);
+                    }
+
+                    listPerson = setOrderGuests(listPerson);
+
+                    PersonAdapter adapter = new PersonAdapter(listPerson, mContext);
                     recyclerView.setAdapter(adapter);
                 } else {
                     if (email.equals(flagServer.getCreator())) {
@@ -306,7 +320,18 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         }
                     }
 
-                    PersonSmallAdapter adapter = new PersonSmallAdapter(response.getPeople(), mContext);
+                    ArrayList<User> listPerson = new ArrayList<>();
+
+                    for (int i = 0; i < response.getPeople().size(); i++) {
+                        User usr = response.getPeople().get(i);
+                        usr.setDelete(false);
+                        usr.setCreator(usr.getEmail().contains(response.getUser().getEmail()));
+                        listPerson.add(usr);
+                    }
+
+                    listPerson = setOrderGuests(listPerson);
+
+                    PersonAdapter adapter = new PersonAdapter(listPerson, mContext);
                     recyclerView.setAdapter(adapter);
                 }
                 setProgress(false, activity_buttons);
@@ -914,9 +939,20 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         customView.findViewById(R.id.addGuestButton).setVisibility(View.GONE);
                         customView.findViewById(R.id.addGuestButtonDivider).setVisibility(View.GONE);
 
-                        PersonSmallAdapter adapter = new PersonSmallAdapter(birthday.getUsersBirthday(), mContext);
+                        ArrayList<User> listPerson = new ArrayList<>();
+
+                        for (int i = 0; i < birthday.getUsersBirthday().size(); i++) {
+                            User usr = birthday.getUsersBirthday().get(i);
+                            usr.setDelete(false);
+                            listPerson.add(usr);
+                        }
+
+                        listPerson = setOrderBirthdayPeople(listPerson);
+
+                        PersonAdapter adapter = new PersonAdapter(listPerson, mContext);
                         recyclerView.setAdapter(adapter);
 
+                        TextView birthdayTitle = (TextView) customView.findViewById(R.id.title);
                         TextView dateMonthYear = (TextView) customView.findViewById(R.id.dateMonthYear);
 
                         Calendar calendar = Calendar.getInstance();
@@ -924,6 +960,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         String day = String.format("%02d", birthday.getDay());
                         String month = dateFormat.formatMonthLowerCase(calendar.get(Calendar.MONTH) + 1);
                         String year = String.valueOf(birthday.getYear());
+                        birthdayTitle.setText(context.getResources().getString(R.string.card_birthday_text_1, birthday.getUsersBirthday().size()));
                         dateMonthYear.setText(context.getResources().getString(R.string.date_format_10, day, month, year));
                     }
 
@@ -1152,6 +1189,106 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
         screen = s;
         friend = usr;
         return f;
+    }
+
+    private static ArrayList<User> setOrderBirthdayPeople(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
+    }
+
+    private static ArrayList<User> setOrderGuests(ArrayList<User> users) {
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                String name1 = c1.getName();
+                String name2 = c2.getName();
+
+                if (name1.compareTo(name2) > 0)
+                    return 1;
+                else if (name1.compareTo(name2) < 0)
+                    return -1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getInvitation();
+                long id2 = c2.getInvitation();
+
+                if (id1 == 1)
+                    return -1;
+                else if (id2 == 1)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountKnows();
+                long id2 = c2.getCountKnows();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                long id1 = c1.getCountFavorite();
+                long id2 = c2.getCountFavorite();
+
+                if (id1 > id2)
+                    return -1;
+                else if (id1 < id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        Collections.sort(users, new Comparator<User>() {
+            @Override
+            public int compare(User c1, User c2) {
+                boolean id1 = c1.isCreator();
+                boolean id2 = c2.isCreator();
+
+                if (id1 && !id2)
+                    return -1;
+                else if (!id1 && id2)
+                    return 1;
+                else
+                    return 0;
+            }
+        });
+
+        return users;
     }
 
     @NonNull
