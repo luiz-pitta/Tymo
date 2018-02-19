@@ -438,11 +438,11 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 boolean act_as_red_flag = false;
 
                 if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
-                    time = "-";
+                    time = context.getResources().getString(R.string.suspension_points);
                 else if (activityServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + "-";
+                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
                 else if (activityServer.getTimeStartEmpty())
-                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
@@ -482,11 +482,11 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 boolean act_as_red_flag = false;
 
                 if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
-                    time = "-";
+                    time = context.getResources().getString(R.string.suspension_points);
                 else if (flagServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + "-";
+                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
                 else if (flagServer.getTimeStartEmpty())
-                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
                 else if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
                     time = hour_start + ":" + minute_start;
                 else
@@ -522,11 +522,11 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String time;
 
                 if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
-                    time = "-";
+                    time = context.getResources().getString(R.string.suspension_points);
                 else if (reminderServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + "-";
+                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
                 else if (reminderServer.getTimeStartEmpty())
-                    time = "-" + "\n" + hour_end + ":" + minute_end;
+                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
                 else if (reminderServer.getHourStart() == reminderServer.getHourEnd() && reminderServer.getMinuteStart() == reminderServer.getMinuteEnd())
                     time = hour_start + ":" + minute_start;
                 else

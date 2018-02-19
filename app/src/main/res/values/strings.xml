@@ -530,7 +530,7 @@
     <string name="settings_notification_center">Central de Notificações</string>
     <string name="settings_privacy_policy">Políticas de Privacidade</string>
     <string name="settings_privacy">Privacidade</string>
-    <string name="settings_show_location">Mostrar Localização</string>
+    <string name="settings_show_location">Permitir Acesso à Localização</string>
     <string name="settings_turorial">Tutorial</string>
     <string name="settings_use_terms">Termos de Uso</string>
     <string name="settings_version">Versão %1$s</string>

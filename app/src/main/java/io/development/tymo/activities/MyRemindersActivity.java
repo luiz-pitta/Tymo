@@ -228,9 +228,13 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
         }
         else{
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
             remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
         }
     }
@@ -280,13 +284,13 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){
-            findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
-            findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
         }
         else{
+            findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
+            findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
             remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
         }
     }
