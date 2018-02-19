@@ -78,8 +78,10 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
+        findViewById(R.id.horizontalBottomLine).setVisibility(View.GONE);
         findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
         findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
+        findViewById(R.id.searchSelection).setVisibility(View.GONE);
 
         m_title.setText(getResources().getString(R.string.profile_menu_1));
 
@@ -178,13 +180,17 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
                     recyclerView.showEmpty();
                 }
                 else if(my_reminders_qty == 1){
+                    findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
                     findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+                    findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
                     remindersQty.setText(R.string.my_reminders_qty_one);
                 }
                 else{
+                    findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
                     findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+                    findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
                     remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
                 }
 
@@ -228,13 +234,17 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+            findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
         }
         else{
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+            findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
         }
     }
@@ -284,13 +294,17 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             recyclerView.showEmpty();
         }
         else if(my_reminders_qty == 1){
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+            findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
         }
         else{
+            findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
+            findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(getResources().getString(R.string.my_reminders_qty, my_reminders_qty));
         }
     }
