@@ -352,9 +352,9 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
 
             } else {
                 dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_50));
-                dayNumber.setTextColor(ContextCompat.getColor(context, R.color.grey_200));
-                dayText.setTextColor(ContextCompat.getColor(context, R.color.grey_300));
-                dayMonth.setTextColor(ContextCompat.getColor(context, R.color.grey_300));
+                dayNumber.setTextColor(ContextCompat.getColor(context, R.color.grey_300));
+                dayText.setTextColor(ContextCompat.getColor(context, R.color.grey_400));
+                dayMonth.setTextColor(ContextCompat.getColor(context, R.color.grey_400));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
                 mRecyclerView.showEmpty();
             }
@@ -397,9 +397,9 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 }
             } else {
                 dayBox.setBackgroundColor(ContextCompat.getColor(context, R.color.grey_50));
-                dayNumber.setTextColor(ContextCompat.getColor(context, R.color.grey_200));
-                dayText.setTextColor(ContextCompat.getColor(context, R.color.grey_300));
-                dayMonth.setTextColor(ContextCompat.getColor(context, R.color.grey_300));
+                dayNumber.setTextColor(ContextCompat.getColor(context, R.color.grey_300));
+                dayText.setTextColor(ContextCompat.getColor(context, R.color.grey_400));
+                dayMonth.setTextColor(ContextCompat.getColor(context, R.color.grey_400));
                 mRecyclerView.setEmptyView(R.layout.empty_commitments_past);
                 mRecyclerView.showEmpty();
             }

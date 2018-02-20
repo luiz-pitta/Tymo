@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:gravity="left"
         android:text="@string/empty_plans_past"
-        android:textColor="@color/grey_300"
+        android:textColor="@color/grey_400"
         android:textSize="14sp" />
 
 </LinearLayout>
