@@ -112,6 +112,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
                     screen, friend);
 
+            createPopUpDialogFragment.setFromCompare(false);
+
             if (show) {
                 createPopUpDialogFragment.setCallback(callback);
                 createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
@@ -217,6 +219,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                         createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                                 CreatePopUpDialogFragment.Type.CUSTOM, obj, screen, null);
 
+                        createPopUpDialogFragment.setFromCompare(false);
+
                         createPopUpDialogFragment.setCallback(callback);
                         createPopUpDialogFragment.show(activity.getFragmentManager(), "custom");
 
@@ -246,6 +250,8 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     createPopUpDialogFragment = CreatePopUpDialogFragment.newInstance(
                             CreatePopUpDialogFragment.Type.CUSTOM, dateTymo,
                             screen, friend);
+
+                    createPopUpDialogFragment.setFromCompare(false);
 
                     if (show) {
                         createPopUpDialogFragment.setCallback(callback);
