@@ -351,6 +351,7 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         if(m_contacts_qty == 0){
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
+            recyclerView.showEmpty();
         }
         else if(m_contacts_qty == 1){
             contactsQty.setText(R.string.contacts_qty_one);
@@ -464,7 +465,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void refreshLayout() {
-
         listContact.clear();
         listContactQuery.clear();
         listContact.addAll(adapter.getAllData());
@@ -473,7 +473,6 @@ public class ContactsActivity extends AppCompatActivity implements View.OnClickL
         m_contacts_qty = adapter.getCount();
 
         if(m_contacts_qty == 0){
-            recyclerView.setEmptyView(null);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.contactsQtyBox).setVisibility(View.GONE);
             recyclerView.showEmpty();

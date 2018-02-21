@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -781,4 +782,9 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             mSubscriptions.dispose();
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        doSearch(".");
+    }
 }

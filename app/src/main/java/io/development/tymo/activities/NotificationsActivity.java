@@ -1,30 +1,60 @@
 package io.development.tymo.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawable;
+import android.support.v4.graphics.drawable.RoundedBitmapDrawableFactory;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SearchView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.target.BitmapImageViewTarget;
+import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
+import com.google.api.client.util.ExponentialBackOff;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.ArrayList;
+import org.w3c.dom.Text;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
+
+import io.development.tymo.BuildConfig;
 import io.development.tymo.R;
 import io.development.tymo.adapters.ViewPagerAdapter;
 import io.development.tymo.fragments.FitPeopleFragment;
 import io.development.tymo.fragments.InvitedPeopleFragment;
+import io.development.tymo.model_server.ActivityServer;
+import io.development.tymo.model_server.AppInfoWrapper;
+import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.ListUserWrapper;
+import io.development.tymo.model_server.Query;
+import io.development.tymo.model_server.ReminderServer;
+import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
+import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.Utilities;
@@ -32,258 +62,183 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
-public class NotificationsActivity extends AppCompatActivity implements View.OnTouchListener {
+public class NotificationsActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
+    private TextView m_title, friendshipRequestsQty, invitationsQty, updatesQty;
+    private RelativeLayout friendshipRequestsBox, invitationsBox, updatesBox;
     private ImageView mBackButton;
-    private TextView m_title;
-
-    private Handler handler = new Handler();
-    private ViewPager viewPager;
-    private TabLayout tabLayout;
-    private SearchView searchView;
-    private CompositeDisposable mSubscriptions;
-    private ViewPagerAdapter adapter;
-    private boolean isAdm, isFlag;
-    private long idAct;
-    private ArrayList<User> listInvitedUser = new ArrayList<>(), listQueryInvitedUser = new ArrayList<>();
-    private ArrayList<User> listConfirmedUser = new ArrayList<>(), listQueryConfirmedUser = new ArrayList<>();
-
     private FirebaseAnalytics mFirebaseAnalytics;
-
-    private SearchView.OnQueryTextListener mOnQueryTextListener = new SearchView.OnQueryTextListener() {
-        @Override
-        public boolean onQueryTextSubmit(String query) {
-            return false;
-        }
-
-        @Override
-        public boolean onQueryTextChange(String query) {
-            InvitedPeopleFragment invitedPeopleFragment = (InvitedPeopleFragment) adapter.getItem(0);
-            FitPeopleFragment fitPeopleFragment = (FitPeopleFragment) adapter.getItem(1);
-
-            invitedPeopleFragment.showProgress(true);
-            fitPeopleFragment.showProgress(true);
-
-            executeFilter(query);
-            return true;
-        }
-    };
+    private CompositeDisposable mSubscriptions;
+    private boolean noInternet = true;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private Handler handler = new Handler();
+    private User user;
+    private View progressBox;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_guests);
+        setContentView(R.layout.activity_notifications);
 
         mSubscriptions = new CompositeDisposable();
+        mSwipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipeRefreshLayout);
 
         findViewById(R.id.icon1).setVisibility(View.GONE);
         findViewById(R.id.icon2).setVisibility(View.INVISIBLE);
 
-        searchView = (SearchView) findViewById(R.id.searchSelectionView);
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
+        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
+        friendshipRequestsBox = (RelativeLayout) findViewById(R.id.friendshipRequestsBox);
+        friendshipRequestsQty = (TextView) findViewById(R.id.friendshipRequestsQty);
+        invitationsBox = (RelativeLayout) findViewById(R.id.invitationsBox);
+        invitationsQty = (TextView) findViewById(R.id.invitationsQty);
+        updatesBox = (RelativeLayout) findViewById(R.id.updatesBox);
+        updatesQty = (TextView) findViewById(R.id.updatesQty);
+        progressBox = findViewById(R.id.progressBox);
 
-        //search bar
-        //int magId = getResources().getIdentifier("android:id/search_mag_icon", null, null);
-        //ImageView magImage = (ImageView) searchView.findViewById(magId);
-        //magImage.setLayoutParams(new LinearLayout.LayoutParams(0, 0));
-        //magImage.setVisibility(GONE);
+        m_title.setText(getResources().getString(R.string.profile_menu_2));
 
-        m_title.setText(getResources().getString(R.string.guests));
-
-        mBackButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                Intent intent = new Intent();
-                //intent.putStringArrayListExtra("tags_objs", tagListSelected);
-                setResult(RESULT_OK, intent);
-                finish();
-            }
-        });
-
-        tabLayout.setupWithViewPager(viewPager);
-
+        mBackButton.setOnClickListener(this);
+        friendshipRequestsBox.setOnClickListener(this);
+        invitationsBox.setOnClickListener(this);
+        updatesBox.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
 
-
-        //search bar
-        searchView.setIconifiedByDefault(false);
-        searchView.setOnQueryTextListener(mOnQueryTextListener);
-        //search bar end
-
-        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-        //setUpMultiChoiceRecyclerView(email);
-        ListUserWrapper listUserWrapper = (ListUserWrapper)getIntent().getSerializableExtra("guest_list_user");
-        listQueryInvitedUser = listUserWrapper.getListUser();
-        listUserWrapper = (ListUserWrapper)getIntent().getSerializableExtra("confirmed_list_user");
-        listQueryConfirmedUser = listUserWrapper.getListUser();
-
-        isAdm = getIntent().getBooleanExtra("is_adm", false);
-        idAct = getIntent().getLongExtra("id_act", -1);
-        isFlag = getIntent().getBooleanExtra("is_flag", false);
-
-        listConfirmedUser.addAll(listQueryConfirmedUser);
-        listInvitedUser.addAll(listQueryInvitedUser);
-
-        setupViewPager(viewPager);
-
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
-    }
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
-    public String getQuery() {
-        return searchView.getQuery().toString();
-    }
-
-    public void executeFilter(String query) {
-        // Load items
-        handler.post(new Runnable() {
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
-            public void run() {
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "executeFilter" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                for(int i=0;i<listInvitedUser.size();i++){
-                    for(int j=0;i<listQueryInvitedUser.size();i++){
-                        if(listInvitedUser.get(i).getEmail().equals(listQueryInvitedUser.get(j).getEmail()))
-                        {
-                            listInvitedUser.remove(i);
-                            listInvitedUser.add(i, listQueryInvitedUser.get(j));
-                        }
-                    }
-                }
-
-                for(int i=0;i<listConfirmedUser.size();i++){
-                    for(int j=0;i<listQueryConfirmedUser.size();i++){
-                        if(listConfirmedUser.get(i).getEmail().equals(listQueryConfirmedUser.get(j).getEmail()))
-                        {
-                            listConfirmedUser.remove(i);
-                            listConfirmedUser.add(i, listQueryInvitedUser.get(j));
-                        }
-                    }
-                }
-
-                ArrayList<User> filteredModelList1 = filter(listInvitedUser, query);
-                ArrayList<User> filteredModelList2 = filter(listConfirmedUser, query);
-
-                InvitedPeopleFragment invitedPeopleFragment = (InvitedPeopleFragment) adapter.getItem(0);
-                listQueryInvitedUser.clear();
-                listQueryInvitedUser.addAll(filteredModelList1);
-                invitedPeopleFragment.setAdapterItens(listQueryInvitedUser);
-                adapter.setPageTitle(0, getResources().getString(R.string.guests_invited, listQueryInvitedUser.size()));
-
-                FitPeopleFragment fitPeopleFragment = (FitPeopleFragment) adapter.getItem(1);
-                listQueryConfirmedUser.clear();
-                listQueryConfirmedUser.addAll(filteredModelList2);
-                fitPeopleFragment.setAdapterItens(listQueryConfirmedUser);
-                adapter.setPageTitle(1, getResources().getString(R.string.guests_fit, listQueryConfirmedUser.size()));
-
-                adapter.notifyDataSetChanged();
+            public void onRefresh() {
+                // Refresh items
+                refreshItems();
             }
         });
+
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(this, R.color.deep_purple_400));
+
+        setProgress(true);
+    }
+
+    void refreshItems() {
+        // Load items
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                updateLayout();
+
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            }
+        }, 500);
+
         // Load complete
     }
 
-
-    public ArrayList<User> getListInvitedUser(){
-        return listQueryInvitedUser;
-    }
-
-    public ArrayList<User> getListConfirmedUser(){
-        return listQueryConfirmedUser;
-    }
-
-    public void setListInvitedUser(ArrayList<User> list){
-        listQueryInvitedUser = list;
-    }
-
-    public void setListConfirmedUser(ArrayList<User> list){
-        listQueryConfirmedUser = list;
-    }
-
-    private void setupViewPager(ViewPager viewPager) {
-        adapter = new ViewPagerAdapter(getFragmentManager(), true);
-
-        adapter.addFragment(new InvitedPeopleFragment(), getResources().getString(R.string.guests_invited, listInvitedUser.size()));
-        adapter.addFragment(new FitPeopleFragment(), getResources().getString(R.string.guests_fit, listConfirmedUser.size()));
-        viewPager.setAdapter(adapter);
-
-        InvitedPeopleFragment invitedPeopleFragment = (InvitedPeopleFragment) adapter.getItem(0);
-        invitedPeopleFragment.setAdapterItens(listQueryInvitedUser);
-        invitedPeopleFragment.setIdAct(idAct);
-        invitedPeopleFragment.setAdm(isAdm);
-        invitedPeopleFragment.setFlag(isFlag);
-
-        FitPeopleFragment fitPeopleFragment = (FitPeopleFragment) adapter.getItem(1);
-        fitPeopleFragment.setAdapterItens(listQueryConfirmedUser);
-        fitPeopleFragment.setIdAct(idAct);
-        fitPeopleFragment.setAdm(isAdm);
-        fitPeopleFragment.setFlag(isFlag);
-    }
-
-    public void setProgress(boolean progress) {
-        if(progress)
-            findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
-        else
-            findViewById(R.id.progressBox).setVisibility(View.GONE);
-    }
-
-    private void getGuests(String email) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().getUsers(email)
+    private void getProfileMainInformation(Query query) {
+        mSubscriptions.add(NetworkUtil.getRetrofit().getProfileMain(query)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
-    private void handleResponse(ArrayList<User> users) {
+    private void handleResponse(Response response) {
+
+        Calendar c = Calendar.getInstance();
+        ArrayList<Object> list = new ArrayList<>();
+        user = response.getUser();
+
+        noInternet = false;
+
+        friendshipRequestsQty.setText(String.valueOf(response.getNumberFriendRequest()));
+        invitationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));
+
+        if (response.getNumberFriendRequest() > 0) {
+            friendshipRequestsQty.setTextColor(ContextCompat.getColor(this, R.color.white));
+            friendshipRequestsQty.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_notification));
+        } else {
+            friendshipRequestsQty.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+            friendshipRequestsQty.setBackground(null);
+        }
+
+        if (response.getNumberInvitationRequest() > 0) {
+            invitationsQty.setTextColor(ContextCompat.getColor(this, R.color.white));
+            invitationsQty.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_notification));
+        } else {
+            invitationsQty.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+            invitationsQty.setBackground(null);
+        }
+
+        updatesQty.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+        updatesQty.setBackground(null);
 
         setProgress(false);
+        mSwipeRefreshLayout.setRefreshing(false);
     }
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(!Utilities.isDeviceOnline(this))
+        noInternet = true;
+        mSwipeRefreshLayout.setRefreshing(false);
+        if (Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+    public void updateLayout() {
+
+        SharedPreferences mSharedPreferences = this.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
+        int minute = c.get(Calendar.MINUTE);
+        int hour = c.get(Calendar.HOUR_OF_DAY);
+
+        Query query = new Query();
+        query.setEmail(email);
+        query.setDay(day);
+        query.setMonth(month);
+        query.setYear(year);
+        query.setHourStart(hour);
+        query.setMinuteStart(minute);
+
+        getProfileMainInformation(query);
     }
 
-    private ArrayList<User> filter(ArrayList<User> models, String query) {
-        if(models == null)
-            return new ArrayList<>();
+    public void setProgress(boolean progress) {
+        if (progress)
+            progressBox.setVisibility(View.VISIBLE);
+        else
+            progressBox.setVisibility(View.GONE);
+    }
 
-        ArrayList<User> filteredModelList = new ArrayList<>();
-        for (User model : models) {
-            String text = model.getName().toLowerCase();
-            if (Utilities.isListContainsQuery(text, query))
-                filteredModelList.add(model);
-
+    @Override
+    public void onClick(View view) {
+        if (view == mBackButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            onBackPressed();
+        } else if (view == friendshipRequestsBox) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "friendshipRequestsBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            startActivity(new Intent(this, FriendRequestActivity.class));
+        } else if (view == invitationsBox) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "invitationsBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            startActivity(new Intent(this, InviteActivity.class));
         }
-        return filteredModelList;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSubscriptions.dispose();
     }
 
     @Override
@@ -299,4 +254,9 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnT
         return false;
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        updateLayout();
+    }
 }

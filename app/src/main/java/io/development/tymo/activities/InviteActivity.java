@@ -94,7 +94,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
         mBackButton.setOnClickListener(this);
         mBackButton.setOnTouchListener(this);
 
-        m_title.setText(getResources().getString(R.string.profile_menu_2));
+        m_title.setText(getResources().getString(R.string.notification_2));
 
         DividerDecoration itemDecoration = new DividerDecoration(ContextCompat.getColor(this,R.color.horizontal_line), (int) Utilities.convertDpToPixel(1, this));
         itemDecoration.setDrawLastItem(true);
@@ -470,8 +470,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            startActivity(new Intent(this, MainActivity.class));
+            onBackPressed();
         }
     }
 

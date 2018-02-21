@@ -227,7 +227,7 @@
     <string name="edit_reminder">Editar nota</string>
     <string name="edit">Editar</string>
     <string name="empty_blocked_users">Nenhum usuário bloqueado</string>
-    <string name="empty_commitments_of_the_day">Você não tem compromissos registrados para hoje</string>
+    <string name="empty_commitments_of_the_day">Você não tem compromissos para hoje</string>
     <string name="empty_commitments">Sem compromissos</string>
     <string name="empty_feed_text_1">Você não tem convites pendentes...</string>
     <string name="empty_feed_text_2">Seja o primeiro a criar atividades e sinalizadores!</string>
@@ -351,6 +351,9 @@
     <string name="my_contacts_view">Ver contatos de %1$s</string>
     <string name="my_reminder">Minha nota</string>
     <string name="no">Não</string>
+    <string name="notification_1">Solicitações pendentes</string>
+    <string name="notification_2">Convites</string>
+    <string name="notification_3">Alterações nos compromissos</string>
     <string name="notification_center_other_1">Convites, solicitações e outros</string>
     <string name="notification_center_start_act">Atividade</string>
     <string name="notification_center_start_flag">Sinalizador</string>
@@ -455,9 +458,9 @@
     <string name="reset">Redefinir</string>
     <string name="response_invitation_accepted">Convite encaixado</string>
     <string name="response_invitation_ignored">Convite ignorado</string>
-    <string name="response_invitation_request_accepted">%1$s aceitou sua solicitação</string>
+    <string name="response_invitation_request_accepted">Aceitou sua solicitação</string>
     <string name="response_request_sent">Solicitação enviada</string>
-    <string name="response_request_to_add_accepted">%1$s agora é seu contato</string>
+    <string name="response_request_to_add_accepted">Agora é seu contato</string>
     <string name="response_request_to_add_ignore">Solicitação ignorada</string>
     <string name="response_sending_request">Enviando solicitação</string>
     <string name="response_waiting_your_answer">Aguardando sua resposta</string>
