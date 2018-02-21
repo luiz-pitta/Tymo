@@ -156,23 +156,18 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
         invitationsQty.setText(String.valueOf(response.getNumberInvitationRequest()));
 
         if (response.getNumberFriendRequest() > 0) {
-            friendshipRequestsQty.setTextColor(ContextCompat.getColor(this, R.color.white));
-            friendshipRequestsQty.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_notification));
+            friendshipRequestsQty.setVisibility(View.VISIBLE);
         } else {
-            friendshipRequestsQty.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
-            friendshipRequestsQty.setBackground(null);
+            friendshipRequestsQty.setVisibility(View.GONE);
         }
 
         if (response.getNumberInvitationRequest() > 0) {
-            invitationsQty.setTextColor(ContextCompat.getColor(this, R.color.white));
-            invitationsQty.setBackground(ContextCompat.getDrawable(this, R.drawable.box_qty_notification));
+            invitationsQty.setVisibility(View.VISIBLE);
         } else {
-            invitationsQty.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
-            invitationsQty.setBackground(null);
+            invitationsQty.setVisibility(View.GONE);
         }
 
-        updatesQty.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
-        updatesQty.setBackground(null);
+        updatesQty.setVisibility(View.GONE);
 
         setProgress(false);
         mSwipeRefreshLayout.setRefreshing(false);

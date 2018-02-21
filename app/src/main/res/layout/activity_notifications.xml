@@ -26,153 +26,183 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <View
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/horizontal_line_height"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:background="@color/horizontal_line" />
+                android:background="@color/white"
+                android:orientation="vertical">
 
-            <RelativeLayout
-                android:id="@+id/friendshipRequestsBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_select_item_white"
-                android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:background="@color/horizontal_line" />
 
-                <TextView
-                    android:id="@+id/friendshipRequestsText"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/friendshipRequestsBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/notification_1"
-                    android:textColor="@color/grey_900"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@drawable/bg_select_item_white"
+                    android:clickable="true"
+                    android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/friendshipRequestsQty"
-                    android:layout_width="wrap_content"
+                    <ImageView
+                        android:id="@+id/friendshipRequestsIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_person_add"
+                        android:tint="@color/deep_purple_400" />
+
+                    <TextView
+                        android:id="@+id/friendshipRequestsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/friendshipRequestsQty"
+                        android:layout_toRightOf="@+id/friendshipRequestsIcon"
+                        android:text="@string/notification_1"
+                        android:textColor="@color/grey_900"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/friendshipRequestsQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/box_qty_notification"
+                        android:gravity="center"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:layout_marginLeft="50dp"
+                    android:background="@color/horizontal_line" />
+
+                <RelativeLayout
+                    android:id="@+id/invitationsBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/box_qty_notification"
-                    android:gravity="center"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="2dp"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
+                    android:background="@drawable/bg_select_item_white"
+                    android:clickable="true"
+                    android:padding="10dp">
 
-            </RelativeLayout>
+                    <ImageView
+                        android:id="@+id/invitationsIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_invitation"
+                        android:tint="@color/deep_purple_400" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/horizontal_line_height"
-                android:layout_marginLeft="20dp"
-                android:background="@color/horizontal_line" />
+                    <TextView
+                        android:id="@+id/invitationsText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/invitationsQty"
+                        android:layout_toRightOf="@+id/invitationsIcon"
+                        android:text="@string/notification_2"
+                        android:textColor="@color/grey_900"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <RelativeLayout
-                android:id="@+id/invitationsBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_select_item_white"
-                android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
+                    <TextView
+                        android:id="@+id/invitationsQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/box_qty_notification"
+                        android:gravity="center"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
-                <TextView
-                    android:id="@+id/invitationsText"
-                    android:layout_width="wrap_content"
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:layout_marginLeft="50dp"
+                    android:background="@color/horizontal_line" />
+
+                <RelativeLayout
+                    android:id="@+id/updatesBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:text="@string/notification_2"
-                    android:textColor="@color/grey_900"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                    android:background="@drawable/bg_select_item_white"
+                    android:clickable="true"
+                    android:padding="10dp">
 
-                <TextView
-                    android:id="@+id/invitationsQty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/box_qty_notification"
-                    android:gravity="center"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="2dp"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
+                    <ImageView
+                        android:id="@+id/updatesIcon"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:src="@drawable/ic_add_cube"
+                        android:tint="@color/deep_purple_400" />
 
-            </RelativeLayout>
+                    <TextView
+                        android:id="@+id/updatesText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_toLeftOf="@+id/updatesQty"
+                        android:layout_toRightOf="@+id/updatesIcon"
+                        android:text="@string/notification_3"
+                        android:textColor="@color/grey_900"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/horizontal_line_height"
-                android:layout_marginLeft="20dp"
-                android:background="@color/horizontal_line" />
+                    <TextView
+                        android:id="@+id/updatesQty"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="10dp"
+                        android:background="@drawable/box_qty_notification"
+                        android:gravity="center"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="16sp"
+                        android:textStyle="normal" />
 
-            <RelativeLayout
-                android:id="@+id/updatesBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bg_select_item_white"
-                android:clickable="true"
-                android:paddingBottom="10dp"
-                android:paddingLeft="20dp"
-                android:paddingRight="10dp"
-                android:paddingTop="10dp">
+                </RelativeLayout>
 
-                <TextView
-                    android:id="@+id/updatesText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:text="@string/notification_3"
-                    android:textColor="@color/grey_900"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:background="@color/horizontal_line" />
 
-                <TextView
-                    android:id="@+id/updatesQty"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="10dp"
-                    android:background="@drawable/box_qty_notification"
-                    android:gravity="center"
-                    android:paddingBottom="2dp"
-                    android:paddingLeft="8dp"
-                    android:paddingRight="8dp"
-                    android:paddingTop="2dp"
-                    android:text="0"
-                    android:textColor="@color/white"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
-
-            </RelativeLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/horizontal_line_height"
-                android:background="@color/horizontal_line" />
+            </LinearLayout>
 
         </LinearLayout>
 
