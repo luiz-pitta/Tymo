@@ -42,7 +42,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 public class InviteViewHolder extends BaseViewHolder<InviteModel> implements View.OnClickListener {
-    private TextView text1,text2,text3, text4, ignoreButton, acceptButton;
+    private TextView text1, text2, text3, text4, ignoreButton, acceptButton;
     private ImageView pieceIcon, cubeLowerBoxIcon, cubeUpperBoxIcon, itemIcon, moreVerticalIcon;
     private RelativeLayout pieceBox, itemImage;
     private ProgressBar ignoreAcceptProgressBar;
@@ -95,12 +95,11 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
     }
 
     public void setProgress(boolean progress) {
-        if(progress){
+        if (progress) {
             ignoreButton.setVisibility(View.GONE);
             acceptButton.setVisibility(View.GONE);
             ignoreAcceptProgressBar.setVisibility(View.VISIBLE);
-        }
-        else{
+        } else {
             ignoreButton.setVisibility(View.VISIBLE);
             acceptButton.setVisibility(View.VISIBLE);
             ignoreAcceptProgressBar.setVisibility(View.GONE);
@@ -108,27 +107,27 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
     }
 
     @Override
-    public void onClick(View v){
-        if(v == resquestInvite){
+    public void onClick(View v) {
+        if (v == resquestInvite) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "resquestInvite" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "resquestInvite" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             Intent intent;
-            if(type == Constants.ACT){
+            if (type == Constants.ACT) {
                 intent = new Intent(context, ShowActivity.class);
-                intent.putExtra("act_show", new ActivityWrapper((ActivityServer)object));
-            }else {
+                intent.putExtra("act_show", new ActivityWrapper((ActivityServer) object));
+            } else {
                 intent = new Intent(context, FlagActivity.class);
                 intent.putExtra("type_flag", 1);
-                intent.putExtra("flag_show", new FlagWrapper((FlagServer)object));
+                intent.putExtra("flag_show", new FlagWrapper((FlagServer) object));
             }
             context.startActivity(intent);
-        }else {
+        } else {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "inviteRequest" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "inviteRequest" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             InviteRequest inviteRequest = new InviteRequest();
@@ -154,7 +153,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
         mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
     private void handleResponse(Response response) {
@@ -171,7 +170,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(Utilities.isDeviceOnline(context))
+        if (Utilities.isDeviceOnline(context))
             Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(context, context.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -179,55 +178,47 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
 
 
     @Override
-    public void setData(InviteModel invite){
-        if(!invite.isInviteAccepted()) {
+    public void setData(InviteModel invite) {
+        if (!invite.isInviteAccepted()) {
             acceptButton.setVisibility(View.VISIBLE);
             ignoreButton.setVisibility(View.VISIBLE);
             text4.setVisibility(View.GONE);
-        }else {
+        } else {
             acceptButton.setVisibility(View.GONE);
             ignoreButton.setVisibility(View.GONE);
             text4.setVisibility(View.VISIBLE);
         }
 
-        if(!invite.getText1().matches("")) {
-            if(invite.getText3().matches("accept")) {
-                text1.setText(invite.getText1());
-                acceptButton.setVisibility(View.GONE);
-                ignoreButton.setVisibility(View.GONE);
-            }
-            else {
-                text1.setText(invite.getText1());
-                acceptButton.setVisibility(View.VISIBLE);
-                ignoreButton.setVisibility(View.VISIBLE);
-            }
-            text1.setVisibility(View.VISIBLE);
+        if (invite.getText3().matches("accept")) {
+            text1.setText(invite.getText1());
+            acceptButton.setVisibility(View.GONE);
+            ignoreButton.setVisibility(View.GONE);
+        } else {
+            text1.setText(invite.getText1());
+            acceptButton.setVisibility(View.VISIBLE);
+            ignoreButton.setVisibility(View.VISIBLE);
         }
-        else
-            text1.setVisibility(View.GONE);
 
-        if(!invite.getText2().matches("")) {
+        text1.setVisibility(View.VISIBLE);
+
+        if (!invite.getText2().matches("")) {
             text2.setText(invite.getText2());
             text2.setVisibility(View.VISIBLE);
-        }
-        else
+        } else
             text2.setVisibility(View.GONE);
 
-        if(!invite.getText3().matches("")) {
-            if(!invite.getText3().matches("accept")) {
+        if (!invite.getText3().matches("")) {
+            if (!invite.getText3().matches("accept")) {
                 text3.setText(invite.getText3());
                 text3.setVisibility(View.VISIBLE);
-            }
-            else
+            } else
                 text3.setVisibility(View.GONE);
-        }
-        else
+        } else
             text3.setVisibility(View.GONE);
 
 
-
         object = invite.getActivity();
-        if(invite.getActivity() instanceof ActivityServer) {
+        if (invite.getActivity() instanceof ActivityServer) {
 
             Glide.clear(pieceIcon);
             Glide.with(context)
@@ -243,8 +234,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
             id_act_flag = ((ActivityServer) invite.getActivity()).getId();
             text1.setTextColor(ContextCompat.getColor(context, R.color.black));
             type = Constants.ACT;
-        }
-        else {
+        } else {
             id_act_flag = ((FlagServer) invite.getActivity()).getId();
             pieceBox.setVisibility(View.GONE);
             itemIcon.setVisibility(View.VISIBLE);
@@ -253,7 +243,7 @@ public class InviteViewHolder extends BaseViewHolder<InviteModel> implements Vie
             type = Constants.FLAG;
         }
 
-        if(text4.getVisibility() == View.VISIBLE) {
+        if (text4.getVisibility() == View.VISIBLE) {
             acceptButton.setVisibility(View.GONE);
             ignoreButton.setVisibility(View.GONE);
         }

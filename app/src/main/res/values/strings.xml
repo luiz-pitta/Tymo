@@ -458,9 +458,9 @@
     <string name="reset">Redefinir</string>
     <string name="response_invitation_accepted">Convite encaixado</string>
     <string name="response_invitation_ignored">Convite ignorado</string>
-    <string name="response_invitation_request_accepted">Aceitou sua solicitação</string>
+    <string name="response_invitation_request_accepted">aceitou sua solicitação</string>
     <string name="response_request_sent">Solicitação enviada</string>
-    <string name="response_request_to_add_accepted">Agora é seu contato</string>
+    <string name="response_request_to_add_accepted">agora é seu contato</string>
     <string name="response_request_to_add_ignore">Solicitação ignorada</string>
     <string name="response_sending_request">Enviando solicitação</string>
     <string name="response_waiting_your_answer">Aguardando sua resposta</string>

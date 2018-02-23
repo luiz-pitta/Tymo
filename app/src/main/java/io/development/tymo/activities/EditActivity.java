@@ -18,6 +18,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -98,7 +99,7 @@ import static io.development.tymo.utils.Validation.validateFields;
 public class EditActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnTouchListener, View.OnLongClickListener {
 
     private Rect rect;
-    private ActivityWrapper activityWrapper;
+    private ActivityWrapper activityWrapper, activityWrapperTemp, activityWrapperEdited;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -298,9 +299,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 int numberS;
                 String maxText;
 
-                if (String.valueOf(s).matches("")){
+                if (String.valueOf(s).matches("")) {
                     numberS = 0;
-                }else{
+                } else {
                     numberS = Integer.valueOf(String.valueOf(s));
                 }
 
@@ -310,8 +311,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 } else if (repeat_type == 3) {
                     limit = 12;
                     maxText = getString(R.string.repeat_max_time_3);
-                }
-                else{
+                } else {
                     limit = 365;
                     maxText = getString(R.string.repeat_max_time_1);
                 }
@@ -331,9 +331,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 int numberS;
                 String maxText;
 
-                if (String.valueOf(s).matches("")){
+                if (String.valueOf(s).matches("")) {
                     numberS = 0;
-                }else{
+                } else {
                     numberS = Integer.valueOf(String.valueOf(s));
                 }
 
@@ -343,8 +343,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 } else if (repeat_type == 3) {
                     limit = 12;
                     maxText = getString(R.string.repeat_max_time_3);
-                }
-                else{
+                } else {
                     limit = 365;
                     maxText = getString(R.string.repeat_max_time_1);
                 }
@@ -364,9 +363,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 int numberS;
                 String maxText;
 
-                if (String.valueOf(s).matches("")){
+                if (String.valueOf(s).matches("")) {
                     numberS = 0;
-                }else{
+                } else {
                     numberS = Integer.valueOf(String.valueOf(s));
                 }
 
@@ -376,8 +375,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 } else if (repeat_type == 3) {
                     limit = 12;
                     maxText = getString(R.string.repeat_max_time_3);
-                }
-                else{
+                } else {
                     limit = 365;
                     maxText = getString(R.string.repeat_max_time_1);
                 }
@@ -433,6 +431,14 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_edit");
 
+        ActivityServer activityServerTemp = new ActivityServer();
+
+        activityServerTemp = activityWrapper.getActivityServer();
+
+        activityWrapperTemp = new ActivityWrapper(activityServerTemp);
+
+        Log.d("xxx", String.valueOf(activityWrapperTemp.getActivityServer().getCubeColor()));
+
         ActivityServer activityServer = new ActivityServer();
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         this.email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -467,9 +473,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 int numberS;
                 String maxText;
 
-                if (repeatEditText.getText().toString().matches("")){
+                if (repeatEditText.getText().toString().matches("")) {
                     numberS = 0;
-                }else{
+                } else {
                     numberS = Integer.parseInt(repeatEditText.getText().toString());
                 }
 
@@ -479,8 +485,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 } else if (repeat_type == 3) {
                     limit = 12;
                     maxText = getString(R.string.repeat_max_time_3);
-                }
-                else{
+                } else {
                     limit = 365;
                     maxText = getString(R.string.repeat_max_time_1);
                 }
@@ -1216,9 +1221,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
+            Log.d("xxx", String.valueOf(activityWrapperTemp.getActivityServer().getCubeColor()));
             Intent intent = new Intent(this, ShowActivity.class);
-            intent.putExtra("act_show", activityWrapper);
+            intent.putExtra("act_show", activityWrapperTemp);
             startActivity(intent);
             finish();
         } else if (v == privacyBox) {
@@ -1510,7 +1515,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         List<Integer> date;
         List<Double> latLng;
         List<Integer> repeat_single = new ArrayList<>();
-        int invite = 0;
         int repeat_left = -1;
         int cube_color;
         int cube_color_upper;
@@ -1526,8 +1530,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         repeat_single = getRepeatFromView(); //Repetir em caso da atividade ser simples ou do google agenda
         location = getLocationFromView();
         latLng = getLatLngFromView();
-
-        invite = getActivity().getInvitationType();
 
         if (customizeCubeLowerBoxIcon == null) {
             cube_color = getActivity().getCubeColor();
@@ -1752,13 +1754,13 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 activityServer.setRepeatQty(-1);
             }
 
+            activityWrapperEdited = new ActivityWrapper(activityServer);
+
             if (!repeat_single_changed)
                 editActivity(activityServer);
             else {
                 editActivityRepeatSingle(activityServer);
             }
-
-            setProgress(true);
         }
     }
 
@@ -1819,7 +1821,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void editActivity(ActivityServer activityServer) {
-        setProgress(true);
+        //setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().editActivity(getActivity().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -1827,7 +1829,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     }
 
     private void editActivityRepeatSingle(ActivityServer activityServer) {
-        setProgress(true);
+        //setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().editActivityRepeatSingle(getActivity().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
@@ -1853,15 +1855,10 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 getActivityStartToday();
         }
 
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.putExtra("d", d);
-        intent.putExtra("m", m);
-        intent.putExtra("y", y);
-        setResult(RESULT_OK, intent);
-        if (user_friend == null)
-            finish();
-        else
-            startActivity(intent);
+        Intent intent = new Intent(this, ShowActivity.class);
+        intent.putExtra("act_show", activityWrapperEdited);
+        startActivity(intent);
+        finish();
 
     }
 
@@ -1902,7 +1899,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         ImageView closeButton = (ImageView) customView.findViewById(R.id.closeButton);
         RecyclerView recyclerIcons = (RecyclerView) customView.findViewById(R.id.recyclerIcons);
 
-
         customizeColorPicker.setDrawDebug(false);
 
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
@@ -1918,13 +1914,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 cubeUpperBoxIcon.setColorFilter((int) customizeCubeUpperBoxIcon.getTag());
                 cubeLowerBoxIcon.setTag(customizeCubeLowerBoxIcon.getTag());
                 cubeUpperBoxIcon.setTag(customizeCubeUpperBoxIcon.getTag());
-                if (activityWrapper != null) {
-                    activityWrapper.getActivityServer().setCubeColor((int) customizeCubeLowerBoxIcon.getTag());
-                    activityWrapper.getActivityServer().setCubeColorUpper((int) customizeCubeUpperBoxIcon.getTag());
-                    activityWrapper.getActivityServer().setCubeIcon(urlIcon);
-                }
 
-                urlIcon = urlIconTemp;
+                if (!urlIconTemp.matches(""))
+                    urlIcon = urlIconTemp;
 
                 Glide.clear(pieceIcon);
                 Glide.with(EditActivity.this)
@@ -1932,6 +1924,12 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(pieceIcon);
+
+                if (activityWrapper != null) {
+                    activityWrapper.getActivityServer().setCubeColor((int) customizeCubeLowerBoxIcon.getTag());
+                    activityWrapper.getActivityServer().setCubeColorUpper((int) customizeCubeUpperBoxIcon.getTag());
+                    activityWrapper.getActivityServer().setCubeIcon(urlIcon);
+                }
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "customizeApplyButtonPickIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1966,23 +1964,28 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         customizeCleanButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400));
-                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400_light));
-                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
-                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
                 if (activityWrapper != null) {
-                    activityWrapper.getActivityServer().setCubeColor(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
-                    activityWrapper.getActivityServer().setCubeColorUpper(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
+                    customizeCubeLowerBoxIcon.setColorFilter(activityWrapper.getActivityServer().getCubeColor());
+                    customizeCubeUpperBoxIcon.setColorFilter(activityWrapper.getActivityServer().getCubeColorUpper());
+                    customizeCubeLowerBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColor());
+                    customizeCubeUpperBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
+                    urlIcon = activityWrapper.getActivityServer().getCubeIcon();
+                } else  {
+                    customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400));
+                    customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400_light));
+                    customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
+                    customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400_light));
+                    urlIcon = Constants.IC_ADD_CUBE_URL;
                 }
+
+                urlIconTemp = "";
 
                 Glide.clear(customizePieceIcon);
                 Glide.with(EditActivity.this)
-                        .load(Constants.IC_ADD_CUBE_URL)
+                        .load(urlIcon)
                         .asBitmap()
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
                         .into(customizePieceIcon);
-
-                urlIcon = Constants.IC_ADD_CUBE_URL;
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "customizeCleanButtonPickIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -2884,7 +2887,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             lng = activityServer.getLng();
 
             if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
-                spinner.setSelectedIndex(0);
                 repeatAdd.setVisibility(View.VISIBLE);
                 repeatBox.setVisibility(View.GONE);
                 repeatNumberBox.setVisibility(View.GONE);

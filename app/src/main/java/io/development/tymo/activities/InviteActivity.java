@@ -238,7 +238,12 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
 
             String date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
 
-            InviteModel inviteModel = new InviteModel(flagServer.getTitle(), date, inviter_name, "",0,0, flagServer);
+            String title = getString(R.string.flag_available);
+
+            if (!flagServer.getTitle().matches(""))
+                title = flagServer.getTitle();
+
+            InviteModel inviteModel = new InviteModel(title, date, inviter_name, "",0,0, flagServer);
             listInvite.add(inviteModel);
         }
 
@@ -299,8 +304,6 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 friend_accept += getResources().getString(R.string.invitation_accepted_more_others_one);
             }
 
-
-
             InviteModel inviteModel = new InviteModel(activity_accepted.get(index1).getTitle(), friend_accept, "accept",
                     activity_accepted.get(index1).getCubeIcon(), activity_accepted.get(index1).getCubeColorUpper(),
                     activity_accepted.get(index1).getCubeColor(), activity_accepted.get(index1));
@@ -333,7 +336,12 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
                 friend_accept += getResources().getString(R.string.invitation_accepted_more_others_one);
             }
 
-            InviteModel inviteModel = new InviteModel(flag_accepted.get(index1).getTitle(), friend_accept, "accept", "",0,0, flag_accepted.get(index1));
+            String title = getString(R.string.flag_available);
+
+            if (!flag_accepted.get(index1).getTitle().matches(""))
+                title = flag_accepted.get(index1).getTitle();
+
+            InviteModel inviteModel = new InviteModel(title, friend_accept, "accept", "",0,0, flag_accepted.get(index1));
 
             listInvite.add(inviteModel);
 
