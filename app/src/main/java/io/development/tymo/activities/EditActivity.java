@@ -99,7 +99,7 @@ import static io.development.tymo.utils.Validation.validateFields;
 public class EditActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener, View.OnTouchListener, View.OnLongClickListener {
 
     private Rect rect;
-    private ActivityWrapper activityWrapper, activityWrapperTemp, activityWrapperEdited;
+    private ActivityWrapper activityWrapper, activityWrapperEdited;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
@@ -108,6 +108,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private boolean first_open = true, permissionInvite = false;
     private boolean isInPast = false;
     private DateFormat dateFormat;
+    private int actualColor, actualColorUpper;
+    private String actualIcon;
 
     private ArrayList<ActivityServer> activityServers;
     private ArrayList<IconServer> iconList;
@@ -431,13 +433,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
         activityWrapper = (ActivityWrapper) getIntent().getSerializableExtra("act_edit");
 
-        ActivityServer activityServerTemp = new ActivityServer();
-
-        activityServerTemp = activityWrapper.getActivityServer();
-
-        activityWrapperTemp = new ActivityWrapper(activityServerTemp);
-
-        Log.d("xxx", String.valueOf(activityWrapperTemp.getActivityServer().getCubeColor()));
+        actualIcon = activityWrapper.getActivityServer().getCubeIcon();
+        actualColor = activityWrapper.getActivityServer().getCubeColor();
+        actualColorUpper = activityWrapper.getActivityServer().getCubeColorUpper();
 
         ActivityServer activityServer = new ActivityServer();
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -1221,9 +1219,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            Log.d("xxx", String.valueOf(activityWrapperTemp.getActivityServer().getCubeColor()));
+            activityWrapper.getActivityServer().setCubeIcon(actualIcon);
+            activityWrapper.getActivityServer().setCubeColor(actualColor);
+            activityWrapper.getActivityServer().setCubeColorUpper(actualColorUpper);
             Intent intent = new Intent(this, ShowActivity.class);
-            intent.putExtra("act_show", activityWrapperTemp);
+            intent.putExtra("act_show", activityWrapper);
             startActivity(intent);
             finish();
         } else if (v == privacyBox) {
