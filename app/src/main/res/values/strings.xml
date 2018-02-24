@@ -183,7 +183,7 @@
     <string name="created_by_me">Criado por mim</string>
     <string name="created_by">Criado por %1$s</string>
     <string name="creator">Criador</string>
-    <string name="customize_piece_personalize">Personalize</string>
+    <string name="customize_piece_personalize">Escolha um dos ícones abaixo</string>
     <string name="customize">Atualizar</string>
     <string name="date_end">Término</string>
     <string name="date_format_01">%1$s %2$d</string>

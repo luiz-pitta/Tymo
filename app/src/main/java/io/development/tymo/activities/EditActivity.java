@@ -58,6 +58,7 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -65,14 +66,17 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import io.development.tymo.R;
 import io.development.tymo.adapters.CustomizeAddActivityAdapter;
 import io.development.tymo.adapters.PersonAdapter;
+import io.development.tymo.adapters.SectionedGridRecyclerViewAdapter;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
+import io.development.tymo.model_server.CategoryServer;
 import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.IconServer;
 import io.development.tymo.model_server.ListUserWrapper;
@@ -802,14 +806,16 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         Collections.sort(iconList, new Comparator<IconServer>() {
             @Override
             public int compare(IconServer c1, IconServer c2) {
-                String[] u1 = c1.getUrl().split("/");
-                String[] u2 = c2.getUrl().split("/");
-                String url1 = u1[u1.length - 1];
-                String url2 = u2[u2.length - 1];
+                String u1 = c1.getCategory();
+                String u2 = c2.getCategory();
 
-                if (url1.compareTo(url2) > 0)
+                if (u1.matches("Tymo") && !u2.matches("Tymo"))
+                    return -1;
+                else if (!u1.matches("Tymo") && u2.matches("Tymo"))
                     return 1;
-                else if (url1.compareTo(url2) < 0)
+                else if (u1.matches("Outros") && !u2.matches("Outros"))
+                    return 1;
+                else if (!u1.matches("Outros") && u2.matches("Outros"))
                     return -1;
                 else
                     return 0;
@@ -1970,7 +1976,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                     customizeCubeLowerBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColor());
                     customizeCubeUpperBoxIcon.setTag(activityWrapper.getActivityServer().getCubeColorUpper());
                     urlIcon = activityWrapper.getActivityServer().getCubeIcon();
-                } else  {
+                } else {
                     customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400));
                     customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(customView.getContext(), R.color.deep_purple_400_light));
                     customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(EditActivity.this, R.color.deep_purple_400));
@@ -1999,22 +2005,54 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         recyclerIcons.setLayoutManager(layoutManager);
         recyclerIcons.setNestedScrollingEnabled(false);
 
-        CustomizeAddActivityAdapter adapter;
+        CustomizeAddActivityAdapter adapter = new CustomizeAddActivityAdapter(this, iconList);
 
-        recyclerIcons.setAdapter(adapter = new CustomizeAddActivityAdapter(this, iconList));
+        ArrayList<CategoryServer> iconCategory = new ArrayList<>();
+        List<Integer> positionsNull = new ArrayList<>();
+
+        iconCategory = getIconCategory(iconCategory, iconList);
+
+        //This is the code to provide a sectioned grid
+        List<SectionedGridRecyclerViewAdapter.Section> sections =
+                new ArrayList<SectionedGridRecyclerViewAdapter.Section>();
+
+        //Sections
+        for (int i = 0; i < iconCategory.size(); i++) {
+            sections.add(new SectionedGridRecyclerViewAdapter.Section(iconCategory.get(i).getPosition(), iconCategory.get(i).getName()));
+            if (i == 0)
+                positionsNull.add(0);
+            else
+                positionsNull.add(iconCategory.get(i - 1).getPosition() + iconCategory.get(i - 1).getIconsQty() + i);
+        }
+
+        //Add your adapter to the sectionAdapter
+        SectionedGridRecyclerViewAdapter.Section[] dummy = new SectionedGridRecyclerViewAdapter.Section[sections.size()];
+        SectionedGridRecyclerViewAdapter mSectionedAdapter = new
+                SectionedGridRecyclerViewAdapter(this, R.layout.list_item_section, R.id.textIcon, recyclerIcons, adapter);
+        mSectionedAdapter.setSections(sections.toArray(dummy));
+
+        //Apply this adapter to the RecyclerView
+        recyclerIcons.setAdapter(mSectionedAdapter);
 
         RecyclerItemClickListener.OnItemClickListener onItemClickListener = new RecyclerItemClickListener.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int position, MotionEvent e) {
 
-                Glide.clear(customizePieceIcon);
-                Glide.with(EditActivity.this)
-                        .load(adapter.getItem(position).getUrl())
-                        .asBitmap()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(customizePieceIcon);
+                if (!positionsNull.contains(position)) {
+                    for (int i = 0; i < positionsNull.size(); i++) {
+                        if (position < positionsNull.get(i)){
+                            urlIconTemp = adapter.getItem(position-i).getUrl();
+                            break;
+                        }
+                    }
 
-                urlIconTemp = adapter.getItem(position).getUrl();
+                    Glide.clear(customizePieceIcon);
+                    Glide.with(EditActivity.this)
+                            .load(urlIconTemp)
+                            .asBitmap()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(customizePieceIcon);
+                }
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "RecyclerItemPickIcon" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -2390,6 +2428,31 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
 
         dialog.show();
+    }
+
+    private ArrayList<CategoryServer> getIconCategory(ArrayList<CategoryServer> iconCategory, ArrayList<IconServer> icons) {
+        int i, j = 0;
+
+        for (i = 0; i < icons.size(); i++) {
+            CategoryServer category = new CategoryServer();
+
+            if (i == 0) {
+                category.setName(icons.get(i).getCategory());
+                category.setIconsQty(1);
+                category.setPosition(0);
+                iconCategory.add(category);
+            } else if (icons.get(i).getCategory().matches(icons.get(i - 1).getCategory())) {
+                iconCategory.get(j).setIconsQty(iconCategory.get(j).getIconsQty() + 1);
+            } else {
+                j++;
+                category.setName(icons.get(i).getCategory());
+                category.setIconsQty(1);
+                category.setPosition(iconCategory.get(j - 1).getPosition() + iconCategory.get(j - 1).getIconsQty());
+                iconCategory.add(category);
+            }
+        }
+
+        return iconCategory;
     }
 
     private void createDialogEditWithRepeat() {
