@@ -734,14 +734,49 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         String hourEnd = String.format("%02d", activityServer.getHourEnd());
         String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
-        if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()){
+            dateHourText.setText(this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
+        }
+        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()){
+            dateHourText.setText(this.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+        }
+        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+            dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+        }
+        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+            dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+        }
+        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            } else {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+            }
+        }
+        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+            } else {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+            }
+        }
+        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
             } else {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
             }
-        } else {
-            dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+        }
+        else{
+            if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                }
+            } else {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+            }
         }
 
         if (activityServer.getLat() == -500)

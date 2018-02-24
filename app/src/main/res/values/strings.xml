@@ -204,6 +204,11 @@
     <string name="date_format_16">%1$s, %2$s/%3$s/%4$d às %5$s:%6$s até\n%7$s, %8$s/%9$s/%10$d</string>
     <string name="date_format_17">%1$s, %2$s/%3$s/%4$d até às %5$s:%6$s</string>
     <string name="date_format_18">até às %1$s:%2$s</string>
+    <string name="date_format_19">%1$s, %2$s/%3$s</string>
+    <string name="date_format_20">%1$s, %2$s/%3$s até às %4$s:%5$s</string>
+    <string name="date_format_21">%1$s, %2$s/%3$s até\n%4$s, %5$s/%6$s</string>
+    <string name="date_format_22">%1$s, %2$s/%3$s até\n%4$s, %5$s/%6$s às %7$s:%8$s</string>
+    <string name="date_format_23">%1$s, %2$s/%3$s às %4$s:%5$s até\n%6$s, %7$s/%8$s</string>
     <string name="date_format_today">Hoje</string>
     <string name="date_format_tomorrow">Amanhã</string>
     <string name="date_format_yesterday">Ontem</string>
