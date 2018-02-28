@@ -1730,6 +1730,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
             activityServer.setVisibility(selected);
 
+            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+            activityServer.setCreator(email);
+
             //Criptografa a url do whatsapp
             String encryptedValue = "";
             if (whatsapp.length() > 0)
@@ -1866,18 +1871,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         startActivity(intent);
         finish();
 
-    }
-
-    private void setPrivacyActivity(ActivityServer activityServer) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().setPrivacyAct(activityServer)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponsePrivacy, this::handleError));
-    }
-
-    private void handleResponsePrivacy(Response response) {
-        setProgress(false);
     }
 
     private void handleError(Throwable error) {
@@ -2255,14 +2248,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         TextView optionText2 = (TextView) customView.findViewById(R.id.optionText2);
         TextView optionText3 = (TextView) customView.findViewById(R.id.optionText3);
 
-        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        String email = mSharedPreferences.getString(Constants.EMAIL, "");
-
-        ActivityServer privacyUpdate = new ActivityServer();
-
-        privacyUpdate.setCreator(email);
-        privacyUpdate.setId(getActivity().getId());
-
         switch (selected) {
             case 1:
                 optionIcon2.setColorFilter(ContextCompat.getColor(dialog.getContext(), R.color.deep_purple_400));
@@ -2384,9 +2369,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 privacyText.setText(getResources().getString(R.string.visibility_public));
                 selected = 0;
 
-                privacyUpdate.setVisibility(selected);
-                //setPrivacyActivity(privacyUpdate);
-
                 dialog.dismiss();
             }
         });
@@ -2400,9 +2382,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 privacyIcon.setImageResource(R.drawable.ic_people_two);
                 privacyText.setText(getResources().getString(R.string.visibility_only_my_contacts));
                 selected = 1;
-
-                privacyUpdate.setVisibility(selected);
-                //setPrivacyActivity(privacyUpdate);
 
                 dialog.dismiss();
             }
@@ -2418,9 +2397,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 privacyIcon.setImageResource(R.drawable.ic_lock);
                 privacyText.setText(getResources().getString(R.string.visibility_private));
                 selected = 2;
-
-                privacyUpdate.setVisibility(selected);
-                //setPrivacyActivity(privacyUpdate);
 
                 dialog.dismiss();
             }
