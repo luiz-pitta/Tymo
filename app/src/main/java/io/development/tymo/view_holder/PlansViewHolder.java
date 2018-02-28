@@ -9,7 +9,6 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -429,6 +428,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
     private List<Object> setPlansItemData(List<Object> objectList, boolean paint) {
         List<Object> list = new ArrayList<>();
 
+
         for (int i = 0; i < objectList.size(); i++) {
             Object object = objectList.get(i);
             if (object instanceof ActivityServer) {
@@ -477,11 +477,18 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     flagServer.setHourStart(activityServer.getHourStart());
                     flagServer.setMinuteEnd(activityServer.getMinuteEnd());
                     flagServer.setHourEnd(activityServer.getHourEnd());
+                    flagServer.setTimeStartEmpty(activityServer.getTimeStartEmpty());
+                    flagServer.setTimeEndEmpty(activityServer.getTimeEndEmpty());
+                    flagServer.setDateStartEmpty(activityServer.getDateStartEmpty());
+                    flagServer.setDateEndEmpty(activityServer.getDateEndEmpty());
+                    flagServer.setTimeStartEmptyCard(activityServer.getTimeStartEmptyCard());
+                    flagServer.setTimeEndEmptyCard(activityServer.getTimeEndEmptyCard());
                     list.add(new Flag(time, R.drawable.ic_flag, false, flagServer, paint, true));
                 } else
                     list.add(new ActivityCard(time, activityServer.getCubeIcon(), activityServer.getCubeColor(), activityServer.getCubeColorUpper(), activityServer, false));
 
             } else if (object instanceof FlagServer) {
+
                 FlagServer flagServer = (FlagServer) object;
                 String hour_start = String.format("%02d", flagServer.getHourCard());
                 String minute_start = String.format("%02d", flagServer.getMinuteCard());
@@ -524,6 +531,13 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     flag.setHourStart(flagServer.getHourStart());
                     flag.setMinuteEnd(flagServer.getMinuteEnd());
                     flag.setHourEnd(flagServer.getHourEnd());
+                    flag.setTimeStartEmpty(flagServer.getTimeStartEmpty());
+                    flag.setTimeEndEmpty(flagServer.getTimeEndEmpty());
+                    flag.setDateStartEmpty(flagServer.getDateStartEmpty());
+                    flag.setDateEndEmpty(flagServer.getDateEndEmpty());
+                    flag.setTimeStartEmptyCard(flagServer.getTimeStartEmptyCard());
+                    flag.setTimeEndEmptyCard(flagServer.getTimeEndEmptyCard());
+
                     list.add(new Flag(time, R.drawable.ic_flag, false, flag, paint, true));
                 } else
                     list.add(new Flag(time, R.drawable.ic_flag, flagServer.getType(), flagServer, paint, false));

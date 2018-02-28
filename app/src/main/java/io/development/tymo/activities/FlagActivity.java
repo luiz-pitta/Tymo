@@ -608,6 +608,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         LocalDate start = new LocalDate(y1, m1 + 1, d1);
         LocalDate end = new LocalDate(y2, m2 + 1, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
+        if (timePeriod.getDays() > 15)
+            return false;
 
         switch (period) {
             case 1:
@@ -628,6 +630,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         LocalDate start = new LocalDate(y1, m1 + 1, d1);
         LocalDate end = new LocalDate(y2, m2 + 1, d2);
         Period timePeriod = new Period(start, end, PeriodType.days());
+        if (timePeriod.getDays() > 15)
+            return getResources().getString(R.string.validation_field_act_max_lenght_days);
 
         switch (period) {
             case 1:
