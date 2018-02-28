@@ -993,7 +993,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         confirmedList.addAll(getConfirmedNoAdm(userList, admList));
 
         ActivityServer activityServer = activityWrapper.getActivityServer();
-        User userEdit = checkIfInActivity(invitedList);
+        User userEdit = checkIfInActivity(userList);
 
         if (!activityServer.getCubeIcon().matches("")) {
 
@@ -1865,6 +1865,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
                 getActivityStartToday();
         }
+
+        activityWrapperEdited.getActivityServer().setId(activityWrapper.getActivityServer().getId());
 
         Intent intent = new Intent(this, ShowActivity.class);
         intent.putExtra("act_show", activityWrapperEdited);
