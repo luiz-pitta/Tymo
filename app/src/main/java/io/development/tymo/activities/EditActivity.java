@@ -1770,6 +1770,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             if (!repeat_single_changed)
                 editActivity(activityServer);
             else {
+                activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
                 editActivityRepeatSingle(activityServer);
             }
         }
