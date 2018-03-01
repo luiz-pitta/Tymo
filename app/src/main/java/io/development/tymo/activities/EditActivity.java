@@ -279,6 +279,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         repeatBox.setVisibility(View.GONE);
         repeatText.setVisibility(View.GONE);
 
+        repeatAdd.setVisibility(View.GONE);
+
         dateFormat = new DateFormat(this);
 
         titleEditText.addTextChangedListener(new TextWatcher() {
@@ -2929,7 +2931,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             lng = activityServer.getLng();
 
             if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
-                repeatAdd.setVisibility(View.VISIBLE);
+                //repeatAdd.setVisibility(View.VISIBLE);
                 repeatBox.setVisibility(View.GONE);
                 repeatNumberBox.setVisibility(View.GONE);
             } else {
