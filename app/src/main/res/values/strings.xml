@@ -616,6 +616,7 @@
     <string name="validation_field_tag_required">Selecione ao menos uma TAG de interesse</string>
     <string name="validation_field_time_end_before_start">O horário de término está antes do horário de início</string>
     <string name="validation_field_title_required">O título é obrigatório</string>
+    <string name="validation_field_visibility_required">Selecione uma das opções</string>
     <string name="version_new_update_no">Fechar</string>
     <string name="version_new_update_text">É necessária a atualização do app para continuar utilizando o Tymo</string>
     <string name="version_new_update_title">Nova versão disponível\n%1$s</string>

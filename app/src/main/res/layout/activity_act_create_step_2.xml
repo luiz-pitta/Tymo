@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
+
+    <android.support.v4.widget.NestedScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:scrollbars="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/actionBackIcon"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_action_back"
+                    android:tint="@color/grey_600" />
+
+                <LinearLayout
+                    android:id="@+id/textsBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="50dp"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/create_activity"
+                        android:textColor="@color/grey_600"
+                        android:textSize="16sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/text2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:ellipsize="end"
+                        android:gravity="center"
+                        android:lines="1"
+                        android:text="@string/steps_2_of_3"
+                        android:textColor="@color/grey_600"
+                        android:textSize="14sp"
+                        android:textStyle="normal" />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/act_who_can_invite"
+                    android:textColor="@color/deep_purple_400"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="7dp"
+                    android:background="@drawable/bg_act_edit_box_2"
+                    android:paddingBottom="5dp"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="5dp">
+
+                    <com.jaredrummler.materialspinner.MaterialSpinner
+                        android:id="@+id/visibilityCalendarPicker"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        app:ms_arrow_tint="@color/grey_900"
+                        app:ms_background_color="@color/grey_50"
+                        app:ms_dropdown_height="wrap_content"
+                        app:ms_dropdown_max_height="120dp"
+                        app:ms_text_color="@color/grey_900" />
+
+                    <TextView
+                        android:id="@+id/feedVisibility"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/visibilityCalendarPicker"
+                        android:layout_marginTop="2dp"
+                        android:text="@string/feed_visibility_1"
+                        android:textColor="@color/grey_600"
+                        android:textSize="12sp"
+                        android:visibility="gone" />
+
+                </RelativeLayout>
+
+                <LinearLayout
+                    android:id="@+id/guestBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/guestText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="10dp"
+                        android:text="@string/act_guests"
+                        android:textColor="@color/deep_purple_400"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/guestsNumber"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/box_qty_guests"
+                        android:gravity="center"
+                        android:paddingBottom="2dp"
+                        android:paddingLeft="8dp"
+                        android:paddingRight="8dp"
+                        android:paddingTop="2dp"
+                        android:text="0"
+                        android:textColor="@color/white"
+                        android:textSize="14sp" />
+
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/profilesPhotos"
+                    layout="@layout/list_profiles"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp" />
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+    <include
+        layout="@layout/btn_confirmation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true" />
+
+    <include
+        android:id="@+id/progressBox"
+        layout="@layout/progress_loading_screen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+</RelativeLayout>

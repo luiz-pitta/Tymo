@@ -1131,7 +1131,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             myIntent.putExtra("act_edit", activityWrapper);
             startActivity(myIntent);
             finish();
-        } else if (id == R.id.checkButtonBox) {
+        } else if (id == R.id.confirmationButtonFit) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "checkButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1150,7 +1150,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             inviteRequest.setIdAct(getActivity().getId());
 
             updateInviteRequest(inviteRequest);
-        } else if (id == R.id.deleteButtonBox) {
+        } else if (id == R.id.confirmationButtonRemove) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
