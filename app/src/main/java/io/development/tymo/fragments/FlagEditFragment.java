@@ -1132,8 +1132,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     profilesPhotos.setVisibility(View.GONE);
                 }
 
-                if (flagServer.getRepeatType() == 0 && !isEdit) {
-                    repeatAdd.setVisibility(View.VISIBLE);
+                if (flagServer.getRepeatType() == 0) {
+                    //repeatAdd.setVisibility(View.VISIBLE);
                     repeatText.setVisibility(View.GONE);
                 } else {
                     String repeatly;
