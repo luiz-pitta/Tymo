@@ -1453,8 +1453,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         setResult(RESULT_OK, intent);
         if (user_friend == null || listUserCompare.size() == 0) {
             finish();
-        } else
+        } else {
             startActivity(intent);
+        }
 
     }
 

@@ -68,6 +68,7 @@ import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.RecyclerItemClickListener;
+import io.development.tymo.utils.SecureStringPropertyConverter;
 import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
@@ -115,6 +116,9 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
     private boolean first_open = true;
     private String urlIcon = Constants.IC_ADD_CUBE_URL;
     private boolean error;
+    private User user_friend = null;
+    private ArrayList<User> listUserCompare = new ArrayList<>();
+    private SecureStringPropertyConverter converter = new SecureStringPropertyConverter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -411,8 +415,19 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         activityServer = new ActivityServer();
 
         activityServer.setCubeColor(getResources().getColor(R.color.deep_purple_400));
-        activityServer.setCubeColorUpper(getResources().getColor(R.color.deep_purple_400));
+        activityServer.setCubeColorUpper(getResources().getColor(R.color.deep_purple_400_light));
         activityServer.setCubeIcon(urlIcon);
+
+        UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("act_free_friend_usr");
+        if (userWrapper != null)
+            user_friend = userWrapper.getUser();
+        else {
+            userWrapper = (UserWrapper) getIntent().getSerializableExtra("ListCreateActivityCompare");
+            if (userWrapper != null) {
+                listUserCompare = userWrapper.getUsers();
+                listUserCompare.remove(0);
+            }
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
@@ -932,6 +947,8 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         List<Double> latLng;
         boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
         String title = titleEditText.getText().toString();
+        String description = descriptionEditText.getText().toString();
+        String whatsapp = whatsAppEditText.getText().toString();
 
         date = getDateFromView();
         repeat = getRepeatFromView();
@@ -1065,7 +1082,14 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             activityServer.setCreator(creator);
             activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
             activityServer.setTitle(title);
-            activityServer.setWhatsappGroupLink("");
+            activityServer.setDescription(description);
+
+            //Criptografa a url do whatsapp
+            String encryptedValue = "";
+            if (whatsapp.length() > 0)
+                encryptedValue = converter.toGraphProperty(whatsapp);
+
+            activityServer.setWhatsappGroupLink(encryptedValue);
 
             d = date.get(0);
             m = date.get(1);
@@ -1107,10 +1131,17 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             activityServer.setDateTimeListStart(date_time_list_start);
             activityServer.setDateTimeListEnd(date_time_list_end);
 
+            activityServer.setLocation(location);
             activityServer.setLat(latLng.get(0));
             activityServer.setLng(latLng.get(1));
 
             Intent register = new Intent(AddPart1Activity.this, AddPart2Activity.class);
+
+            if (user_friend != null)
+                register.putExtra("act_free_friend_usr", new UserWrapper(user_friend));
+            else if (listUserCompare.size() > 0) {
+                register.putExtra("ListCreateActivityCompare", new UserWrapper(listUserCompare));
+            }
 
             ActivityWrapper wrapper = new ActivityWrapper(activityServer);
             register.putExtra("act_wrapper", wrapper);
