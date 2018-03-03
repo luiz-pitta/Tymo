@@ -231,6 +231,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         feedVisibility = (TextView) findViewById(R.id.feedVisibility);
         repeatText = (TextView) findViewById(R.id.repeatText);
 
+        findViewById(R.id.addGuestBox).setVisibility(View.GONE);
+
         mBackButton.setOnClickListener(this);
         privacyBox.setOnClickListener(this);
         pieceBox.setOnClickListener(this);

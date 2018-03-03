@@ -104,7 +104,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private TextView dateStart, dateEnd, titleMax, sendText, repeatText;
     private TextView timeStart, timeEnd, repeatAddText;
 
-    private LinearLayout repeatEditLayout, repeatBox, whoCanInviteBox, profilesPhotos;
+    private LinearLayout repeatEditLayout, repeatBox, whoCanInviteBox, profilesPhotos, addGuestBox;
     private EditText repeatEditText, titleEditText;
     private MaterialSpinner spinner, sendPicker;
 
@@ -173,6 +173,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         repeatAddText = (TextView) view.findViewById(R.id.repeatAddText);
         repeatAdd = (RelativeLayout) view.findViewById(R.id.repeatAdd);
         repeatText = (TextView) view.findViewById(R.id.repeatText);
+        addGuestBox = (LinearLayout) view.findViewById(R.id.addGuestBox);
 
         clearDateStart.setVisibility(View.GONE);
         clearDateEnd.setVisibility(View.GONE);
@@ -992,6 +993,11 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
 
             isEdit = edit;
+
+            if (isEdit)
+                addGuestBox.setVisibility(View.GONE);
+            else
+                addGuestBox.setVisibility(View.VISIBLE);
 
             String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());

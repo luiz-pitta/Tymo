@@ -79,6 +79,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
                     android:text="@string/act_who_can_invite"
                     android:textColor="@color/deep_purple_400"
                     android:textSize="14sp"
