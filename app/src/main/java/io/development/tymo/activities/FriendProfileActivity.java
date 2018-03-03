@@ -407,6 +407,7 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void handleErrorBgProfile(Throwable error) {
+        setProgress(false);
         if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
@@ -966,8 +967,8 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
     }
 
     private void handleError(Throwable error) {
-        //setProgress(false);
-        //setProgressFriendRequest(false);
+        setProgress(false);
+        setProgressFriendRequest(false);
         friendshipRequestsBox.setOnClickListener(this);
         if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();

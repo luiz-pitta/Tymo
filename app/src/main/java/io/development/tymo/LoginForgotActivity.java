@@ -113,6 +113,7 @@ public class LoginForgotActivity extends AppCompatActivity implements View.OnCli
             }
         }
         catch (Exception e){
+            setProgress(false);
             if(!Utilities.isDeviceOnline(this))
                 Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             else
