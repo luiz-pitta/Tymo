@@ -741,7 +741,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else

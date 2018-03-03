@@ -174,10 +174,10 @@ public class NotificationsActivity extends AppCompatActivity implements View.OnC
     }
 
     private void handleError(Throwable error) {
-        setProgress(false);
+        //setProgress(false);
         noInternet = true;
         mSwipeRefreshLayout.setRefreshing(false);
-        if (!Utilities.isDeviceOnline(this))
+        if (Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

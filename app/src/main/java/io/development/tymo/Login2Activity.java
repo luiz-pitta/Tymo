@@ -254,7 +254,7 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
                     e.printStackTrace();
                 }
             } else {
-                progressBox.setVisibility(View.GONE);
+                //progressBox.setVisibility(View.GONE);
                 if(!Utilities.isDeviceOnline(this))
                     Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
                 else
@@ -262,7 +262,6 @@ public class Login2Activity extends AppCompatActivity implements View.OnClickLis
             }
         }
         catch (Exception e){
-            progressBox.setVisibility(View.GONE);
             if(!Utilities.isDeviceOnline(this))
                 Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
             else

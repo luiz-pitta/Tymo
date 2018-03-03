@@ -194,7 +194,7 @@ public class MyInterestsActivity extends AppCompatActivity implements View.OnCli
     }
 
     private void handleError(Throwable error) {
-        progressBox.setVisibility(View.GONE);
+        //progressBox.setVisibility(View.GONE);
         if(!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
