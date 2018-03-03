@@ -11,9 +11,11 @@ import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -75,6 +77,7 @@ import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import jp.wasabeef.recyclerview.animators.LandingAnimator;
 
 import static io.development.tymo.utils.Validation.validateFields;
 
@@ -86,6 +89,8 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
     private ActivityServer activityServer;
     private PersonAdapter adapter;
     private Handler handler = new Handler();
+    private User user_friend = null;
+    private ArrayList<User> listUserCompare = new ArrayList<>();
 
     private TextView confirmationButton, guestText, guestsNumber, addGuestText, feedVisibility;
     private ImageView mBackButton;
@@ -99,7 +104,7 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
     private final int ADD_GUEST = 39;
     private Rect rect;
 
-    ArrayList<User> data = new ArrayList<>();
+    ArrayList<User> list_guest = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,13 +176,58 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
                 })
                 .build();
 
+        UserWrapper userWrapper = (UserWrapper) getIntent().getSerializableExtra("act_free_friend_usr");
+        if (userWrapper != null)
+            user_friend = userWrapper.getUser();
+        else {
+            userWrapper = (UserWrapper) getIntent().getSerializableExtra("ListCreateActivityCompare");
+            if (userWrapper != null) {
+                listUserCompare = userWrapper.getUsers();
+                listUserCompare.remove(0);
+            }
+        }
+
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
         getUser(email);
 
+        recyclerViewGuestRow.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        recyclerViewGuestRow.setItemAnimator(new LandingAnimator());
+        recyclerViewGuestRow.setNestedScrollingEnabled(false);
+
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
+    }
+
+    private void register() {
+        activityWrapper.getActivityServer().setInvitationType(invite);
+
+        int i;
+        for (i = 1; i < list_guest.size(); i++) {
+            activityWrapper.getActivityServer().addGuest(list_guest.get(i).getEmail());
+            if (list_guest.get(i).isAdm())
+                activityWrapper.getActivityServer().addAdms(list_guest.get(i).getEmail());
+        }
+
+        if(list_guest.size() == 0 && user_friend != null)
+            activityWrapper.getActivityServer().addGuest(user_friend.getEmail());
+        else if(list_guest.size() == 0 && listUserCompare.size() > 0) {
+            for(int j=0;j<listUserCompare.size();j++)
+                activityWrapper.getActivityServer().addGuest(listUserCompare.get(j).getEmail());
+        }
+
+        Intent register = new Intent(AddPart2Activity.this, AddPart3Activity.class);
+
+        if (user_friend != null)
+            register.putExtra("act_free_friend_usr", new UserWrapper(user_friend));
+        else if (listUserCompare.size() > 0) {
+            register.putExtra("ListCreateActivityCompare", new UserWrapper(listUserCompare));
+        }
+
+        register.putExtra("act_wrapper", activityWrapper);
+        startActivity(register);
+        overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
     }
 
     private void getUser(String email) {
@@ -188,37 +238,41 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
                 .subscribe(this::handleResponse, this::handleError));
     }
 
-    public List<User> getGuestFromView() {
-        return data;
+    public User getUserFriend() {
+        return user_friend;
+    }
+
+    public ArrayList<User> getListUserCompare() {
+        return listUserCompare;
     }
 
     private void handleResponse(User user) {
-        /*data = new ArrayList<>();
+        list_guest = new ArrayList<>();
         user.setDelete(false);
-        data.add(user);
-        User friend = flagActivity.getUserFriend();
-        ArrayList<User> list = flagActivity.getListUserCompare();
+        list_guest.add(user);
+        User friend = getUserFriend();
+        ArrayList<User> list = getListUserCompare();
         if (friend != null) {
             friend.setDelete(false);
-            data.add(friend);
+            list_guest.add(friend);
         } else if (list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 User usr = list.get(i);
                 usr.setDelete(false);
-                data.add(usr);
+                list_guest.add(usr);
             }
         }
 
-        data = setOrderGuests(data);
+        list_guest = setOrderGuests(list_guest);
 
-        adapter = new PersonAdapter(data, this);
+        adapter = new PersonAdapter(list_guest, this);
         recyclerViewGuestRow.setAdapter(adapter);
-        guestsNumber.setText(String.valueOf(data.size()));
-        addPersonButton.setActivated(true);*/
+        guestsNumber.setText(String.valueOf(list_guest.size()));
+        addPersonButton.setActivated(true);
     }
 
     private void handleError(Throwable error) {
-        if (Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -328,7 +382,7 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
                 PersonModelWrapper wrap =
                         (PersonModelWrapper) intent.getSerializableExtra("guest_objs");
 
-                list.add(data.get(0));
+                list.add(list_guest.get(0));
                 list.addAll(wrap.getItemDetails());
                 for (int i = 0; i < list.size(); i++) {
                     User usr = list.get(i);
@@ -347,11 +401,7 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonEdit" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-            Intent register = new Intent(AddPart2Activity.this, AddPart3Activity.class);
-            register.putExtra("act_wrapper", activityWrapper);
-            startActivity(register);
-            overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
-            //register();
+            register();
         } else if (v == mBackButton) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -367,8 +417,8 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            for (int i = 0; i < data.size(); i++) {
-                list.add(data.get(i).getEmail());
+            for (int i = 0; i < list_guest.size(); i++) {
+                list.add(list_guest.get(i).getEmail());
             }
 
             intent.putStringArrayListExtra("guest_list", list);
