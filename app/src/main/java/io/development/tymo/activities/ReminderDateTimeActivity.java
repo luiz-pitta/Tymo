@@ -66,7 +66,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
-    private ReminderWrapper reminderWrapper, reminderWrapperTemp;
+    private ReminderWrapper reminderWrapperTemp;
 
     private boolean error = false;
 
@@ -107,7 +107,6 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
 
         dateFormat = new DateFormat(this);
 
-        reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_show");
         reminderWrapperTemp = (ReminderWrapper) getIntent().getSerializableExtra("reminder_temp");
 
         day_start = -1;

@@ -118,10 +118,23 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_show");
 
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String creator = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        reminderServer = new ReminderServer();
+
+        reminderServer.setCreator(creator);
+        reminderServer.setTitle("");
+
         if (reminderWrapper != null) {
             edit = true;
             confirmationButtonBar.setVisibility(View.GONE);
             confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
+
+            reminderServer.setId(reminderWrapper.getReminderServer().getId());
+            reminderServer.setText(reminderWrapper.getReminderServer().getText());
+            reminderEditText.setText(reminderServer.getText());
+
             setReminderServer(reminderWrapper.getReminderServer());
             setInformation(reminderWrapper.getReminderServer());
         } else {
@@ -132,6 +145,10 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             confirmationButtonBar.setVisibility(View.VISIBLE);
             confirmationButton.setText(R.string.create_reminder);
             dateBox.setVisibility(View.GONE);
+
+            reminderServer.setText("");
+            reminderEditText.setText(reminderServer.getText());
+
             setReminderServer(null);
         }
 
@@ -141,18 +158,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void setReminderServer(ReminderServer reminder) {
-        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-        String creator = mSharedPreferences.getString(Constants.EMAIL, "");
-
-        reminderServer = new ReminderServer();
-        reminderServer.setCreator(creator);
-
         if (reminder != null) {
-            reminderServer.setId(reminder.getId());
-
-            reminderServer.setTitle(reminder.getTitle());
-            reminderServer.setText(reminder.getText());
-
             reminderServer.setRepeatQty(reminder.getRepeatQty());
             reminderServer.setRepeatType(reminder.getRepeatType());
 
@@ -173,9 +179,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             reminderServer.setDateEndEmpty(reminder.getDateEndEmpty());
             reminderServer.setTimeEndEmpty(reminder.getTimeEndEmpty());
         } else {
-            reminderServer.setTitle("");
-            reminderServer.setText("");
-
             reminderServer.setRepeatQty(-1);
             reminderServer.setRepeatType(0);
 
@@ -199,48 +202,20 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     public void setInformation(ReminderServer reminder) {
-        reminderEditText.setText(reminder.getText());
         reminderEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                if (reminderWrapper != null) {
-                    if (!reminderEditText.getText().toString().matches(reminderWrapper.getReminderServer().getText())) {
-                        confirmationButtonBar.setVisibility(View.VISIBLE);
-                        confirmationButtonBarFitRemove.setVisibility(View.GONE);
-                        confirmationButton.setText(R.string.save_updates);
-                    } else {
-                        confirmationButtonBar.setVisibility(View.GONE);
-                        confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
-                    }
-                }
+                showHideUpdateButton();
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (reminderWrapper != null) {
-                    if (!reminderEditText.getText().toString().matches(reminderWrapper.getReminderServer().getText())) {
-                        confirmationButtonBar.setVisibility(View.VISIBLE);
-                        confirmationButtonBarFitRemove.setVisibility(View.GONE);
-                        confirmationButton.setText(R.string.save_updates);
-                    } else {
-                        confirmationButtonBar.setVisibility(View.GONE);
-                        confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
-                    }
-                }
+                showHideUpdateButton();
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (reminderWrapper != null) {
-                    if (!reminderEditText.getText().toString().matches(reminderWrapper.getReminderServer().getText())) {
-                        confirmationButtonBar.setVisibility(View.VISIBLE);
-                        confirmationButtonBarFitRemove.setVisibility(View.GONE);
-                        confirmationButton.setText(R.string.save_updates);
-                    } else {
-                        confirmationButtonBar.setVisibility(View.GONE);
-                        confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
-                    }
-                }
+                showHideUpdateButton();
             }
         });
 
@@ -349,6 +324,23 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             addDateHourButton.setVisibility(View.VISIBLE);
         }
 
+        showHideUpdateButton();
+
+    }
+
+    private void showHideUpdateButton() {
+        if (reminderWrapper != null) {
+            if (!reminderEditText.getText().toString().matches(getReminder().getText()) || getReminder().getDayStart() != reminderServer.getDayStart() || getReminder().getMonthStart() != reminderServer.getMonthStart() ||
+                    getReminder().getYearStart() != reminderServer.getYearStart() || getReminder().getMinuteStart() != reminderServer.getMinuteStart() || getReminder().getHourStart() != reminderServer.getHourStart() ||
+                            getReminder().getRepeatType() != reminderServer.getRepeatType() || getReminder().getRepeatQty() != reminderServer.getRepeatQty()) {
+                confirmationButtonBar.setVisibility(View.VISIBLE);
+                confirmationButtonBarFitRemove.setVisibility(View.GONE);
+                confirmationButton.setText(R.string.save_updates);
+            } else {
+                confirmationButtonBar.setVisibility(View.GONE);
+                confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
+            }
+        }
     }
 
     private void register() {
@@ -364,11 +356,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (err == 0) {
-
-            SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-            String creator = mSharedPreferences.getString(Constants.EMAIL, "");
-
-            reminderServer.setCreator(creator);
             reminderServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
             reminderServer.setText(text);
             reminderServer.setTitle("");
@@ -394,7 +381,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         }
 
         if (err == 0) {
-
             reminderServer.setText(text);
             reminderServer.setTitle("");
 
@@ -455,8 +441,13 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("d", d);
         intent.putExtra("m", m);
         intent.putExtra("y", y);
-        setResult(RESULT_OK, intent);
-        startActivity(intent);
+
+        if (edit || reminder.getDayStart() == -1) {
+            finish();
+        } else {
+            setResult(RESULT_OK, intent);
+            startActivity(intent);
+        }
 
     }
 
@@ -877,24 +868,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             if (requestCode == 1) {
                 reminderWrapperTemp = (ReminderWrapper) intent.getSerializableExtra("add_date_time");
 
-                if (edit) {
-                    if (reminderWrapperTemp != null) {
-                        setReminderServer(reminderWrapperTemp.getReminderServer());
-                        setInformation(reminderWrapperTemp.getReminderServer());
-                    } else {
-                        setReminderServer(reminderWrapper.getReminderServer());
-                        setInformation(reminderWrapper.getReminderServer());
-                    }
-                } else {
-                    if (reminderWrapperTemp != null) {
-                        setReminderServer(reminderWrapperTemp.getReminderServer());
-                        setInformation(reminderWrapperTemp.getReminderServer());
-                    } else {
-                        dateBox.setVisibility(View.GONE);
-                        addDateHourButton.setVisibility(View.VISIBLE);
-                        setReminderServer(null);
-                    }
-                }
+                setReminderServer(reminderWrapperTemp.getReminderServer());
+                setInformation(reminderWrapperTemp.getReminderServer());
             }
         }
     }
