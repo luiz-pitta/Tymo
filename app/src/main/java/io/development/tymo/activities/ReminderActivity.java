@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -43,6 +44,8 @@ import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.ReminderWrapper;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.model_server.User;
+import io.development.tymo.models.PersonModelWrapper;
 import io.development.tymo.models.cards.Reminder;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
@@ -114,19 +117,13 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         dateFormat = new DateFormat(this);
 
         reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_show");
-        reminderWrapperTemp = (ReminderWrapper) getIntent().getSerializableExtra("reminder_temp");
 
         if (reminderWrapper != null) {
             edit = true;
             confirmationButtonBar.setVisibility(View.GONE);
             confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
-            if (reminderWrapperTemp != null) {
-                setReminderServer(reminderWrapperTemp.getReminderServer());
-                setInformation(reminderWrapperTemp.getReminderServer());
-            } else {
-                setReminderServer(reminderWrapper.getReminderServer());
-                setInformation(reminderWrapper.getReminderServer());
-            }
+            setReminderServer(reminderWrapper.getReminderServer());
+            setInformation(reminderWrapper.getReminderServer());
         } else {
             edit = false;
             mBackButton.setRotation(45);
@@ -134,13 +131,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             confirmationButtonBarFitRemove.setVisibility(View.GONE);
             confirmationButtonBar.setVisibility(View.VISIBLE);
             confirmationButton.setText(R.string.create_reminder);
-            if (reminderWrapperTemp != null) {
-                setReminderServer(reminderWrapperTemp.getReminderServer());
-                setInformation(reminderWrapperTemp.getReminderServer());
-            } else {
-                dateBox.setVisibility(View.GONE);
-                setReminderServer(null);
-            }
+            dateBox.setVisibility(View.GONE);
+            setReminderServer(null);
         }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
@@ -465,7 +457,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("y", y);
         setResult(RESULT_OK, intent);
         startActivity(intent);
-        finish();
 
     }
 
@@ -513,7 +504,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             getActivityStartToday();
 
         setProgress(false);
-        finish();
     }
 
     private void getActivityStartToday() {
@@ -880,6 +870,36 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (resultCode == RESULT_OK) {
+            if (requestCode == 1) {
+                reminderWrapperTemp = (ReminderWrapper) intent.getSerializableExtra("add_date_time");
+
+                if (edit) {
+                    if (reminderWrapperTemp != null) {
+                        setReminderServer(reminderWrapperTemp.getReminderServer());
+                        setInformation(reminderWrapperTemp.getReminderServer());
+                    } else {
+                        setReminderServer(reminderWrapper.getReminderServer());
+                        setInformation(reminderWrapper.getReminderServer());
+                    }
+                } else {
+                    if (reminderWrapperTemp != null) {
+                        setReminderServer(reminderWrapperTemp.getReminderServer());
+                        setInformation(reminderWrapperTemp.getReminderServer());
+                    } else {
+                        dateBox.setVisibility(View.GONE);
+                        addDateHourButton.setVisibility(View.VISIBLE);
+                        setReminderServer(null);
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
     public void onClick(View v) {
         if (v == confirmationButton) {
             Bundle bundle = new Bundle();
@@ -904,7 +924,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             Intent intent = new Intent(ReminderActivity.this, ReminderDateTimeActivity.class);
             intent.putExtra("reminder_show", reminderWrapper);
             intent.putExtra("reminder_temp", new ReminderWrapper(reminderServer));
-            startActivity(intent);
+            startActivityForResult(intent, 1);
             overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
         } else if (v == dateBox) {
             Bundle bundle = new Bundle();
@@ -914,7 +934,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             Intent intent = new Intent(ReminderActivity.this, ReminderDateTimeActivity.class);
             intent.putExtra("reminder_show", reminderWrapper);
             intent.putExtra("reminder_temp", new ReminderWrapper(reminderServer));
-            startActivity(intent);
+            startActivityForResult(intent, 1);
             overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
         } else if (v == confirmationButtonRemove) {
             Bundle bundle = new Bundle();

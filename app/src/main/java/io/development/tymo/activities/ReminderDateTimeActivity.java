@@ -9,6 +9,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -121,7 +122,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
         hour_end = -1;
 
         day_start = getReminder().getDayStart();
-        month_start = getReminder().getMonthStart();
+        month_start = getReminder().getMonthStart() - 1;
         year_start = getReminder().getYearStart();
         minutes_start = getReminder().getMinuteStart();
         hour_start = getReminder().getHourStart();
@@ -133,7 +134,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             dateStart.setText(day + "/" + month + "/" + year_start);
         } else {
-
+            dateStart.setText("");
         }
 
         if (!getReminder().getTimeStartEmpty()) {
@@ -141,7 +142,9 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             String minuteString = String.format("%02d", minutes_start);
             timeStart.setText(hourString + ":" + minuteString);
         } else {
-
+            timeStart.setText("");
+            minutes_start = -1;
+            hour_start = -1;
         }
 
         spinnerRepeatPicker.setItems(getResources().getStringArray(R.array.array_repeat_type));
@@ -310,8 +313,17 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
 
         if (date.get(0) == -1) {
             dateStartEmpty = true;
+            repeat_qty = -1;
+            getReminder().setRepeatType(0);
         } else {
             dateStartEmpty = false;
+
+            if (!repeatEditText.getText().toString().matches("")){
+                repeat_qty = Integer.parseInt(repeatEditText.getText().toString());
+            }
+            else{
+                repeat_qty = -1;
+            }
         }
 
         if (date.get(6) == -1) {
@@ -322,17 +334,10 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             timeStartEmpty = false;
         }
 
-        if (!repeatEditText.getText().toString().matches("")){
-            repeat_qty = Integer.parseInt(repeatEditText.getText().toString());
-        }
-        else{
-            repeat_qty = 0;
-        }
-
         if (dateStartEmpty && !timeStartEmpty) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required_reminder, Toast.LENGTH_LONG).show();
-        } else if ((getReminder().getRepeatType() != 0 && repeat_qty < 1)) {
+        } else if (!dateStartEmpty && getReminder().getRepeatType() != 0 && repeat_qty < 1) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
         } else {
@@ -377,10 +382,9 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
                 getReminder().setRepeatQty(Integer.parseInt(repeatEditText.getText().toString()));
             }
 
-            Intent intent = new Intent(ReminderDateTimeActivity.this, ReminderActivity.class);
-            intent.putExtra("reminder_show", reminderWrapper);
-            intent.putExtra("reminder_temp", reminderWrapperTemp);
-            startActivity(intent);
+            Intent intent = new Intent();
+            intent.putExtra("add_date_time", reminderWrapperTemp);
+            setResult(RESULT_OK, intent);
             overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
             finish();
 
