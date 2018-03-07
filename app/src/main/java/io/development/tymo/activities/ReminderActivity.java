@@ -5,39 +5,37 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.AppCompatRadioButton;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
-import android.widget.Space;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.aspsine.fragmentnavigator.FragmentNavigator;
 import com.evernote.android.job.JobManager;
 import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
+import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
+import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.adapters.ReminderFragmentAdapter;
-import io.development.tymo.fragments.ReminderEditFragment;
-import io.development.tymo.fragments.ReminderShowFragment;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
@@ -45,8 +43,10 @@ import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.ReminderWrapper;
 import io.development.tymo.model_server.Response;
+import io.development.tymo.models.cards.Reminder;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.NotificationSyncJob;
 import io.development.tymo.utils.Utilities;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -57,28 +57,21 @@ import static io.development.tymo.utils.Validation.validateFields;
 
 public class ReminderActivity extends AppCompatActivity implements View.OnClickListener, View.OnTouchListener {
 
-    private ImageView mBackButton, icon2, icon1, deleteIcon;
-    private TextView m_title, reminderCardText, reminderCardTime, editButton;
-    private RelativeLayout bottomBarBox;
-    private TextView confirmationButton;
-    private LinearLayout buttonsBar;
-    private Space space;
-
-    private ArrayList<ReminderServer> reminderServers;
-
-    private int d, m, y;
-    private boolean edit = false;
-
-    private FragmentNavigator mNavigator;
-
+    private LinearLayout confirmationButtonFit, confirmationButtonRemove, addDateHourButton, privacyBox;
+    private RelativeLayout dateBox;
+    private TextView confirmationButton, addDateHourButtonText, dateHourText, repeatText;
+    private EditText reminderEditText;
+    private ImageView mBackButton, addDateHourButtonIcon, dateIcon;
     private CompositeDisposable mSubscriptions;
-
     private FirebaseAnalytics mFirebaseAnalytics;
+    private ReminderWrapper reminderWrapper, reminderWrapperTemp;
+    private ReminderServer reminderServer, reminderServerTemp;
+    private RelativeLayout confirmationButtonBar, confirmationButtonBarFitRemove;
 
-    private int type;
-    private ReminderWrapper reminderWrapper;
+    private boolean error = false;
+    private boolean edit;
 
-    private boolean error;
+    private DateFormat dateFormat;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,586 +80,337 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         mSubscriptions = new CompositeDisposable();
 
-        space = (Space) findViewById(R.id.space);
-        buttonsBar = (LinearLayout) findViewById(R.id.buttonsBar);
-        icon2 = (ImageView) findViewById(R.id.icon2);
-        icon1 = (ImageView) findViewById(R.id.icon1);
-        deleteIcon = (ImageView) findViewById(R.id.deleteButton);
-        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
-        bottomBarBox = (RelativeLayout) findViewById(R.id.confirmationButtonBar);
-        m_title = (TextView) findViewById(R.id.text);
         confirmationButton = (TextView) findViewById(R.id.confirmationButton);
-        reminderCardTime = (TextView) findViewById(R.id.reminderCardTime);
-        reminderCardText = (TextView) findViewById(R.id.reminderCardText);
-        editButton = (TextView) findViewById(R.id.editButton);
+        confirmationButtonBar = (RelativeLayout) findViewById(R.id.confirmationButtonBar);
+        confirmationButtonBarFitRemove = (RelativeLayout) findViewById(R.id.confirmationButtonBarFitRemove);
+        confirmationButtonFit = (LinearLayout) findViewById(R.id.confirmationButtonFit);
+        confirmationButtonRemove = (LinearLayout) findViewById(R.id.confirmationButtonRemove);
+        privacyBox = (LinearLayout) findViewById(R.id.privacyBox);
+        mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
+        dateBox = (RelativeLayout) findViewById(R.id.dateBox);
+        dateHourText = (TextView) findViewById(R.id.dateHourText);
+        dateIcon = (ImageView) findViewById(R.id.dateIcon);
+        repeatText = (TextView) findViewById(R.id.repeatText);
+        addDateHourButton = (LinearLayout) findViewById(R.id.addDateHourButton);
+        addDateHourButtonIcon = (ImageView) findViewById(R.id.addDateHourButtonIcon);
+        addDateHourButtonText = (TextView) findViewById(R.id.addDateHourButtonText);
+        reminderEditText = (EditText) findViewById(R.id.reminderEditText);
 
-        reminderCardText.setText("");
-        reminderCardTime.setText("");
+        confirmationButtonFit.setVisibility(View.GONE);
+        confirmationButtonRemove.setVisibility(View.VISIBLE);
 
-        error = false;
+        confirmationButton.setOnClickListener(this);
+        mBackButton.setOnClickListener(this);
+        addDateHourButton.setOnClickListener(this);
+        dateBox.setOnClickListener(this);
+        repeatText.setOnClickListener(this);
+        confirmationButtonRemove.setOnClickListener(this);
 
-        type = getIntent().getIntExtra("type_reminder", 0);
+        mBackButton.setOnTouchListener(this);
+        addDateHourButton.setOnTouchListener(this);
+        dateBox.setOnTouchListener(this);
+        repeatText.setOnTouchListener(this);
 
-        mNavigator = new FragmentNavigator(getFragmentManager(), new ReminderFragmentAdapter(), R.id.contentBox);
-        mNavigator.setDefaultPosition(type);
-        mNavigator.onCreate(savedInstanceState);
-        mNavigator.showFragment(type);
+        dateFormat = new DateFormat(this);
 
-        if (type == 0) {
-            m_title.setText(getResources().getString(R.string.create_reminder));
-            mBackButton.setImageResource(R.drawable.ic_add);
-            mBackButton.setRotation(45);
-            confirmationButton.setText(R.string.confirm);
-            buttonsBar.setVisibility(View.GONE);
-            icon2.setVisibility(View.INVISIBLE);
-            icon1.setVisibility(View.GONE);
-            reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_edit");
-            if (reminderWrapper == null)
-                reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_free_time");
-            else {
-                edit = true;
-                mBackButton.setImageResource(R.drawable.ic_add);
-                mBackButton.setRotation(45);
-                m_title.setText(getResources().getString(R.string.edit_reminder));
-                confirmationButton.setText(R.string.save_updates);
-            }
+        reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_show");
+        reminderWrapperTemp = (ReminderWrapper) getIntent().getSerializableExtra("reminder_temp");
 
-            if (reminderWrapper != null) {
-                ReminderServer reminderServer = reminderWrapper.getReminderServer();
-                setReminderInformation(reminderServer.getId());
-                setProgress(true);
-
-                String hourString = String.format("%02d", reminderServer.getHourStart());
-                String minuteString = String.format("%02d", reminderServer.getMinuteStart());
-                String time;
-
-                time = hourString + ":" + minuteString;
-
-                if (reminderServer.getTitle() != null && !reminderServer.getTitle().matches(""))
-                    reminderCardText.setText(reminderServer.getTitle());
-
-                reminderCardTime.setText(time);
+        if (reminderWrapper != null) {
+            edit = true;
+            confirmationButtonBar.setVisibility(View.GONE);
+            confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
+            if (reminderWrapperTemp != null) {
+                setReminderServer(reminderWrapperTemp.getReminderServer());
+                setInformation(reminderWrapperTemp.getReminderServer());
+            } else {
+                setReminderServer(reminderWrapper.getReminderServer());
+                setInformation(reminderWrapper.getReminderServer());
             }
         } else {
-            m_title.setText(getResources().getString(R.string.reminder));
-            reminderWrapper = (ReminderWrapper) getIntent().getSerializableExtra("reminder_show");
-            if (reminderWrapper != null) {
-                ReminderServer reminderServer = reminderWrapper.getReminderServer();
-
-                String hourString = String.format("%02d", reminderServer.getHourStart());
-                String minuteString = String.format("%02d", reminderServer.getMinuteStart());
-                String time;
-
-                time = hourString + ":" + minuteString;
-
-                reminderCardText.setText(reminderServer.getTitle());
-                reminderCardTime.setText(time);
-
-                setReminderInformation(reminderWrapper.getReminderServer().getId());
-                setProgress(true);
+            edit = false;
+            mBackButton.setRotation(45);
+            mBackButton.setImageResource(R.drawable.ic_add);
+            confirmationButtonBarFitRemove.setVisibility(View.GONE);
+            confirmationButtonBar.setVisibility(View.VISIBLE);
+            confirmationButton.setText(R.string.create_reminder);
+            if (reminderWrapperTemp != null) {
+                setReminderServer(reminderWrapperTemp.getReminderServer());
+                setInformation(reminderWrapperTemp.getReminderServer());
+            } else {
+                dateBox.setVisibility(View.GONE);
+                setReminderServer(null);
             }
-            bottomBarBox.setVisibility(View.GONE);
-            icon1.setVisibility(View.GONE);
-            icon2.setVisibility(View.GONE);
-            editButton.setVisibility(View.VISIBLE);
-            space.setVisibility(View.VISIBLE);
         }
-
-        mBackButton.setOnClickListener(this);
-        mBackButton.setOnTouchListener(this);
-        confirmationButton.setOnClickListener(this);
-        //icon1.setOnClickListener(this);
-        icon2.setOnClickListener(this);
-        editButton.setOnClickListener(this);
-        editButton.setOnTouchListener(this);
-        deleteIcon.setOnClickListener(this);
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
+
     }
 
-    public void setProgress(boolean progress) {
-        if (progress)
-            findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
-        else
-            findViewById(R.id.progressBox).setVisibility(View.GONE);
-    }
+    private void setReminderServer(ReminderServer reminder) {
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String creator = mSharedPreferences.getString(Constants.EMAIL, "");
 
-    public ReminderServer getReminder() {
-        if (reminderWrapper != null)
-            return reminderWrapper.getReminderServer();
-        else
-            return null;
-    }
+        reminderServer = new ReminderServer();
+        reminderServer.setCreator(creator);
 
-    public void setReminderCardText(String text) {
-        reminderCardText.setText(text);
-    }
+        if (reminder != null) {
+            reminderServer.setId(reminder.getId());
 
-    public void setReminderCardTime(String time) {
-        reminderCardTime.setText(time);
-    }
+            reminderServer.setTitle(reminder.getTitle());
+            reminderServer.setText(reminder.getText());
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
+            reminderServer.setRepeatQty(reminder.getRepeatQty());
+            reminderServer.setRepeatType(reminder.getRepeatType());
 
-    @Override
-    public void onClick(View v) {
-        if (v == mBackButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            onBackPressed();
-        }
-        else if (v == confirmationButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            if (!edit)
-                register();
-            else {
-                if (getReminder().getRepeatType() > 0) {
-                    List<Integer> date = ((ReminderEditFragment) mNavigator.getFragment(0)).getDateFromView();
-                    int d = date.get(0);
-                    int m = date.get(1) + 1;
-                    int y = date.get(2);
-
-                    if (sameDay(y, m, d, getReminder().getYearStart(), getReminder().getMonthStart(), getReminder().getDayStart()))
-                        edit_reminder(false);
-                    else
-                        createDialogEditWithRepeat();
-                } else
-                    edit_reminder(false);
-            }
-        } else if (v == editButton) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "editButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            Intent myIntent = new Intent(ReminderActivity.this, ReminderActivity.class);
-            myIntent.putExtra("reminder_edit", reminderWrapper);
-            startActivity(myIntent);
-            finish();
-        } else if (v == deleteIcon) {
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteIcon" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            createDialogRemove(getReminder().getRepeatType() > 0);
-        }
-    }
-
-    private void createDialogRemove(boolean repeat) {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_message, null);
-
-        TextView text1 = (TextView) customView.findViewById(R.id.text1);
-        TextView text2 = (TextView) customView.findViewById(R.id.text2);
-        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-        EditText editText = (EditText) customView.findViewById(R.id.editText);
-        RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
-        AppCompatRadioButton allRadioButton = (AppCompatRadioButton) customView.findViewById(R.id.allRadioButton);
-
-        editText.setVisibility(View.GONE);
-
-        allRadioButton.setText(getResources().getString(R.string.delete_plans_answer_all));
-
-        if (repeat) {
-            radioGroup.setVisibility(View.VISIBLE);
-            radioGroup.setOrientation(LinearLayout.VERTICAL);
-            buttonText1.setText(getResources().getString(R.string.cancel));
-            buttonText2.setText(getResources().getString(R.string.confirm));
-            text2.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.delete_plans_question_text_1));
-            text2.setText(getResources().getString(R.string.delete_plans_question_text_2));
+            reminderServer.setDayStart(reminder.getDayStart());
+            reminderServer.setMonthStart(reminder.getMonthStart());
+            reminderServer.setYearStart(reminder.getYearStart());
+            reminderServer.setDayEnd(reminder.getDayEnd());
+            reminderServer.setMonthEnd(reminder.getMonthEnd());
+            reminderServer.setYearEnd(reminder.getYearEnd());
+            reminderServer.setMinuteStart(reminder.getMinuteStart());
+            reminderServer.setHourStart(reminder.getHourStart());
+            reminderServer.setMinuteEnd(reminder.getMinuteEnd());
+            reminderServer.setHourEnd(reminder.getHourEnd());
+            reminderServer.setDateTimeStart(reminder.getDateTimeStart());
+            reminderServer.setDateTimeEnd(reminder.getDateTimeEnd());
+            reminderServer.setDateStartEmpty(reminder.getDateStartEmpty());
+            reminderServer.setTimeStartEmpty(reminder.getTimeStartEmpty());
+            reminderServer.setDateEndEmpty(reminder.getDateEndEmpty());
+            reminderServer.setTimeEndEmpty(reminder.getTimeEndEmpty());
         } else {
-            buttonText1.setText(getResources().getString(R.string.no));
-            buttonText2.setText(getResources().getString(R.string.yes));
-            text2.setVisibility(View.GONE);
-            text1.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
+            reminderServer.setTitle("");
+            reminderServer.setText("");
+
+            reminderServer.setRepeatQty(-1);
+            reminderServer.setRepeatType(0);
+
+            reminderServer.setDayStart(-1);
+            reminderServer.setMonthStart(-1);
+            reminderServer.setYearStart(-1);
+            reminderServer.setDayEnd(-1);
+            reminderServer.setMonthEnd(-1);
+            reminderServer.setYearEnd(-1);
+            reminderServer.setMinuteStart(0);
+            reminderServer.setHourStart(0);
+            reminderServer.setMinuteEnd(0);
+            reminderServer.setHourEnd(0);
+            reminderServer.setDateTimeStart(-1);
+            reminderServer.setDateTimeEnd(-1);
+            reminderServer.setDateStartEmpty(true);
+            reminderServer.setTimeStartEmpty(true);
+            reminderServer.setDateEndEmpty(true);
+            reminderServer.setTimeEndEmpty(true);
+        }
+    }
+
+    public void setInformation(ReminderServer reminder) {
+        reminderEditText.setText(reminder.getText());
+        reminderEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                if (reminderWrapper != null) {
+                    if (!reminderEditText.getText().toString().matches(reminderWrapper.getReminderServer().getText())) {
+                        confirmationButtonBar.setVisibility(View.VISIBLE);
+                        confirmationButtonBarFitRemove.setVisibility(View.GONE);
+                        confirmationButton.setText(R.string.save_updates);
+                    } else {
+                        confirmationButtonBar.setVisibility(View.GONE);
+                        confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (reminderWrapper != null) {
+                    if (!reminderEditText.getText().toString().matches(reminderWrapper.getReminderServer().getText())) {
+                        confirmationButtonBar.setVisibility(View.VISIBLE);
+                        confirmationButtonBarFitRemove.setVisibility(View.GONE);
+                        confirmationButton.setText(R.string.save_updates);
+                    } else {
+                        confirmationButtonBar.setVisibility(View.GONE);
+                        confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (reminderWrapper != null) {
+                    if (!reminderEditText.getText().toString().matches(reminderWrapper.getReminderServer().getText())) {
+                        confirmationButtonBar.setVisibility(View.VISIBLE);
+                        confirmationButtonBarFitRemove.setVisibility(View.GONE);
+                        confirmationButton.setText(R.string.save_updates);
+                    } else {
+                        confirmationButtonBar.setVisibility(View.GONE);
+                        confirmationButtonBarFitRemove.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
+        });
+
+        if (!reminder.getDateStartEmpty()) {
+            dateBox.setVisibility(View.VISIBLE);
+            addDateHourButton.setVisibility(View.GONE);
+
+            Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
+            calendar.set(reminder.getYearStart(), reminder.getMonthStart() - 1, reminder.getDayStart());
+            calendar2.set(reminder.getYearEnd(), reminder.getMonthEnd() - 1, reminder.getDayEnd());
+
+            String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayStart = String.format("%02d", reminder.getDayStart());
+            String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int yearStart = reminder.getYearStart();
+            String hourStart = String.format("%02d", reminder.getHourStart());
+            String minuteStart = String.format("%02d", reminder.getMinuteStart());
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayEnd = String.format("%02d", reminder.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = reminder.getYearEnd();
+            String hourEnd = String.format("%02d", reminder.getHourEnd());
+            String minuteEnd = String.format("%02d", reminder.getMinuteEnd());
+
+            if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty()) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
+            } else if (!reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty()) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+            } else if (reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty()) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+            } else if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty()) {
+                dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+            } else if (!reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty()) {
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+                }
+            } else if (!reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty()) {
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                }
+            } else if (reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty()) {
+                if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                }
+            } else {
+                if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                    if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                    } else {
+                        dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                    }
+                } else {
+                    dateHourText.setText(this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
+                }
+            }
+
+            if (reminder.getRepeatType() == 0) {
+                repeatText.setVisibility(View.GONE);
+            } else {
+                String repeatly;
+                repeatText.setVisibility(View.VISIBLE);
+                switch (reminder.getRepeatType()) {
+                    case Constants.DAYLY:
+                        repeatly = this.getString(R.string.repeat_daily);
+                        break;
+                    case Constants.WEEKLY:
+                        repeatly = this.getString(R.string.repeat_weekly);
+                        break;
+                    case Constants.MONTHLY:
+                        repeatly = this.getString(R.string.repeat_monthly);
+                        break;
+                    default:
+                        repeatly = "";
+                        break;
+                }
+
+                /*ActivityServer activityServer = activityServers.get(activityServers.size() - 1);
+
+                Calendar cal = Calendar.getInstance();
+                cal.set(Calendar.HOUR_OF_DAY, 0);
+                cal.clear(Calendar.MINUTE);
+                cal.clear(Calendar.SECOND);
+                cal.clear(Calendar.MILLISECOND);
+                cal.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+
+                String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(cal.get(Calendar.DAY_OF_WEEK), cal);
+                String dayEnd = String.format("%02d", activityServer.getDayEnd());
+                String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
+                int yearEnd = activityServer.getYearEnd();
+
+                String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
+
+                return date;
+
+                repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(reminderServers)));*/
+            }
+        } else {
+            dateBox.setVisibility(View.GONE);
+            addDateHourButton.setVisibility(View.VISIBLE);
         }
 
-        Dialog dg = new Dialog(this, R.style.NewDialog);
-
-        dg.setContentView(customView);
-        dg.setCanceledOnTouchOutside(true);
-
-        buttonText1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dg.dismiss();
-            }
-        });
-
-        buttonText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int radioButtonID;
-                View radioButton;
-                int idx = -1;
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteReminder" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                if (repeat) {
-                    radioButtonID = radioGroup.getCheckedRadioButtonId();
-                    radioButton = radioGroup.findViewById(radioButtonID);
-                    idx = radioGroup.indexOfChild(radioButton);
-                }
-
-                ActivityServer activityServer = new ActivityServer();
-                activityServer.setId(idx);
-                activityServer.setVisibility(Constants.REMINDER);
-
-                deleteFlagActReminder(getReminder().getId(), activityServer);
-
-                dg.dismiss();
-            }
-        });
-
-        dg.show();
-    }
-
-    private void deleteFlagActReminder(long id, ActivityServer activityServer) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activityServer)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleDeleteIgnoreConfirm, this::handleError));
-    }
-
-    private void handleDeleteIgnoreConfirm(Response response) {
-        setProgress(false);
-        //Toast.makeText(this, ServerMessage.getServerMessage(this, response.getMessage()), Toast.LENGTH_LONG).show();
-        //ACTIVITY_DELETED_SUCCESSFULLY e WITHOUT_NOTIFICATION
-        finish();
     }
 
     private void register() {
 
-        String title = ((ReminderEditFragment) mNavigator.getFragment(0)).getTitleFromView();
-        List<Integer> date = ((ReminderEditFragment) mNavigator.getFragment(0)).getDateFromView();
-        List<Integer> repeat = ((ReminderEditFragment) mNavigator.getFragment(0)).getRepeatFromView();
-
+        String text = reminderEditText.getText().toString();
 
         int err = 0;
+        if (!validateFields(text)) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_text_required, Toast.LENGTH_LONG).show();
+        } else {
 
-        if (!validateFields(title)) {
-
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_title_required, Toast.LENGTH_LONG).show();
-        } else if (date.size() == 0 || date.get(0) == -1 || date.get(3) == -1) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_date_start_required, Toast.LENGTH_LONG).show();
-        } else if ((repeat.get(0) != 0 && repeat.get(1) < 0)) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-        } else if (repeat.get(1) == 0 || repeat.get(1) > 30) {
-            err++;
-            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         }
+
         if (err == 0) {
-
-            int repeat_type = repeat.get(0);
-            int repeat_qty = repeat.get(1);
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(4), date.get(3));
-
-                for (int i = 0; i < repeat_qty; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY)
-                        cal.add(Calendar.MONTH, 1);
-                    else
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-
-                }
-
-            }
 
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String creator = mSharedPreferences.getString(Constants.EMAIL, "");
-            ReminderServer reminderServer = new ReminderServer();
-            reminderServer.setTitle(title);
-
-            d = date.get(0);
-            m = date.get(1);
-            y = date.get(2);
 
             reminderServer.setCreator(creator);
-            reminderServer.setDayStart(date.get(0));
-            reminderServer.setMonthStart(date.get(1) + 1);
-            reminderServer.setYearStart(date.get(2));
-            reminderServer.setMinuteStart(date.get(3));
-            reminderServer.setHourStart(date.get(4));
-
             reminderServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart(), reminderServer.getHourStart(), reminderServer.getMinuteStart());
-            reminderServer.setDateTimeStart(calendar.getTimeInMillis());
-
-            reminderServer.setRepeatType(repeat.get(0));
-            reminderServer.setRepeatQty(repeat.get(1));
-            reminderServer.setDayListStart(day_list_start);
-            reminderServer.setMonthListStart(month_list_start);
-            reminderServer.setYearListStart(year_list_start);
-
-            reminderServer.setDateTimeListStart(date_time_list_start);
+            reminderServer.setText(text);
+            reminderServer.setTitle("");
 
             registerProcess(reminderServer);
+            setProgress(true);
 
         } else {
             error = true;
-            ((ReminderEditFragment) mNavigator.getFragment(0)).updateError(error);
-            //requiredText.setVisibility(View.VISIBLE);
-            showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
         }
     }
 
-    private int getFutureActivities(List<Integer> date) {
-        Collections.sort(reminderServers, new Comparator<ReminderServer>() {
-            @Override
-            public int compare(ReminderServer c1, ReminderServer c2) {
-                int day = 0, month = 0, year = 0;
-                int day2 = 0, month2 = 0, year2 = 0;
+    private void editReminder() {
 
-                day = c1.getDayStart();
-                month = c1.getMonthStart();
-                year = c1.getYearStart();
-
-                day2 = c2.getDayStart();
-                month2 = c2.getMonthStart();
-                year2 = c2.getYearStart();
-
-
-                if (year < year2)
-                    return -1;
-                else if (year > year2)
-                    return 1;
-                else if (month < month2)
-                    return -1;
-                else if (month > month2)
-                    return 1;
-                else if (day < day2)
-                    return -1;
-                else if (day > day2)
-                    return 1;
-                else
-                    return 0;
-
-            }
-        });
-
-        ArrayList<ReminderServer> list = new ArrayList<>();
-        for (int i = 0; i < reminderServers.size(); i++) {
-            ReminderServer rem = reminderServers.get(i);
-            if (!isDatePrior(rem.getDayStart(), rem.getMonthStart(), rem.getYearStart(), getReminder().getDayStart(), getReminder().getMonthStart(), getReminder().getYearStart()))
-                list.add(rem);
-        }
-
-        return list.size();
-    }
-
-    private boolean isDatePrior(int d1, int m1, int y1, int d2, int m2, int y2) {
-        if (y1 < y2)
-            return true;
-        else if (y1 == y2) {
-            if (m1 < m2)
-                return true;
-            else if (m1 == m2)
-                if (d1 < d2)
-                    return true;
-        }
-        return false;
-    }
-
-    private void edit_reminder(boolean repeat) {
-
-        String title = ((ReminderEditFragment) mNavigator.getFragment(0)).getTitleFromView();
-        List<Integer> date = ((ReminderEditFragment) mNavigator.getFragment(0)).getDateFromView();
-        List<Integer> repeat_single = ((ReminderEditFragment) mNavigator.getFragment(0)).getRepeatFromView();
+        String text = reminderEditText.getText().toString();
 
         int err = 0;
-        int repeat_type = getReminder().getRepeatType();
-        boolean repeat_single_changed = false;
+        if (!validateFields(text)) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_text_required, Toast.LENGTH_LONG).show();
+        } else {
 
-        if (repeat_type == 0 && repeat_type != repeat_single.get(0)) {
-            repeat_type = repeat_single.get(0);
-            repeat_single_changed = true;
-            repeat = true;
-            if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
-                err++;
-                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-            } else if (repeat_single.get(1) == 0 || repeat_single.get(1) > 30) {
-                err++;
-                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
-            }
         }
 
         if (err == 0) {
 
-            ActivityServer activityServer = new ActivityServer();
-            activityServer.setTitle(title);
-            int repeat_left = -1;
+            reminderServer.setText(text);
+            reminderServer.setTitle("");
 
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(4), date.get(3));
-
-                if (!repeat_single_changed)
-                    repeat_left = getFutureActivities(date);
-                else
-                    repeat_left = repeat_single.get(1);
-
-                for (int i = 0; i < repeat_left; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY)
-                        cal.add(Calendar.MONTH, 1);
-                    else
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-
-                }
-
-            }
-
-            d = date.get(0);
-            m = date.get(1);
-            y = date.get(2);
-
-            activityServer.setId(getReminder().getId());
-
-            activityServer.setDayStart(date.get(0));
-            activityServer.setMonthStart(date.get(1) + 1);
-            activityServer.setYearStart(date.get(2));
-            activityServer.setMinuteStart(date.get(3));
-            activityServer.setHourStart(date.get(4));
-
-            activityServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
-
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart(), activityServer.getHourStart(), activityServer.getMinuteStart());
-            activityServer.setDateTimeStart(calendar.getTimeInMillis());
-
-            activityServer.setDayListStart(day_list_start);
-            activityServer.setMonthListStart(month_list_start);
-            activityServer.setYearListStart(year_list_start);
-
-            activityServer.setDateTimeListStart(date_time_list_start);
-
-            if (repeat_type > 0) {
-                if (sameDay(y, m+1, d, getReminder().getYearStart(), getReminder().getMonthStart(), getReminder().getDayStart())) // So editar os dados
-                    activityServer.setVisibility(1);
-                else
-                    activityServer.setVisibility(2);
-            } else
-                activityServer.setVisibility(0);
-
-
-            if (repeat) { //ver se edita só esse ou todas repetições
-                activityServer.setRepeatType(repeat_type);
-                activityServer.setRepeatQty(repeat_left); //tamanho que sobra com as atividades futuras
-            } else {
-                activityServer.setRepeatType(0);
-                activityServer.setRepeatQty(-1);
-            }
-
-            if (!repeat_single_changed)
-                editReminder(activityServer);
-            else
-                editReminderRepeatSingle(activityServer);
-
+            editProcess(reminderServer);
+            setProgress(true);
 
         } else {
             error = true;
-            //requiredText.setVisibility(View.VISIBLE);
-        }
-    }
-
-    private boolean sameDay(int y1, int m1, int d1, int y2, int m2, int d2) {
-        return d1 == d2 && m1 == m2 && y1 == y2;
-    }
-
-    private int getRepeatAdder(int type) {
-        switch (type) {
-            case Constants.DAYLY:
-                return 1;
-            case Constants.WEEKLY:
-                return 7;
-            default:
-                return 0;
         }
     }
 
@@ -678,38 +422,19 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 .subscribe(this::handleResponse, this::handleError));
     }
 
-    private void setReminderInformation(long id) {
-
-        mSubscriptions.add(NetworkUtil.getRetrofit().getFlagReminder(id)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleReminderInformation, this::handleError));
-    }
-
-    private void handleReminderInformation(Response response) {
-        setProgress(false);
-        reminderServers = response.getMyCommitReminder();
-
-        ReminderShowFragment reminderShowFragment = (ReminderShowFragment) mNavigator.getFragment(1);
-        if (reminderShowFragment != null)
-            reminderShowFragment.setLayout(getReminder(), reminderServers);
-
-    }
-
-    private void editReminder(ActivityServer activityServer) {
+    private void editProcess(ReminderServer reminderServer) {
         setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().editReminder(getReminder().getId(), activityServer)
+        mSubscriptions.add(NetworkUtil.getRetrofit().editReminder(reminderWrapper.getReminderServer().getId(), reminderServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse, this::handleError));
     }
 
-    private void editReminderRepeatSingle(ActivityServer activityServer) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().editReminderRepeatSingle(getReminder().getId(), activityServer)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+    public ReminderServer getReminder() {
+        if (reminderWrapper != null)
+            return reminderWrapper.getReminderServer();
+        else
+            return null;
     }
 
     private void handleResponse(Response response) {
@@ -726,128 +451,72 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         int month2 = c2.get(Calendar.MONTH);
         int year2 = c2.get(Calendar.YEAR);
 
-        if(getReminder()!=null) {
-            if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
-                getActivityStartToday();
-        }
+        ReminderServer reminder = getReminder();
+        int d = reminder.getDayStart();
+        int m = reminder.getMonthStart();
+        int y = reminder.getYearStart();
 
-        Intent intent = new Intent();
+        if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+            getActivityStartToday();
+
+        Intent intent = new Intent(this, MainActivity.class);
         intent.putExtra("d", d);
         intent.putExtra("m", m);
         intent.putExtra("y", y);
         setResult(RESULT_OK, intent);
+        startActivity(intent);
         finish();
 
     }
 
     private void handleError(Throwable error) {
-        //setProgress(false);
-        if(!Utilities.isDeviceOnline(this))
+        setProgress(false);
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
-    private void showSnackBarMessage(String message) {
-
-        if (findViewById(android.R.id.content) != null) {
-
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
-        }
+    public void setProgress(boolean progress) {
+        if (progress)
+            findViewById(R.id.progressBox).setVisibility(View.VISIBLE);
+        else
+            findViewById(R.id.progressBox).setVisibility(View.GONE);
     }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        mSubscriptions.dispose();
+    private void deleteFlagActReminder(long id, ActivityServer activity) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().deleteActivity(id, activity)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleDeleteIgnoreConfirm, this::handleError));
     }
 
-    private void createDialogEditWithRepeat() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_message, null);
+    private void handleDeleteIgnoreConfirm(Response response) {
+        Calendar c = Calendar.getInstance();
+        int day = c.get(Calendar.DAY_OF_MONTH);
+        int month = c.get(Calendar.MONTH) + 1;
+        int year = c.get(Calendar.YEAR);
 
-        TextView text1 = (TextView) customView.findViewById(R.id.text1);
-        TextView text2 = (TextView) customView.findViewById(R.id.text2);
-        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-        EditText editText = (EditText) customView.findViewById(R.id.editText);
-        RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
+        Calendar c2 = Calendar.getInstance();
+        c2.add(Calendar.DATE, 1);
+        int day2 = c2.get(Calendar.DAY_OF_MONTH);
+        int month2 = c2.get(Calendar.MONTH) + 1;
+        int year2 = c2.get(Calendar.YEAR);
 
-        editText.setVisibility(View.GONE);
+        ReminderServer reminder = getReminder();
+        int d = reminder.getDayStart();
+        int m = reminder.getMonthStart();
+        int y = reminder.getYearStart();
 
-        text1.setText(getResources().getString(R.string.popup_message_edit_commitments_with_repetitions));
-        text2.setVisibility(View.GONE);
-        buttonText1.setText(getResources().getString(R.string.cancel));
-        buttonText2.setText(getResources().getString(R.string.confirm));
+        if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+            getActivityStartToday();
 
-        radioGroup.setVisibility(View.VISIBLE);
-        text2.setVisibility(View.VISIBLE);
-        text2.setText(getResources().getString(R.string.popup_message_edit_select_which_one_to_modify));
-
-        Dialog dg = new Dialog(this, R.style.NewDialog);
-
-        dg.setContentView(customView);
-        dg.setCanceledOnTouchOutside(true);
-
-        buttonText1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dg.dismiss();
-            }
-        });
-
-        buttonText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int radioButtonID;
-                View radioButton;
-                int idx = -1;
-
-                radioButtonID = radioGroup.getCheckedRadioButtonId();
-                radioButton = radioGroup.findViewById(radioButtonID);
-                idx = radioGroup.indexOfChild(radioButton);
-
-                edit_reminder(idx == 1);
-
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, getResources().getString(R.string.popup_message_edit_commitments_with_repetitions) + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                dg.dismiss();
-            }
-        });
-
-        dg.show();
+        setProgress(false);
+        finish();
     }
 
-    private void getActivityStartToday(){
+    private void getActivityStartToday() {
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -880,7 +549,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     private void handleResponseToday(Response response) {
 
         JobManager mJobManager = JobManager.instance();
-        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+        if (mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
             mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
 
         ArrayList<Object> list = new ArrayList<>();
@@ -888,13 +557,13 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
-            for(int i=0;i<activityServers.size();i++){
+            for (int i = 0; i < activityServers.size(); i++) {
                 list.add(activityServers.get(i));
             }
         }
         if (response.getMyCommitFlag() != null) {
             ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
-            for(int i=0;i<flagServers.size();i++){
+            for (int i = 0; i < flagServers.size(); i++) {
                 list.add(flagServers.get(i));
             }
         }
@@ -1026,19 +695,19 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
                 list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
-                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
+                        activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getYearStart()));
             }
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
                 list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
-                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
+                        flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
                 list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
-                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
+                        reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }
 
@@ -1063,7 +732,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             Calendar c2 = Calendar.getInstance();
 
             c1.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
-            c1.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+            c1.set(Calendar.MONTH, activityOfDay.getMonth() - 1);
             c1.set(Calendar.YEAR, activityOfDay.getYear());
             c1.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
             c1.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
@@ -1071,35 +740,34 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             c1.set(Calendar.MILLISECOND, 0);
 
             c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-            c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+            c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
             c2.set(Calendar.YEAR, activityOfDayNext.getYear());
             c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
             c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
             c2.set(Calendar.SECOND, 0);
             c2.set(Calendar.MILLISECOND, 0);
 
-            while(activityOfDayNext !=null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
+            while (activityOfDayNext != null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
                 j++;
                 count_same++;
-                if(j < list_notify.size()) {
+                if (j < list_notify.size()) {
                     activityOfDayNext = list_notify.get(j);
                     c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
                     c2.set(Calendar.YEAR, activityOfDayNext.getYear());
                     c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
                     c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
                     c2.set(Calendar.SECOND, 0);
                     c2.set(Calendar.MILLISECOND, 0);
-                }
-                else
+                } else
                     activityOfDayNext = null;
             }
             activityOfDay.setCommitmentSameHour(count_same);
 
-            time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+            time_exact = (int) (c1.getTimeInMillis() - c3.getTimeInMillis()) / (1000 * 60);
+            if (time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
                 c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras)
@@ -1108,9 +776,9 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                         .schedule();
             }
 
-            if(time_exact >= 1440) {
+            if (time_exact >= 1440) {
                 c1.add(Calendar.MINUTE, -1380);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras2)
@@ -1119,7 +787,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                         .schedule();
             }
 
-            i=j-1;
+            i = j - 1;
         }
 
         if (list_notify.size() > 0) {
@@ -1134,20 +802,157 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
     private void handleErrorToday(Throwable error) {
     }
 
+    private void createDialogRemove() {
+        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View customView = inflater.inflate(R.layout.dialog_message, null);
+
+        TextView text1 = (TextView) customView.findViewById(R.id.text1);
+        TextView text2 = (TextView) customView.findViewById(R.id.text2);
+        TextView button1 = (TextView) customView.findViewById(R.id.buttonText1);
+        TextView button2 = (TextView) customView.findViewById(R.id.buttonText2);
+        EditText editText = (EditText) customView.findViewById(R.id.editText);
+
+        editText.setVisibility(View.GONE);
+
+        button1.setText(getResources().getString(R.string.no));
+        button2.setText(getResources().getString(R.string.yes));
+        text2.setVisibility(View.GONE);
+        text1.setVisibility(View.VISIBLE);
+        text1.setText(getResources().getString(R.string.delete_plans_question_text_reminder_3));
+
+        Dialog dg = new Dialog(this, R.style.NewDialog);
+
+        dg.setContentView(customView);
+        dg.setCanceledOnTouchOutside(true);
+
+        button1.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    button1.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    button1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
+                }
+
+                return false;
+            }
+        });
+
+        button2.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent event) {
+                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                    button2.setBackground(null);
+                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                    button2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
+                }
+
+                return false;
+            }
+        });
+
+        button1.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dg.dismiss();
+            }
+        });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "deleteReminder" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                ActivityServer activityServer = new ActivityServer();
+                activityServer.setId(0);
+                activityServer.setVisibility(Constants.REMINDER);
+
+                deleteFlagActReminder(getReminder().getId(), activityServer);
+
+                dg.dismiss();
+            }
+        });
+
+        dg.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (v == confirmationButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonEdit" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            if (edit)
+                editReminder();
+            else
+                register();
+        } else if (v == mBackButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            onBackPressed();
+        } else if (v == addDateHourButton) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "addDateHourButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            Intent intent = new Intent(ReminderActivity.this, ReminderDateTimeActivity.class);
+            intent.putExtra("reminder_show", reminderWrapper);
+            intent.putExtra("reminder_temp", new ReminderWrapper(reminderServer));
+            startActivity(intent);
+            overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
+        } else if (v == dateBox) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "dateBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            Intent intent = new Intent(ReminderActivity.this, ReminderDateTimeActivity.class);
+            intent.putExtra("reminder_show", reminderWrapper);
+            intent.putExtra("reminder_temp", new ReminderWrapper(reminderServer));
+            startActivity(intent);
+            overridePendingTransition(R.anim.push_left_enter, R.anim.push_left_exit);
+        } else if (v == confirmationButtonRemove) {
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            createDialogRemove();
+        }
+
+    }
+
     @Override
     public boolean onTouch(View view, MotionEvent event) {
         if (view == mBackButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_900));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
-            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                mBackButton.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
             }
-        }
-        else if (view == editButton) {
+        } else if (view == addDateHourButton) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                addDateHourButtonText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_400));
+                addDateHourButtonIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                editButton.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                addDateHourButtonText.setTextColor(ContextCompat.getColor(this, R.color.deep_purple_200));
+                addDateHourButtonIcon.setColorFilter(ContextCompat.getColor(this, R.color.deep_purple_200));
+            }
+        } else if (view == dateBox) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                dateHourText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+                dateIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_600));
+                if (repeatText.getVisibility() == View.VISIBLE)
+                    repeatText.setTextColor(ContextCompat.getColor(this, R.color.grey_600));
+            } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                dateHourText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
+                dateIcon.setColorFilter(ContextCompat.getColor(this, R.color.grey_400));
+                if (repeatText.getVisibility() == View.VISIBLE)
+                    repeatText.setTextColor(ContextCompat.getColor(this, R.color.grey_400));
             }
         }
 

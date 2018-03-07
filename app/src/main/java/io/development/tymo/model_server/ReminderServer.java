@@ -93,6 +93,10 @@ public class ReminderServer implements Serializable {
         this.time_start_empty = time_start_empty;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public boolean getTimeStartEmpty() {
         return time_start_empty;
     }

@@ -220,6 +220,10 @@
     <string name="delete_plans_question_text_1">Esse compromisso se repete</string>
     <string name="delete_plans_question_text_2">O que você deseja remover da sua agenda?</string>
     <string name="delete_plans_question_text_3">Tem certeza que deseja remover esse compromisso da sua agenda?</string>
+    <string name="delete_plans_question_text_reminder_1">Essa nota se repete</string>
+    <string name="delete_plans_question_text_reminder_2">O que você deseja apagar?</string>
+    <string name="delete_plans_question_text_reminder_3">Tem certeza que deseja apagar essa nota?</string>
+    <string name="delete_plans_answer_only_this_reminde">Somente essa</string>
     <string name="delete">Excluir</string>
     <string name="deselect_all">Desmarcar todos</string>
     <string name="dialog_fit_multiple_repeat_activity_text">Quais dias você deseja encaixar?</string>
@@ -594,6 +598,7 @@
     <string name="validation_field_compare_selected_required">Deve ter ao menos um usuário selecionado</string>
     <string name="validation_field_date_end_before_start">A data término está antes da data de início</string>
     <string name="validation_field_date_start_required">A data de início é obrigatória</string>
+    <string name="validation_field_date_start_required_reminder">Para aplicar um horário é necessário uma data</string>
     <string name="validation_field_email_invalid_or_not_registered">Email inválido ou não cadastrado</string>
     <string name="validation_field_email_required">Preencha o email corretamente</string>
     <string name="validation_field_gender_required">Selecione um gênero</string>
@@ -616,6 +621,7 @@
     <string name="validation_field_tag_required">Selecione ao menos uma TAG de interesse</string>
     <string name="validation_field_time_end_before_start">O horário de término está antes do horário de início</string>
     <string name="validation_field_title_required">O título é obrigatório</string>
+    <string name="validation_field_text_required">O texto é obrigatório</string>
     <string name="validation_field_visibility_required">Selecione uma das opções</string>
     <string name="version_new_update_no">Fechar</string>
     <string name="version_new_update_text">É necessária a atualização do app para continuar utilizando o Tymo</string>

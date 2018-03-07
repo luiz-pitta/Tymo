@@ -247,7 +247,7 @@ public interface RetrofitInterface {
     Observable<Response> editFlag(@Path("id") long id, @Body ActivityServer activityServer);
 
     @POST("edit_reminder/{id}")
-    Observable<Response> editReminder(@Path("id") long id, @Body ActivityServer activityServer);
+    Observable<Response> editReminder(@Path("id") long id, @Body ReminderServer reminderServer);
 
     @POST("edit_activity/{id}")
     Observable<Response> editActivity(@Path("id") long id, @Body ActivityServer activityServer);

@@ -655,13 +655,19 @@
                     android:textSize="14sp"
                     android:textStyle="normal" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:layout_marginTop="20dp"
+                    android:background="@color/horizontal_line" />
+
                 <LinearLayout
                     android:id="@+id/locationBoxAdd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
                     android:visibility="visible">
@@ -693,7 +699,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="20dp"
                     android:layout_marginRight="20dp"
-                    android:layout_marginTop="20dp">
+                    android:layout_marginTop="10dp">
 
                     <ProgressBar
                         android:id="@+id/progressLocation"
@@ -734,6 +740,12 @@
                         android:tint="@color/grey_600" />
 
                 </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/horizontal_line_height"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/horizontal_line" />
 
                 <LinearLayout
                     android:id="@+id/whatsAppGroupLinkBox"

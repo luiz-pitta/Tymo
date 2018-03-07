@@ -480,6 +480,18 @@
                 android:value=".activities.MainActivity" />
         </activity>
 
+        <activity
+            android:name=".activities.ReminderDateTimeActivity"
+            android:label="ReminderDateTimeActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:parentActivityName=".activities.ReminderActivity" >
+            <!-- The meta-data element is needed for versions lower than 4.1 -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.ReminderActivity" />
+        </activity>
+
         <!-- [START firebase_service] -->
         <service
             android:name=".utils.TymoMessagingService"

@@ -14,6 +14,8 @@ public class ActivityServer implements Serializable {
     private String creator;
     private String name_inviter;
     private String creator_email;
+    private String text;
+    private boolean date_time_alert;
     private long id;
     private long id_facebook;
     private String id_google;
@@ -176,6 +178,22 @@ public class ActivityServer implements Serializable {
 
     public void setDateStartEmpty(boolean date_start_empty) {
         this.date_start_empty = date_start_empty;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setDateTimeAlert(boolean date_time_alert) {
+        this.date_time_alert = date_time_alert;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public boolean getDateTimeAlert() {
+        return date_time_alert;
     }
 
     public boolean getDateStartEmpty() {
