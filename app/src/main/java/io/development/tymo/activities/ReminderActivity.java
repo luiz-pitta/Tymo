@@ -287,37 +287,29 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 switch (reminder.getRepeatType()) {
                     case Constants.DAYLY:
                         repeatly = this.getString(R.string.repeat_daily);
+                        calendar2.add(Calendar.DAY_OF_WEEK, 1 * reminder.getRepeatQty());
                         break;
                     case Constants.WEEKLY:
                         repeatly = this.getString(R.string.repeat_weekly);
+                        calendar2.add(Calendar.DAY_OF_WEEK, 7 * reminder.getRepeatQty());
                         break;
                     case Constants.MONTHLY:
                         repeatly = this.getString(R.string.repeat_monthly);
+                        calendar2.add(Calendar.MONTH, 1 * reminder.getRepeatQty());
                         break;
                     default:
                         repeatly = "";
                         break;
                 }
 
-                /*ActivityServer activityServer = activityServers.get(activityServers.size() - 1);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-                cal.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
-
-                String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(cal.get(Calendar.DAY_OF_WEEK), cal);
-                String dayEnd = String.format("%02d", activityServer.getDayEnd());
-                String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
-                int yearEnd = activityServer.getYearEnd();
+                dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+                dayEnd = String.format("%02d", calendar2.get(Calendar.DAY_OF_MONTH));
+                monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                yearEnd = calendar2.get(Calendar.YEAR);
 
                 String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
 
-                return date;
-
-                repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(reminderServers)));*/
+                repeatText.setText(this.getString(R.string.repeat_text, repeatly, date));
             }
         } else {
             dateBox.setVisibility(View.GONE);
