@@ -295,7 +295,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
         if (getReminder().getRepeatQty() < 1)
             repeatEditText.setText("");
         else
-            repeatEditText.setText(getReminder().getRepeatQty());
+            repeatEditText.setText(String.valueOf(getReminder().getRepeatQty()));
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
@@ -359,7 +359,31 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             getReminder().setMinuteEnd(date.get(6));
             getReminder().setHourEnd(date.get(7));
 
-            if (date.get(0) != -1) {
+            if(dateStartEmpty){
+                getReminder().setDateStartEmpty(true);
+                getReminder().setDateEndEmpty(true);
+                getReminder().setTimeStartEmpty(true);
+                getReminder().setTimeEndEmpty(true);
+                getReminder().setDayStart(-1);
+                getReminder().setMonthStart(-1);
+                getReminder().setYearStart(-1);
+                getReminder().setDayEnd(-1);
+                getReminder().setMonthEnd(-1);
+                getReminder().setYearEnd(-1);
+                getReminder().setMinuteStart(0);
+                getReminder().setHourStart(0);
+                getReminder().setMinuteEnd(0);
+                getReminder().setHourEnd(0);
+
+                getReminder().setRepeatQty(-1);
+                getReminder().setRepeatType(0);
+            } else if(getReminder().getRepeatType() == 0){
+                getReminder().setRepeatQty(-1);
+            } else {
+                getReminder().setRepeatQty(Integer.parseInt(repeatEditText.getText().toString()));
+            }
+
+            if (!dateStartEmpty) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(getReminder().getYearStart(), getReminder().getMonthStart() - 1, getReminder().getDayStart(), getReminder().getHourStart(), getReminder().getMinuteStart());
                 getReminder().setDateTimeStart(calendar.getTimeInMillis());
@@ -370,15 +394,6 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             else{
                 getReminder().setDateTimeStart(-1);
                 getReminder().setDateTimeEnd(-1);
-            }
-
-            if(dateStartEmpty){
-                getReminder().setRepeatQty(-1);
-                getReminder().setRepeatType(0);
-            } else if(getReminder().getRepeatType() == 0){
-                getReminder().setRepeatQty(-1);
-            } else {
-                getReminder().setRepeatQty(Integer.parseInt(repeatEditText.getText().toString()));
             }
 
             Intent intent = new Intent();

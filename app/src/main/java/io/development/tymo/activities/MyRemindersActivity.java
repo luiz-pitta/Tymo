@@ -33,6 +33,7 @@ import io.development.tymo.model_server.Response;
 import io.development.tymo.models.MyRemindersModel;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
+import io.development.tymo.utils.DateFormat;
 import io.development.tymo.utils.Utilities;
 import io.development.tymo.view_holder.MyRemindersHolder;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -44,8 +45,10 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
     private EasyRecyclerView recyclerView;
     private MyRemindersAdapter adapter;
     private SearchView searchView;
-    
+
     private int my_reminders_qty;
+
+    private DateFormat dateFormat;
 
     private Handler handler = new Handler();
 
@@ -65,6 +68,8 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_list_reminders);
 
         mSubscriptions = new CompositeDisposable();
+
+        dateFormat = new DateFormat(this);
 
         mBackButton = (ImageView) findViewById(R.id.actionBackIcon);
         m_title = (TextView) findViewById(R.id.text);
@@ -156,7 +161,7 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         @Override
         public boolean onQueryTextChange(String query) {
-            if(adapter.getCount() > 60 || query.equals(""))
+            if (adapter.getCount() > 60 || query.equals(""))
                 recyclerView.showProgress();
             executeFilter(query);
             return true;
@@ -174,19 +179,17 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
                 my_reminders_qty = adapter.getCount();
 
-                if(my_reminders_qty == 0){
+                if (my_reminders_qty == 0) {
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
                     findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
                     recyclerView.showEmpty();
-                }
-                else if(my_reminders_qty == 1){
+                } else if (my_reminders_qty == 1) {
                     findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
                     findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
                     findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
                     remindersQty.setText(R.string.my_reminders_qty_one);
-                }
-                else{
+                } else {
                     findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
                     findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
                     findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
@@ -201,7 +204,7 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
     }
 
     private ArrayList<MyRemindersModel> filter(List<MyRemindersModel> models, String query) {
-        if(models == null)
+        if (models == null)
             return new ArrayList<>();
 
         ArrayList<MyRemindersModel> filteredModelList = new ArrayList<>();
@@ -227,20 +230,18 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         my_reminders_qty = adapter.getCount();
 
-        if(my_reminders_qty == 0){
+        if (my_reminders_qty == 0) {
             recyclerView.setEmptyView(null);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
             recyclerView.showEmpty();
-        }
-        else if(my_reminders_qty == 1){
+        } else if (my_reminders_qty == 1) {
             findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
             findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
-        }
-        else{
+        } else {
             findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
@@ -264,43 +265,52 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
 
         for (i = 0; i < response.getMyCommitReminder().size(); i++) {
             ReminderServer reminderServer = response.getMyCommitReminder().get(i);
+            String date = "";
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(reminderServer.getDateTimeCreation());
+            if (!reminderServer.getDateStartEmpty()) {
 
-            String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-            String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-            String year = new SimpleDateFormat("yyyy", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(reminderServer.getYearStart(),reminderServer.getMonthStart()-1,reminderServer.getDayStart());
 
-            String date = this.getResources().getString(R.string.reminder_created_date, day + "/" + month + "/" + year);
+                String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                String dayStart = String.format("%02d", reminderServer.getDayStart());
+                String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                int yearStart = reminderServer.getYearStart();
+                String hourStart = String.format("%02d", reminderServer.getHourStart());
+                String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
+
+                if (!reminderServer.getTimeStartEmpty())
+                    date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                else
+                    date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+            }
 
             MyRemindersModel myRemindersModel = new MyRemindersModel(reminderServer.getTitle(), reminderServer.getText(), date, reminderServer);
             listMyReminders.add(myRemindersModel);
             listMyRemindersQuery.add(myRemindersModel);
+
         }
-        
+
         adapter.clear();
         adapter.addAll(listMyReminders);
 
         String query = searchView.getQuery().toString();
-        if(!query.equals(""))
+        if (!query.equals(""))
             executeFilter(query);
 
         my_reminders_qty = response.getMyCommitReminder().size();
 
-        if(my_reminders_qty == 0){
+        if (my_reminders_qty == 0) {
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.GONE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.GONE);
             recyclerView.showEmpty();
-        }
-        else if(my_reminders_qty == 1){
+        } else if (my_reminders_qty == 1) {
             findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
             findViewById(R.id.searchSelection).setVisibility(View.VISIBLE);
             remindersQty.setText(R.string.my_reminders_qty_one);
-        }
-        else{
+        } else {
             findViewById(R.id.horizontalBottomLine).setVisibility(View.VISIBLE);
             findViewById(R.id.horizontalBottomLine2).setVisibility(View.VISIBLE);
             findViewById(R.id.remindersQtyBox).setVisibility(View.VISIBLE);
