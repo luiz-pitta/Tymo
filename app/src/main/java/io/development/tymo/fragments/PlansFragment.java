@@ -19,6 +19,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -145,7 +146,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         mSubscriptions = new CompositeDisposable();
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
-        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
         gestureDetector = new GestureDetector(getActivity(), new SingleTapConfirm());
 
@@ -172,7 +173,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             }
         });
 
-        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(),R.color.deep_purple_400));
+        mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
 
         mDateBox.setOnClickListener(this);
         dateTextWeek.setOnClickListener(this);
@@ -238,21 +239,21 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
-        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp),month_text_start_temp));
+        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
 
-        String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH)+1);
+        String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH) + 1);
         dateTextMonth.setText(getResources().getString(R.string.date_format_01, month_text, year_start));
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR)
                 != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(getActivity(), new String[] { Manifest.permission.READ_CALENDAR },
+            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.READ_CALENDAR},
                     1);
         }
 
         ArrayList<Integer> list = TymoApplication.getInstance().getDate();
-        if(list == null && !TymoApplication.getInstance().isCreatedActivity())
+        if (list == null && !TymoApplication.getInstance().isCreatedActivity())
             refreshLayout(true);
-        else if(list != null && list.size() >= 3){
+        else if (list != null && list.size() >= 3) {
             updateLayout(list.get(0), list.get(1), list.get(2), true);
             TymoApplication.getInstance().setDate(null);
             TymoApplication.getInstance().setCreatedActivity(false);
@@ -260,7 +261,6 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiverRefresh, new IntentFilter("refresh_screen_delete"));
     }
-
 
 
     void refreshItems() {
@@ -273,8 +273,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 refreshLayout(true);
 
                 Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "refresh" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
             }
         }, 500);
@@ -303,7 +303,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         int m = cal.get(Calendar.MONTH) + 1;
         int y = cal.get(Calendar.YEAR);
 
-        cal.set(y, m-1,d, 0,0);
+        cal.set(y, m - 1, d, 0, 0);
         long time1 = cal.getTimeInMillis();
 
         cal.add(Calendar.DAY_OF_WEEK, 21);
@@ -311,7 +311,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         int month2 = cal.get(Calendar.MONTH) + 1;
         int year2 = cal.get(Calendar.YEAR);
 
-        cal.set(year2, month2-1,day2, 23,59);
+        cal.set(year2, month2 - 1, day2, 23, 59);
         long time2 = cal.getTimeInMillis();
 
         int d1f = d;
@@ -358,14 +358,14 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
-        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp),month_text_start_temp));
+        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
 
-        String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH)+1);
+        String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH) + 1);
         dateTextMonth.setText(getResources().getString(R.string.date_format_01, month_text, year_start));
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR)
                 == PackageManager.PERMISSION_GRANTED) {
-            list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(),time1,time2);
+            list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(), time1, time2);
         }
 
         setPlans(plans, showRefresh);
@@ -385,7 +385,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         }
     }
 
-    private void setProgress(){
+    private void setProgress() {
         CommitmentFragment commitmentFragment = (CommitmentFragment) mNavigator.getFragment(0);
         if (commitmentFragment != null)
             commitmentFragment.showProgressCommitment();
@@ -436,7 +436,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             year = cal.get(Calendar.YEAR);
 
             String day_text = dateFormat.formatDayOfWeek(cal.get(Calendar.DAY_OF_WEEK));
-            String month_text = dateFormat.formatMonthShort(cal.get(Calendar.MONTH)+1);
+            String month_text = dateFormat.formatMonthShort(cal.get(Calendar.MONTH) + 1);
 
             WeekModel weekModel = new WeekModel(String.format("%02d", day), day_text, month_text, day, month, year, false);
 
@@ -444,7 +444,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             for (j = 0; j < response.getMyCommitAct().size(); j++) {
                 ActivityServer activity = response.getMyCommitAct().get(j);
                 ActivityServer activityServer = new ActivityServer(activity);
-                if (Utilities.isActivityInRange(activityServer.getYearStart(), activityServer.getYearEnd(),activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
+                if (Utilities.isActivityInRange(activityServer.getYearStart(), activityServer.getYearEnd(), activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
                     boolean start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
                     boolean finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
                     if (!start && finish) {
@@ -483,7 +483,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             for (j = 0; j < response.getMyCommitFlag().size(); j++) {
                 FlagServer flag = response.getMyCommitFlag().get(j);
                 FlagServer flagServer = new FlagServer(flag);
-                if (Utilities.isActivityInRange(flagServer.getYearStart(), flagServer.getYearEnd(),flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
+                if (Utilities.isActivityInRange(flagServer.getYearStart(), flagServer.getYearEnd(), flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
                     boolean start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
                     boolean finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
                     if (!start && finish) {
@@ -519,41 +519,83 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 }
             }
             for (j = 0; j < response.getMyCommitReminder().size(); j++) {
-                ReminderServer reminder = response.getMyCommitReminder().get(j);
-                ReminderServer reminderServer = new ReminderServer(reminder);
-                if (Utilities.isActivityInRange(reminderServer.getYearStart(), reminderServer.getYearEnd(),reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getDayEnd(), reminderServer.getMonthEnd(), day)) {
-                    boolean start = Utilities.isStartedFinishedToday(day, reminderServer.getDayStart());
-                    boolean finish = Utilities.isStartedFinishedToday(day, reminderServer.getDayEnd());
-                    if (!start && finish) {
-                        reminderServer.setTimeStartEmptyCard(true);
-                        reminderServer.setTimeEndEmptyCard(false);
-                        reminderServer.setMinuteCard(0);
-                        reminderServer.setHourCard(0);
-                        reminderServer.setMinuteEndCard(reminderServer.getMinuteEnd());
-                        reminderServer.setHourEndCard(reminderServer.getHourEnd());
-                    } else if (start && !finish) {
-                        reminderServer.setTimeStartEmptyCard(false);
-                        reminderServer.setTimeEndEmptyCard(true);
-                        reminderServer.setMinuteCard(reminderServer.getMinuteStart());
-                        reminderServer.setHourCard(reminderServer.getHourStart());
-                        reminderServer.setMinuteEndCard(59);
-                        reminderServer.setHourEndCard(23);
-                    } else if (!start && !finish) {
-                        reminderServer.setTimeStartEmptyCard(true);
-                        reminderServer.setTimeEndEmptyCard(true);
-                        reminderServer.setMinuteCard(0);
-                        reminderServer.setHourCard(0);
-                        reminderServer.setMinuteEndCard(59);
-                        reminderServer.setHourEndCard(23);
+                ReminderServer myCommitReminder = response.getMyCommitReminder().get(j);
+                ReminderServer reminder = new ReminderServer(myCommitReminder);
+
+                Calendar calendar = Calendar.getInstance();
+                Calendar calendar2 = Calendar.getInstance();
+                calendar.set(reminder.getYearStart(), reminder.getMonthStart() - 1, reminder.getDayStart(), reminder.getHourStart(), reminder.getMinuteStart());
+                calendar2.set(reminder.getYearEnd(), reminder.getMonthEnd() - 1, reminder.getDayEnd(), reminder.getHourEnd(), reminder.getMinuteEnd());
+
+                reminder.setRepeatQty(reminder.getRepeatQty() < 0 ? 0 : reminder.getRepeatQty());
+
+                for (int k = 0; k <= reminder.getRepeatQty(); k++) {
+                    ReminderServer reminderServer = new ReminderServer(myCommitReminder);
+
+                    if (k > 0) {
+                        switch (reminderServer.getRepeatType()) {
+                            case Constants.DAYLY:
+                                calendar.add(Calendar.DAY_OF_WEEK, 1);
+                                calendar2.add(Calendar.DAY_OF_WEEK, 1);
+                                break;
+                            case Constants.WEEKLY:
+                                calendar.add(Calendar.DAY_OF_WEEK, 7);
+                                calendar2.add(Calendar.DAY_OF_WEEK, 7);
+                                break;
+                            case Constants.MONTHLY:
+                                calendar.add(Calendar.MONTH, 1);
+                                calendar2.add(Calendar.MONTH, 1);
+                                break;
+                            default:
+                                break;
+                        }
                     } else {
-                        reminderServer.setTimeStartEmptyCard(false);
-                        reminderServer.setTimeEndEmptyCard(false);
-                        reminderServer.setMinuteCard(reminderServer.getMinuteStart());
-                        reminderServer.setHourCard(reminderServer.getHourStart());
-                        reminderServer.setMinuteEndCard(reminderServer.getMinuteEnd());
-                        reminderServer.setHourEndCard(reminderServer.getHourEnd());
+
                     }
-                    weekModel.addPlans(reminderServer);
+
+                    reminderServer.setDateTimeStart(calendar.getTimeInMillis());
+                    reminderServer.setDayStart(calendar.get(Calendar.DAY_OF_MONTH));
+                    reminderServer.setMonthStart(calendar.get(Calendar.MONTH) + 1);
+                    reminderServer.setYearStart(calendar.get(Calendar.YEAR));
+                    reminderServer.setDateTimeEnd(calendar2.getTimeInMillis());
+                    reminderServer.setDayEnd(calendar2.get(Calendar.DAY_OF_MONTH));
+                    reminderServer.setMonthEnd(calendar2.get(Calendar.MONTH) + 1);
+                    reminderServer.setYearEnd(calendar2.get(Calendar.YEAR));
+
+                    if (Utilities.isActivityInRange(reminderServer.getYearStart(), reminderServer.getYearEnd(), reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getDayEnd(), reminderServer.getMonthEnd(), day)) {
+                        boolean start = Utilities.isStartedFinishedToday(day, reminderServer.getDayStart());
+                        boolean finish = Utilities.isStartedFinishedToday(day, reminderServer.getDayEnd());
+                        if (!start && finish) {
+                            reminderServer.setTimeStartEmptyCard(true);
+                            reminderServer.setTimeEndEmptyCard(false);
+                            reminderServer.setMinuteCard(0);
+                            reminderServer.setHourCard(0);
+                            reminderServer.setMinuteEndCard(reminderServer.getMinuteEnd());
+                            reminderServer.setHourEndCard(reminderServer.getHourEnd());
+                        } else if (start && !finish) {
+                            reminderServer.setTimeStartEmptyCard(false);
+                            reminderServer.setTimeEndEmptyCard(true);
+                            reminderServer.setMinuteCard(reminderServer.getMinuteStart());
+                            reminderServer.setHourCard(reminderServer.getHourStart());
+                            reminderServer.setMinuteEndCard(59);
+                            reminderServer.setHourEndCard(23);
+                        } else if (!start && !finish) {
+                            reminderServer.setTimeStartEmptyCard(true);
+                            reminderServer.setTimeEndEmptyCard(true);
+                            reminderServer.setMinuteCard(0);
+                            reminderServer.setHourCard(0);
+                            reminderServer.setMinuteEndCard(59);
+                            reminderServer.setHourEndCard(23);
+                        } else {
+                            reminderServer.setTimeStartEmptyCard(false);
+                            reminderServer.setTimeEndEmptyCard(false);
+                            reminderServer.setMinuteCard(reminderServer.getMinuteStart());
+                            reminderServer.setHourCard(reminderServer.getHourStart());
+                            reminderServer.setMinuteEndCard(reminderServer.getMinuteEnd());
+                            reminderServer.setHourEndCard(reminderServer.getHourEnd());
+                        }
+                        weekModel.addPlans(reminderServer);
+                    }
                 }
             }
 
@@ -568,10 +610,10 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 }
             }
 
-            if(birthday.getUsersBirthday().size() > 0)
+            if (birthday.getUsersBirthday().size() > 0)
                 weekModel.addPlans(birthday);
 
-            if(list_holiday.size() > 0) {
+            if (list_holiday.size() > 0) {
                 ArrayList<String> name_holydays = list_holiday.get(0);
                 ArrayList<String> date_holydays = list_holiday.get(1);
                 Holiday holiday = new Holiday();
@@ -626,12 +668,12 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                         start_minute = reminderServer.getMinuteStart();
                         end_hour = reminderServer.getHourStart();
                         end_minute = reminderServer.getMinuteStart();
-                    }else if(c1 instanceof Holiday){
+                    } else if (c1 instanceof Holiday) {
                         start_hour = 0;
                         start_minute = 0;
                         end_hour = 0;
                         end_minute = 0;
-                    }else if(c1 instanceof Birthday){
+                    } else if (c1 instanceof Birthday) {
                         start_hour = 0;
                         start_minute = 0;
                         end_hour = 0;
@@ -656,12 +698,12 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                         start_minute2 = reminderServer.getMinuteStart();
                         end_hour2 = reminderServer.getHourStart();
                         end_minute2 = reminderServer.getMinuteStart();
-                    }else if(c2 instanceof Holiday){
+                    } else if (c2 instanceof Holiday) {
                         start_hour = 0;
                         start_minute = 0;
                         end_hour = 0;
                         end_minute = 0;
-                    }else if(c2 instanceof Birthday){
+                    } else if (c2 instanceof Birthday) {
                         start_hour = 0;
                         start_minute = 0;
                         end_hour = 0;
@@ -729,12 +771,12 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                         start_minute = reminderServer.getMinuteStart();
                         end_hour = start_hour;
                         end_minute = start_minute;
-                    }else if (object instanceof Holiday) {
+                    } else if (object instanceof Holiday) {
                         start_hour = 0;
                         start_minute = 0;
                         end_hour = 0;
                         end_minute = 0;
-                    }else if (object instanceof Birthday) {
+                    } else if (object instanceof Birthday) {
                         start_hour = 0;
                         start_minute = 0;
                         end_hour = 0;
@@ -775,22 +817,21 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             }
 
             for (j = 0; j < arrayList.size(); j++) {
-                FreeTimeServer freeTimeServer = (FreeTimeServer)arrayList.get(j);
-                if(isFreeTimeOneMinute(freeTimeServer.getHourStart(),freeTimeServer.getMinuteStart(),freeTimeServer.getHourEnd(),freeTimeServer.getMinuteEnd())){
+                FreeTimeServer freeTimeServer = (FreeTimeServer) arrayList.get(j);
+                if (isFreeTimeOneMinute(freeTimeServer.getHourStart(), freeTimeServer.getMinuteStart(), freeTimeServer.getHourEnd(), freeTimeServer.getMinuteEnd())) {
                     arrayList.remove(j);
                     j--;
                 }
             }
 
             for (j = 0; j < arrayList.size(); j++) {
-                FreeTimeServer freeTimeServer = (FreeTimeServer)arrayList.get(j);
-                if((j+1) < arrayList.size()){
-                    FreeTimeServer freeTimeServer2 = (FreeTimeServer)arrayList.get(j+1);
-                    if(isStartFinishSame(freeTimeServer.getHourEnd(),freeTimeServer.getMinuteEnd(), freeTimeServer2.getHourStart(),freeTimeServer2.getMinuteStart()))
-                    {
+                FreeTimeServer freeTimeServer = (FreeTimeServer) arrayList.get(j);
+                if ((j + 1) < arrayList.size()) {
+                    FreeTimeServer freeTimeServer2 = (FreeTimeServer) arrayList.get(j + 1);
+                    if (isStartFinishSame(freeTimeServer.getHourEnd(), freeTimeServer.getMinuteEnd(), freeTimeServer2.getHourStart(), freeTimeServer2.getMinuteStart())) {
                         freeTimeServer.setHourEnd(freeTimeServer2.getHourEnd());
                         freeTimeServer.setMinuteEnd(freeTimeServer2.getMinuteEnd());
-                        arrayList.remove(j+1);
+                        arrayList.remove(j + 1);
                         j--;
                     }
                 }
@@ -818,11 +859,11 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     }
 
-    public boolean isFreeTimeOneMinute(int start_hour, int start_minute, int end_hour, int end_minute){
+    public boolean isFreeTimeOneMinute(int start_hour, int start_minute, int end_hour, int end_minute) {
         return start_hour == end_hour && ((end_minute - start_minute) == 1);
     }
 
-    public boolean isStartFinishSame(int start_hour, int start_minute, int end_hour, int end_minute){
+    public boolean isStartFinishSame(int start_hour, int start_minute, int end_hour, int end_minute) {
         return start_hour == end_hour && end_minute == start_minute;
     }
 
@@ -843,7 +884,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
     private void handleError(Throwable error) {
         mSwipeRefreshLayout.setRefreshing(false);
-        if(Utilities.isDeviceOnline(getActivity()))
+        if (Utilities.isDeviceOnline(getActivity()))
             Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -860,7 +901,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mNavigator!=null)
+        if (mNavigator != null)
             mNavigator.onSaveInstanceState(outState);
     }
 
@@ -903,7 +944,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         int m = cal.get(Calendar.MONTH) + 1;
         int y = cal.get(Calendar.YEAR);
 
-        cal.set(y, m-1,d, 0,0);
+        cal.set(y, m - 1, d, 0, 0);
         long time1 = cal.getTimeInMillis();
 
         cal.add(Calendar.DAY_OF_WEEK, 21);
@@ -911,7 +952,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
         int month2 = cal.get(Calendar.MONTH) + 1;
         int year2 = cal.get(Calendar.YEAR);
 
-        cal.set(year2, month2-1,day2, 23,59);
+        cal.set(year2, month2 - 1, day2, 23, 59);
         long time2 = cal.getTimeInMillis();
 
         int d1f = d;
@@ -958,14 +999,14 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
         String month_text_start = dateFormat.formatMonthShort(month_start);
         String month_text_start_temp = dateFormat.formatMonthShort(month_start_temp);
-        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp),month_text_start_temp));
+        dateTextWeek.setText(getResources().getString(R.string.date_format_02, String.format("%02d", day_start), month_text_start, String.format("%02d", day_start_temp), month_text_start_temp));
 
-        String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH)+1);
+        String month_text = dateFormat.formatMonth(cal.get(Calendar.MONTH) + 1);
         dateTextMonth.setText(getResources().getString(R.string.date_format_01, month_text, year_start));
 
         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.READ_CALENDAR)
                 == PackageManager.PERMISSION_GRANTED) {
-            list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(),time1,time2);
+            list_holiday = GoogleCalendarEvents.readCalendarHolidays(getActivity(), time1, time2);
         }
 
         setPlans(plans, true);
@@ -992,8 +1033,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 btnCompare.setBackgroundResource(R.drawable.btn_compare);
                 btnCompare.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
             }
-        }
-        else if (view == mDateBox) {
+        } else if (view == mDateBox) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 dateTextMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_900));
                 calendarIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_900));
@@ -1001,22 +1041,19 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 dateTextMonth.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_600));
                 calendarIcon.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_600));
             }
-        }
-        else if (view == nextWeek) {
+        } else if (view == nextWeek) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 nextWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 nextWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_200));
             }
-        }
-        else if (view == previousWeek) {
+        } else if (view == previousWeek) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 previousWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_400));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
                 previousWeek.setColorFilter(ContextCompat.getColor(getActivity(), R.color.grey_200));
             }
-        }
-        else if (view == dateTextWeek) {
+        } else if (view == dateTextWeek) {
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
                 dateTextWeek.setTextColor(ContextCompat.getColor(getActivity(), R.color.grey_500));
             } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -1048,8 +1085,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             before3Months.add(Calendar.MONTH, -3);
             dpd.setMinDate(before3Months);
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mDateBox" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mDateBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             dpd.setAccentColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
@@ -1061,8 +1098,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             freeTimeButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.white));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "freeTimeButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "freeTimeButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             setCurrentTab(1);
@@ -1073,8 +1110,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             freeTimeButton.setTextColor(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "commitmentsButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "commitmentsButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             setCurrentTab(0);
@@ -1092,8 +1129,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             year_start = cal.get(Calendar.YEAR);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "previousWeek" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "previousWeek" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             updateLayout(day_start, month_start - 1, year_start, true);
@@ -1112,8 +1149,8 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             year_start = cal.get(Calendar.YEAR);
 
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "nextWeek" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "nextWeek" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             updateLayout(day_start, month_start - 1, year_start, true);
@@ -1180,8 +1217,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
             year_start = cal.get(Calendar.YEAR);
 
             updateLayout(day_start, month_start - 1, year_start, true);
-        }
-        else {
+        } else {
             updateLayout(day_start, month_start - 1, year_start, showRefresh);
         }
 

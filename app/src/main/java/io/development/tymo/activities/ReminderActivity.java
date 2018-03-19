@@ -135,8 +135,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             reminderServer.setText(reminderWrapper.getReminderServer().getText());
             reminderEditText.setText(reminderServer.getText());
 
-            setReminderServer(reminderWrapper.getReminderServer());
-            setInformation(reminderWrapper.getReminderServer());
+            setReminderInformation(reminderWrapper.getReminderServer().getId());
         } else {
             edit = false;
             mBackButton.setRotation(45);
@@ -155,6 +154,38 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
+    }
+
+    private void setReminderInformation(long id) {
+        setProgress(true);
+        mSubscriptions.add(NetworkUtil.getRetrofit().getFlagReminder(id)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponseGet, this::handleError));
+    }
+
+    private void handleResponseGet(Response response) {
+        reminderWrapper.getReminderServer().setDayStart(response.getMyCommitReminder().get(0).getDayStart());
+        reminderWrapper.getReminderServer().setMonthStart(response.getMyCommitReminder().get(0).getMonthStart());
+        reminderWrapper.getReminderServer().setYearStart(response.getMyCommitReminder().get(0).getYearStart());
+        reminderWrapper.getReminderServer().setDayEnd(response.getMyCommitReminder().get(0).getDayEnd());
+        reminderWrapper.getReminderServer().setMonthEnd(response.getMyCommitReminder().get(0).getMonthEnd());
+        reminderWrapper.getReminderServer().setYearEnd(response.getMyCommitReminder().get(0).getYearEnd());
+        reminderWrapper.getReminderServer().setMinuteStart(response.getMyCommitReminder().get(0).getMinuteStart());
+        reminderWrapper.getReminderServer().setHourStart(response.getMyCommitReminder().get(0).getHourStart());
+        reminderWrapper.getReminderServer().setMinuteEnd(response.getMyCommitReminder().get(0).getMinuteEnd());
+        reminderWrapper.getReminderServer().setHourEnd(response.getMyCommitReminder().get(0).getHourEnd());
+        reminderWrapper.getReminderServer().setDateTimeStart(response.getMyCommitReminder().get(0).getDateTimeStart());
+        reminderWrapper.getReminderServer().setDateTimeEnd(response.getMyCommitReminder().get(0).getDateTimeEnd());
+        reminderWrapper.getReminderServer().setDateStartEmpty(response.getMyCommitReminder().get(0).getDateStartEmpty());
+        reminderWrapper.getReminderServer().setTimeStartEmpty(response.getMyCommitReminder().get(0).getTimeStartEmpty());
+        reminderWrapper.getReminderServer().setDateEndEmpty(response.getMyCommitReminder().get(0).getDateEndEmpty());
+        reminderWrapper.getReminderServer().setTimeEndEmpty(response.getMyCommitReminder().get(0).getTimeEndEmpty());
+
+        setReminderServer(reminderWrapper.getReminderServer());
+        setInformation(reminderWrapper.getReminderServer());
+
+        setProgress(false);
     }
 
     private void setReminderServer(ReminderServer reminder) {
