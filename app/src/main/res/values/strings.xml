@@ -449,6 +449,7 @@
     <string name="reminder_privacy">Somente você pode ver</string>
     <string name="reminder">Nota</string>
     <string name="remove_from_my_agenda">Remover da minha agenda</string>
+    <string name="remove_note">Remover nota</string>
     <string name="remove">Remover</string>
     <string name="repeat_daily">diariamente</string>
     <string name="repeat_frequence">Repetir com que frequência?</string>

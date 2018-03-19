@@ -143,12 +143,14 @@
                 </RelativeLayout>
 
                 <View
+                    android:visibility="gone"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/horizontal_line_height"
                     android:layout_marginLeft="50dp"
                     android:background="@color/horizontal_line" />
 
                 <RelativeLayout
+                    android:visibility="gone"
                     android:id="@+id/updatesBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"

@@ -63,6 +63,33 @@ public class ReminderServer implements Serializable {
         this.hour_end_card = reminderServer.getHourEndCard();
         this.time_start_empty_card = reminderServer.getTimeStartEmptyCard();
         this.time_end_empty_card = reminderServer.getTimeEndEmptyCard();
+
+        this.id = reminderServer.getId();
+
+        this.title = reminderServer.getTitle();
+        this.text = reminderServer.getText();
+
+        this.date_time_creation = reminderServer.getDateTimeCreation();
+        this.date_time_start = reminderServer.getDateTimeStart();
+        this.date_time_end = reminderServer.getDateTimeEnd();
+        this.day_start = reminderServer.getDayStart();
+        this.month_start = reminderServer.getMonthStart();
+        this.year_start = reminderServer.getYearStart();
+        this.day_end = reminderServer.getDayEnd();
+        this.month_end = reminderServer.getMonthEnd();
+        this.year_end = reminderServer.getYearEnd();
+        this.minute_start = reminderServer.getMinuteStart();
+        this.hour_start = reminderServer.getHourStart();
+        this.minute_end = reminderServer.getMinuteEnd();
+        this.hour_end = reminderServer.getHourEnd();
+
+        this.repeat_qty = reminderServer.getRepeatQty();
+        this.repeat_type = reminderServer.getRepeatType();
+
+        this.date_end_empty = reminderServer.getDateEndEmpty();
+        this.date_start_empty = reminderServer.getDateStartEmpty();
+        this.time_end_empty = reminderServer.getTimeEndEmpty();
+        this.time_start_empty = reminderServer.getTimeStartEmpty();
     }
     
     public void setDateTimeAlert(boolean date_time_alert) {

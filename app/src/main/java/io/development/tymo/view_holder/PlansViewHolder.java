@@ -549,29 +549,23 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                 String hour_end = String.format("%02d", reminderServer.getHourEnd());
                 String minute_end = String.format("%02d", reminderServer.getMinuteEnd());
                 String time;
+                String title;
 
-                if ((reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty()) || (reminderServer.getTimeStartEmptyCard() && reminderServer.getTimeEndEmptyCard())) {
-                    time = context.getResources().getString(R.string.suspension_points);
-                } else if (!reminderServer.getTimeStartEmptyCard() && reminderServer.getTimeEndEmptyCard()) {
-                    if (reminderServer.getTimeStartEmpty())
-                        time = context.getResources().getString(R.string.suspension_points);
-                    else
-                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                } else if (reminderServer.getTimeStartEmptyCard() && !reminderServer.getTimeEndEmptyCard()) {
-                    if (reminderServer.getTimeEndEmpty())
-                        time = context.getResources().getString(R.string.suspension_points);
-                    else
-                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                } else {
-                    if (reminderServer.getTimeEndEmpty())
-                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                    else if (reminderServer.getTimeStartEmpty())
-                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                    else
-                        time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                if (reminderServer.getTimeStartEmpty()){
+                    time = "";
+                }
+                else{
+                    time = hour_start + ":" + minute_start;
                 }
 
-                list.add(new Reminder(reminderServer.getTitle(), time, reminderServer));
+                if (!reminderServer.getTitle().matches("")){
+                    title = reminderServer.getTitle();
+                }
+                else{
+                    title = reminderServer.getText();
+                }
+
+                list.add(new Reminder(title, time, reminderServer));
             } else if (object instanceof FreeTimeServer) {
                 PlansAdapter plansAdapter = getOwnerAdapter();
                 WeekModel weekModel = plansAdapter.getItem(getAdapterPosition());
