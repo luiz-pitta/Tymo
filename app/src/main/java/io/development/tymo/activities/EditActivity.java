@@ -58,7 +58,6 @@ import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -66,7 +65,6 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 
 import io.development.tymo.R;
@@ -123,7 +121,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private ArrayList<User> invitedList = new ArrayList<>();
     private ArrayList<User> confirmedList = new ArrayList<>();
 
-    private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton, repeatMax, repeatAddText, repeatText;
+    private TextView customizeApplyButton, customizeCleanButton, privacyText, confirmationButton, repeatMax, repeatAddText, repeatText, repeatLastDate;
     private TextView addImageText, loadedImageText, titleMax, addTagText, dateStart, dateEnd, timeStart, timeEnd, locationText, locationTextAdd;
     private TextView guestText, guestsNumber, addGuestText, feedVisibility;
     private EditText titleEditText, descriptionEditText, whatsAppEditText, repeatEditText;
@@ -149,7 +147,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private double lat = -500;
     private double lng = -500;
     private static final int PLACE_PICKER_REQUEST = 1020;
-    private boolean locationNotWorking = false;
+    private boolean locationNotWorking = false, repeat_blocked = false;
     private Calendar calendarStart;
     private PlacePicker.IntentBuilder builder = null;
     private Intent placePicker = null;
@@ -230,6 +228,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         spinnerRepeatPicker = (MaterialSpinner) findViewById(R.id.repeatPicker);
         feedVisibility = (TextView) findViewById(R.id.feedVisibility);
         repeatText = (TextView) findViewById(R.id.repeatText);
+        repeatLastDate = (TextView) findViewById(R.id.repeatLastDate);
 
         findViewById(R.id.addGuestBox).setVisibility(View.GONE);
 
@@ -305,17 +304,62 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int number;
 
+                if (String.valueOf(s).matches("")) {
+                    number = 0;
+                } else {
+                    number = Integer.valueOf(String.valueOf(s));
+                }
+
+                setRepeatLastDate();
+
+                if (number > 500) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatLastDate.setVisibility(View.INVISIBLE);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int number;
 
+                if (String.valueOf(s).matches("")) {
+                    number = 0;
+                } else {
+                    number = Integer.valueOf(String.valueOf(s));
+                }
+
+                setRepeatLastDate();
+
+                if (number > 500) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatLastDate.setVisibility(View.INVISIBLE);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                int number;
 
+                if (String.valueOf(s).matches("")) {
+                    number = 0;
+                } else {
+                    number = Integer.valueOf(String.valueOf(s));
+                }
+
+                setRepeatLastDate();
+
+                if (number > 500) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatLastDate.setVisibility(View.INVISIBLE);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
         });
 
@@ -398,12 +442,14 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if (position != 0) {
-                    repeatNumberBox.setVisibility(View.VISIBLE);
-                } else {
+
+                if (position == 0) {
                     repeatNumberBox.setVisibility(View.GONE);
-                    repeatEditText.setText("");
+                } else {
+                    repeatNumberBox.setVisibility(View.VISIBLE);
                 }
+
+                setRepeatLastDate();
             }
         });
 
@@ -947,7 +993,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             String repeatly;
             repeatText.setVisibility(View.VISIBLE);
             switch (activityServer.getRepeatType()) {
-                case Constants.DAYLY:
+                case Constants.DAILY:
                     repeatly = this.getString(R.string.repeat_daily);
                     break;
                 case Constants.WEEKLY:
@@ -964,7 +1010,14 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             if (activityServer.getRepeatType() == 5) {
                 repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
             } else {
-                repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(activityServer.getLastDateTime());
+                String dayOfWeek = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+                String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                int year = calendar.get(Calendar.YEAR);
+                String date = this.getResources().getString(R.string.date_format_03, dayOfWeek, day, month, year);
+                repeatText.setText(this.getString(R.string.repeat_text, repeatly, date));
             }
         }
 
@@ -1097,23 +1150,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "confirmationButtonEdit" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-            if (getActivity().getRepeatType() > 0) {
-                List<Integer> date;
-
-                date = getDateFromView();
-
-                int d = date.get(0);
-                int m = date.get(1) + 1;
-                int y = date.get(2);
-
-                if (sameDay(y, m, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
-                        && sameDay(date.get(5), date.get(4) + 1, date.get(3), getActivity().getYearEnd(), getActivity().getMonthEnd(), getActivity().getDayEnd()))
-                    edit_activity(false);
-                else
-                    createDialogEditWithRepeat();
-            } else
-                edit_activity(false);
+            edit_activity();
         } else if (v == mBackButton) {
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mBackButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1157,12 +1194,14 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 year_start = -1;
                 dateStart.setText("");
                 clearDateStart.setVisibility(View.GONE);
+                setRepeatLastDate();
             } else if (v == clearDateEnd) {
                 day_end = -1;
                 month_end = -1;
                 year_end = -1;
                 dateEnd.setText("");
                 clearDateEnd.setVisibility(View.GONE);
+                setRepeatLastDate();
             } else if (v == clearTimeStart) {
                 hour_start = -1;
                 minutes_start = -1;
@@ -1352,72 +1391,15 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
     }
 
-    private int getFutureActivities(List<Integer> date) {
-        Collections.sort(activityServers, new Comparator<ActivityServer>() {
-            @Override
-            public int compare(ActivityServer c1, ActivityServer c2) {
-                int day = 0, month = 0, year = 0;
-                int day2 = 0, month2 = 0, year2 = 0;
-
-                day = c1.getDayStart();
-                month = c1.getMonthStart();
-                year = c1.getYearStart();
-
-                day2 = c2.getDayStart();
-                month2 = c2.getMonthStart();
-                year2 = c2.getYearStart();
-
-
-                if (year < year2)
-                    return -1;
-                else if (year > year2)
-                    return 1;
-                else if (month < month2)
-                    return -1;
-                else if (month > month2)
-                    return 1;
-                else if (day < day2)
-                    return -1;
-                else if (day > day2)
-                    return 1;
-                else
-                    return 0;
-
-            }
-        });
-
-        ArrayList<ActivityServer> list = new ArrayList<>();
-        for (int i = 0; i < activityServers.size(); i++) {
-            ActivityServer act = activityServers.get(i);
-            if (!isDatePrior(act.getDayStart(), act.getMonthStart(), act.getYearStart(), getActivity().getDayStart(), getActivity().getMonthStart(), getActivity().getYearStart()))
-                list.add(act);
-        }
-
-        return list.size();
-    }
-
-    private boolean isDatePrior(int d1, int m1, int y1, int d2, int m2, int y2) {
-        if (y1 < y2)
-            return true;
-        else if (y1 == y2) {
-            if (m1 < m2)
-                return true;
-            else if (m1 == m2)
-                if (d1 < d2)
-                    return true;
-        }
-        return false;
-    }
-
-    private void edit_activity(boolean repeat) {
+    private void edit_activity() {
 
         boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
         List<Integer> date;
         List<Double> latLng;
-        List<Integer> repeat_single = new ArrayList<>();
-        int repeat_left = -1;
+        List<Integer> repeat_list_accepted = new ArrayList<>();
         int cube_color;
         int cube_color_upper;
+        int repeat_type, repeat_qty;
         String cube_icon;
         String location = "";
         String title = titleEditText.getText().toString();
@@ -1427,7 +1409,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         List<Tag> tags = getTags();
 
         date = getDateFromView();
-        repeat_single = getRepeatFromView(); //Repetir em caso da atividade ser simples ou do google agenda
         location = getLocationFromView();
         latLng = getLatLngFromView();
 
@@ -1442,8 +1423,18 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         }
 
         int err = 0;
-        int repeat_type = getActivity().getRepeatType();
-        boolean repeat_single_changed = false;
+
+        if (!repeat_blocked) {
+            if (repeatEditText.getText().toString().matches(""))
+                repeat_qty = 0;
+            else
+                repeat_qty = Integer.parseInt(repeatEditText.getText().toString());
+
+            repeat_type = this.repeat_type;
+        } else {
+            repeat_type = getActivity().getRepeatType();
+            repeat_qty = getActivity().getRepeatQty();
+        }
 
         if (date.get(0) == -1) {
             dateStartEmpty = true;
@@ -1499,78 +1490,20 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         } else if (!validateTime) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_time_end_before_start, Toast.LENGTH_LONG).show();
-        } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType())) {
+        } else if ((repeat_type != 0 && repeat_qty <= 0)) {
             err++;
-            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), getActivity().getRepeatType()), Toast.LENGTH_LONG).show();
-        } else if ((repeat_type == 0 || repeat_type == 5) && repeat_type != repeat_single.get(0)) {
-            repeat_type = repeat_single.get(0);
-            repeat_single_changed = true;
-            repeat = true;
-            if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
-                err++;
-                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-            } else if (repeat_single.get(1) == 0 || repeat_single.get(1) > 30) {
-                err++;
-                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
-            }
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
+        } else if (repeat_type == 1 && repeat_qty > 500) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
+        } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat_type)) {
+            err++;
+            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat_type), Toast.LENGTH_LONG).show();
+        } else {
+
         }
 
         if (err == 0) {
-
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Integer> day_list_end = new ArrayList<>();
-            List<Integer> month_list_end = new ArrayList<>();
-            List<Integer> year_list_end = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-            List<Long> date_time_list_end = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                Calendar cal2 = Calendar.getInstance();
-                cal2.set(Calendar.HOUR_OF_DAY, 0);
-                cal2.clear(Calendar.MINUTE);
-                cal2.clear(Calendar.SECOND);
-                cal2.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
-                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
-
-                if (!repeat_single_changed)
-                    repeat_left = getFutureActivities(date);
-                else
-                    repeat_left = repeat_single.get(1);
-
-                for (int i = 0; i < repeat_left; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-                    day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
-                    year_list_end.add(cal2.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-                    date_time_list_end.add(cal2.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY) {
-                        cal.add(Calendar.MONTH, 1);
-                        cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                    }
-                }
-
-            }
-
             ActivityServer activityServer = new ActivityServer();
             activityServer.setTitle(title);
             activityServer.setDescription(description);
@@ -1608,6 +1541,39 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
             activityServer.setDateTimeEnd(calendar.getTimeInMillis());
 
+            switch (repeat_type) {
+                case Constants.DAILY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * repeat_qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * repeat_qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * repeat_qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
+            activityServer.setRepeatType(repeat_type);
+            activityServer.setRepeatQty(repeat_qty);
+
+            if (!repeat_blocked) {
+                if (repeat_qty > 0) {
+                    for (int i = 0; i <= repeat_qty; i++) {
+                        repeat_list_accepted.add(i);
+                    }
+                } else {
+                    repeat_list_accepted.add(0);
+                }
+
+                activityServer.setRepeatListAccepted(repeat_list_accepted);
+            }
+
             activityServer.setCubeColor(cube_color);
             activityServer.setCubeColorUpper(cube_color_upper);
             activityServer.setCubeIcon(cube_icon);
@@ -1631,30 +1597,62 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 activityServer.addTags(tags.get(i).text);
             }
 
-            if (repeat_type > 0) {
-                if (sameDay(y, m + 1, d, getActivity().getYearStart(), getActivity().getMonthStart(), getActivity().getDayStart())
-                        && sameDay(date.get(5), date.get(4) + 1, date.get(3), getActivity().getYearEnd(), getActivity().getMonthEnd(), getActivity().getDayEnd())) // So editar os dados
-                    activityServer.setId(1);
-                else
-                    activityServer.setId(2);
-            } else
-                activityServer.setId(0);
-
-
-            if (repeat) {
-                activityServer.setRepeatType(repeat_type);
-                activityServer.setRepeatQty(repeat_left);
-            } else {
-                activityServer.setRepeatType(0);
-                activityServer.setRepeatQty(-1);
-            }
-
             activityWrapperEdited = new ActivityWrapper(activityServer);
 
-            if (!repeat_single_changed)
-                editActivity(activityServer);
-            else {
-                activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
+            editActivity(activityServer);
+        }
+    }
+
+    private void setRepeatLastDate() {
+        int qty = 0;
+        int repeat_type = this.repeat_type;
+
+        if (!repeat_blocked) {
+            if (!repeatEditText.getText().toString().matches(""))
+                qty = Integer.parseInt(repeatEditText.getText().toString());
+        } else {
+            qty = getActivity().getRepeatQty();
+            repeat_type = getActivity().getRepeatType();
+        }
+
+        if (qty > 0 && repeat_type > 0 && day_start != -1) {
+            repeatNumberBox.setVisibility(View.VISIBLE);
+            repeatLastDate.setVisibility(View.VISIBLE);
+            Calendar calendar = Calendar.getInstance();
+
+            if (day_end != -1)
+                calendar.set(year_end, month_end, day_end);
+            else
+                calendar.set(year_start, month_start, day_start);
+
+            switch (repeat_type) {
+                case Constants.DAILY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * qty);
+                    getActivity().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * qty);
+                    getActivity().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * qty);
+                    getActivity().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    getActivity().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
+            String dayOfWeek = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+            String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int year = calendar.get(Calendar.YEAR);
+            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek.toLowerCase(), day, month, year);
+            repeatLastDate.setText(this.getString(R.string.repeat_last_date, date));
+        } else {
+            repeatLastDate.setVisibility(View.INVISIBLE);
+            if (repeat_type == 0) {
+                repeatNumberBox.setVisibility(View.GONE);
             }
         }
     }
@@ -1697,21 +1695,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 return getResources().getString(R.string.validation_field_act_max_lenght_days_monthly);
             default:
                 return "";
-        }
-    }
-
-    private boolean sameDay(int y1, int m1, int d1, int y2, int m2, int d2) {
-        return d1 == d2 && m1 == m2 && y1 == y2;
-    }
-
-    private int getRepeatAdder(int type) {
-        switch (type) {
-            case Constants.DAYLY:
-                return 1;
-            case Constants.WEEKLY:
-                return 7;
-            default:
-                return 0;
         }
     }
 
@@ -1911,8 +1894,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
                 if (!positionsNull.contains(position)) {
                     for (int i = 0; i < positionsNull.size(); i++) {
-                        if (position < positionsNull.get(i)){
-                            urlIconTemp = adapter.getItem(position-i).getUrl();
+                        if (position < positionsNull.get(i)) {
+                            urlIconTemp = adapter.getItem(position - i).getUrl();
                             break;
                         }
                     }
@@ -2307,86 +2290,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         }
 
         return iconCategory;
-    }
-
-    private void createDialogEditWithRepeat() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_message, null);
-
-        TextView text1 = (TextView) customView.findViewById(R.id.text1);
-        TextView text2 = (TextView) customView.findViewById(R.id.text2);
-        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-        EditText editText = (EditText) customView.findViewById(R.id.editText);
-        RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
-
-        editText.setVisibility(View.GONE);
-
-        text1.setText(getResources().getString(R.string.popup_message_edit_commitments_with_repetitions));
-        text2.setVisibility(View.GONE);
-        buttonText1.setText(getResources().getString(R.string.cancel));
-        buttonText2.setText(getResources().getString(R.string.confirm));
-
-        radioGroup.setVisibility(View.VISIBLE);
-        text2.setVisibility(View.VISIBLE);
-        text2.setText(getResources().getString(R.string.popup_message_edit_select_which_one_to_modify));
-
-        Dialog dg = new Dialog(this, R.style.NewDialog);
-
-        dg.setContentView(customView);
-        dg.setCanceledOnTouchOutside(true);
-
-        buttonText1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dg.dismiss();
-            }
-        });
-
-        buttonText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int radioButtonID;
-                View radioButton;
-                int idx = -1;
-
-                radioButtonID = radioGroup.getCheckedRadioButtonId();
-                radioButton = radioGroup.findViewById(radioButtonID);
-                idx = radioGroup.indexOfChild(radioButton);
-
-                edit_activity(idx == 1);
-
-                dg.dismiss();
-            }
-        });
-
-        dg.show();
     }
 
     private void getActivityStartToday() {
@@ -2804,10 +2707,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             lng = activityServer.getLng();
 
             if (activityServer.getRepeatType() == 0 || activityServer.getRepeatType() == 5) {
-                //repeatAdd.setVisibility(View.VISIBLE);
+                repeatAdd.setVisibility(View.VISIBLE);
                 repeatBox.setVisibility(View.GONE);
                 repeatNumberBox.setVisibility(View.GONE);
             } else {
+                repeat_blocked = true;
                 repeatAdd.setVisibility(View.GONE);
                 repeatBox.setVisibility(View.GONE);
                 repeatNumberBox.setVisibility(View.GONE);
@@ -2851,61 +2755,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 clearTimeEnd.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    private String getLastActivity(ArrayList<ActivityServer> activityServers) {
-
-        Collections.sort(activityServers, new Comparator<ActivityServer>() {
-            @Override
-            public int compare(ActivityServer c1, ActivityServer c2) {
-                ActivityServer activityServer;
-                int day = 0, month = 0, year = 0;
-                int day2 = 0, month2 = 0, year2 = 0;
-
-                day = c1.getDayStart();
-                month = c1.getMonthStart();
-                year = c1.getYearStart();
-
-                day2 = c2.getDayStart();
-                month2 = c2.getMonthStart();
-                year2 = c2.getYearStart();
-
-
-                if (year < year2)
-                    return -1;
-                else if (year > year2)
-                    return 1;
-                else if (month < month2)
-                    return -1;
-                else if (month > month2)
-                    return 1;
-                else if (day < day2)
-                    return -1;
-                else if (day > day2)
-                    return 1;
-                else
-                    return 0;
-
-            }
-        });
-
-        ActivityServer activityServer = activityServers.get(activityServers.size() - 1);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.clear(Calendar.MINUTE);
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
-        cal.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
-
-        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(cal.get(Calendar.DAY_OF_WEEK), cal);
-        String dayEnd = String.format("%02d", activityServer.getDayEnd());
-        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
-        int yearEnd = activityServer.getYearEnd();
-
-        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
-
-        return date;
     }
 
     @Override
@@ -3027,6 +2876,8 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         } else {
             clearDateEnd.setVisibility(View.VISIBLE);
         }
+
+        setRepeatLastDate();
 
     }
 

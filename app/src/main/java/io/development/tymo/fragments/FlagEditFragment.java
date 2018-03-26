@@ -76,7 +76,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private View addGuestButtonDivider;
     private Rect rect;
     private FlagServer flagServer;
-    private boolean isInPast = false;
+    private long last_date_time;
+    private boolean isInPast = false, repeat_blocked = false;;
 
     private DateFormat dateFormat;
 
@@ -101,10 +102,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private int minutes_start, hour_start;
     private int minutes_end, hour_end;
 
-    private TextView dateStart, dateEnd, titleMax, sendText, repeatText;
+    private TextView dateStart, dateEnd, titleMax, sendText, repeatText, repeatLastDate;
     private TextView timeStart, timeEnd, repeatAddText;
 
-    private LinearLayout repeatEditLayout, repeatBox, whoCanInviteBox, profilesPhotos, addGuestBox;
+    private LinearLayout repeatNumberBox, repeatBox, whoCanInviteBox, profilesPhotos, addGuestBox;
     private EditText repeatEditText, titleEditText;
     private MaterialSpinner spinner, sendPicker;
 
@@ -153,7 +154,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         clearDateEnd = (ImageView) view.findViewById(R.id.clearDateEnd);
         clearTimeStart = (ImageView) view.findViewById(R.id.clearTimeStart);
         clearTimeEnd = (ImageView) view.findViewById(R.id.clearTimeEnd);
-        repeatEditLayout = (LinearLayout) view.findViewById(R.id.repeatNumberBox);
+        repeatNumberBox = (LinearLayout) view.findViewById(R.id.repeatNumberBox);
         repeatEditText = (EditText) view.findViewById(R.id.repeatEditText);
         repeatMax = (TextView) view.findViewById(R.id.repeatMax);
         titleEditText = (EditText) view.findViewById(R.id.title);
@@ -174,6 +175,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         repeatAdd = (RelativeLayout) view.findViewById(R.id.repeatAdd);
         repeatText = (TextView) view.findViewById(R.id.repeatText);
         addGuestBox = (LinearLayout) view.findViewById(R.id.addGuestBox);
+        repeatLastDate = (TextView) view.findViewById(R.id.repeatLastDate);
 
         clearDateStart.setVisibility(View.GONE);
         clearDateEnd.setVisibility(View.GONE);
@@ -206,17 +208,62 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                int number;
 
+                if (String.valueOf(s).matches("")) {
+                    number = 0;
+                } else {
+                    number = Integer.valueOf(String.valueOf(s));
+                }
+
+                setRepeatLastDate();
+
+                if (number > 500) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatLastDate.setVisibility(View.INVISIBLE);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                int number;
 
+                if (String.valueOf(s).matches("")) {
+                    number = 0;
+                } else {
+                    number = Integer.valueOf(String.valueOf(s));
+                }
+
+                setRepeatLastDate();
+
+                if (number > 500) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatLastDate.setVisibility(View.INVISIBLE);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
+                int number;
 
+                if (String.valueOf(s).matches("")) {
+                    number = 0;
+                } else {
+                    number = Integer.valueOf(String.valueOf(s));
+                }
+
+                setRepeatLastDate();
+
+                if (number > 500) {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
+                    repeatLastDate.setVisibility(View.INVISIBLE);
+                } else {
+                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
+                }
             }
         });
 
@@ -261,7 +308,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         clearTimeEnd.setOnClickListener(this);
         repeatAdd.setOnTouchListener(this);
 
-        repeatEditLayout.setVisibility(View.GONE);
+        repeatNumberBox.setVisibility(View.GONE);
         guestBox.setVisibility(View.GONE);
         profilesPhotos.setVisibility(View.GONE);
         whoCanInviteBox.setVisibility(View.GONE);
@@ -278,12 +325,14 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if (position != 0) {
-                    repeatEditLayout.setVisibility(View.VISIBLE);
+
+                if (position == 0) {
+                    repeatNumberBox.setVisibility(View.GONE);
                 } else {
-                    repeatEditLayout.setVisibility(View.GONE);
-                    repeatEditText.setText("");
+                    repeatNumberBox.setVisibility(View.VISIBLE);
                 }
+
+                setRepeatLastDate();
             }
         });
 
@@ -332,6 +381,60 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
+    }
+
+    private void setRepeatLastDate() {
+        int qty = 0;
+        int repeat_type = this.repeat_type;
+
+        if (!repeat_blocked) {
+            if (!repeatEditText.getText().toString().matches(""))
+                qty = Integer.parseInt(repeatEditText.getText().toString());
+        } else {
+            qty = this.repeat_qty;
+            repeat_type = this.repeat_type;
+        }
+
+        if (qty > 0 && repeat_type > 0 && day_start != -1) {
+            repeatNumberBox.setVisibility(View.VISIBLE);
+            repeatLastDate.setVisibility(View.VISIBLE);
+            Calendar calendar = Calendar.getInstance();
+
+            if (day_end != -1)
+                calendar.set(year_end, month_end, day_end);
+            else
+                calendar.set(year_start, month_start, day_start);
+
+            switch (repeat_type) {
+                case Constants.DAILY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * qty);
+                    last_date_time = calendar.getTimeInMillis();
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * qty);
+                    last_date_time = calendar.getTimeInMillis();
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * qty);
+                    last_date_time = calendar.getTimeInMillis();
+                    break;
+                default:
+                    last_date_time = calendar.getTimeInMillis();
+                    break;
+            }
+
+            String dayOfWeek = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+            String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int year = calendar.get(Calendar.YEAR);
+            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek.toLowerCase(), day, month, year);
+            repeatLastDate.setText(this.getString(R.string.repeat_last_date, date));
+        } else {
+            repeatLastDate.setVisibility(View.INVISIBLE);
+            if (repeat_type == 0) {
+                repeatNumberBox.setVisibility(View.GONE);
+            }
+        }
     }
 
     private ArrayList<User> setOrderGuests(ArrayList<User> users) {
@@ -629,6 +732,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             clearDateEnd.setVisibility(View.VISIBLE);
         }
 
+        setRepeatLastDate();
     }
 
     @Override
@@ -691,6 +795,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
     public List<User> getGuestFromView() {
         return data;
+    }
+
+    public boolean getRepeatBlocked() {
+        return repeat_blocked;
     }
 
     public List<Integer> getRepeatFromView() {
@@ -802,12 +910,14 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 year_start = -1;
                 dateStart.setText("");
                 clearDateStart.setVisibility(View.GONE);
+                setRepeatLastDate();
             } else if (v == clearDateEnd) {
                 day_end = -1;
                 month_end = -1;
                 year_end = -1;
                 dateEnd.setText("");
                 clearDateEnd.setVisibility(View.GONE);
+                setRepeatLastDate();
             } else if (v == clearTimeStart) {
                 hour_start = -1;
                 minutes_start = -1;
@@ -914,6 +1024,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 timeEnd.setText(time2);
             }
 
+            last_date_time = flagServer.getLastDateTime();
             day_start = flagServer.getDayStart();
             month_start = flagServer.getMonthStart() - 1;
             year_start = flagServer.getYearStart();
@@ -1025,12 +1136,13 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 }
 
                 if (flagServer.getRepeatType() == 0) {
-                    //repeatAdd.setVisibility(View.VISIBLE);
+                    repeatAdd.setVisibility(View.VISIBLE);
                     repeatText.setVisibility(View.GONE);
                 } else {
+                    repeat_blocked = true;
                     String repeatly;
                     switch (flagServer.getRepeatType()) {
-                        case Constants.DAYLY:
+                        case Constants.DAILY:
                             repeatly = getActivity().getString(R.string.repeat_daily);
                             break;
                         case Constants.WEEKLY:
@@ -1044,7 +1156,15 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                             break;
                     }
                     repeatText.setVisibility(View.VISIBLE);
-                    repeatText.setText(getActivity().getString(R.string.repeat_text, repeatly, getLastActivity(flagServers)));
+
+                    calendar = Calendar.getInstance();
+                    calendar.setTimeInMillis(flagServer.getLastDateTime());
+                    String dayOfWeek = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                    day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+                    month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                    int year = calendar.get(Calendar.YEAR);
+                    date = this.getResources().getString(R.string.date_format_03, dayOfWeek, day, month, year);
+                    repeatText.setText(this.getString(R.string.repeat_text, repeatly, date));
                 }
 
             } else if (!free) {
@@ -1069,7 +1189,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                     spinner.setSelectedIndex(flagServer.getRepeatType());
                 } else {
                     spinner.setSelectedIndex(flagServer.getRepeatType());
-                    repeatEditLayout.setVisibility(View.VISIBLE);
+                    repeatNumberBox.setVisibility(View.VISIBLE);
                     repeatEditText.setText(String.valueOf(flagServer.getRepeatQty()));
                 }
             } else if (friend) {

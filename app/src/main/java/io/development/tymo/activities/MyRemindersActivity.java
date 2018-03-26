@@ -9,7 +9,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
@@ -338,7 +337,7 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
                     String repeat = "";
 
                     switch (reminderServer.getRepeatType()) {
-                        case Constants.DAYLY:
+                        case Constants.DAILY:
                             if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
                                 date = this.getResources().getString(R.string.date_format_daily_01);
                             else if (!reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())

@@ -9,7 +9,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,10 +24,6 @@ import com.evernote.android.job.JobRequest;
 import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
-import com.jaredrummler.materialspinner.MaterialSpinner;
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
-import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
-import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -44,9 +39,6 @@ import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.ReminderWrapper;
 import io.development.tymo.model_server.Response;
-import io.development.tymo.model_server.User;
-import io.development.tymo.models.PersonModelWrapper;
-import io.development.tymo.models.cards.Reminder;
 import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.DateFormat;
@@ -329,7 +321,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
                 String date = "";
 
                 switch (reminder.getRepeatType()) {
-                    case Constants.DAYLY:
+                    case Constants.DAILY:
                         if (reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
                             date = this.getResources().getString(R.string.date_format_daily_01);
                         else if (!reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())

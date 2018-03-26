@@ -13,13 +13,13 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -54,14 +54,10 @@ import java.util.List;
 import io.development.tymo.R;
 import io.development.tymo.adapters.CustomizeAddActivityAdapter;
 import io.development.tymo.adapters.SectionedGridRecyclerViewAdapter;
-import io.development.tymo.fragments.FlagEditFragment;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.ActivityWrapper;
 import io.development.tymo.model_server.CategoryServer;
-import io.development.tymo.model_server.FlagServer;
 import io.development.tymo.model_server.IconServer;
-import io.development.tymo.model_server.Query;
-import io.development.tymo.model_server.Response;
 import io.development.tymo.model_server.User;
 import io.development.tymo.model_server.UserWrapper;
 import io.development.tymo.network.NetworkUtil;
@@ -386,7 +382,7 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
                 calendar.set(year_start, month_start, day_start);
 
             switch (repeat_type) {
-                case Constants.DAYLY:
+                case Constants.DAILY:
                     calendar.add(Calendar.DAY_OF_WEEK, 1 * qty);
                     activityServer.setLastDateTime(calendar.getTimeInMillis());
                     break;
@@ -778,7 +774,6 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             public void onColorSelected(int color) {
 
                 if (first_open && (cubeUpperBoxIcon.getTag() != null || (activityServer != null && activityServer.getCubeIcon().contains("http")))) {
-
                     if (activityServer != null) {
                         customizeCubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
                         customizeCubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
@@ -1000,7 +995,7 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         } else if ((repeat.get(0) != 0 && repeat.get(1) <= 0)) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-        } else if ((repeat.get(0) == 1 && repeat.get(1) > 365) || (repeat.get(0) == 2 && repeat.get(1) > 53) || (repeat.get(0) == 3 && repeat.get(1) > 12)) {
+        } else if (repeat.get(0) == 1 && repeat.get(1) > 500) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
         } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
@@ -1055,7 +1050,7 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             activityServer.setDateTimeEnd(calendar.getTimeInMillis());
 
             switch (repeat.get(0)) {
-                case Constants.DAYLY:
+                case Constants.DAILY:
                     calendar.add(Calendar.DAY_OF_WEEK, 1 * repeat.get(1));
                     activityServer.setLastDateTime(calendar.getTimeInMillis());
                     break;
@@ -1083,6 +1078,8 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             else{
                 repeat_list_accepted.add(0);
             }
+
+            activityServer.setRepeatListAccepted(repeat_list_accepted);
 
             activityServer.setLocation(location);
             activityServer.setLat(latLng.get(0));

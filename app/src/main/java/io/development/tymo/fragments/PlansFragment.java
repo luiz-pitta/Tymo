@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +18,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -32,9 +30,6 @@ import android.widget.Toast;
 
 
 import com.aspsine.fragmentnavigator.FragmentNavigator;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationRequest;
-import com.google.android.gms.location.LocationServices;
 import com.google.firebase.analytics.FirebaseAnalytics;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 
@@ -534,7 +529,7 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
                     if (k > 0) {
                         switch (reminderServer.getRepeatType()) {
-                            case Constants.DAYLY:
+                            case Constants.DAILY:
                                 calendar.add(Calendar.DAY_OF_WEEK, 1);
                                 calendar2.add(Calendar.DAY_OF_WEEK, 1);
                                 break;

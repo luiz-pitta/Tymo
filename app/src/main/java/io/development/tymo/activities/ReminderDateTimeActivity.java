@@ -1,30 +1,19 @@
 package io.development.tymo.activities;
 
-import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.evernote.android.job.JobManager;
-import com.evernote.android.job.JobRequest;
-import com.evernote.android.job.util.support.PersistableBundleCompat;
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.google.gson.Gson;
 import com.jaredrummler.materialspinner.MaterialSpinner;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
@@ -33,28 +22,14 @@ import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import io.development.tymo.R;
-import io.development.tymo.model_server.ActivityOfDay;
-import io.development.tymo.model_server.ActivityServer;
-import io.development.tymo.model_server.FlagServer;
-import io.development.tymo.model_server.Query;
 import io.development.tymo.model_server.ReminderServer;
 import io.development.tymo.model_server.ReminderWrapper;
-import io.development.tymo.model_server.Response;
-import io.development.tymo.network.NetworkUtil;
 import io.development.tymo.utils.Constants;
 import io.development.tymo.utils.DateFormat;
-import io.development.tymo.utils.NotificationSyncJob;
-import io.development.tymo.utils.Utilities;
-import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-
-import static io.development.tymo.utils.Validation.validateFields;
 
 public class ReminderDateTimeActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener, TimePickerDialog.OnTimeSetListener, View.OnClickListener {
 
@@ -267,7 +242,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             calendar.set(year_start, month_start, day_start);
 
             switch (getReminder().getRepeatType()) {
-                case Constants.DAYLY:
+                case Constants.DAILY:
                     calendar.add(Calendar.DAY_OF_WEEK, 1 * getReminder().getRepeatQty());
                     getReminder().setLastDateTime(calendar.getTimeInMillis());
                     break;
@@ -388,7 +363,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
                 getReminder().setDateTimeEnd(calendar.getTimeInMillis());
 
                 switch (getReminder().getRepeatType()) {
-                    case Constants.DAYLY:
+                    case Constants.DAILY:
                         calendar.add(Calendar.DAY_OF_WEEK, 1 * getReminder().getRepeatQty());
                         getReminder().setLastDateTime(calendar.getTimeInMillis());
                         break;

@@ -42,7 +42,7 @@ public class Constants {
     public static final int ADM_SET = 7;
     public static final int UPDATE_ACT = 8;
 
-    public final static int DAYLY = 1, WEEKLY = 2, MONTHLY = 3;
+    public final static int DAILY = 1, WEEKLY = 2, MONTHLY = 3;
 
     public final static int MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT = 5;
 }

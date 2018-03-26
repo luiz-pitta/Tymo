@@ -105,8 +105,8 @@
                         android:layout_below="@+id/dateHourText"
                         android:layout_marginLeft="45dp"
                         android:text="Text"
-                        android:textColor="@color/grey_600"
-                        android:textSize="14sp"
+                        android:textColor="@color/grey_500"
+                        android:textSize="12sp"
                         android:textStyle="normal" />
 
                 </RelativeLayout>

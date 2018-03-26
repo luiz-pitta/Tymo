@@ -11,13 +11,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
-import android.widget.Space;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -788,7 +786,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             String date = "";
 
             switch (activityServer.getRepeatType()) {
-                case Constants.DAYLY:
+                case Constants.DAILY:
                     if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
                         date = this.getResources().getString(R.string.date_format_daily_01);
                     else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())

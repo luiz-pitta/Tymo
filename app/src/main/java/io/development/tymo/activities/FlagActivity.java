@@ -10,8 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
-import android.util.Log;
-import android.widget.Space;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatRadioButton;
@@ -658,9 +656,9 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void register() {
-
         List<Integer> date;
         List<Integer> repeat;
+        List<Integer> repeat_list_accepted = new ArrayList<>();
         List<User> list_guest = new ArrayList<>();
         boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
         String title = ((FlagEditFragment) mNavigator.getFragment(0)).getTitleFromView();
@@ -745,54 +743,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             int repeat_type = repeat.get(0);
             int repeat_qty = repeat.get(1);
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Integer> day_list_end = new ArrayList<>();
-            List<Integer> month_list_end = new ArrayList<>();
-            List<Integer> year_list_end = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-            List<Long> date_time_list_end = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                Calendar cal2 = Calendar.getInstance();
-                cal2.set(Calendar.HOUR_OF_DAY, 0);
-                cal2.clear(Calendar.MINUTE);
-                cal2.clear(Calendar.SECOND);
-                cal2.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
-                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
-
-                for (int i = 0; i < repeat_qty; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-                    day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
-                    year_list_end.add(cal2.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-                    date_time_list_end.add(cal2.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY) {
-                        cal.add(Calendar.MONTH, 1);
-                        cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                    }
-                }
-
-            }
 
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String creator = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -833,6 +783,35 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             flagServer.setRepeatType(repeat.get(0));
             flagServer.setRepeatQty(repeat.get(1));
 
+            switch (repeat_type) {
+                case Constants.DAILY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * repeat_qty);
+                    flagServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * repeat_qty);
+                    flagServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * repeat_qty);
+                    flagServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    flagServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
+            if (repeat.get(1) > 0){
+                for (int i = 0; i <= repeat.get(1); i++){
+                    repeat_list_accepted.add(i);
+                }
+            }
+            else{
+                repeat_list_accepted.add(0);
+            }
+
+            flagServer.setRepeatListAccepted(repeat_list_accepted);
+
             flagServer.setType(free);
             if (free) {
                 flagServer.setToAll(sendAll);
@@ -851,17 +830,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             error = true;
-        }
-    }
-
-    private int getRepeatAdder(int type) {
-        switch (type) {
-            case Constants.DAYLY:
-                return 1;
-            case Constants.WEEKLY:
-                return 7;
-            default:
-                return 0;
         }
     }
 
@@ -1221,16 +1189,16 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         return false;
     }
 
-    private void edit_flag(boolean repeat) {
+    private void edit_flag() {
         boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
         String title = ((FlagEditFragment) mNavigator.getFragment(0)).getTitleFromView();
-        List<Integer> repeat_single = ((FlagEditFragment) mNavigator.getFragment(0)).getRepeatFromView();
         List<Integer> date = ((FlagEditFragment) mNavigator.getFragment(0)).getDateFromView();
-        int repeat_left = -1;
+        List<Integer> repeat = ((FlagEditFragment) mNavigator.getFragment(0)).getRepeatFromView();
+        List<Integer> repeat_list_accepted = new ArrayList<>();
 
         int err = 0;
-        int repeat_type = getFlag().getRepeatType();
-        boolean repeat_single_changed = false;
+        int repeat_type = repeat.get(0);
+        int repeat_qty = repeat.get(1);
 
         if (date.get(0) == -1) {
             dateStartEmpty = true;
@@ -1283,74 +1251,20 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         } else if (!validateTime) {
             err++;
             Toast.makeText(getApplicationContext(), R.string.validation_field_time_end_before_start, Toast.LENGTH_LONG).show();
-        } else if (repeat_type == 0 && repeat_type != repeat_single.get(0)) {
-            repeat_type = repeat_single.get(0);
-            repeat_single_changed = true;
-            if ((repeat_single.get(0) != 0 && repeat_single.get(1) < 0)) {
-                err++;
-                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
-            } else if (repeat_single.get(1) == 0 || repeat_single.get(1) > 30) {
-                err++;
-                Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
-            }
+        } else if ((repeat.get(0) != 0 && repeat.get(1) <= 0)) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_required, Toast.LENGTH_LONG).show();
+        } else if ((repeat.get(0) == 1 && repeat.get(1) > 365) || (repeat.get(0) == 2 && repeat.get(1) > 53) || (repeat.get(0) == 3 && repeat.get(1) > 12)) {
+            err++;
+            Toast.makeText(getApplicationContext(), R.string.validation_field_repetitions_min_max, Toast.LENGTH_LONG).show();
+        } else if (!isActivityReadyRegister(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0))) {
+            err++;
+            Toast.makeText(getApplicationContext(), getErrorMessage(date.get(2), date.get(1), date.get(0), date.get(5), date.get(4), date.get(3), repeat.get(0)), Toast.LENGTH_LONG).show();
+        } else {
+
         }
 
         if (err == 0) {
-
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Integer> day_list_end = new ArrayList<>();
-            List<Integer> month_list_end = new ArrayList<>();
-            List<Integer> year_list_end = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-            List<Long> date_time_list_end = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                Calendar cal2 = Calendar.getInstance();
-                cal2.set(Calendar.HOUR_OF_DAY, 0);
-                cal2.clear(Calendar.MINUTE);
-                cal2.clear(Calendar.SECOND);
-                cal2.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
-                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
-
-                if (!repeat_single_changed)
-                    repeat_left = getFutureActivities(date);
-                else
-                    repeat_left = repeat_single.get(1);
-
-                for (int i = 0; i < repeat_left; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-                    day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
-                    year_list_end.add(cal2.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-                    date_time_list_end.add(cal2.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY) {
-                        cal.add(Calendar.MONTH, 1);
-                        cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                    }
-                }
-
-            }
-
             ActivityServer activityServer = new ActivityServer();
             activityServer.setTitle(title);
             activityServer.setDateStartEmpty(dateStartEmpty);
@@ -1377,22 +1291,45 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
             activityServer.setDateTimeEnd(calendar.getTimeInMillis());
 
-            if (repeat) {
-                activityServer.setRepeatType(repeat_type);
-                activityServer.setRepeatQty(repeat_left);
-            } else {
-                activityServer.setRepeatType(0);
-                activityServer.setRepeatQty(-1);
+            activityServer.setRepeatType(repeat_type);
+            activityServer.setRepeatQty(repeat_qty);
+
+            switch (repeat_type) {
+                case Constants.DAILY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * repeat_qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * repeat_qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * repeat_qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
+            if (!((FlagEditFragment) mNavigator.getFragment(0)).getRepeatBlocked()) {
+                if (repeat_qty > 0) {
+                    for (int i = 0; i <= repeat_qty; i++) {
+                        repeat_list_accepted.add(i);
+                    }
+                } else {
+                    repeat_list_accepted.add(0);
+                }
+
+                activityServer.setRepeatListAccepted(repeat_list_accepted);
             }
 
             setProgress(true);
 
-            if (!repeat_single_changed)
-                editFlag(activityServer);
+            editFlag(activityServer);
 
         } else
             error = true;
-        //requiredText.setVisibility(View.VISIBLE);
     }
 
     private void handleResponse(Response response) {
@@ -1434,14 +1371,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
-    }
-
-    private void showSnackBarMessage(String message) {
-
-        if (findViewById(android.R.id.content) != null) {
-
-            Snackbar.make(findViewById(android.R.id.content), message, Snackbar.LENGTH_LONG).show();
-        }
     }
 
     private void updateInviteRequest(InviteRequest inviteRequest) {
@@ -1489,90 +1418,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
-    }
-
-    private boolean sameDay(int y1, int m1, int d1, int y2, int m2, int d2) {
-        return d1 == d2 && m1 == m2 && y1 == y2;
-    }
-
-    private void createDialogEditWithRepeat() {
-        LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View customView = inflater.inflate(R.layout.dialog_message, null);
-
-        TextView text1 = (TextView) customView.findViewById(R.id.text1);
-        TextView text2 = (TextView) customView.findViewById(R.id.text2);
-        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-        TextView buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-        EditText editText = (EditText) customView.findViewById(R.id.editText);
-        RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
-
-        editText.setVisibility(View.GONE);
-
-        text1.setText(getResources().getString(R.string.popup_message_edit_commitments_with_repetitions));
-        text2.setVisibility(View.GONE);
-        buttonText1.setText(getResources().getString(R.string.cancel));
-        buttonText2.setText(getResources().getString(R.string.confirm));
-
-        radioGroup.setVisibility(View.VISIBLE);
-        text2.setVisibility(View.VISIBLE);
-        text2.setText(getResources().getString(R.string.popup_message_edit_select_which_one_to_modify));
-
-        Dialog dg = new Dialog(this, R.style.NewDialog);
-
-        dg.setContentView(customView);
-        dg.setCanceledOnTouchOutside(true);
-
-        buttonText1.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText1.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText1.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_left_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText2.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                    buttonText2.setBackground(null);
-                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    buttonText2.setBackground(ContextCompat.getDrawable(dg.getContext(), R.drawable.btn_dialog_message_bottom_right_radius));
-                }
-
-                return false;
-            }
-        });
-
-        buttonText1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dg.dismiss();
-            }
-        });
-
-        buttonText2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int radioButtonID;
-                View radioButton;
-                int idx = -1;
-
-                radioButtonID = radioGroup.getCheckedRadioButtonId();
-                radioButton = radioGroup.findViewById(radioButtonID);
-                idx = radioGroup.indexOfChild(radioButton);
-
-                edit_flag(idx == 1);
-
-                dg.dismiss();
-            }
-        });
-
-        dg.show();
     }
 
     @Override
@@ -1636,22 +1481,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             if (!edit) {
                 register();
             } else {
-                if (getFlag().getRepeatType() > 0) {
-                    List<Integer> date;
-
-                    date = ((FlagEditFragment) mNavigator.getFragment(0)).getDateFromView();
-
-                    int d = date.get(0);
-                    int m = date.get(1) + 1;
-                    int y = date.get(2);
-
-                    if (sameDay(y, m, d, getFlag().getYearStart(), getFlag().getMonthStart(), getFlag().getDayStart())
-                            && sameDay(date.get(5), date.get(4) + 1, date.get(3), getFlag().getYearEnd(), getFlag().getMonthEnd(), getFlag().getDayEnd()))
-                        edit_flag(false);
-                    else
-                        createDialogEditWithRepeat();
-                } else
-                    edit_flag(false);
+                edit_flag();
             }
         } else if (v == editButton) {
             Bundle bundle = new Bundle();

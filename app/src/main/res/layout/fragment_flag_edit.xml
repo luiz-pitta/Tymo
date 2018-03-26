@@ -271,6 +271,19 @@
 
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/repeatText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:gravity="right"
+        android:text="Repeat Text"
+        android:textColor="@color/grey_400"
+        android:textSize="12sp"
+        android:textStyle="normal" />
+
     <LinearLayout
         android:id="@+id/repeatBox"
         android:layout_width="match_parent"
