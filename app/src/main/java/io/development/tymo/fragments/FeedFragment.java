@@ -1200,10 +1200,12 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                 if (feedCardFragment != null)
                     feedCardFragment.setLatLng(lat, lng);
 
-                locationRequest = LocationRequest.create();
+
+                //XXXXXXXXXXXXX
+                /*locationRequest = LocationRequest.create();
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 locationRequest.setInterval(1000*60*5);
-                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);
+                LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, locationRequest, this);*/
             }
         }
     }

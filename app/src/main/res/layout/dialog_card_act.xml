@@ -92,17 +92,34 @@
                         android:src="@drawable/ic_calendar_clock"
                         android:tint="@color/grey_600" />
 
-                    <TextView
-                        android:id="@+id/dateMonthYear"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="8dp"
-                        android:ellipsize="end"
-                        android:gravity="center_vertical"
-                        android:maxLines="2"
-                        android:text="Date"
-                        android:textColor="@color/grey_600"
-                        android:textSize="14sp" />
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/dateMonthYear"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="2"
+                            android:text="Date"
+                            android:textColor="@color/grey_600"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/repeatText"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/dateHourText"
+                            android:text="Text"
+                            android:textColor="@color/grey_600"
+                            android:textSize="14sp"
+                            android:textStyle="normal" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
 

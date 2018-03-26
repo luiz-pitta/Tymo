@@ -36,6 +36,7 @@ public class ActivityServer implements Serializable {
     private long date_time_creation;
     private long date_time_start;
     private long date_time_end;
+    private long last_date_time;
 
     private String title;
     private String description;
@@ -64,14 +65,7 @@ public class ActivityServer implements Serializable {
 
     private int repeat_type;
     private int repeat_qty;
-    private List<Integer> day_list_start = new ArrayList<>();
-    private List<Integer> month_list_start = new ArrayList<>();
-    private List<Integer> year_list_start = new ArrayList<>();
-    private List<Integer> day_list_end = new ArrayList<>();
-    private List<Integer> month_list_end = new ArrayList<>();
-    private List<Integer> year_list_end = new ArrayList<>();
-    private List<Long> date_time_list_start = new ArrayList<>();
-    private List<Long> date_time_list_end = new ArrayList<>();
+    private List<Integer> repeat_list_accepted = new ArrayList<>();
 
     private int cube_color;
     private int cube_color_upper;
@@ -93,8 +87,6 @@ public class ActivityServer implements Serializable {
 
     private String invite_date;
 
-    private ArrayList<ActivityServer> listRepeatedActvities = new ArrayList<>();
-
     public ActivityServer() {
     }
 
@@ -107,12 +99,15 @@ public class ActivityServer implements Serializable {
         this.time_start_empty_card = activityServer.getTimeStartEmptyCard();
         this.time_end_empty_card = activityServer.getTimeEndEmptyCard();
 
+        this.repeat_list_accepted = activityServer.getRepeatListAccepted();
+
         this.title = activityServer.getTitle();
 
         this.invitation_type = activityServer.getInvitationType();
         this.date_time_creation = activityServer.getDateTimeCreation();
         this.date_time_start = activityServer.getDateTimeStart();
         this.date_time_end = activityServer.getDateTimeEnd();
+        this.last_date_time = activityServer.getLastDateTime();
         this.day_start = activityServer.getDayStart();
         this.month_start = activityServer.getMonthStart();
         this.year_start = activityServer.getYearStart();
@@ -184,16 +179,8 @@ public class ActivityServer implements Serializable {
         this.text = text;
     }
 
-    public void setDateTimeAlert(boolean date_time_alert) {
-        this.date_time_alert = date_time_alert;
-    }
-
     public String getText() {
         return text;
-    }
-
-    public boolean getDateTimeAlert() {
-        return date_time_alert;
     }
 
     public boolean getDateStartEmpty() {
@@ -224,10 +211,6 @@ public class ActivityServer implements Serializable {
         return time_end_empty;
     }
 
-    public ArrayList<ActivityServer> getListRepeatedActvities() {
-        return listRepeatedActvities;
-    }
-
     public double getRankPoints() {
         return rank_points;
     }
@@ -246,6 +229,14 @@ public class ActivityServer implements Serializable {
 
     public long getDateTimeNow() {
         return date_time_now;
+    }
+
+    public void setLastDateTime(long last_date_time) {
+        this.last_date_time = last_date_time;
+    }
+
+    public long getLastDateTime() {
+        return last_date_time;
     }
 
     public int getStatus() {
@@ -624,36 +615,12 @@ public class ActivityServer implements Serializable {
         this.whatsapp_group_link = whatsapp_group_link;
     }
 
-    public void setDayListStart(List<Integer> list) {
-        this.day_list_start.addAll(list);
+    public void setRepeatListAccepted(List<Integer> repeat_list_accepted) {
+        this.repeat_list_accepted.addAll(repeat_list_accepted);
     }
 
-    public void setMonthListStart(List<Integer> list) {
-        this.month_list_start.addAll(list);
-    }
-
-    public void setYearListStart(List<Integer> list) {
-        this.year_list_start.addAll(list);
-    }
-
-    public void setDayListEnd(List<Integer> list) {
-        this.day_list_end.addAll(list);
-    }
-
-    public void setMonthListEnd(List<Integer> list) {
-        this.month_list_end.addAll(list);
-    }
-
-    public void setYearListEnd(List<Integer> list) {
-        this.year_list_end.addAll(list);
-    }
-
-    public void setDateTimeListStart(List<Long> list) {
-        this.date_time_list_start.addAll(list);
-    }
-
-    public void setDateTimeListEnd(List<Long> list) {
-        this.date_time_list_end.addAll(list);
+    public List<Integer> getRepeatListAccepted() {
+        return repeat_list_accepted;
     }
 
     @Override

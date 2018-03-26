@@ -832,15 +832,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             flagServer.setRepeatType(repeat.get(0));
             flagServer.setRepeatQty(repeat.get(1));
-            flagServer.setDayListStart(day_list_start);
-            flagServer.setMonthListStart(month_list_start);
-            flagServer.setYearListStart(year_list_start);
-            flagServer.setDayListEnd(day_list_end);
-            flagServer.setMonthListEnd(month_list_end);
-            flagServer.setYearListEnd(year_list_end);
-
-            flagServer.setDateTimeListStart(date_time_list_start);
-            flagServer.setDateTimeListEnd(date_time_list_end);
 
             flagServer.setType(free);
             if (free) {
@@ -860,8 +851,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         } else {
             error = true;
-            //requiredText.setVisibility(View.VISIBLE);
-            //showSnackBarMessage(getResources().getString(R.string.validation_field_required_fill_correctly));
         }
     }
 
@@ -887,14 +876,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
     private void editFlag(ActivityServer activityServer) {
         setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().editFlag(getFlag().getId(), activityServer)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
-    }
-
-    private void editFlagRepeatSingle(ActivityServer activityServer) {
-        setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().editFlagRepeatSingle(getFlag().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse, this::handleError));
@@ -1090,7 +1071,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
                         reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }
@@ -1396,16 +1377,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
             activityServer.setDateTimeEnd(calendar.getTimeInMillis());
 
-            activityServer.setDayListStart(day_list_start);
-            activityServer.setMonthListStart(month_list_start);
-            activityServer.setYearListStart(year_list_start);
-            activityServer.setDayListEnd(day_list_end);
-            activityServer.setMonthListEnd(month_list_end);
-            activityServer.setYearListEnd(year_list_end);
-
-            activityServer.setDateTimeListStart(date_time_list_start);
-            activityServer.setDateTimeListEnd(date_time_list_end);
-
             if (repeat) {
                 activityServer.setRepeatType(repeat_type);
                 activityServer.setRepeatQty(repeat_left);
@@ -1418,8 +1389,6 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
             if (!repeat_single_changed)
                 editFlag(activityServer);
-            else
-                editFlagRepeatSingle(activityServer);
 
         } else
             error = true;

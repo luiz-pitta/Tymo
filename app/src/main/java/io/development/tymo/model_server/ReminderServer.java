@@ -7,7 +7,6 @@ import java.util.List;
 public class ReminderServer implements Serializable {
     private static final long serialVersionUID = 5L;
 
-    private String title;
     private String text;
     private String creator;
     private long id;
@@ -33,6 +32,7 @@ public class ReminderServer implements Serializable {
     private long date_time_creation;
     private long date_time_start;
     private long date_time_end;
+    private long last_date_time;
 
     private int minute_card;
     private int hour_card;
@@ -44,14 +44,7 @@ public class ReminderServer implements Serializable {
 
     private int repeat_type;
     private int repeat_qty;
-    private List<Integer> day_list_start = new ArrayList<>();
-    private List<Integer> month_list_start = new ArrayList<>();
-    private List<Integer> year_list_start = new ArrayList<>();
-    private List<Long> date_time_list_start = new ArrayList<>();
-    private List<Integer> day_list_end = new ArrayList<>();
-    private List<Integer> month_list_end = new ArrayList<>();
-    private List<Integer> year_list_end = new ArrayList<>();
-    private List<Long> date_time_list_end = new ArrayList<>();
+    private List<Integer> repeat_list_accepted = new ArrayList<>();
 
     public ReminderServer() {
     }
@@ -64,14 +57,16 @@ public class ReminderServer implements Serializable {
         this.time_start_empty_card = reminderServer.getTimeStartEmptyCard();
         this.time_end_empty_card = reminderServer.getTimeEndEmptyCard();
 
+        this.repeat_list_accepted = reminderServer.getRepeatListAccepted();
+
         this.id = reminderServer.getId();
 
-        this.title = reminderServer.getTitle();
         this.text = reminderServer.getText();
 
         this.date_time_creation = reminderServer.getDateTimeCreation();
         this.date_time_start = reminderServer.getDateTimeStart();
         this.date_time_end = reminderServer.getDateTimeEnd();
+        this.last_date_time = reminderServer.getLastDateTime();
         this.day_start = reminderServer.getDayStart();
         this.month_start = reminderServer.getMonthStart();
         this.year_start = reminderServer.getYearStart();
@@ -172,10 +167,6 @@ public class ReminderServer implements Serializable {
         return id;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
     public String getText() {
         return text;
     }
@@ -220,8 +211,12 @@ public class ReminderServer implements Serializable {
         return hour_end;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setLastDateTime(long last_date_time) {
+        this.last_date_time = last_date_time;
+    }
+
+    public long getLastDateTime() {
+        return last_date_time;
     }
 
     public void setText(String text) {
@@ -281,38 +276,6 @@ public class ReminderServer implements Serializable {
         this.repeat_type = repeat_type;
     }
 
-    public void setDayListStart(List<Integer> list) {
-        this.day_list_start.addAll(list);
-    }
-
-    public void setMonthListStart(List<Integer> list) {
-        this.month_list_start.addAll(list);
-    }
-
-    public void setYearListStart(List<Integer> list) {
-        this.year_list_start.addAll(list);
-    }
-
-    public void setDateTimeListStart(List<Long> list) {
-        this.date_time_list_start.addAll(list);
-    }
-
-    public void setDayListEnd(List<Integer> list) {
-        this.day_list_end.addAll(list);
-    }
-
-    public void setMonthListEnd(List<Integer> list) {
-        this.month_list_end.addAll(list);
-    }
-
-    public void setYearListEnd(List<Integer> list) {
-        this.year_list_end.addAll(list);
-    }
-
-    public void setDateTimeListEnd(List<Long> list) {
-        this.date_time_list_end.addAll(list);
-    }
-
     public int getRepeatType() {
         return repeat_type;
     }
@@ -367,5 +330,13 @@ public class ReminderServer implements Serializable {
 
     public void setHourEndCard(int time) {
         this.hour_end_card = time;
+    }
+
+    public void setRepeatListAccepted(List<Integer> repeat_list_accepted) {
+        this.repeat_list_accepted.addAll(repeat_list_accepted);
+    }
+
+    public List<Integer> getRepeatListAccepted() {
+        return repeat_list_accepted;
     }
 }

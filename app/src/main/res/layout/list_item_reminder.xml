@@ -28,34 +28,23 @@
         android:orientation="vertical">
 
         <TextView
-            android:visibility="gone"
             android:id="@+id/text1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:maxLines="2"
-            android:text="Text"
-            android:textColor="@color/grey_900"
-            android:textSize="16sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:id="@+id/text2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="4"
+            android:maxLines="3"
             android:minLines="2"
             android:text="Text"
             android:textColor="@color/grey_800"
             android:textSize="14sp" />
 
         <TextView
-            android:id="@+id/text3"
+            android:id="@+id/text2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
-            android:lines="1"
+            android:maxLines="2"
+            android:minLines="1"
             android:text="Text"
             android:textColor="@color/grey_500"
             android:textSize="12sp" />

@@ -270,22 +270,129 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
             if (!reminderServer.getDateStartEmpty()) {
 
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(reminderServer.getYearStart(),reminderServer.getMonthStart()-1,reminderServer.getDayStart());
+                Calendar calendar2 = Calendar.getInstance();
+                Calendar calendar3 = Calendar.getInstance();
+                calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());
+                calendar2.set(reminderServer.getYearEnd(), reminderServer.getMonthEnd() - 1, reminderServer.getDayEnd());
+                calendar3.setTimeInMillis(reminderServer.getLastDateTime());
 
                 String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
                 String dayStart = String.format("%02d", reminderServer.getDayStart());
                 String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
                 int yearStart = reminderServer.getYearStart();
                 String hourStart = String.format("%02d", reminderServer.getHourStart());
                 String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
 
-                if (!reminderServer.getTimeStartEmpty())
-                    date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
-                else
+                String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+                String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+                String dayEnd = String.format("%02d", reminderServer.getDayEnd());
+                String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                int yearEnd = reminderServer.getYearEnd();
+                String hourEnd = String.format("%02d", reminderServer.getHourEnd());
+                String minuteEnd = String.format("%02d", reminderServer.getMinuteEnd());
+
+                String dayLast = String.format("%02d", calendar3.get(Calendar.DAY_OF_MONTH));
+                String monthLast = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar3.getTime().getTime());
+                int yearLast = calendar3.get(Calendar.YEAR);
+
+                if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty()) {
                     date = this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart);
+                } else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty()) {
+                    date = this.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd);
+                } else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty()) {
+                    date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                } else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty()) {
+                    date = this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd);
+                } else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty()) {
+                    if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                        date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                    } else {
+                        date = this.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd);
+                    }
+                } else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty()) {
+                    if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                        date = this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd);
+                    } else {
+                        date = this.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
+                    }
+                } else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty()) {
+                    if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                        date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                    } else {
+                        date = this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                    }
+                } else {
+                    if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
+                        if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
+                            date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+                        } else {
+                            date = this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        }
+                    } else {
+                        date = this.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd);
+                    }
+                }
+
+                if (reminderServer.getRepeatType() > 0) {
+                    String repeat = "";
+
+                    switch (reminderServer.getRepeatType()) {
+                        case Constants.DAYLY:
+                            if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_daily_01);
+                            else if (!reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                            else if (reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                            else if (!reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                            break;
+                        case Constants.WEEKLY:
+                            if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                            else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                            else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                            else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                            else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                            else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                            else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                            else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                            break;
+                        case Constants.MONTHLY:
+                            if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                            else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                            else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                            else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                            else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                            else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                            else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                            else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                                date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                            break;
+                        default:
+                            break;
+                    }
+
+                    date = date + "\n" + this.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast);
+                }
             }
 
-            MyRemindersModel myRemindersModel = new MyRemindersModel(reminderServer.getTitle(), reminderServer.getText(), date, reminderServer);
+            MyRemindersModel myRemindersModel = new MyRemindersModel(reminderServer.getText(), date, reminderServer);
             listMyReminders.add(myRemindersModel);
             listMyRemindersQuery.add(myRemindersModel);
 

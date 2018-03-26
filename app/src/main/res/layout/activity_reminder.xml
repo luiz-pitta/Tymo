@@ -106,7 +106,7 @@
                         android:layout_marginLeft="45dp"
                         android:text="Text"
                         android:textColor="@color/grey_600"
-                        android:textSize="12sp"
+                        android:textSize="14sp"
                         android:textStyle="normal" />
 
                 </RelativeLayout>

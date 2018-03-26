@@ -722,7 +722,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                         buttonIcon2 = (ImageView) customView.findViewById(R.id.buttonIcon2);
 
                         buttonText1.setText(context.getResources().getString(R.string.open));
-                        title.setText(reminderServer.getTitle());
+                        title.setText(reminderServer.getText());
 
                         Calendar calendar = Calendar.getInstance();
                         calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());

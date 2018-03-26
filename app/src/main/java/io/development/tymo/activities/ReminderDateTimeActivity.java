@@ -62,7 +62,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
     private LinearLayout repeatBox, repeatNumberBox;
     private TextView cleanButton, applyButton, repeatEditText, repeatMax;
     private ImageView clearDateStart, clearTimeStart;
-    private TextView dateStart, timeStart;
+    private TextView dateStart, timeStart, repeatLastDate;
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -93,6 +93,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
         repeatMax = (TextView) findViewById(R.id.repeatMax);
         dateStart = (TextView) findViewById(R.id.dateStart);
         timeStart = (TextView) findViewById(R.id.timeStart);
+        repeatLastDate = (TextView) findViewById(R.id.repeatLastDate);
         clearDateStart = (ImageView) findViewById(R.id.clearDateStart);
         clearTimeStart = (ImageView) findViewById(R.id.clearTimeStart);
 
@@ -132,16 +133,23 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             String day = new SimpleDateFormat("dd", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             String month = new SimpleDateFormat("MM", getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             dateStart.setText(day + "/" + month + "/" + year_start);
+            clearDateStart.setVisibility(View.VISIBLE);
         } else {
             dateStart.setText("");
+            clearDateStart.setVisibility(View.GONE);
+            day_start = -1;
+            month_start = -1;
+            year_start = -1;
         }
 
         if (!getReminder().getTimeStartEmpty()) {
             String hourString = String.format("%02d", hour_start);
             String minuteString = String.format("%02d", minutes_start);
             timeStart.setText(hourString + ":" + minuteString);
+            clearTimeStart.setVisibility(View.VISIBLE);
         } else {
             timeStart.setText("");
+            clearTimeStart.setVisibility(View.GONE);
             minutes_start = -1;
             hour_start = -1;
         }
@@ -153,36 +161,13 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 getReminder().setRepeatType(position);
 
-                int limit;
-                int numberS;
-                String maxText;
-
-                if (repeatEditText.getText().toString().matches("")) {
-                    numberS = 0;
+                if (position == 0) {
+                    repeatNumberBox.setVisibility(View.GONE);
                 } else {
-                    numberS = Integer.parseInt(repeatEditText.getText().toString());
+                    repeatNumberBox.setVisibility(View.VISIBLE);
                 }
 
-                if (getReminder().getRepeatType() == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (getReminder().getRepeatType() == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
-
-                if (numberS > limit) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
-                } else {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
-                }
-
-                repeatNumberBox.setActivated(position != 0);
+                setRepeatLastDate();
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -197,109 +182,121 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int limit;
-                int numberS;
-                String maxText;
+                int number;
 
                 if (String.valueOf(s).matches("")) {
-                    numberS = 0;
+                    number = 0;
                 } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
+                    number = Integer.valueOf(String.valueOf(s));
                 }
 
-                if (getReminder().getRepeatType() == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (getReminder().getRepeatType() == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
+                getReminder().setRepeatQty(number);
+                setRepeatLastDate();
 
-                if (numberS > limit) {
+                if (number > 500) {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
+                    repeatLastDate.setVisibility(View.INVISIBLE);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int limit;
-                int numberS;
-                String maxText;
+                int number;
 
                 if (String.valueOf(s).matches("")) {
-                    numberS = 0;
+                    number = 0;
                 } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
+                    number = Integer.valueOf(String.valueOf(s));
                 }
 
-                if (getReminder().getRepeatType() == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (getReminder().getRepeatType() == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
+                getReminder().setRepeatQty(number);
+                setRepeatLastDate();
 
-                if (numberS > limit) {
+                if (number > 500) {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
+                    repeatLastDate.setVisibility(View.INVISIBLE);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                int limit;
-                int numberS;
-                String maxText;
+                int number;
 
                 if (String.valueOf(s).matches("")) {
-                    numberS = 0;
+                    number = 0;
                 } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
+                    number = Integer.valueOf(String.valueOf(s));
                 }
 
-                if (getReminder().getRepeatType() == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (getReminder().getRepeatType() == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
+                getReminder().setRepeatQty(number);
+                setRepeatLastDate();
 
-                if (numberS > limit) {
+                if (number > 500) {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
+                    repeatLastDate.setVisibility(View.INVISIBLE);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
         });
 
-        if (getReminder().getRepeatQty() < 1)
+        if (getReminder().getRepeatQty() < 1) {
             repeatEditText.setText("");
-        else
+            repeatLastDate.setVisibility(View.INVISIBLE);
+        } else {
             repeatEditText.setText(String.valueOf(getReminder().getRepeatQty()));
+            repeatLastDate.setVisibility(View.VISIBLE);
+            setRepeatLastDate();
+        }
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
+    }
+
+    private void setRepeatLastDate() {
+        if (getReminder().getRepeatQty() > 0 && getReminder().getRepeatType() > 0 && day_start != -1) {
+            repeatNumberBox.setVisibility(View.VISIBLE);
+            repeatLastDate.setVisibility(View.VISIBLE);
+            Calendar calendar = Calendar.getInstance();
+            calendar.set(year_start, month_start, day_start);
+
+            switch (getReminder().getRepeatType()) {
+                case Constants.DAYLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * getReminder().getRepeatQty());
+                    getReminder().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * getReminder().getRepeatQty());
+                    getReminder().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * getReminder().getRepeatQty());
+                    getReminder().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    getReminder().setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
+            String dayOfWeek = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+            String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int year = calendar.get(Calendar.YEAR);
+            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek.toLowerCase(), day, month, year);
+            repeatLastDate.setText(this.getString(R.string.repeat_last_date, date));
+        }
+        else{
+            repeatLastDate.setVisibility(View.INVISIBLE);
+            if (getReminder().getRepeatType() == 0){
+                repeatNumberBox.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void applyChanges() {
@@ -317,10 +314,9 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
         } else {
             dateStartEmpty = false;
 
-            if (!repeatEditText.getText().toString().matches("")){
+            if (!repeatEditText.getText().toString().matches("")) {
                 repeat_qty = Integer.parseInt(repeatEditText.getText().toString());
-            }
-            else{
+            } else {
                 repeat_qty = -1;
             }
         }
@@ -359,7 +355,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             getReminder().setMinuteEnd(date.get(6));
             getReminder().setHourEnd(date.get(7));
 
-            if(dateStartEmpty){
+            if (dateStartEmpty) {
                 getReminder().setDateStartEmpty(true);
                 getReminder().setDateEndEmpty(true);
                 getReminder().setTimeStartEmpty(true);
@@ -377,7 +373,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
 
                 getReminder().setRepeatQty(-1);
                 getReminder().setRepeatType(0);
-            } else if(getReminder().getRepeatType() == 0){
+            } else if (getReminder().getRepeatType() == 0) {
                 getReminder().setRepeatQty(-1);
             } else {
                 getReminder().setRepeatQty(Integer.parseInt(repeatEditText.getText().toString()));
@@ -390,10 +386,29 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
 
                 calendar.set(getReminder().getYearEnd(), getReminder().getMonthEnd() - 1, getReminder().getDayEnd(), getReminder().getHourEnd(), getReminder().getMinuteEnd());
                 getReminder().setDateTimeEnd(calendar.getTimeInMillis());
-            }
-            else{
+
+                switch (getReminder().getRepeatType()) {
+                    case Constants.DAYLY:
+                        calendar.add(Calendar.DAY_OF_WEEK, 1 * getReminder().getRepeatQty());
+                        getReminder().setLastDateTime(calendar.getTimeInMillis());
+                        break;
+                    case Constants.WEEKLY:
+                        calendar.add(Calendar.DAY_OF_WEEK, 7 * getReminder().getRepeatQty());
+                        getReminder().setLastDateTime(calendar.getTimeInMillis());
+                        break;
+                    case Constants.MONTHLY:
+                        calendar.add(Calendar.MONTH, 1 * getReminder().getRepeatQty());
+                        getReminder().setLastDateTime(calendar.getTimeInMillis());
+                        break;
+                    default:
+                        getReminder().setLastDateTime(calendar.getTimeInMillis());
+                        break;
+                }
+
+            } else {
                 getReminder().setDateTimeStart(-1);
                 getReminder().setDateTimeEnd(-1);
+                getReminder().setLastDateTime(-1);
             }
 
             Intent intent = new Intent();
@@ -459,6 +474,8 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
         } else {
             clearDateStart.setVisibility(View.VISIBLE);
         }
+
+        setRepeatLastDate();
 
     }
 
@@ -534,6 +551,7 @@ public class ReminderDateTimeActivity extends AppCompatActivity implements DateP
             year_start = -1;
             dateStart.setText("");
             clearDateStart.setVisibility(View.GONE);
+            setRepeatLastDate();
         } else if (v == clearTimeStart) {
             hour_start = -1;
             minutes_start = -1;

@@ -114,6 +114,7 @@ public class AddPart3Activity extends AppCompatActivity implements View.OnClickL
     private int selected = -1;
     private User user_friend = null;
     private ArrayList<User> listUserCompare = new ArrayList<>();
+    private int d = -1, m= -1, y = -1;
 
     ArrayList<User> data = new ArrayList<>();
 
@@ -179,6 +180,10 @@ public class AddPart3Activity extends AppCompatActivity implements View.OnClickL
         if (err == 0) {
             activityWrapper.getActivityServer().setVisibility(selected);
 
+            d = activityWrapper.getActivityServer().getDayStart();
+            m = activityWrapper.getActivityServer().getMonthStart()-1;
+            y = activityWrapper.getActivityServer().getYearStart();
+
             registerProcess(activityWrapper.getActivityServer());
             setProgress(true);
         }
@@ -212,10 +217,6 @@ public class AddPart3Activity extends AppCompatActivity implements View.OnClickL
         int day2 = c2.get(Calendar.DAY_OF_MONTH);
         int month2 = c2.get(Calendar.MONTH);
         int year2 = c2.get(Calendar.YEAR);
-
-        int d = activityWrapper.getActivityServer().getDayStart();
-        int m = activityWrapper.getActivityServer().getMonthStart();
-        int y = activityWrapper.getActivityServer().getYearStart();
 
         if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
@@ -430,7 +431,7 @@ public class AddPart3Activity extends AppCompatActivity implements View.OnClickL
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
                         reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }

@@ -410,11 +410,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String text1;
 
-            if (reminderServer.getTitle().matches("")){
-                text1 = reminderServer.getText();
-            } else {
-                text1 = reminderServer.getTitle();
-            }
+            text1 = reminderServer.getText();
 
             listMyCommitment.add(new ReminderSearch(text1, date, this.getResources().getString(R.string.my_reminder), reminderServer));
         }
@@ -630,11 +626,7 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
 
             String text1;
 
-            if (reminderServer.getTitle().matches("")){
-                text1 = reminderServer.getText();
-            } else {
-                text1 = reminderServer.getTitle();
-            }
+            text1 = reminderServer.getText();
 
             listMyCommitment.add(new ReminderSearch(text1, date, this.getResources().getString(R.string.my_reminder), reminderServer));
         }

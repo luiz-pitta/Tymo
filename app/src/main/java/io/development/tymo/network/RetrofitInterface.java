@@ -252,13 +252,4 @@ public interface RetrofitInterface {
     @POST("edit_activity/{id}")
     Observable<Response> editActivity(@Path("id") long id, @Body ActivityServer activityServer);
 
-    @POST("edit_flag_repeat_single/{id}")
-    Observable<Response> editFlagRepeatSingle(@Path("id") long id, @Body ActivityServer activityServer);
-
-    @POST("edit_reminder_repeat_single/{id}")
-    Observable<Response> editReminderRepeatSingle(@Path("id") long id, @Body ActivityServer activityServer);
-
-    @POST("edit_activity_repeat_single/{id}")
-    Observable<Response> editActivityRepeatSingle(@Path("id") long id, @Body ActivityServer activityServer);
-
 }

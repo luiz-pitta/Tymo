@@ -678,7 +678,7 @@ public class InviteActivity extends AppCompatActivity implements View.OnClickLis
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
                         reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
             }
         }

@@ -305,98 +305,17 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int limit;
-                int numberS;
-                String maxText;
 
-                if (String.valueOf(s).matches("")) {
-                    numberS = 0;
-                } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
-                }
-
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
-
-                if (numberS > limit) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
-                } else {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
-                }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int limit;
-                int numberS;
-                String maxText;
 
-                if (String.valueOf(s).matches("")) {
-                    numberS = 0;
-                } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
-                }
-
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
-
-                if (numberS > limit) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
-                } else {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
-                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                int limit;
-                int numberS;
-                String maxText;
 
-                if (String.valueOf(s).matches("")) {
-                    numberS = 0;
-                } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
-                }
-
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
-
-                if (numberS > limit) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
-                } else {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
-                }
             }
         });
 
@@ -475,35 +394,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 repeat_type = position;
 
-                int limit;
-                int numberS;
-                String maxText;
-
-                if (repeatEditText.getText().toString().matches("")) {
-                    numberS = 0;
-                } else {
-                    numberS = Integer.parseInt(repeatEditText.getText().toString());
-                }
-
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
-
-                if (numberS > limit) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
-                } else {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
-                }
-
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -543,10 +433,10 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         mSubscriptions.add(NetworkUtil.getRetrofit().getProfile(email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
+                .subscribe(this::handleResponseGetUser, this::handleError));
     }
 
-    private void handleResponse(User user) {
+    private void handleResponseGetUser(User user) {
         setProgress(false);
     }
 
@@ -1718,16 +1608,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
             activityServer.setDateTimeEnd(calendar.getTimeInMillis());
 
-            activityServer.setDayListStart(day_list_start);
-            activityServer.setMonthListStart(month_list_start);
-            activityServer.setYearListStart(year_list_start);
-            activityServer.setDayListEnd(day_list_end);
-            activityServer.setMonthListEnd(month_list_end);
-            activityServer.setYearListEnd(year_list_end);
-
-            activityServer.setDateTimeListStart(date_time_list_start);
-            activityServer.setDateTimeListEnd(date_time_list_end);
-
             activityServer.setCubeColor(cube_color);
             activityServer.setCubeColorUpper(cube_color_upper);
             activityServer.setCubeIcon(cube_icon);
@@ -1775,7 +1655,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
                 editActivity(activityServer);
             else {
                 activityServer.setDateTimeNow(Calendar.getInstance().getTimeInMillis());
-                editActivityRepeatSingle(activityServer);
             }
         }
     }
@@ -1839,14 +1718,6 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
     private void editActivity(ActivityServer activityServer) {
         //setProgress(true);
         mSubscriptions.add(NetworkUtil.getRetrofit().editActivity(getActivity().getId(), activityServer)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse, this::handleError));
-    }
-
-    private void editActivityRepeatSingle(ActivityServer activityServer) {
-        //setProgress(true);
-        mSubscriptions.add(NetworkUtil.getRetrofit().editActivityRepeatSingle(getActivity().getId(), activityServer)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleResponse, this::handleError));
@@ -2708,7 +2579,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
                         reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }

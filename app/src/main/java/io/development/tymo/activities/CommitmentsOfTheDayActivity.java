@@ -646,7 +646,7 @@ public class CommitmentsOfTheDayActivity extends AppCompatActivity implements Vi
                 }
 
                 listNotification.add(new NotificationModel(
-                        reminderServer.getTitle(),
+                        reminderServer.getText(),
                         time,
                         statusText,
                         "",

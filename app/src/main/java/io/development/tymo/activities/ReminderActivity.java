@@ -73,6 +73,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
     private boolean error = false;
     private boolean edit;
+    private int d = -1, m = -1, y = -1;
 
     private DateFormat dateFormat;
 
@@ -124,7 +125,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         reminderServer = new ReminderServer();
 
         reminderServer.setCreator(creator);
-        reminderServer.setTitle("");
 
         if (reminderWrapper != null) {
             edit = true;
@@ -181,6 +181,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         reminderWrapper.getReminderServer().setTimeStartEmpty(response.getMyCommitReminder().get(0).getTimeStartEmpty());
         reminderWrapper.getReminderServer().setDateEndEmpty(response.getMyCommitReminder().get(0).getDateEndEmpty());
         reminderWrapper.getReminderServer().setTimeEndEmpty(response.getMyCommitReminder().get(0).getTimeEndEmpty());
+        reminderWrapper.getReminderServer().setLastDateTime(response.getMyCommitReminder().get(0).getLastDateTime());
 
         setReminderServer(reminderWrapper.getReminderServer());
         setInformation(reminderWrapper.getReminderServer());
@@ -209,6 +210,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             reminderServer.setTimeStartEmpty(reminder.getTimeStartEmpty());
             reminderServer.setDateEndEmpty(reminder.getDateEndEmpty());
             reminderServer.setTimeEndEmpty(reminder.getTimeEndEmpty());
+            reminderServer.setLastDateTime(reminder.getLastDateTime());
         } else {
             reminderServer.setRepeatQty(-1);
             reminderServer.setRepeatType(0);
@@ -229,6 +231,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             reminderServer.setTimeStartEmpty(true);
             reminderServer.setDateEndEmpty(true);
             reminderServer.setTimeEndEmpty(true);
+            reminderServer.setLastDateTime(-1);
         }
     }
 
@@ -256,21 +259,30 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
             Calendar calendar = Calendar.getInstance();
             Calendar calendar2 = Calendar.getInstance();
+            Calendar calendar3 = Calendar.getInstance();
             calendar.set(reminder.getYearStart(), reminder.getMonthStart() - 1, reminder.getDayStart());
             calendar2.set(reminder.getYearEnd(), reminder.getMonthEnd() - 1, reminder.getDayEnd());
+            calendar3.setTimeInMillis(reminder.getLastDateTime());
 
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", reminder.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = reminder.getYearStart();
             String hourStart = String.format("%02d", reminder.getHourStart());
             String minuteStart = String.format("%02d", reminder.getMinuteStart());
+
             String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
             String dayEnd = String.format("%02d", reminder.getDayEnd());
             String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
             int yearEnd = reminder.getYearEnd();
             String hourEnd = String.format("%02d", reminder.getHourEnd());
             String minuteEnd = String.format("%02d", reminder.getMinuteEnd());
+
+            String dayLast = String.format("%02d", calendar3.get(Calendar.DAY_OF_MONTH));
+            String monthLast = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar3.getTime().getTime());
+            int yearLast = calendar3.get(Calendar.YEAR);
 
             if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty()) {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
@@ -313,34 +325,62 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             if (reminder.getRepeatType() == 0) {
                 repeatText.setVisibility(View.GONE);
             } else {
-                String repeatly;
                 repeatText.setVisibility(View.VISIBLE);
+                String date = "";
+
                 switch (reminder.getRepeatType()) {
                     case Constants.DAYLY:
-                        repeatly = this.getString(R.string.repeat_daily);
-                        calendar2.add(Calendar.DAY_OF_WEEK, 1 * reminder.getRepeatQty());
+                        if (reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
                         break;
                     case Constants.WEEKLY:
-                        repeatly = this.getString(R.string.repeat_weekly);
-                        calendar2.add(Calendar.DAY_OF_WEEK, 7 * reminder.getRepeatQty());
+                        if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
                         break;
                     case Constants.MONTHLY:
-                        repeatly = this.getString(R.string.repeat_monthly);
-                        calendar2.add(Calendar.MONTH, 1 * reminder.getRepeatQty());
+                        if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!reminder.getDateEndEmpty() && reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!reminder.getDateEndEmpty() && !reminder.getTimeStartEmpty() && !reminder.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
                         break;
                     default:
-                        repeatly = "";
                         break;
                 }
 
-                dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
-                dayEnd = String.format("%02d", calendar2.get(Calendar.DAY_OF_MONTH));
-                monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
-                yearEnd = calendar2.get(Calendar.YEAR);
-
-                String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
-
-                repeatText.setText(this.getString(R.string.repeat_text, repeatly, date));
+                dateHourText.setText(date);
+                repeatText.setText(this.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast));
             }
         } else {
             dateBox.setVisibility(View.GONE);
@@ -355,7 +395,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         if (reminderWrapper != null) {
             if (!reminderEditText.getText().toString().matches(getReminder().getText()) || getReminder().getDayStart() != reminderServer.getDayStart() || getReminder().getMonthStart() != reminderServer.getMonthStart() ||
                     getReminder().getYearStart() != reminderServer.getYearStart() || getReminder().getMinuteStart() != reminderServer.getMinuteStart() || getReminder().getHourStart() != reminderServer.getHourStart() ||
-                            getReminder().getRepeatType() != reminderServer.getRepeatType() || getReminder().getRepeatQty() != reminderServer.getRepeatQty()) {
+                    getReminder().getRepeatType() != reminderServer.getRepeatType() || getReminder().getRepeatQty() != reminderServer.getRepeatQty()) {
                 confirmationButtonBar.setVisibility(View.VISIBLE);
                 confirmationButtonBarFitRemove.setVisibility(View.GONE);
                 confirmationButton.setText(R.string.save_updates);
@@ -381,7 +421,10 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         if (err == 0) {
             reminderServer.setDateTimeCreation(Calendar.getInstance().getTimeInMillis());
             reminderServer.setText(text);
-            reminderServer.setTitle("");
+
+            d = reminderServer.getDayStart();
+            m = reminderServer.getMonthStart() - 1;
+            y = reminderServer.getYearStart();
 
             registerProcess(reminderServer);
             setProgress(true);
@@ -405,7 +448,10 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
 
         if (err == 0) {
             reminderServer.setText(text);
-            reminderServer.setTitle("");
+
+            d = reminderServer.getDayStart();
+            m = reminderServer.getMonthStart() - 1;
+            y = reminderServer.getYearStart();
 
             editProcess(reminderServer);
             setProgress(true);
@@ -452,11 +498,6 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         int month2 = c2.get(Calendar.MONTH);
         int year2 = c2.get(Calendar.YEAR);
 
-        ReminderServer reminder = getReminder();
-        int d = reminder.getDayStart();
-        int m = reminder.getMonthStart();
-        int y = reminder.getYearStart();
-
         if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
             getActivityStartToday();
 
@@ -465,12 +506,8 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
         intent.putExtra("m", m);
         intent.putExtra("y", y);
 
-        if (edit || reminder.getDayStart() == -1) {
-            finish();
-        } else {
-            setResult(RESULT_OK, intent);
-            startActivity(intent);
-        }
+        setResult(RESULT_OK, intent);
+        startActivity(intent);
 
     }
 
@@ -710,7 +747,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
                         reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }

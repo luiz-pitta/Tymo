@@ -25,8 +25,6 @@ public class FlagServer implements Serializable {
     private int count_my_favorites;
     private int participates;
 
-    private int repeat_id_original_flag;
-
     private int status; // -1 = already happened ; 0 = is happening ; 1 = will happen
 
     private String title;
@@ -56,25 +54,17 @@ public class FlagServer implements Serializable {
     private long date_time_creation;
     private long date_time_start;
     private long date_time_end;
+    private long last_date_time;
 
     private boolean time_start_empty_card;
     private boolean time_end_empty_card;
 
     private int repeat_type;
     private int repeat_qty;
-    private List<Integer> day_list_start = new ArrayList<>();
-    private List<Integer> month_list_start = new ArrayList<>();
-    private List<Integer> year_list_start = new ArrayList<>();
-    private List<Integer> day_list_end = new ArrayList<>();
-    private List<Integer> month_list_end = new ArrayList<>();
-    private List<Integer> year_list_end = new ArrayList<>();
-    private List<Long> date_time_list_start = new ArrayList<>();
-    private List<Long> date_time_list_end = new ArrayList<>();
+    private List<Integer> repeat_list_accepted = new ArrayList<>();
 
     private Boolean toAll;
     private List<String> guest = new ArrayList();
-
-    private ArrayList<FlagServer> listRepeatedActvities = new ArrayList<>();
 
     private String invite_date;
 
@@ -90,6 +80,8 @@ public class FlagServer implements Serializable {
         this.time_start_empty_card = flagServer.getTimeStartEmptyCard();
         this.time_end_empty_card = flagServer.getTimeEndEmptyCard();
 
+        this.repeat_list_accepted = flagServer.getRepeatListAccepted();
+
         this.title = flagServer.getTitle();
         this.text = flagServer.getText();
         this.type = flagServer.getType();
@@ -104,6 +96,7 @@ public class FlagServer implements Serializable {
         this.date_time_creation = flagServer.getDateTimeCreation();
         this.date_time_start = flagServer.getDateTimeStart();
         this.date_time_end = flagServer.getDateTimeEnd();
+        this.last_date_time = flagServer.getLastDateTime();
         this.day_start = flagServer.getDayStart();
         this.month_start = flagServer.getMonthStart();
         this.year_start = flagServer.getYearStart();
@@ -169,10 +162,6 @@ public class FlagServer implements Serializable {
         return time_end_empty;
     }
 
-    public ArrayList<FlagServer> getListRepeatedActvities() {
-        return listRepeatedActvities;
-    }
-
     public double getRankPoints() {
         return rank_points;
     }
@@ -195,6 +184,14 @@ public class FlagServer implements Serializable {
 
     public void setCountMyFavorites(int count_my_favorites) {
         this.count_my_favorites = count_my_favorites;
+    }
+
+    public void setLastDateTime(long last_date_time) {
+        this.last_date_time = last_date_time;
+    }
+
+    public long getLastDateTime() {
+        return last_date_time;
     }
 
     public int getCountMyContacts() {
@@ -449,38 +446,6 @@ public class FlagServer implements Serializable {
         this.toAll = toAll;
     }
 
-    public void setDateTimeListStart(List<Long> list) {
-        this.date_time_list_start.addAll(list);
-    }
-
-    public void setDateTimeListEnd(List<Long> list) {
-        this.date_time_list_end.addAll(list);
-    }
-
-    public void setDayListStart(List<Integer> list) {
-        this.day_list_start.addAll(list);
-    }
-
-    public void setMonthListStart(List<Integer> list) {
-        this.month_list_start.addAll(list);
-    }
-
-    public void setYearListStart(List<Integer> list) {
-        this.year_list_start.addAll(list);
-    }
-
-    public void setDayListEnd(List<Integer> list) {
-        this.day_list_end.addAll(list);
-    }
-
-    public void setMonthListEnd(List<Integer> list) {
-        this.month_list_end.addAll(list);
-    }
-
-    public void setYearListEnd(List<Integer> list) {
-        this.year_list_end.addAll(list);
-    }
-
     public int getRepeatType() {
         return repeat_type;
     }
@@ -503,5 +468,13 @@ public class FlagServer implements Serializable {
 
     public boolean getTimeEndEmptyCard() {
         return time_end_empty_card;
+    }
+
+    public void setRepeatListAccepted(List<Integer> repeat_list_accepted) {
+        this.repeat_list_accepted.addAll(repeat_list_accepted);
+    }
+
+    public List<Integer> getRepeatListAccepted() {
+        return repeat_list_accepted;
     }
 }

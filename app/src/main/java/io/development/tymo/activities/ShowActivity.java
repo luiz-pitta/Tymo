@@ -718,56 +718,58 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
+        Calendar calendar3 = Calendar.getInstance();
         calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
         calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+        calendar3.setTimeInMillis(activityServer.getLastDateTime());
 
         String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+        String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
         String dayStart = String.format("%02d", activityServer.getDayStart());
         String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
         int yearStart = activityServer.getYearStart();
         String hourStart = String.format("%02d", activityServer.getHourStart());
         String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+
         String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+        String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
         String dayEnd = String.format("%02d", activityServer.getDayEnd());
         String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
         int yearEnd = activityServer.getYearEnd();
         String hourEnd = String.format("%02d", activityServer.getHourEnd());
         String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
-        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()){
+        String dayLast = String.format("%02d", calendar3.get(Calendar.DAY_OF_MONTH));
+        String monthLast = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar3.getTime().getTime());
+        int yearLast = calendar3.get(Calendar.YEAR);
+
+        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
             dateHourText.setText(this.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
-        }
-        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()){
+        } else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
             dateHourText.setText(this.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
-        }
-        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+        } else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
             dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
-        }
-        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+        } else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
             dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
-        }
-        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+        } else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
             } else {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
             }
-        }
-        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+        } else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
             } else {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
             }
-        }
-        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+        } else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
             } else {
                 dateHourText.setText(this.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
             }
-        }
-        else{
+        } else {
             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                 if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
                     dateHourText.setText(this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
@@ -779,130 +781,182 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             }
         }
 
-        if (activityServer.getLat() == -500)
-            locationBox.setVisibility(View.GONE);
-        else
-            locationText.setText(activityServer.getLocation());
-
         if (activityServer.getRepeatType() == 0) {
-            repeatBox.setVisibility(View.GONE);
+            repeatText.setVisibility(View.GONE);
         } else {
-            String repeatly;
-            repeatBox.setVisibility(View.VISIBLE);
+            repeatText.setVisibility(View.VISIBLE);
+            String date = "";
+
             switch (activityServer.getRepeatType()) {
                 case Constants.DAYLY:
-                    repeatly = this.getString(R.string.repeat_daily);
+                    if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_daily_01);
+                    else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                    else if (activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                    else if (!activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
                     break;
                 case Constants.WEEKLY:
-                    repeatly = this.getString(R.string.repeat_weekly);
+                    if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                    else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
                     break;
                 case Constants.MONTHLY:
-                    repeatly = this.getString(R.string.repeat_monthly);
+                    if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                    else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                        date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
                     break;
                 default:
-                    repeatly = "";
                     break;
             }
 
-            if (activityServer.getRepeatType() == 5) {
-                repeatText.setText(this.getString(R.string.repeat_text_imported_google_agenda));
-            } else {
-                repeatText.setText(this.getString(R.string.repeat_text, repeatly, getLastActivity(activityServers)));
-            }
+            dateHourText.setText(date);
+            repeatText.setText(this.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast));
         }
 
-        locationBox.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent;
+        if(activityServer.getLat()==-500)
+                locationBox.setVisibility(View.GONE);
+        else
+                locationText.setText(activityServer.getLocation());
 
-                if (activityServer.getLat() != -500) {
-                    if (activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
-                        intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                                "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
-                    } else {
-                        intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                                "geo:" + activityServer.getLat() +
-                                        "," + activityServer.getLng() +
-                                        "?q=" + activityServer.getLat() +
-                                        "," + activityServer.getLng() +
-                                        "(" + activityServer.getLocation() + ")"));
-                    }
-                } else {
-                    intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                            "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
-                }
+        locationBox.setOnClickListener(new View.OnClickListener()
 
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+    {
+        @Override
+        public void onClick (View view){
+        Intent intent;
 
-                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-                try {
-                    startActivity(intent);
-                } catch (ActivityNotFoundException ex) {
-                    Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
-                }
+        if (activityServer.getLat() != -500) {
+            if (activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
+                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                        "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+            } else {
+                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                        "geo:" + activityServer.getLat() +
+                                "," + activityServer.getLng() +
+                                "?q=" + activityServer.getLat() +
+                                "," + activityServer.getLng() +
+                                "(" + activityServer.getLocation() + ")"));
             }
-        });
+        } else {
+            intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                    "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+        }
 
-        new Actor.Builder(SpringSystem.create(), addGuestButton)
-                .addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
-                .onTouchListener(new View.OnTouchListener() {
-                    @Override
-                    public boolean onTouch(View v, MotionEvent event) {
-                        switch (event.getAction()) {
-                            case MotionEvent.ACTION_UP:
-                                if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+        Bundle bundle = new Bundle();
+        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-                                }
-                                break;
-                            case MotionEvent.ACTION_DOWN:
-                                rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                                break;
-                        }
-                        return true;
+        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException ex) {
+            Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
+        }
+    }
+    });
+
+        new Actor.Builder(SpringSystem.create(),addGuestButton)
+            .
+
+    addMotion(new ToggleImitator(null, 1.0,0.8),View.SCALE_X,View.SCALE_Y)
+            .
+
+    onTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch (View v, MotionEvent event){
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_UP:
+                    if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
                     }
-                })
-                .build();
+                    break;
+                case MotionEvent.ACTION_DOWN:
+                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                    break;
+            }
+            return true;
+        }
+    })
+            .
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+    build();
+
+        recyclerView.setLayoutManager(new
+
+    LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setNestedScrollingEnabled(false);
 
-        context = recyclerView.getContext();
+    context =recyclerView.getContext();
 
-        recyclerView.addOnItemTouchListener(new RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-            @Override
-            public void onItemClick(View view, int position, MotionEvent e) {
-                SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+        recyclerView.addOnItemTouchListener(new
 
-                Intent intent = new Intent(context, ShowGuestsActivity.class);
-                intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
-                intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
-                intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
-                intent.putExtra("id_act", getActivity().getId());
+    RecyclerItemClickListener(this,recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+        @Override
+        public void onItemClick (View view,int position, MotionEvent e){
+            SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+            String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
-                Bundle bundle = new Bundle();
-                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+            Intent intent = new Intent(context, ShowGuestsActivity.class);
+            intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+            intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+            intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
+            intent.putExtra("id_act", getActivity().getId());
 
-                startActivityForResult(intent, GUEST_UPDATE);
-            }
+            Bundle bundle = new Bundle();
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            @Override
-            public void onLongItemClick(View view, int position, MotionEvent e) {
-            }
-        }));
+            startActivityForResult(intent, GUEST_UPDATE);
+        }
 
-        setLayout(this.getActivity(), this.getUserList(), this.getUserConfirmedList(), this.getPermissionInvite());
+        @Override
+        public void onLongItemClick (View view,int position, MotionEvent e){
+        }
+    }));
 
-        setProgress(false);
+    setLayout(this.getActivity(), this.
+
+    getUserList(), this.
+
+    getUserConfirmedList(), this.
+
+    getPermissionInvite());
+
+    setProgress(false);
 
         mSwipeRefreshLayout.setRefreshing(false);
-    }
+}
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -1813,7 +1867,7 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
                         reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }

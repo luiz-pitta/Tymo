@@ -86,7 +86,7 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
     private ActivityServer activityServer;
     private Calendar calendarStart;
 
-    private TextView customizeApplyButton, customizeCleanButton, confirmationButton, repeatMax, repeatAddText, repeatText;
+    private TextView customizeApplyButton, customizeCleanButton, confirmationButton, repeatMax, repeatAddText, repeatLastDate;
     private TextView titleMax, dateStart, dateEnd, timeStart, timeEnd, locationText, locationTextAdd;
     private EditText titleEditText, descriptionEditText, whatsAppEditText, repeatEditText;
     private ImageView cubeLowerBoxIcon, cubeUpperBoxIcon, pieceIcon, customizeCubeLowerBoxIcon, customizeCubeUpperBoxIcon, customizePieceIcon;
@@ -160,7 +160,7 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         locationText = (TextView) findViewById(R.id.locationText);
         whatsAppEditText = (EditText) findViewById(R.id.whatsAppGroupLink);
         spinnerRepeatPicker = (MaterialSpinner) findViewById(R.id.repeatPicker);
-        repeatText = (TextView) findViewById(R.id.repeatText);
+        repeatLastDate = (TextView) findViewById(R.id.repeatLastDate);
 
         mBackButton.setOnClickListener(this);
         pieceBox.setOnClickListener(this);
@@ -193,7 +193,6 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         clearTimeStart.setVisibility(View.GONE);
         clearTimeEnd.setVisibility(View.GONE);
         repeatBox.setVisibility(View.GONE);
-        repeatText.setVisibility(View.GONE);
 
         dateFormat = new DateFormat(this);
 
@@ -217,97 +216,61 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         repeatEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                int limit;
-                int numberS;
-                String maxText;
+                int number;
 
                 if (String.valueOf(s).matches("")) {
-                    numberS = 0;
+                    number = 0;
                 } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
+                    number = Integer.valueOf(String.valueOf(s));
                 }
 
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
+                setRepeatLastDate();
 
-                if (numberS > limit) {
+                if (number > 500) {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
+                    repeatLastDate.setVisibility(View.INVISIBLE);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                int limit;
-                int numberS;
-                String maxText;
+                int number;
 
                 if (String.valueOf(s).matches("")) {
-                    numberS = 0;
+                    number = 0;
                 } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
+                    number = Integer.valueOf(String.valueOf(s));
                 }
 
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
+                setRepeatLastDate();
 
-                if (numberS > limit) {
+                if (number > 500) {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
+                    repeatLastDate.setVisibility(View.INVISIBLE);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                int limit;
-                int numberS;
-                String maxText;
+                int number;
 
                 if (String.valueOf(s).matches("")) {
-                    numberS = 0;
+                    number = 0;
                 } else {
-                    numberS = Integer.valueOf(String.valueOf(s));
+                    number = Integer.valueOf(String.valueOf(s));
                 }
 
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
+                setRepeatLastDate();
 
-                if (numberS > limit) {
+                if (number > 500) {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
+                    repeatLastDate.setVisibility(View.INVISIBLE);
                 } else {
                     repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
                 }
             }
         });
@@ -355,45 +318,18 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             public void onItemSelected(MaterialSpinner view, int position, long id, String item) {
                 repeat_type = position;
 
-                int limit;
-                int numberS;
-                String maxText;
-
-                if (repeatEditText.getText().toString().matches("")) {
-                    numberS = 0;
-                } else {
-                    numberS = Integer.parseInt(repeatEditText.getText().toString());
-                }
-
-                if (repeat_type == 2) {
-                    limit = 53;
-                    maxText = getString(R.string.repeat_max_time_2);
-                } else if (repeat_type == 3) {
-                    limit = 12;
-                    maxText = getString(R.string.repeat_max_time_3);
-                } else {
-                    limit = 365;
-                    maxText = getString(R.string.repeat_max_time_1);
-                }
-
-                if (numberS > limit) {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.red_600));
-                    repeatMax.setText(maxText);
-                } else {
-                    repeatMax.setTextColor(ContextCompat.getColor(repeatMax.getContext(), R.color.grey_400));
-                    repeatMax.setText(getString(R.string.repeat_max_time));
-                }
-
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "repeatPicker" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                 mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-                if (position != 0) {
-                    repeatNumberBox.setVisibility(View.VISIBLE);
-                } else {
+
+                if (position == 0) {
                     repeatNumberBox.setVisibility(View.GONE);
-                    repeatEditText.setText("");
+                } else {
+                    repeatNumberBox.setVisibility(View.VISIBLE);
                 }
+
+                setRepeatLastDate();
             }
         });
 
@@ -431,6 +367,54 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
         mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
+    }
+
+    private void setRepeatLastDate() {
+        int qty = 0;
+
+        if (!repeatEditText.getText().toString().matches(""))
+            qty = Integer.parseInt(repeatEditText.getText().toString());
+
+        if (qty > 0 && repeat_type > 0 && day_start != -1) {
+            repeatNumberBox.setVisibility(View.VISIBLE);
+            repeatLastDate.setVisibility(View.VISIBLE);
+            Calendar calendar = Calendar.getInstance();
+
+            if (day_end != -1)
+                calendar.set(year_end, month_end, day_end);
+            else
+                calendar.set(year_start, month_start, day_start);
+
+            switch (repeat_type) {
+                case Constants.DAYLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * qty);
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
+            String dayOfWeek = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
+            String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+            int year = calendar.get(Calendar.YEAR);
+            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek.toLowerCase(), day, month, year);
+            repeatLastDate.setText(this.getString(R.string.repeat_last_date, date));
+        } else {
+            repeatLastDate.setVisibility(View.INVISIBLE);
+            if (repeat_type == 0) {
+                repeatNumberBox.setVisibility(View.GONE);
+            }
+        }
     }
 
     private void getIcons() {
@@ -505,6 +489,8 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         } else {
             clearDateEnd.setVisibility(View.VISIBLE);
         }
+
+        setRepeatLastDate();
 
     }
 
@@ -944,6 +930,7 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
 
         List<Integer> date;
         List<Integer> repeat;
+        List<Integer> repeat_list_accepted = new ArrayList<>();
         List<Double> latLng;
         boolean dateStartEmpty = false, dateEndEmpty = false, timeStartEmpty = false, timeEndEmpty = false;
         String title = titleEditText.getText().toString();
@@ -1024,58 +1011,6 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         }
 
         if (err == 0) {
-
-            int repeat_type = repeat.get(0);
-            int repeat_qty = repeat.get(1);
-            List<Integer> day_list_start = new ArrayList<>();
-            List<Integer> month_list_start = new ArrayList<>();
-            List<Integer> year_list_start = new ArrayList<>();
-            List<Integer> day_list_end = new ArrayList<>();
-            List<Integer> month_list_end = new ArrayList<>();
-            List<Integer> year_list_end = new ArrayList<>();
-            List<Long> date_time_list_start = new ArrayList<>();
-            List<Long> date_time_list_end = new ArrayList<>();
-
-            if (repeat_type > 0) {
-                int repeat_adder = getRepeatAdder(repeat_type);
-
-                Calendar cal = Calendar.getInstance();
-                cal.set(Calendar.HOUR_OF_DAY, 0);
-                cal.clear(Calendar.MINUTE);
-                cal.clear(Calendar.SECOND);
-                cal.clear(Calendar.MILLISECOND);
-
-                Calendar cal2 = Calendar.getInstance();
-                cal2.set(Calendar.HOUR_OF_DAY, 0);
-                cal2.clear(Calendar.MINUTE);
-                cal2.clear(Calendar.SECOND);
-                cal2.clear(Calendar.MILLISECOND);
-
-                cal.set(date.get(2), date.get(1), date.get(0), date.get(7), date.get(6));
-                cal2.set(date.get(5), date.get(4), date.get(3), date.get(9), date.get(8));
-
-                for (int i = 0; i < repeat_qty; i++) {
-                    day_list_start.add(cal.get(Calendar.DAY_OF_MONTH));
-                    month_list_start.add(cal.get(Calendar.MONTH) + 1);
-                    year_list_start.add(cal.get(Calendar.YEAR));
-                    day_list_end.add(cal2.get(Calendar.DAY_OF_MONTH));
-                    month_list_end.add(cal2.get(Calendar.MONTH) + 1);
-                    year_list_end.add(cal2.get(Calendar.YEAR));
-
-                    date_time_list_start.add(cal.getTimeInMillis());
-                    date_time_list_end.add(cal2.getTimeInMillis());
-
-                    if (repeat_type == Constants.MONTHLY) {
-                        cal.add(Calendar.MONTH, 1);
-                        cal2.add(Calendar.MONTH, 1);
-                    } else {
-                        cal.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                        cal2.add(Calendar.DAY_OF_WEEK, repeat_adder);
-                    }
-                }
-
-            }
-
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
             String creator = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -1119,17 +1054,35 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
             calendar.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd());
             activityServer.setDateTimeEnd(calendar.getTimeInMillis());
 
+            switch (repeat.get(0)) {
+                case Constants.DAYLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 1 * repeat.get(1));
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.WEEKLY:
+                    calendar.add(Calendar.DAY_OF_WEEK, 7 * repeat.get(1));
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                case Constants.MONTHLY:
+                    calendar.add(Calendar.MONTH, 1 * repeat.get(1));
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+                default:
+                    activityServer.setLastDateTime(calendar.getTimeInMillis());
+                    break;
+            }
+
             activityServer.setRepeatType(repeat.get(0));
             activityServer.setRepeatQty(repeat.get(1));
-            activityServer.setDayListStart(day_list_start);
-            activityServer.setMonthListStart(month_list_start);
-            activityServer.setYearListStart(year_list_start);
-            activityServer.setDayListEnd(day_list_end);
-            activityServer.setMonthListEnd(month_list_end);
-            activityServer.setYearListEnd(year_list_end);
 
-            activityServer.setDateTimeListStart(date_time_list_start);
-            activityServer.setDateTimeListEnd(date_time_list_end);
+            if (repeat.get(1) > 0){
+                for (int i = 0; i <= repeat.get(1); i++){
+                    repeat_list_accepted.add(i);
+                }
+            }
+            else{
+                repeat_list_accepted.add(0);
+            }
 
             activityServer.setLocation(location);
             activityServer.setLat(latLng.get(0));
@@ -1150,17 +1103,6 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
 
         } else {
             error = true;
-        }
-    }
-
-    private int getRepeatAdder(int type) {
-        switch (type) {
-            case Constants.DAYLY:
-                return 1;
-            case Constants.WEEKLY:
-                return 7;
-            default:
-                return 0;
         }
     }
 
@@ -1316,12 +1258,14 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
                 year_start = -1;
                 dateStart.setText("");
                 clearDateStart.setVisibility(View.GONE);
+                setRepeatLastDate();
             } else if (v == clearDateEnd) {
                 day_end = -1;
                 month_end = -1;
                 year_end = -1;
                 dateEnd.setText("");
                 clearDateEnd.setVisibility(View.GONE);
+                setRepeatLastDate();
             } else if (v == clearTimeStart) {
                 hour_start = -1;
                 minutes_start = -1;

@@ -231,7 +231,6 @@ public class AddPart2Activity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getUser(String email) {
-
         mSubscriptions.add(NetworkUtil.getRetrofit().getProfile(email)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())

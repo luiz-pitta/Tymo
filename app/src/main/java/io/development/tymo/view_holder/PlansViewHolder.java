@@ -558,12 +558,7 @@ public class PlansViewHolder extends BaseViewHolder<WeekModel> {
                     time = hour_start + ":" + minute_start;
                 }
 
-                if (!reminderServer.getTitle().matches("")){
-                    title = reminderServer.getTitle();
-                }
-                else{
-                    title = reminderServer.getText();
-                }
+                title = reminderServer.getText();
 
                 list.add(new Reminder(title, time, reminderServer));
             } else if (object instanceof FreeTimeServer) {

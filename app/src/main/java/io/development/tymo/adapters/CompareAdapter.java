@@ -532,7 +532,7 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 else
                     time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
 
-                list.add(new Reminder(reminderServer.getTitle(), time, reminderServer));
+                list.add(new Reminder(reminderServer.getText(), time, reminderServer));
             } else if (object instanceof FreeTimeServer) {
                 FreeTimeServer freeTimeServer = (FreeTimeServer) object;
                 String hour_start = String.format("%02d", freeTimeServer.getHourStart());

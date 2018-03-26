@@ -1062,14 +1062,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
                         startsAtMinute = reminderServer.getMinuteStart();
                         startsAtHourText = String.format("%02d", startsAtHour);
                         startsAtMinuteText = String.format("%02d", startsAtMinute);
-                        title_will_happen = reminderServer.getTitle();
+                        title_will_happen = reminderServer.getText();
                     } else {
                         if (isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             startsAtHour = reminderServer.getHourStart();
                             startsAtMinute = reminderServer.getMinuteStart();
                             startsAtHourText = String.format("%02d", startsAtHour);
                             startsAtMinuteText = String.format("%02d", startsAtMinute);
-                            title_will_happen = reminderServer.getTitle();
+                            title_will_happen = reminderServer.getText();
                         } else if (!isTimeInBefore(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText) && !isTimeInAfter(startsAtHourText + ":" + startsAtMinuteText, hourStartText + ":" + minuteStartText)) {
                             count_will_happen_at_same_time++;
                         }
@@ -1077,7 +1077,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
                     count_will_happen++;
                 } else if (reminderServer.getStatus() == 0) {
                     count_is_happening++;
-                    title_is_happening = reminderServer.getTitle();
+                    title_is_happening = reminderServer.getText();
                 } else {
                     count_already_happened++;
                 }

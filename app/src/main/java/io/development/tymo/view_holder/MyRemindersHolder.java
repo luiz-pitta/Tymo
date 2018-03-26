@@ -50,7 +50,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implements View.OnClickListener {
     private LinearLayout reminderItemBox;
-    private TextView text1, text2, text3;
+    private TextView text1, text2;
     private Context context;
     private Object object;
     private RefreshLayoutPlansCallback callback;
@@ -64,7 +64,6 @@ public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implemen
         reminderItemBox = $(R.id.reminderItemBox);
         text1 = $(R.id.text1);
         text2 = $(R.id.text2);
-        text3 = $(R.id.text3);
         this.context = context;
         this.callback = callback;
 
@@ -94,12 +93,6 @@ public class MyRemindersHolder extends BaseViewHolder<MyRemindersModel> implemen
         object = reminder.getActivity();
         text1.setText(reminder.getText1());
         text2.setText(reminder.getText2());
-        text3.setText(reminder.getText3());
-
-        if(reminder.getText1().matches(""))
-            text1.setVisibility(View.GONE);
-        else
-            text1.setVisibility(View.VISIBLE);
 
     }
 

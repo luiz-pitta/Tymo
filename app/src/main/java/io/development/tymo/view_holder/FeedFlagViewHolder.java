@@ -168,11 +168,13 @@ public class FeedFlagViewHolder extends BaseViewHolder<FlagServer> implements Vi
         textViewTitle.setTextColor(ContextCompat.getColor(context, R.color.flag_available));
         textViewDescription.setText(cube.getTitle());
 
+        /* xxx
         if(cube.getListRepeatedActvities().size() > 0){
             repeatBox.setVisibility(View.VISIBLE);
             repeatText.setText(context.getResources().getString(R.string.repeat_qty, cube.getListRepeatedActvities().size() + 1));
         }else
             repeatBox.setVisibility(View.GONE);
+            */
 
         pieceBox.startAnimation(animation2);
 

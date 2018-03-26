@@ -110,7 +110,7 @@ import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener,
-        ForceUpdateChecker.OnUpdateNeededListener{
+        ForceUpdateChecker.OnUpdateNeededListener {
 
     public static final String ADD_VIEW_IS_VISIBLE = "add_is_visible";
 
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private static final int SEARCH = 3;
 
     private static final int REQUEST_AUTHORIZATION = 1001;
-    private static final String[] SCOPES = { CalendarScopes.CALENDAR_READONLY };
+    private static final String[] SCOPES = {CalendarScopes.CALENDAR_READONLY};
 
     private View addView;
 
@@ -185,16 +185,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         initInterface(savedInstanceState);
 
-        if(AccessToken.getCurrentAccessToken() != null)
+        if (AccessToken.getCurrentAccessToken() != null)
             importFromFacebookRequest();
 
         Gson gson = new Gson();
         ArrayList<String> list_json = new ArrayList<>();
         String json = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString("ListCalendarImportGoogle", "");
-        if(!json.matches(""))
-            list_json = gson.fromJson(json, new TypeToken<ArrayList<String>>(){}.getType());
+        if (!json.matches(""))
+            list_json = gson.fromJson(json, new TypeToken<ArrayList<String>>() {
+            }.getType());
 
-        if(list_json.size() > 0 && mCredential.getSelectedAccountName() != null && !mCredential.getSelectedAccountName().equals(""))
+        if (list_json.size() > 0 && mCredential.getSelectedAccountName() != null && !mCredential.getSelectedAccountName().equals(""))
             new GetCalendarEventsAsync(mCredential).execute(list_json.toArray(new String[list_json.size()]));
 
 
@@ -205,12 +206,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityGooglenewApi(mSharedPreferences.getString(Constants.EMAIL, ""), activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseGoogleImported,this::handleError));
+                .subscribe(this::handleResponseGoogleImported, this::handleError));
     }
 
-    private void handleResponseGoogleImported(Response response) {}
+    private void handleResponseGoogleImported(Response response) {
+    }
 
-    private void importFromFacebookRequest(){
+    private void importFromFacebookRequest() {
 
         ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
 
@@ -225,23 +227,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         try {
                             JSONArray events = object.getJSONArray("data");
 
-                            for(int i=0;i<events.length();i++){
+                            for (int i = 0; i < events.length(); i++) {
                                 JSONObject jsonObject = events.getJSONObject(i);
                                 ActivityServer server = createActivity(jsonObject);
-                                if(server != null)
+                                if (server != null)
                                     list_activities_to_import.add(server);
                             }
 
-                            if(list_activities_to_import.size() > 0) {
+                            if (list_activities_to_import.size() > 0) {
                                 GraphRequest nextRequest = response.getRequestForPagedResults(GraphResponse.PagingDirection.NEXT);
-                                if(nextRequest != null) {
+                                if (nextRequest != null) {
                                     nextRequest.setCallback(request.getCallback());
                                     nextRequest.executeAsync();
-                                }else
+                                } else
                                     importFromFacebook(list_activities_to_import);
                             }
-                        }
-                        catch (Exception  e){
+                        } catch (Exception e) {
                         }
                     }
                 });
@@ -256,7 +257,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().registerActivityFacebook(mSharedPreferences.getString(Constants.EMAIL, ""), activityServers)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseFacebookImported,this::handleError));
+                .subscribe(this::handleResponseFacebookImported, this::handleError));
     }
 
     private void handleResponseFacebookImported(Response response) {
@@ -267,9 +268,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         callbackManager = CallbackManager.Factory.create();
     }
 
-    private ActivityServer createActivity(JSONObject jsonObject){
+    private ActivityServer createActivity(JSONObject jsonObject) {
         ActivityServer activityServer = new ActivityServer();
-        String id = "0", description="", start_time, end_time, name="";
+        String id = "0", description = "", start_time, end_time, name = "";
         String name_place;
         JSONObject place;
         Double lat, lng;
@@ -352,14 +353,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int hour2 = c2.get(Calendar.HOUR_OF_DAY);
 
             int day_today = c.get(Calendar.DAY_OF_MONTH);
-            int month_today = c.get(Calendar.MONTH)+1;
+            int month_today = c.get(Calendar.MONTH) + 1;
             int year_today = c.get(Calendar.YEAR);
 
-            if(y2 < year_today)
+            if (y2 < year_today)
                 return null;
-            else if(y2 == year_today && m2 < month_today)
+            else if (y2 == year_today && m2 < month_today)
                 return null;
-            else if(y2 == year_today && m2 == month_today && d2 < day_today)
+            else if (y2 == year_today && m2 == month_today && d2 < day_today)
                 return null;
 
             LocalDate starts = new LocalDate(year, month, day);
@@ -401,14 +402,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             activityServer.setCreator(creator);
             activityServer.setDeletedActivityImported(true);
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         return activityServer;
     }
 
-    private ActivityServer createActivityGoogle(Event event){
+    private ActivityServer createActivityGoogle(Event event) {
         ActivityServer activityServer = new ActivityServer();
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -489,7 +489,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     @Override
-    public void onUpdateNotNeeded() {}
+    public void onUpdateNotNeeded() {
+    }
 
     @Override
     public void onUpdateNeeded(String updateUrl, String version) {
@@ -563,7 +564,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         startActivity(intent);
     }
 
-    public void updateProfileMainInformation(){
+    public void updateProfileMainInformation() {
         Calendar c = Calendar.getInstance();
         int day = c.get(Calendar.DAY_OF_MONTH);
         int month = c.get(Calendar.MONTH) + 1;
@@ -587,14 +588,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().getPendingSolicitaion(query)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponseMain,this::handleError2));
+                .subscribe(this::handleResponseMain, this::handleError2));
     }
 
     private void handleResponseMain(Response response) {
         boolean isTherePendingSolicitation = response.getNumberFriendRequest() + response.getNumberInvitationRequest() > 0;
-        if(isTherePendingSolicitation){
+        if (isTherePendingSolicitation) {
             notificationView.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             notificationView.setVisibility(View.GONE);
         }
     }
@@ -604,21 +605,23 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mSubscriptions.add(NetworkUtil.getRetrofit().setPushNotification(pushNotification)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
-                .subscribe(this::handleResponse,this::handleError));
+                .subscribe(this::handleResponse, this::handleError));
     }
 
-    private void handleResponse(Response response) {}
+    private void handleResponse(Response response) {
+    }
 
     private void handleError(Throwable error) {
-        if(!Utilities.isDeviceOnline(this))
+        if (!Utilities.isDeviceOnline(this))
             Toast.makeText(this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
     }
 
-    private void handleError2(Throwable error) {}
+    private void handleError2(Throwable error) {
+    }
 
-    private void initInterface(Bundle savedInstanceState){
+    private void initInterface(Bundle savedInstanceState) {
         mSubscriptions = new CompositeDisposable();
         mJobManager = JobManager.instance();
         facebookSDKInitialize();
@@ -634,7 +637,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             mCredential.setSelectedAccountName(accountName);
 
         String token = FirebaseInstanceId.getInstance().getToken();
-        if(token != null) {
+        if (token != null) {
             FirebaseMessaging.getInstance().subscribeToTopic("Tymo");
 
             SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
@@ -682,7 +685,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         controller.attach(false, null, icon3, null);
         controller.attach(false, null, icon4, null);
         controller.setMultiple(false);
-        controller.updateAll(FEED,0,R.color.deep_purple_400, 0);
+        controller.updateAll(FEED, 0, R.color.deep_purple_400, 0);
 
         searchView.bringToFront();
 
@@ -696,16 +699,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         closeButton.setOnClickListener(this);
 
         if (savedInstanceState != null) {
-            if(mNavigator!=null) {
+            if (mNavigator != null) {
                 controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
                 icon3.clearColorFilter();
                 setCurrentTab(mNavigator.getCurrentPosition());
             }
 
-            if(searchView!=null && searchView.isSearchOpen())
+            if (searchView != null && searchView.isSearchOpen())
                 mainMenu.setVisibility(View.INVISIBLE);
 
-            if(savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE))
+            if (savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE))
                 addView.setVisibility(View.VISIBLE);
         }
 
@@ -718,7 +721,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         initAnimation();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
+        mFirebaseAnalytics.setCurrentScreen(this, "=>=" + getClass().getName().substring(20, getClass().getName().length()), null /* class override */);
 
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         email = mSharedPreferences.getString(Constants.EMAIL, "");
@@ -791,8 +794,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "closeButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "closeButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                     Revealator.unreveal(addView)
@@ -820,8 +823,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                     startActivityForResult(new Intent(v.getContext(), AddPart1Activity.class), Constants.REGISTER_ACT);
@@ -848,8 +851,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flagButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                     startActivityForResult(new Intent(v.getContext(), FlagActivity.class), Constants.REGISTER_ACT);
@@ -876,8 +879,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderButton" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderButton" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                     startActivityForResult(new Intent(v.getContext(), ReminderActivity.class), Constants.REGISTER_ACT);
@@ -904,8 +907,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                                 if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
 
                                     Bundle bundle = new Bundle();
-                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "fab" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "fab" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                                    bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
                                     mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
                                     Revealator.reveal(addView)
@@ -928,63 +931,60 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v == icon1Box) {
+        if (v == icon1Box) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon1" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon1" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             controller.updateAll(FEED, 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
-            FeedFragment feedFragment = (FeedFragment)mNavigator.getFragment(FEED);
+            FeedFragment feedFragment = (FeedFragment) mNavigator.getFragment(FEED);
 
-            if(mNavigator.getCurrentPosition() == FEED)
+            if (mNavigator.getCurrentPosition() == FEED)
                 feedFragment.getRecyclerView().getRecyclerView().smoothScrollToPosition(0);
 
             setCurrentTab(FEED);
-        }
-        else if(v == icon2Box) {
+        } else if (v == icon2Box) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon2" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
 
-            PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
+            PlansFragment plansFragment = (PlansFragment) mNavigator.getFragment(PLANS);
 
-            if (plansFragment!=null && mNavigator.getCurrentPosition() != PLANS)
+            if (plansFragment != null && mNavigator.getCurrentPosition() != PLANS)
                 plansFragment.refreshLayout(false);
 
             setCurrentTab(PLANS);
-        }
-        else if(v == icon3Box) {
+        } else if (v == icon3Box) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon3" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon3" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             controller.updateAll(ABOUT, 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
-            ProfileFragment profileFragment = (ProfileFragment)mNavigator.getFragment(ABOUT);
+            ProfileFragment profileFragment = (ProfileFragment) mNavigator.getFragment(ABOUT);
 
-            if (profileFragment!=null)
+            if (profileFragment != null)
                 profileFragment.updateLayout();
 
             setCurrentTab(ABOUT);
-        }
-        else if(v == icon4Box){
+        } else if (v == icon4Box) {
             Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon4" + "=>=" + getClass().getName().substring(20,getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20,getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "icon4" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
-            if(searchFragment != null)
+            SearchFragment searchFragment = (SearchFragment) mNavigator.getFragment(SEARCH);
+            if (searchFragment != null)
                 searchFragment.doSearch(".");
 
-            controller.updateAll(SEARCH,0,R.color.deep_purple_400, 0);
+            controller.updateAll(SEARCH, 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
             mainMenu.setVisibility(View.INVISIBLE);
             searchView.showSearch(true);
@@ -993,14 +993,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public FragmentNavigator getFragmentNavigator(){
+    public FragmentNavigator getFragmentNavigator() {
         return mNavigator;
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(mNavigator!=null)
+        if (mNavigator != null)
             mNavigator.onSaveInstanceState(outState);
         outState.putBoolean(ADD_VIEW_IS_VISIBLE, addView.getVisibility() == View.VISIBLE);
     }
@@ -1008,16 +1008,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        if(mNavigator!=null) {
+        if (mNavigator != null) {
             controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
             setCurrentTab(mNavigator.getCurrentPosition());
         }
 
-        if(searchView!=null && searchView.isSearchOpen())
+        if (searchView != null && searchView.isSearchOpen())
             mainMenu.setVisibility(View.INVISIBLE);
 
-        if(savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE))
+        if (savedInstanceState.getBoolean(ADD_VIEW_IS_VISIBLE))
             addView.setVisibility(View.VISIBLE);
     }
 
@@ -1026,13 +1026,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         if (searchView.isSearchOpen()) {
             searchView.closeSearch();
             int lastPosition = mNavigator.getLastPosition();
-            if(lastPosition == SEARCH)
+            if (lastPosition == SEARCH)
                 lastPosition = FEED;
             setCurrentTab(lastPosition);
-            controller.updateAll(lastPosition,0,R.color.deep_purple_400, 0);
+            controller.updateAll(lastPosition, 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
             mainMenu.setVisibility(View.VISIBLE);
-        }else
+        } else
             moveTaskToBack(true);
     }
 
@@ -1044,7 +1044,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK)
+        if (resultCode == RESULT_OK)
             callbackManager.onActivityResult(requestCode, resultCode, data);
 
 
@@ -1060,16 +1060,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             return;
         }
 
-        if(resultCode == RESULT_OK && requestCode == Constants.REGISTER_ACT){
+        if (resultCode == RESULT_OK && requestCode == Constants.REGISTER_ACT) {
             controller.updateAll(PLANS, 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
             setCurrentTab(PLANS);
 
-            PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
+            PlansFragment plansFragment = (PlansFragment) mNavigator.getFragment(PLANS);
+            ProfileFragment profileFragment = (ProfileFragment) mNavigator.getFragment(ABOUT);
 
-            int d = data.getIntExtra("d",0);
-            int m = data.getIntExtra("m",0);
-            int y = data.getIntExtra("y",0);
+            int d = data.getIntExtra("d", 0);
+            int m = data.getIntExtra("m", 0);
+            int y = data.getIntExtra("y", 0);
 
             Calendar c = Calendar.getInstance();
             int day = c.get(Calendar.DAY_OF_MONTH);
@@ -1082,7 +1083,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             int month2 = c2.get(Calendar.MONTH);
             int year2 = c2.get(Calendar.YEAR);
 
-            if((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
+            if ((d == day && m == month && y == year) || (d == day2 && m == month2 && y == year2))
                 getActivityStartToday();
 
             ArrayList<Integer> list = new ArrayList<>();
@@ -1095,11 +1096,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             refresh = false;
 
-            if (plansFragment!=null)
-                plansFragment.updateLayout(d,m,y, true);
+            if (d == -1) {
+                if (profileFragment != null && mNavigator.getCurrentPosition() == ABOUT)
+                    profileFragment.updateLayout();
+            } else {
+                if (plansFragment != null)
+                    plansFragment.updateLayout(d, m, y, true);
+            }
         }
 
-        if(resultCode == RESULT_OK && requestCode == Constants.FILTER_RESULT){
+        if (resultCode == RESULT_OK && requestCode == Constants.FILTER_RESULT) {
             FilterWrapper wrap =
                     (FilterWrapper) data.getSerializableExtra("filter_att");
 
@@ -1109,22 +1115,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             filterServer.setQuery(query);
 
-            SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
+            SearchFragment searchFragment = (SearchFragment) mNavigator.getFragment(SEARCH);
 
             searchFragment.doSearchFilter(filterServer);
         }
     }
 
-    private void searchViewInit(){
+    private void searchViewInit() {
         searchView.setVoiceSearch(false);
         searchView.setCursorDrawable(R.drawable.color_cursor_white);
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if(filterServer == null || !filterServer.isFilterFilled())
-                    ((SearchFragment)mNavigator.getFragment(SEARCH)).doSearch(query);
+                if (filterServer == null || !filterServer.isFilterFilled())
+                    ((SearchFragment) mNavigator.getFragment(SEARCH)).doSearch(query);
                 else
-                    ((SearchFragment)mNavigator.getFragment(SEARCH)).doSearchFilter(filterServer);
+                    ((SearchFragment) mNavigator.getFragment(SEARCH)).doSearchFilter(filterServer);
 
                 return false;
             }
@@ -1140,10 +1146,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public boolean onPressBack() {
                 int lastPosition = mNavigator.getLastPosition();
-                if(lastPosition == SEARCH)
+                if (lastPosition == SEARCH)
                     lastPosition = FEED;
                 setCurrentTab(lastPosition);
-                controller.updateAll(lastPosition,0,R.color.deep_purple_400, 0);
+                controller.updateAll(lastPosition, 0, R.color.deep_purple_400, 0);
                 icon3.clearColorFilter();
                 mainMenu.setVisibility(View.VISIBLE);
                 return true;
@@ -1175,18 +1181,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void updateSearch(){
-        SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
+    public void updateSearch() {
+        SearchFragment searchFragment = (SearchFragment) mNavigator.getFragment(SEARCH);
         String query = searchView.getQuery();
-        if(query.matches(""))
+        if (query.matches(""))
             query = ".";
-        if(searchFragment != null && filterServer != null && !filterServer.isFilterFilled())
+        if (searchFragment != null && filterServer != null && !filterServer.isFilterFilled())
             searchFragment.doSearch(query);
     }
 
-    public void updateFeed(){
+    public void updateFeed() {
         FeedFragment feedFragment = (FeedFragment) mNavigator.getFragment(FEED);
-        if(feedFragment != null)
+        if (feedFragment != null)
             feedFragment.setFeedRefresh();
     }
 
@@ -1194,48 +1200,48 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onResume() {
         super.onResume();  // Always call the superclass method first
 
-        ForceUpdateChecker.with(this).onUpdateNeeded(this ,mSubscriptions).check();
+        ForceUpdateChecker.with(this).onUpdateNeeded(this, mSubscriptions).check();
 
-        if(mNavigator != null) {
-            PlansFragment plansFragment = (PlansFragment)mNavigator.getFragment(PLANS);
+        if (mNavigator != null) {
+            PlansFragment plansFragment = (PlansFragment) mNavigator.getFragment(PLANS);
             ProfileFragment profileFragment = (ProfileFragment) mNavigator.getFragment(ABOUT);
             FeedFragment feedFragment = (FeedFragment) mNavigator.getFragment(FEED);
-            SearchFragment searchFragment = (SearchFragment)mNavigator.getFragment(SEARCH);
+            SearchFragment searchFragment = (SearchFragment) mNavigator.getFragment(SEARCH);
 
-            if(plansFragment != null && refresh && mNavigator.getCurrentPosition() == PLANS){
+            if (plansFragment != null && refresh && mNavigator.getCurrentPosition() == PLANS) {
                 int d, m, y;
                 ArrayList<Integer> date = TymoApplication.getInstance().getDate();
-                if(date == null) {
+                if (date == null) {
                     plansFragment.refreshLayout(false);
-                }else {
+                } else {
                     d = date.get(0);
                     m = date.get(1);
                     y = date.get(2);
-                    plansFragment.updateLayout(d,m,y, true);
+                    plansFragment.updateLayout(d, m, y, true);
                 }
 
-            }else
+            } else
                 refresh = true;
 
-            if(profileFragment != null && mNavigator.getCurrentPosition() == ABOUT)
+            if (profileFragment != null && mNavigator.getCurrentPosition() == ABOUT)
                 profileFragment.updateLayout();
 
 
-            if(feedFragment != null)
+            if (feedFragment != null)
                 feedFragment.setFeedRefresh();
 
-            if(searchFragment != null && mNavigator.getCurrentPosition() == SEARCH)
+            if (searchFragment != null && mNavigator.getCurrentPosition() == SEARCH)
                 updateSearch();
 
-            controller.updateAll(mNavigator.getCurrentPosition(),0,R.color.deep_purple_400, 0);
+            controller.updateAll(mNavigator.getCurrentPosition(), 0, R.color.deep_purple_400, 0);
             icon3.clearColorFilter();
             setCurrentTab(mNavigator.getCurrentPosition());
 
-            int d = getIntent().getIntExtra("d",0);
-            int m = getIntent().getIntExtra("m",0);
-            int y = getIntent().getIntExtra("y",0);
+            int d = getIntent().getIntExtra("d", 0);
+            int m = getIntent().getIntExtra("m", 0);
+            int y = getIntent().getIntExtra("y", 0);
 
-            if(d > 0 && m >= 0 && y > 0) {
+            if (d > 0 && m >= 0 && y > 0) {
                 ArrayList<Integer> list = new ArrayList<>();
                 list.add(d);
                 list.add(m);
@@ -1257,13 +1263,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void setActivityPeriodicJob() {
-        if(mJobManager.getAllJobRequestsForTag(ActivitySyncJob.TAG).size() == 0) {
+        if (mJobManager.getAllJobRequestsForTag(ActivitySyncJob.TAG).size() == 0) {
             getActivityStartToday();
             ActivitySyncJob.schedule();
         }
     }
 
-    private void getActivityStartToday(){
+    private void getActivityStartToday() {
         SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
         String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
@@ -1296,7 +1302,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private void handleResponseToday(Response response) {
 
         JobManager mJobManager = JobManager.instance();
-        if(mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
+        if (mJobManager.getAllJobRequestsForTag(NotificationSyncJob.TAG).size() > 0)
             mJobManager.cancelAllForTag(NotificationSyncJob.TAG);
 
         ArrayList<Object> list = new ArrayList<>();
@@ -1304,13 +1310,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         if (response.getMyCommitAct() != null) {
             ArrayList<ActivityServer> activityServers = response.getMyCommitAct();
-            for(int i=0;i<activityServers.size();i++){
+            for (int i = 0; i < activityServers.size(); i++) {
                 list.add(activityServers.get(i));
             }
         }
         if (response.getMyCommitFlag() != null) {
             ArrayList<FlagServer> flagServers = response.getMyCommitFlag();
-            for(int i=0;i<flagServers.size();i++){
+            for (int i = 0; i < flagServers.size(); i++) {
                 list.add(flagServers.get(i));
             }
         }
@@ -1442,19 +1448,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (list.get(i) instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) list.get(i);
                 list_notify.add(new ActivityOfDay(activityServer.getTitle(), activityServer.getMinuteStart(), activityServer.getHourStart(), Constants.ACT,
-                        activityServer.getDayStart(),activityServer.getMonthStart(),activityServer.getYearStart()));
+                        activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getYearStart()));
             }
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
                 list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
-                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
+                        flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
                 ReminderServer reminderServer = (ReminderServer) list.get(i);
-                list_notify.add(new ActivityOfDay(reminderServer.getTitle(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
-                        reminderServer.getDayStart(),reminderServer.getMonthStart(),reminderServer.getYearStart()));
+                list_notify.add(new ActivityOfDay(reminderServer.getText(), reminderServer.getMinuteStart(), reminderServer.getHourStart(), Constants.REMINDER,
+                        reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getYearStart()));
             }
         }
 
@@ -1479,7 +1485,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             Calendar c2 = Calendar.getInstance();
 
             c1.set(Calendar.DAY_OF_MONTH, activityOfDay.getDay());
-            c1.set(Calendar.MONTH, activityOfDay.getMonth()-1);
+            c1.set(Calendar.MONTH, activityOfDay.getMonth() - 1);
             c1.set(Calendar.YEAR, activityOfDay.getYear());
             c1.set(Calendar.HOUR_OF_DAY, activityOfDay.getHourStart());
             c1.set(Calendar.MINUTE, activityOfDay.getMinuteStart());
@@ -1487,35 +1493,34 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             c1.set(Calendar.MILLISECOND, 0);
 
             c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-            c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+            c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
             c2.set(Calendar.YEAR, activityOfDayNext.getYear());
             c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
             c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
             c2.set(Calendar.SECOND, 0);
             c2.set(Calendar.MILLISECOND, 0);
 
-            while(activityOfDayNext !=null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
+            while (activityOfDayNext != null && c1.getTimeInMillis() == c2.getTimeInMillis()) {
                 j++;
                 count_same++;
-                if(j < list_notify.size()) {
+                if (j < list_notify.size()) {
                     activityOfDayNext = list_notify.get(j);
                     c2.set(Calendar.DAY_OF_MONTH, activityOfDayNext.getDay());
-                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth()-1);
+                    c2.set(Calendar.MONTH, activityOfDayNext.getMonth() - 1);
                     c2.set(Calendar.YEAR, activityOfDayNext.getYear());
                     c2.set(Calendar.HOUR_OF_DAY, activityOfDayNext.getHourStart());
                     c2.set(Calendar.MINUTE, activityOfDayNext.getMinuteStart());
                     c2.set(Calendar.SECOND, 0);
                     c2.set(Calendar.MILLISECOND, 0);
-                }
-                else
+                } else
                     activityOfDayNext = null;
             }
             activityOfDay.setCommitmentSameHour(count_same);
 
-            time_exact = (int)(c1.getTimeInMillis()-c3.getTimeInMillis())/(1000*60);
-            if(time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
+            time_exact = (int) (c1.getTimeInMillis() - c3.getTimeInMillis()) / (1000 * 60);
+            if (time_exact >= Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT) {
                 c1.add(Calendar.MINUTE, -Constants.MINUTES_NOTIFICATION_BEFORE_START_COMMITMENT);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras)
@@ -1524,9 +1529,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            if(time_exact >= 1440) {
+            if (time_exact >= 1440) {
                 c1.add(Calendar.MINUTE, -1380);
-                time_to_happen = c1.getTimeInMillis()-c3.getTimeInMillis();
+                time_to_happen = c1.getTimeInMillis() - c3.getTimeInMillis();
                 new JobRequest.Builder(NotificationSyncJob.TAG)
                         .setExact(time_to_happen)
                         .setExtras(extras2)
@@ -1535,7 +1540,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         .schedule();
             }
 
-            i=j-1;
+            i = j - 1;
         }
 
         if (list_notify.size() > 0) {
@@ -1592,7 +1597,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             ArrayList<ActivityServer> list_activities_to_import = new ArrayList<>();
 
-            for(String name : calendarList) {
+            for (String name : calendarList) {
                 String pageToken = null;
                 do { //Get events without repeat
                     Events events = mService.events()
@@ -1608,7 +1613,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                         if (event.getRecurrence() == null && event.getRecurringEventId() == null && !event.getStatus().equals("cancelled")) {
                             ActivityServer server = createActivityGoogle(event);
-                            if(server != null)
+                            if (server != null)
                                 list_activities_to_import.add(server);
                         }
                     }
@@ -1631,9 +1636,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     for (Event event : itemsRepeat) {
 
-                        if(event.getRecurringEventId() != null && !event.getStatus().equals("cancelled")) {
+                        if (event.getRecurringEventId() != null && !event.getStatus().equals("cancelled")) {
                             ActivityServer server = createActivityGoogle(event);
-                            if(server != null)
+                            if (server != null)
                                 list_activities_to_import.add(server);
                         }
                     }
@@ -1648,7 +1653,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
 
         @Override
-        protected void onPreExecute() {}
+        protected void onPreExecute() {
+        }
 
         @Override
         protected void onPostExecute(Integer output) {
