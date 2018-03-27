@@ -840,121 +840,121 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             repeatText.setText(this.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast));
         }
 
-        if(activityServer.getLat()==-500)
-                locationBox.setVisibility(View.GONE);
+        if (activityServer.getLat() == -500)
+            locationBox.setVisibility(View.GONE);
         else
-                locationText.setText(activityServer.getLocation());
+            locationText.setText(activityServer.getLocation());
 
         locationBox.setOnClickListener(new View.OnClickListener()
 
-    {
-        @Override
-        public void onClick (View view){
-        Intent intent;
+        {
+            @Override
+            public void onClick(View view) {
+                Intent intent;
 
-        if (activityServer.getLat() != -500) {
-            if (activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
-                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                        "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
-            } else {
-                intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                        "geo:" + activityServer.getLat() +
-                                "," + activityServer.getLng() +
-                                "?q=" + activityServer.getLat() +
-                                "," + activityServer.getLng() +
-                                "(" + activityServer.getLocation() + ")"));
-            }
-        } else {
-            intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
-                    "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
-        }
-
-        Bundle bundle = new Bundle();
-        bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-        bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-        mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-        intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
-        try {
-            startActivity(intent);
-        } catch (ActivityNotFoundException ex) {
-            Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
-        }
-    }
-    });
-
-        new Actor.Builder(SpringSystem.create(),addGuestButton)
-            .
-
-    addMotion(new ToggleImitator(null, 1.0,0.8),View.SCALE_X,View.SCALE_Y)
-            .
-
-    onTouchListener(new View.OnTouchListener() {
-        @Override
-        public boolean onTouch (View v, MotionEvent event){
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_UP:
-                    if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
-
+                if (activityServer.getLat() != -500) {
+                    if (activityServer.getLat() == -250.0 && activityServer.getLat() == -250.0) {
+                        intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+                    } else {
+                        intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                                "geo:" + activityServer.getLat() +
+                                        "," + activityServer.getLng() +
+                                        "?q=" + activityServer.getLat() +
+                                        "," + activityServer.getLng() +
+                                        "(" + activityServer.getLocation() + ")"));
                     }
-                    break;
-                case MotionEvent.ACTION_DOWN:
-                    rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
-                    break;
-            }
-            return true;
-        }
-    })
-            .
+                } else {
+                    intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(
+                            "http://maps.google.co.in/maps?q=" + activityServer.getLocation()));
+                }
 
-    build();
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "locationBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+
+                intent.setClassName("com.google.android.apps.maps", "com.google.android.maps.MapsActivity");
+                try {
+                    startActivity(intent);
+                } catch (ActivityNotFoundException ex) {
+                    Toast.makeText(ShowActivity.this, getResources().getString(R.string.map_unable_to_find_application), Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        new Actor.Builder(SpringSystem.create(), addGuestButton)
+                .
+
+                        addMotion(new ToggleImitator(null, 1.0, 0.8), View.SCALE_X, View.SCALE_Y)
+                .
+
+                        onTouchListener(new View.OnTouchListener() {
+                            @Override
+                            public boolean onTouch(View v, MotionEvent event) {
+                                switch (event.getAction()) {
+                                    case MotionEvent.ACTION_UP:
+                                        if (rect.contains(v.getLeft() + (int) event.getX(), v.getTop() + (int) event.getY())) {
+
+                                        }
+                                        break;
+                                    case MotionEvent.ACTION_DOWN:
+                                        rect = new Rect(v.getLeft(), v.getTop(), v.getRight(), v.getBottom());
+                                        break;
+                                }
+                                return true;
+                            }
+                        })
+                .
+
+                        build();
 
         recyclerView.setLayoutManager(new
 
-    LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL, false));
+                LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerView.setNestedScrollingEnabled(false);
 
-    context =recyclerView.getContext();
+        context = recyclerView.getContext();
 
         recyclerView.addOnItemTouchListener(new
 
-    RecyclerItemClickListener(this,recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
-        @Override
-        public void onItemClick (View view,int position, MotionEvent e){
-            SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
-            String email = mSharedPreferences.getString(Constants.EMAIL, "");
+                RecyclerItemClickListener(this, recyclerView, new RecyclerItemClickListener.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position, MotionEvent e) {
+                SharedPreferences mSharedPreferences = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
 
-            Intent intent = new Intent(context, ShowGuestsActivity.class);
-            intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
-            intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
-            intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
-            intent.putExtra("id_act", getActivity().getId());
+                Intent intent = new Intent(context, ShowGuestsActivity.class);
+                intent.putExtra("guest_list_user", new ListUserWrapper(listPerson));
+                intent.putExtra("confirmed_list_user", new ListUserWrapper(listConfirmed));
+                intent.putExtra("is_adm", checkIfAdm(getAdmList(), email));
+                intent.putExtra("id_act", getActivity().getId());
 
-            Bundle bundle = new Bundle();
-            bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-            bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-            mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
+                Bundle bundle = new Bundle();
+                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "guest_list_user" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
+                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
-            startActivityForResult(intent, GUEST_UPDATE);
-        }
+                startActivityForResult(intent, GUEST_UPDATE);
+            }
 
-        @Override
-        public void onLongItemClick (View view,int position, MotionEvent e){
-        }
-    }));
+            @Override
+            public void onLongItemClick(View view, int position, MotionEvent e) {
+            }
+        }));
 
-    setLayout(this.getActivity(), this.
+        setLayout(this.getActivity(), this.
 
-    getUserList(), this.
+                getUserList(), this.
 
-    getUserConfirmedList(), this.
+                getUserConfirmedList(), this.
 
-    getPermissionInvite());
+                getPermissionInvite());
 
-    setProgress(false);
+        setProgress(false);
 
         mSwipeRefreshLayout.setRefreshing(false);
-}
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
@@ -1316,24 +1316,11 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
 
         editText.setVisibility(View.GONE);
 
-        allRadioButton.setText(getResources().getString(R.string.delete_plans_answer_all));
-
-        if (repeat) {
-            radioGroup.setVisibility(View.VISIBLE);
-            radioGroup.setOrientation(LinearLayout.VERTICAL);
-            button1.setText(getResources().getString(R.string.cancel));
-            button2.setText(getResources().getString(R.string.confirm));
-            text2.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.delete_plans_question_text_1));
-            text2.setText(getResources().getString(R.string.delete_plans_question_text_2));
-        } else {
-            button1.setText(getResources().getString(R.string.no));
-            button2.setText(getResources().getString(R.string.yes));
-            text2.setVisibility(View.GONE);
-            text1.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
-        }
-
+        button1.setText(getResources().getString(R.string.no));
+        button2.setText(getResources().getString(R.string.yes));
+        text2.setVisibility(View.GONE);
+        text1.setVisibility(View.VISIBLE);
+        text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
         Dialog dg = new Dialog(this, R.style.NewDialog);
 
         dg.setContentView(customView);
@@ -1375,18 +1362,8 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int radioButtonID;
-                View radioButton;
-                int idx = -1;
-
-                if (repeat) {
-                    radioButtonID = radioGroup.getCheckedRadioButtonId();
-                    radioButton = radioGroup.findViewById(radioButtonID);
-                    idx = radioGroup.indexOfChild(radioButton);
-                }
-
                 ActivityServer activity = new ActivityServer();
-                activity.setId(idx);
+                activity.setId(-1);
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));

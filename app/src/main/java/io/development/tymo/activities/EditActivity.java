@@ -1573,6 +1573,9 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
                 activityServer.setRepeatListAccepted(repeat_list_accepted);
             }
+            else {
+                activityServer.setRepeatListAccepted(getActivity().getRepeatListAccepted());
+            }
 
             activityServer.setCubeColor(cube_color);
             activityServer.setCubeColorUpper(cube_color_upper);
@@ -1647,7 +1650,7 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
             String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int year = calendar.get(Calendar.YEAR);
-            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek.toLowerCase(), day, month, year);
+            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek, day, month, year);
             repeatLastDate.setText(this.getString(R.string.repeat_last_date, date));
         } else {
             repeatLastDate.setVisibility(View.INVISIBLE);

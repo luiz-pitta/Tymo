@@ -427,7 +427,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
             String day = String.format("%02d", calendar.get(Calendar.DAY_OF_MONTH));
             String month = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int year = calendar.get(Calendar.YEAR);
-            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek.toLowerCase(), day, month, year);
+            String date = this.getResources().getString(R.string.date_format_03, dayOfWeek, day, month, year);
             repeatLastDate.setText(this.getString(R.string.repeat_last_date, date));
         } else {
             repeatLastDate.setVisibility(View.INVISIBLE);
@@ -1199,66 +1199,6 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
                 profilesPhotos.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    private String getLastActivity(ArrayList<FlagServer> flagServers) {
-
-        Collections.sort(flagServers, new Comparator<Object>() {
-            @Override
-            public int compare(Object c1, Object c2) {
-                FlagServer flagServer;
-                int day = 0, month = 0, year = 0;
-                int day2 = 0, month2 = 0, year2 = 0;
-
-                if (c1 instanceof FlagServer) {
-                    flagServer = (FlagServer) c1;
-                    day = flagServer.getDayStart();
-                    month = flagServer.getMonthStart();
-                    year = flagServer.getYearStart();
-                }
-
-                if (c2 instanceof FlagServer) {
-                    flagServer = (FlagServer) c2;
-                    day2 = flagServer.getDayStart();
-                    month2 = flagServer.getMonthStart();
-                    year2 = flagServer.getYearStart();
-                }
-
-                if (year < year2)
-                    return -1;
-                else if (year > year2)
-                    return 1;
-                else if (month < month2)
-                    return -1;
-                else if (month > month2)
-                    return 1;
-                else if (day < day2)
-                    return -1;
-                else if (day > day2)
-                    return 1;
-                else
-                    return 0;
-
-            }
-        });
-
-        FlagServer flagServer = flagServers.get(flagServers.size() - 1);
-
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.HOUR_OF_DAY, 0);
-        cal.clear(Calendar.MINUTE);
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
-        cal.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
-
-        String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(cal.get(Calendar.DAY_OF_WEEK), cal);
-        String dayEnd = String.format("%02d", flagServer.getDayEnd());
-        String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(cal.getTime().getTime());
-        int yearEnd = flagServer.getYearEnd();
-
-        String date = this.getResources().getString(R.string.date_format_03, dayOfWeekEnd.toLowerCase(), dayEnd, monthEnd, yearEnd);
-
-        return date;
     }
 
     private boolean isFlagInPast(FlagServer flagServer) {

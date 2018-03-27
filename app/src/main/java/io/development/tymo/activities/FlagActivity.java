@@ -801,12 +801,11 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                     break;
             }
 
-            if (repeat.get(1) > 0){
-                for (int i = 0; i <= repeat.get(1); i++){
+            if (repeat.get(1) > 0) {
+                for (int i = 0; i <= repeat.get(1); i++) {
                     repeat_list_accepted.add(i);
                 }
-            }
-            else{
+            } else {
                 repeat_list_accepted.add(0);
             }
 
@@ -1322,6 +1321,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
                 }
 
                 activityServer.setRepeatListAccepted(repeat_list_accepted);
+            } else {
+                activityServer.setRepeatListAccepted(getFlag().getRepeatListAccepted());
             }
 
             setProgress(true);
@@ -1519,7 +1520,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
             mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
 
             if (checkIfCreator(creator_flag.getEmail())) {
-                createDialogRemove(getFlag().getRepeatType() > 0);
+                createDialogRemove();
             } else {
                 InviteRequest inviteRequest = new InviteRequest();
 
@@ -1574,7 +1575,7 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         finish();
     }
 
-    private void createDialogRemove(boolean repeat) {
+    private void createDialogRemove() {
         LayoutInflater inflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = inflater.inflate(R.layout.dialog_message, null);
 
@@ -1589,23 +1590,11 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
 
         editText.setVisibility(View.GONE);
 
-        allRadioButton.setText(getResources().getString(R.string.delete_plans_answer_all));
-
-        if (repeat) {
-            radioGroup.setVisibility(View.VISIBLE);
-            radioGroup.setOrientation(LinearLayout.VERTICAL);
-            button1.setText(getResources().getString(R.string.cancel));
-            button2.setText(getResources().getString(R.string.confirm));
-            text2.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.delete_plans_question_text_1));
-            text2.setText(getResources().getString(R.string.delete_plans_question_text_2));
-        } else {
-            button1.setText(getResources().getString(R.string.no));
-            button2.setText(getResources().getString(R.string.yes));
-            text2.setVisibility(View.GONE);
-            text1.setVisibility(View.VISIBLE);
-            text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
-        }
+        button1.setText(getResources().getString(R.string.no));
+        button2.setText(getResources().getString(R.string.yes));
+        text2.setVisibility(View.GONE);
+        text1.setVisibility(View.VISIBLE);
+        text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
 
         Dialog dg = new Dialog(this, R.style.NewDialog);
 
@@ -1648,18 +1637,8 @@ public class FlagActivity extends AppCompatActivity implements View.OnClickListe
         button2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int radioButtonID;
-                View radioButton;
-                int idx = -1;
-
-                if (repeat) {
-                    radioButtonID = radioGroup.getCheckedRadioButtonId();
-                    radioButton = radioGroup.findViewById(radioButtonID);
-                    idx = radioGroup.indexOfChild(radioButton);
-                }
-
                 ActivityServer activity = new ActivityServer();
-                activity.setId(idx);
+                activity.setId(-1);
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
