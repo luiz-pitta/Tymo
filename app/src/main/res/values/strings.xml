@@ -241,6 +241,7 @@
     <string name="delete_plans_question_text_1">Esse compromisso se repete</string>
     <string name="delete_plans_question_text_2">O que você deseja remover da sua agenda?</string>
     <string name="delete_plans_question_text_3">Tem certeza que deseja remover esse compromisso da sua agenda?</string>
+    <string name="delete_plans_question_text_4">Você é o criador! Se remover esse compromisso da sua agenda ele será apagado das agendas dos convidados</string>
     <string name="delete_plans_question_text_reminder_1">Essa nota se repete</string>
     <string name="delete_plans_question_text_reminder_2">O que você deseja apagar?</string>
     <string name="delete_plans_question_text_reminder_3">Tem certeza que deseja apagar essa nota?</string>

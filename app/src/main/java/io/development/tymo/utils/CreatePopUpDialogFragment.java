@@ -105,6 +105,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
             private ActivityServer activityServer;
             private ReminderServer reminderServer;
             private Space spaceTop,spaceBottom;
+            private int invitedList;
 
             private FirebaseAnalytics mFirebaseAnalytics;
 
@@ -282,7 +283,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 String email = mSharedPreferences.getString(Constants.EMAIL, "");
                 boolean activity_buttons = false;
 
-                if (response.getTags() != null) {
+                if (response.getWhatsGoingAct() != null) {
                     if (email.equals(activityServer.getCreator())) {
                         buttonIcon2.setImageResource(R.drawable.ic_trash);
                         buttonIcon2.setColorFilter(ContextCompat.getColor(mContext, R.color.red_600));
@@ -302,6 +303,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     }
 
                     listPerson = setOrderGuests(listPerson);
+
+                    invitedList = listPerson.size();
 
                     PersonAdapter adapter = new PersonAdapter(listPerson, mContext);
                     recyclerView.setAdapter(adapter);
@@ -330,6 +333,8 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                     }
 
                     listPerson = setOrderGuests(listPerson);
+
+                    invitedList = listPerson.size();
 
                     PersonAdapter adapter = new PersonAdapter(listPerson, mContext);
                     recyclerView.setAdapter(adapter);
@@ -370,27 +375,23 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 TextView button1 = (TextView) customView.findViewById(R.id.buttonText1);
                 TextView button2 = (TextView) customView.findViewById(R.id.buttonText2);
                 EditText editText = (EditText) customView.findViewById(R.id.editText);
-                RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
-                AppCompatRadioButton allRadioButton = (AppCompatRadioButton) customView.findViewById(R.id.allRadioButton);
 
                 editText.setVisibility(View.GONE);
 
-                allRadioButton.setText(mContext.getResources().getString(R.string.delete_plans_answer_all));
+                button1.setText(mContext.getResources().getString(R.string.no));
+                button2.setText(mContext.getResources().getString(R.string.yes));
+                text2.setVisibility(View.GONE);
+                text1.setVisibility(View.VISIBLE);
+                text1.setText(mContext.getResources().getString(R.string.delete_plans_question_text_3));
 
-                if (repeat) {
-                    radioGroup.setVisibility(View.VISIBLE);
-                    radioGroup.setOrientation(LinearLayout.VERTICAL);
-                    button1.setText(mContext.getResources().getString(R.string.cancel));
-                    button2.setText(mContext.getResources().getString(R.string.confirm));
+                SharedPreferences mSharedPreferences = mContext.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+                String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+                boolean isCreator = type == Constants.FLAG ? flagServer.getCreator().equals(email) : activityServer.getCreator().equals(email);
+
+                if (isCreator && invitedList > 1) {
                     text2.setVisibility(View.VISIBLE);
-                    text1.setText(mContext.getResources().getString(R.string.delete_plans_question_text_1));
-                    text2.setText(mContext.getResources().getString(R.string.delete_plans_question_text_2));
-                } else {
-                    button1.setText(mContext.getResources().getString(R.string.no));
-                    button2.setText(mContext.getResources().getString(R.string.yes));
-                    text2.setVisibility(View.GONE);
-                    text1.setVisibility(View.VISIBLE);
-                    text1.setText(mContext.getResources().getString(R.string.delete_plans_question_text_3));
+                    text2.setText(mContext.getResources().getString(R.string.delete_plans_question_text_4));
                 }
 
                 Dialog dg = new Dialog(mContext, R.style.NewDialog);
@@ -434,18 +435,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                 button2.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        int radioButtonID;
-                        View radioButton;
-                        int idx = -1;
-
-                        if (repeat) {
-                            radioButtonID = radioGroup.getCheckedRadioButtonId();
-                            radioButton = radioGroup.findViewById(radioButtonID);
-                            idx = radioGroup.indexOfChild(radioButton);
-                        }
-
                         ActivityServer activity = new ActivityServer();
-                        activity.setId(idx);
 
                         if (type == Constants.FLAG) {
                             Bundle bundle = new Bundle();
@@ -699,7 +689,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                                     updateInviteRequest(inviteRequest);
                                     dialog.dismiss();
                                 } else {
-                                    createDialogRemove(flagServer.getRepeatType() > 0 && activityServer.getCreator().equals(email), Constants.FLAG, dialog);
+                                    createDialogRemove(flagServer.getRepeatType() > 0 && flagServer.getCreator().equals(email), Constants.FLAG, dialog);
                                 }
 
 
@@ -710,80 +700,6 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
                             setFlagInformation(flagServer.getId());
 
                     } else if (obj instanceof Reminder) {
-                        reminderServer = ((Reminder) obj).getReminderServer();
-
-                        customView = inflater.inflate(R.layout.dialog_card_reminder, null);
-                        TextView title = (TextView) customView.findViewById(R.id.title);
-                        TextView dateText = (TextView) customView.findViewById(R.id.dateMonthYear);
-                        TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
-                        LinearLayout button1 = (LinearLayout) customView.findViewById(R.id.button1);
-                        button2 = (LinearLayout) customView.findViewById(R.id.button2);
-                        buttonText2 = (TextView) customView.findViewById(R.id.buttonText2);
-                        buttonIcon2 = (ImageView) customView.findViewById(R.id.buttonIcon2);
-
-                        buttonText1.setText(context.getResources().getString(R.string.open));
-                        title.setText(reminderServer.getText());
-
-                        Calendar calendar = Calendar.getInstance();
-                        calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());
-                        String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
-                        String dayStart = String.format("%02d", reminderServer.getDayStart());
-                        String monthStart = new SimpleDateFormat("MM", mContext.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
-                        int yearStart = reminderServer.getYearStart();
-                        String hourStart = String.format("%02d", reminderServer.getHourStart());
-                        String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
-
-                        dateText.setText(mContext.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
-
-                        buttonText1.setOnTouchListener(new View.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View view, MotionEvent event) {
-                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    buttonText1.setBackground(null);
-                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    buttonText1.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_left_radius));
-                                }
-
-                                return false;
-                            }
-                        });
-
-                        button2.setOnTouchListener(new View.OnTouchListener() {
-                            @Override
-                            public boolean onTouch(View view, MotionEvent event) {
-                                if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                                    button2.setBackground(null);
-                                } else if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                                    button2.setBackground(ContextCompat.getDrawable(dialog.getContext(), R.drawable.btn_dialog_card_bottom_right_radius));
-                                }
-
-                                return false;
-                            }
-                        });
-
-                        button1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent myIntent = new Intent(context, ReminderActivity.class);
-                                myIntent.putExtra("type_reminder", 1);
-                                myIntent.putExtra("reminder_show", new ReminderWrapper(reminderServer));
-                                context.startActivity(myIntent);
-
-                                Bundle bundle = new Bundle();
-                                bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminderOpen" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                                bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
-                                mFirebaseAnalytics.logEvent(FirebaseAnalytics.Event.SELECT_CONTENT, bundle);
-
-                                dialog.dismiss();
-                            }
-                        });
-
-                        button2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                createDialogRemove(reminderServer.getRepeatType() > 0, Constants.REMINDER, dialog);
-                            }
-                        });
 
                     } else if (obj instanceof ActivityCard) {
                         activityServer = ((ActivityCard) obj).getActivityServer();

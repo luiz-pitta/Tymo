@@ -200,7 +200,6 @@
                                 android:text="Text"
                                 android:textColor="@color/grey_500"
                                 android:textSize="12sp"
-                                android:textIsSelectable="true"
                                 android:textStyle="normal" />
 
                         </LinearLayout>

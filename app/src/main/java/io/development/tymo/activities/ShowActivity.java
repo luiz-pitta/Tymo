@@ -1311,8 +1311,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         TextView button1 = (TextView) customView.findViewById(R.id.buttonText1);
         TextView button2 = (TextView) customView.findViewById(R.id.buttonText2);
         EditText editText = (EditText) customView.findViewById(R.id.editText);
-        RadioGroup radioGroup = (RadioGroup) customView.findViewById(R.id.radioGroup);
-        AppCompatRadioButton allRadioButton = (AppCompatRadioButton) customView.findViewById(R.id.allRadioButton);
 
         editText.setVisibility(View.GONE);
 
@@ -1321,6 +1319,15 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
         text2.setVisibility(View.GONE);
         text1.setVisibility(View.VISIBLE);
         text1.setText(getResources().getString(R.string.delete_plans_question_text_3));
+
+        SharedPreferences mSharedPreferences = getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE);
+        String email = mSharedPreferences.getString(Constants.EMAIL, "");
+
+        if (creator_activity.getEmail().matches(email) && invitedList.size() > 1) {
+            text2.setVisibility(View.VISIBLE);
+            text2.setText(getResources().getString(R.string.delete_plans_question_text_4));
+        }
+
         Dialog dg = new Dialog(this, R.style.NewDialog);
 
         dg.setContentView(customView);
@@ -1363,7 +1370,6 @@ public class ShowActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 ActivityServer activity = new ActivityServer();
-                activity.setId(-1);
 
                 Bundle bundle = new Bundle();
                 bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "actRemove" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));

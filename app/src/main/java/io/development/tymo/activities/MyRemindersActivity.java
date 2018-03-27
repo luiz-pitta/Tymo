@@ -387,7 +387,7 @@ public class MyRemindersActivity extends AppCompatActivity implements View.OnCli
                             break;
                     }
 
-                    date = date + "\n" + this.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast);
+                    //date = date + "\n" + this.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast);
                 }
             }
 
