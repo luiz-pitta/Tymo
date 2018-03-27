@@ -176,14 +176,6 @@ public class CubeViewHolder extends BaseViewHolder<ActivityServer> implements Vi
             photoCreatorRingBox.setVisibility(View.INVISIBLE);
         }
 
-        /* xxx
-        if(cube.getListRepeatedActvities().size() > 0){
-            repeatBox.setVisibility(View.VISIBLE);
-            repeatText.setText(context.getResources().getString(R.string.repeat_qty, cube.getListRepeatedActvities().size() + 1));
-        }else
-            repeatBox.setVisibility(View.GONE);
-            */
-
         pieceBox.startAnimation(animation2);
 
         textBox.startAnimation(animation);

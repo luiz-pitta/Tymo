@@ -49,8 +49,8 @@
                 android:layout_below="@+id/title"
                 android:layout_marginTop="5dp"
                 android:ellipsize="end"
-                android:maxLines="4"
                 android:gravity="clip_horizontal"
+                android:maxLines="4"
                 android:text="Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description Description"
                 android:textColor="@color/grey_800"
                 android:textSize="14sp" />
@@ -151,25 +151,25 @@
                 android:id="@+id/repeatBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/box_qty_contacts"
                 android:paddingBottom="2dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
                 android:paddingTop="2dp"
-                android:layout_marginRight="10dp"
-                android:background="@drawable/box_qty_contacts"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
-                android:visibility="visible">
+                android:visibility="gone">
 
                 <TextView
                     android:id="@+id/repeatText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="16sp"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
+                    android:text="+0"
                     android:textColor="@color/deep_purple_400"
-                    android:text="+0" />
+                    android:textSize="16sp" />
 
             </RelativeLayout>
 

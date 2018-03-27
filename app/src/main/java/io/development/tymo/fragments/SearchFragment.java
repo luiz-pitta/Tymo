@@ -263,13 +263,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             ActivityServer activityServer = whats_going_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = activityServer.getYearStart();
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", activityServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = activityServer.getYearEnd();
+            String hourEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
             String date;
 
@@ -280,6 +292,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
+            if (activityServer.getRepeatType() > 0) {
+                switch (activityServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             listWhats.add(new ActivitySearch(activityServer.getTitle(), date, this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
 
@@ -287,13 +352,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             FlagServer flagServer = whats_going_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+            calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = flagServer.getYearStart();
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", flagServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = flagServer.getYearEnd();
+            String hourEnd = String.format("%02d", flagServer.getHourEnd());
+            String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
             String date;
 
@@ -302,6 +379,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (flagServer.getRepeatType() > 0) {
+                switch (flagServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
             
             String text1;
@@ -319,13 +449,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             ActivityServer activityServer = my_commit_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = activityServer.getYearStart();
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", activityServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = activityServer.getYearEnd();
+            String hourEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
             String date;
 
@@ -334,6 +476,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (activityServer.getRepeatType() > 0) {
+                switch (activityServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String creator;
@@ -351,13 +546,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             FlagServer flagServer = my_commit_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+            calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = flagServer.getYearStart();
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", flagServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = flagServer.getYearEnd();
+            String hourEnd = String.format("%02d", flagServer.getHourEnd());
+            String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
             String date;
 
@@ -366,6 +573,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (flagServer.getRepeatType() > 0) {
+                switch (flagServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String creator;
@@ -391,13 +651,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             ReminderServer reminderServer = my_commit_reminderServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());
+            calendar2.set(reminderServer.getYearEnd(), reminderServer.getMonthEnd() - 1, reminderServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", reminderServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = reminderServer.getYearStart();
             String hourStart = String.format("%02d", reminderServer.getHourStart());
             String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", reminderServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = reminderServer.getYearEnd();
+            String hourEnd = String.format("%02d", reminderServer.getHourEnd());
+            String minuteEnd = String.format("%02d", reminderServer.getMinuteEnd());
 
             String date;
 
@@ -406,6 +678,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (reminderServer.getRepeatType() > 0) {
+                switch (reminderServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String text1;
@@ -469,13 +794,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             ActivityServer activityServer = whats_going_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = activityServer.getYearStart();
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", activityServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = activityServer.getYearEnd();
+            String hourEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
             String date;
 
@@ -486,6 +823,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
             }
 
+            if (activityServer.getRepeatType() > 0) {
+                switch (activityServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
             listWhats.add(new ActivitySearch(activityServer.getTitle(), date, this.getResources().getString(R.string.created_by, activityServer.getCreator()), activityServer.getCubeColorUpper(), activityServer.getCubeColor(), activityServer.getCubeIcon(), activityServer));
         }
 
@@ -493,13 +883,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             FlagServer flagServer = whats_going_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+            calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = flagServer.getYearStart();
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", flagServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = flagServer.getYearEnd();
+            String hourEnd = String.format("%02d", flagServer.getHourEnd());
+            String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
             String date;
 
@@ -508,6 +910,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (flagServer.getRepeatType() > 0) {
+                switch (flagServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String text1;
@@ -535,13 +990,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             ActivityServer activityServer = my_commit_act.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
+            calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", activityServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = activityServer.getYearStart();
             String hourStart = String.format("%02d", activityServer.getHourStart());
             String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", activityServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = activityServer.getYearEnd();
+            String hourEnd = String.format("%02d", activityServer.getHourEnd());
+            String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
             String date;
 
@@ -550,6 +1017,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (activityServer.getRepeatType() > 0) {
+                switch (activityServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String creator;
@@ -567,13 +1087,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             FlagServer flagServer = my_commit_flagServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
+            calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", flagServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = flagServer.getYearStart();
             String hourStart = String.format("%02d", flagServer.getHourStart());
             String minuteStart = String.format("%02d", flagServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", flagServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = flagServer.getYearEnd();
+            String hourEnd = String.format("%02d", flagServer.getHourEnd());
+            String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
             String date;
 
@@ -582,6 +1114,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (flagServer.getRepeatType() > 0) {
+                switch (flagServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String creator;
@@ -607,13 +1192,25 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             ReminderServer reminderServer = my_commit_reminderServer.get(i);
 
             Calendar calendar = Calendar.getInstance();
+            Calendar calendar2 = Calendar.getInstance();
             calendar.set(reminderServer.getYearStart(), reminderServer.getMonthStart() - 1, reminderServer.getDayStart());
+            calendar2.set(reminderServer.getYearEnd(), reminderServer.getMonthEnd() - 1, reminderServer.getDayEnd());
+
             String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+            String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
             String dayStart = String.format("%02d", reminderServer.getDayStart());
             String monthStart = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
             int yearStart = reminderServer.getYearStart();
             String hourStart = String.format("%02d", reminderServer.getHourStart());
             String minuteStart = String.format("%02d", reminderServer.getMinuteStart());
+
+            String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+            String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
+            String dayEnd = String.format("%02d", reminderServer.getDayEnd());
+            String monthEnd = new SimpleDateFormat("MM", this.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+            int yearEnd = reminderServer.getYearEnd();
+            String hourEnd = String.format("%02d", reminderServer.getHourEnd());
+            String minuteEnd = String.format("%02d", reminderServer.getMinuteEnd());
 
             String date;
 
@@ -622,6 +1219,59 @@ public class SearchFragment extends Fragment implements TabLayout.OnTabSelectedL
             }
             else {
                 date = this.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart);
+            }
+
+            if (reminderServer.getRepeatType() > 0) {
+                switch (reminderServer.getRepeatType()) {
+                    case Constants.DAILY:
+                        if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_01);
+                        else if (!reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                        else if (reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                        else if (!reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                        break;
+                    case Constants.WEEKLY:
+                        if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                        else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                        break;
+                    case Constants.MONTHLY:
+                        if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                        else if (reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                        else if (reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                        else if (!reminderServer.getDateEndEmpty() && reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                        else if (!reminderServer.getDateEndEmpty() && !reminderServer.getTimeStartEmpty() && !reminderServer.getTimeEndEmpty())
+                            date = this.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                        break;
+                    default:
+                        break;
+                }
             }
 
             String text1;

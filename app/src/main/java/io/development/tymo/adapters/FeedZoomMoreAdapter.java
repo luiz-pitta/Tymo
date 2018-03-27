@@ -411,12 +411,6 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
                         });
             } else
                 holder.photoCreator.setImageResource(R.drawable.ic_profile_photo_empty);
-/* xxx
-            if(feedCubeModel.getListRepeatedActvities().size() > 0){
-                holder.repeatBox.setVisibility(View.VISIBLE);
-                holder.repeatText.setText(mContext.getResources().getString(R.string.repeat_qty, feedCubeModel.getListRepeatedActvities().size() + 1));
-            }else
-                holder.repeatBox.setVisibility(View.GONE);*/
 
             if (feedCubeModel.getFavoriteCreator() > 0) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);
@@ -490,13 +484,6 @@ public class FeedZoomMoreAdapter extends RecyclerView.Adapter<FeedZoomMoreAdapte
                         });
             } else
                 holder.photoCreator.setImageResource(R.drawable.ic_profile_photo_empty);
-/* xxx
-            if(feedFlagModel.getListRepeatedActvities().size() > 0){
-                holder.repeatBox.setVisibility(View.VISIBLE);
-                holder.repeatText.setText(mContext.getResources().getString(R.string.repeat_qty, feedFlagModel.getListRepeatedActvities().size() + 1));
-            }else
-                holder.repeatBox.setVisibility(View.GONE);
-                */
 
             if (feedFlagModel.getFavoriteCreator() > 0) {
                 holder.photoCreatorRingBox.setVisibility(View.VISIBLE);

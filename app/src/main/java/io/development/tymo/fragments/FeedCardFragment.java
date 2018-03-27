@@ -318,11 +318,9 @@ public class FeedCardFragment extends Fragment {
             if (item instanceof ActivityServer) {
                 ActivityServer activityServer = (ActivityServer) item;
                 listActivities.add(activityServer);
-                //xxx listActivities.addAll(activityServer.getListRepeatedActvities());
             } else if (item instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) item;
                 listActivities.add(flagServer);
-                //xxx istActivities.addAll(flagServer.getListRepeatedActvities());
             }
 
             if (listActivities.size() > 1)

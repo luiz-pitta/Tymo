@@ -419,17 +419,6 @@ public class FeedListFragment extends Fragment implements SwipeRefreshLayout.OnR
                         ArrayList<Object> listActivities = new ArrayList<>();
                         FeedFragment feedFragment = (FeedFragment) getActivity().getFragmentManager().findFragmentByTag("Feed_main");
 
-/* xxx
-                        if (item instanceof ActivityServer) {
-                            ActivityServer activityServer = (ActivityServer) item;
-                            listActivities.add(activityServer);
-                            listActivities.addAll(activityServer.getListRepeatedActvities());
-                        } else if (item instanceof FlagServer) {
-                            FlagServer flagServer = (FlagServer) item;
-                            listActivities.add(flagServer);
-                            listActivities.addAll(flagServer.getListRepeatedActvities());
-                        }
-*/
                         if (listActivities.size() > 1)
                             feedFragment.createDialogRepeatImport(listActivities, position, 0);
                         else {

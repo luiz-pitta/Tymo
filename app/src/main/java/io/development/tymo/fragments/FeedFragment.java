@@ -1201,7 +1201,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
                     feedCardFragment.setLatLng(lat, lng);
 
 
-                //XXXXXXXXXXXXX
+                //xxx
                 /*locationRequest = LocationRequest.create();
                 locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
                 locationRequest.setInterval(1000*60*5);
