@@ -82,6 +82,8 @@ public class ActivityServer implements Serializable {
 
     private boolean time_start_empty_card;
     private boolean time_end_empty_card;
+    private boolean time_start_empty_temp;
+    private boolean time_end_empty_temp;
 
     private int status; // -1 = already happened ; 0 = is happening ; 1 = will happen
 
@@ -161,6 +163,22 @@ public class ActivityServer implements Serializable {
         this.date_start_empty = activityServer.getDateStartEmpty();
         this.time_end_empty = activityServer.getTimeEndEmpty();
         this.time_start_empty = activityServer.getTimeStartEmpty();
+    }
+
+    public void setTimeStartEmptyTemp(boolean time_start_empty_temp) {
+        this.time_start_empty_temp = time_start_empty_temp;
+    }
+
+    public boolean getTimeStartEmptyTemp() {
+        return time_start_empty_temp;
+    }
+
+    public void setTimeEndEmptyTemp(boolean time_end_empty_temp) {
+        this.time_end_empty_temp = time_end_empty_temp;
+    }
+
+    public boolean getTimeEndEmptyTemp() {
+        return time_end_empty_temp;
     }
 
     public boolean isDeletedActivityImported() {

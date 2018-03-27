@@ -41,6 +41,8 @@ public class ReminderServer implements Serializable {
 
     private boolean time_start_empty_card;
     private boolean time_end_empty_card;
+    private boolean time_start_empty_temp;
+    private boolean time_end_empty_temp;
 
     private int repeat_type;
     private int repeat_qty;
@@ -87,12 +89,20 @@ public class ReminderServer implements Serializable {
         this.time_start_empty = reminderServer.getTimeStartEmpty();
     }
     
-    public void setDateTimeAlert(boolean date_time_alert) {
-        this.date_time_alert = date_time_alert;
+    public void setTimeStartEmptyTemp(boolean time_start_empty_temp) {
+        this.time_start_empty_temp = time_start_empty_temp;
     }
 
-    public boolean getDateTimeAlert() {
-        return date_time_alert;
+    public boolean getTimeStartEmptyTemp() {
+        return time_start_empty_temp;
+    }
+
+    public void setTimeEndEmptyTemp(boolean time_end_empty_temp) {
+        this.time_end_empty_temp = time_end_empty_temp;
+    }
+
+    public boolean getTimeEndEmptyTemp() {
+        return time_end_empty_temp;
     }
 
     public void setDateStartEmpty(boolean date_start_empty) {

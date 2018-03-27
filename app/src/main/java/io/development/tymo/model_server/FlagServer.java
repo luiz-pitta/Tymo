@@ -58,6 +58,8 @@ public class FlagServer implements Serializable {
 
     private boolean time_start_empty_card;
     private boolean time_end_empty_card;
+    private boolean time_start_empty_temp;
+    private boolean time_end_empty_temp;
 
     private int repeat_type;
     private int repeat_qty;
@@ -128,6 +130,22 @@ public class FlagServer implements Serializable {
         this.date_start_empty = flagServer.getDateStartEmpty();
         this.time_end_empty = flagServer.getTimeEndEmpty();
         this.time_start_empty = flagServer.getTimeStartEmpty();
+    }
+
+    public void setTimeStartEmptyTemp(boolean time_start_empty_temp) {
+        this.time_start_empty_temp = time_start_empty_temp;
+    }
+
+    public boolean getTimeStartEmptyTemp() {
+        return time_start_empty_temp;
+    }
+
+    public void setTimeEndEmptyTemp(boolean time_end_empty_temp) {
+        this.time_end_empty_temp = time_end_empty_temp;
+    }
+
+    public boolean getTimeEndEmptyTemp() {
+        return time_end_empty_temp;
     }
 
     public void setDateStartEmpty(boolean date_start_empty) {

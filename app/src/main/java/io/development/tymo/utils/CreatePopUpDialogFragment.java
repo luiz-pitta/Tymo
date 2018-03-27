@@ -527,6 +527,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         TextView title = (TextView) customView.findViewById(R.id.title);
                         TextView dateText = (TextView) customView.findViewById(R.id.dateMonthYear);
+                        TextView repeatText = (TextView) customView.findViewById(R.id.repeatText);
                         TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
                         recyclerView = (RecyclerView) customView.findViewById(R.id.guestRow);
                         button2 = (LinearLayout) customView.findViewById(R.id.button2);
@@ -571,63 +572,128 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         Calendar calendar = Calendar.getInstance();
                         Calendar calendar2 = Calendar.getInstance();
+                        Calendar calendar3 = Calendar.getInstance();
                         calendar.set(flagServer.getYearStart(), flagServer.getMonthStart() - 1, flagServer.getDayStart());
                         calendar2.set(flagServer.getYearEnd(), flagServer.getMonthEnd() - 1, flagServer.getDayEnd());
+                        calendar3.setTimeInMillis(flagServer.getLastDateTime());
 
                         String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                        String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
                         String dayStart = String.format("%02d", flagServer.getDayStart());
-                        String monthStart = new SimpleDateFormat("MM", mContext.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                        String monthStart = new SimpleDateFormat("MM", context.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                        int yearStart = flagServer.getYearStart();
                         String hourStart = String.format("%02d", flagServer.getHourStart());
                         String minuteStart = String.format("%02d", flagServer.getMinuteStart());
+
                         String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+                        String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
                         String dayEnd = String.format("%02d", flagServer.getDayEnd());
-                        String monthEnd = new SimpleDateFormat("MM", mContext.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                        String monthEnd = new SimpleDateFormat("MM", context.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                        int yearEnd = flagServer.getYearEnd();
                         String hourEnd = String.format("%02d", flagServer.getHourEnd());
                         String minuteEnd = String.format("%02d", flagServer.getMinuteEnd());
 
-                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()){
-                            dateText.setText(context.getResources().getString(R.string.date_format_19, dayOfWeekStart, dayStart, monthStart));
-                        }
-                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()){
-                            dateText.setText(context.getResources().getString(R.string.date_format_21, dayOfWeekStart, dayStart, monthStart, dayOfWeekEnd, dayEnd, monthEnd));
-                        }
-                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
-                            dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
-                        }
-                        else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
-                            dateText.setText(context.getResources().getString(R.string.date_format_20, dayOfWeekStart, dayStart, monthStart, hourEnd, minuteEnd));
-                        }
-                        else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
+                        String dayLast = String.format("%02d", calendar3.get(Calendar.DAY_OF_MONTH));
+                        String monthLast = new SimpleDateFormat("MM", context.getResources().getConfiguration().locale).format(calendar3.getTime().getTime());
+                        int yearLast = calendar3.get(Calendar.YEAR);
+
+                        if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
+                        } else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+                        } else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                        } else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+                        } else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) {
                             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-                                dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_23, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
                             }
-                        }
-                        else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
+                        } else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
                             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-                                dateText.setText(context.getResources().getString(R.string.date_format_20, dayOfWeekStart, dayStart, monthStart, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_22, dayOfWeekStart, dayStart, monthStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
                             }
-                        }
-                        else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
+                        } else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty()) {
                             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                                dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_08, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                             }
-                        }
-                        else{
+                        } else {
                             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                                 if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                                    dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                    dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                                 } else {
-                                    dateText.setText(context.getResources().getString(R.string.date_format_08, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                                    dateText.setText(context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                                 }
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_09, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
                             }
+                        }
+
+                        if (flagServer.getRepeatType() == 0) {
+                            repeatText.setVisibility(View.GONE);
+                        } else {
+                            repeatText.setVisibility(View.VISIBLE);
+                            String date = "";
+
+                            switch (flagServer.getRepeatType()) {
+                                case Constants.DAILY:
+                                    if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_01);
+                                    else if (!flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                                    else if (flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                                    else if (!flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                                    break;
+                                case Constants.WEEKLY:
+                                    if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                                    else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                                    else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                                    else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                                    else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                                    else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                                    else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                                    else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                                    break;
+                                case Constants.MONTHLY:
+                                    if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                                    else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                                    else if (flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                                    else if (flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                                    else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                                    else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                                    else if (!flagServer.getDateEndEmpty() && flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                                    else if (!flagServer.getDateEndEmpty() && !flagServer.getTimeStartEmpty() && !flagServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            dateText.setText(date);
+                            repeatText.setText(context.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast));
                         }
 
                         buttonText1.setOnTouchListener(new View.OnTouchListener() {
@@ -708,6 +774,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         TextView title = (TextView) customView.findViewById(R.id.title);
                         TextView dateText = (TextView) customView.findViewById(R.id.dateMonthYear);
+                        TextView repeatText = (TextView) customView.findViewById(R.id.repeatText);
                         TextView description = (TextView) customView.findViewById(R.id.description);
                         TextView locationText = (TextView) customView.findViewById(R.id.locationText);
                         TextView buttonText1 = (TextView) customView.findViewById(R.id.buttonText1);
@@ -759,63 +826,128 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                         Calendar calendar = Calendar.getInstance();
                         Calendar calendar2 = Calendar.getInstance();
+                        Calendar calendar3 = Calendar.getInstance();
                         calendar.set(activityServer.getYearStart(), activityServer.getMonthStart() - 1, activityServer.getDayStart());
                         calendar2.set(activityServer.getYearEnd(), activityServer.getMonthEnd() - 1, activityServer.getDayEnd());
+                        calendar3.setTimeInMillis(activityServer.getLastDateTime());
 
                         String dayOfWeekStart = dateFormat.todayTomorrowYesterdayCheck(calendar.get(Calendar.DAY_OF_WEEK), calendar);
+                        String dayOfWeekStart2 = dateFormat.formatDayOfWeek(calendar.get(Calendar.DAY_OF_WEEK));
                         String dayStart = String.format("%02d", activityServer.getDayStart());
-                        String monthStart = new SimpleDateFormat("MM", mContext.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                        String monthStart = new SimpleDateFormat("MM", context.getResources().getConfiguration().locale).format(calendar.getTime().getTime());
+                        int yearStart = activityServer.getYearStart();
                         String hourStart = String.format("%02d", activityServer.getHourStart());
                         String minuteStart = String.format("%02d", activityServer.getMinuteStart());
+
                         String dayOfWeekEnd = dateFormat.todayTomorrowYesterdayCheck(calendar2.get(Calendar.DAY_OF_WEEK), calendar2);
+                        String dayOfWeekEnd2 = dateFormat.formatDayOfWeek(calendar2.get(Calendar.DAY_OF_WEEK));
                         String dayEnd = String.format("%02d", activityServer.getDayEnd());
-                        String monthEnd = new SimpleDateFormat("MM", mContext.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                        String monthEnd = new SimpleDateFormat("MM", context.getResources().getConfiguration().locale).format(calendar2.getTime().getTime());
+                        int yearEnd = activityServer.getYearEnd();
                         String hourEnd = String.format("%02d", activityServer.getHourEnd());
                         String minuteEnd = String.format("%02d", activityServer.getMinuteEnd());
 
-                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()){
-                            dateText.setText(context.getResources().getString(R.string.date_format_19, dayOfWeekStart, dayStart, monthStart));
-                        }
-                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()){
-                            dateText.setText(context.getResources().getString(R.string.date_format_21, dayOfWeekStart, dayStart, monthStart, dayOfWeekEnd, dayEnd, monthEnd));
-                        }
-                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
-                            dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
-                        }
-                        else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
-                            dateText.setText(context.getResources().getString(R.string.date_format_20, dayOfWeekStart, dayStart, monthStart, hourEnd, minuteEnd));
-                        }
-                        else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+                        String dayLast = String.format("%02d", calendar3.get(Calendar.DAY_OF_MONTH));
+                        String monthLast = new SimpleDateFormat("MM", context.getResources().getConfiguration().locale).format(calendar3.getTime().getTime());
+                        int yearLast = calendar3.get(Calendar.YEAR);
+
+                        if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_03, dayOfWeekStart, dayStart, monthStart, yearStart));
+                        } else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_14, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
+                        } else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
+                        } else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+                            dateText.setText(context.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
+                        } else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) {
                             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-                                dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_23, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_16, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd));
                             }
-                        }
-                        else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+                        } else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
                             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
-                                dateText.setText(context.getResources().getString(R.string.date_format_20, dayOfWeekStart, dayStart, monthStart, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_17, dayOfWeekStart, dayStart, monthStart, yearStart, hourEnd, minuteEnd));
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_22, dayOfWeekStart, dayStart, monthStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_15, dayOfWeekStart, dayStart, monthStart, yearStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
                             }
-                        }
-                        else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
+                        } else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty()) {
                             if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                                dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_08, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                             }
-                        }
-                        else{
+                        } else {
                             if (calendar.get(Calendar.DATE) == calendar2.get(Calendar.DATE)) {
                                 if (hourStart.matches(hourEnd) && minuteStart.matches(minuteEnd)) {
-                                    dateText.setText(context.getResources().getString(R.string.date_format_07, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart));
+                                    dateText.setText(context.getResources().getString(R.string.date_format_04, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart));
                                 } else {
-                                    dateText.setText(context.getResources().getString(R.string.date_format_08, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, hourEnd, minuteEnd));
+                                    dateText.setText(context.getResources().getString(R.string.date_format_05, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, hourEnd, minuteEnd));
                                 }
                             } else {
-                                dateText.setText(context.getResources().getString(R.string.date_format_09, dayOfWeekStart, dayStart, monthStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, hourEnd, minuteEnd));
+                                dateText.setText(context.getResources().getString(R.string.date_format_06, dayOfWeekStart, dayStart, monthStart, yearStart, hourStart, minuteStart, dayOfWeekEnd, dayEnd, monthEnd, yearEnd, hourEnd, minuteEnd));
                             }
+                        }
+
+                        if (activityServer.getRepeatType() == 0) {
+                            repeatText.setVisibility(View.GONE);
+                        } else {
+                            repeatText.setVisibility(View.VISIBLE);
+                            String date = "";
+
+                            switch (activityServer.getRepeatType()) {
+                                case Constants.DAILY:
+                                    if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_01);
+                                    else if (!activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_02, hourStart, minuteStart);
+                                    else if (activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_03, hourEnd, minuteEnd);
+                                    else if (!activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_daily_04, hourStart, minuteStart, hourEnd, minuteEnd);
+                                    break;
+                                case Constants.WEEKLY:
+                                    if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_01, dayOfWeekStart2);
+                                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_02, dayOfWeekStart2, hourStart, minuteStart);
+                                    else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_03, dayOfWeekStart2, hourEnd, minuteEnd);
+                                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_04, dayOfWeekStart2, hourStart, minuteStart, hourEnd, minuteEnd);
+                                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_05, dayOfWeekStart2, dayOfWeekEnd2);
+                                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_06, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2);
+                                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_07, dayOfWeekStart2, dayOfWeekEnd2, hourEnd, minuteEnd);
+                                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_weekly_08, dayOfWeekStart2, hourStart, minuteStart, dayOfWeekEnd2, hourEnd, minuteEnd);
+                                    break;
+                                case Constants.MONTHLY:
+                                    if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_01, dayStart);
+                                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_02, dayStart, hourStart, minuteStart);
+                                    else if (activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_03, dayStart, hourEnd, minuteEnd);
+                                    else if (activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_04, dayStart, hourStart, minuteStart, hourEnd, minuteEnd);
+                                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_05, dayStart, dayEnd);
+                                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_06, dayStart, hourStart, minuteStart, dayEnd);
+                                    else if (!activityServer.getDateEndEmpty() && activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_07, dayStart, dayEnd, hourEnd, minuteEnd);
+                                    else if (!activityServer.getDateEndEmpty() && !activityServer.getTimeStartEmpty() && !activityServer.getTimeEndEmpty())
+                                        date = context.getResources().getString(R.string.date_format_monthly_08, dayStart, hourStart, minuteStart, dayEnd, hourEnd, minuteEnd);
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            dateText.setText(date);
+                            repeatText.setText(context.getResources().getString(R.string.date_format_repeat, dayStart, monthStart, yearStart, dayLast, monthLast, yearLast));
                         }
 
                         buttonText1.setOnTouchListener(new View.OnTouchListener() {

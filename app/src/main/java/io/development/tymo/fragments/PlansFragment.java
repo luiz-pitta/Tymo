@@ -437,80 +437,163 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
             int j;
             for (j = 0; j < response.getMyCommitAct().size(); j++) {
-                ActivityServer activity = response.getMyCommitAct().get(j);
-                ActivityServer activityServer = new ActivityServer(activity);
-                if (Utilities.isActivityInRange(activityServer.getYearStart(), activityServer.getYearEnd(), activityServer.getDayStart(), activityServer.getMonthStart(), activityServer.getDayEnd(), activityServer.getMonthEnd(), day)) {
-                    boolean start = Utilities.isStartedFinishedToday(day, activityServer.getDayStart());
-                    boolean finish = Utilities.isStartedFinishedToday(day, activityServer.getDayEnd());
-                    if (!start && finish) {
-                        activityServer.setTimeStartEmptyCard(true);
-                        activityServer.setTimeEndEmptyCard(false);
-                        activityServer.setMinuteCard(0);
-                        activityServer.setHourCard(0);
-                        activityServer.setMinuteEndCard(activityServer.getMinuteEnd());
-                        activityServer.setHourEndCard(activityServer.getHourEnd());
-                    } else if (start && !finish) {
-                        activityServer.setTimeStartEmptyCard(false);
-                        activityServer.setTimeEndEmptyCard(true);
-                        activityServer.setMinuteCard(activityServer.getMinuteStart());
-                        activityServer.setHourCard(activityServer.getHourStart());
-                        activityServer.setMinuteEndCard(59);
-                        activityServer.setHourEndCard(23);
-                    } else if (!start && !finish) {
-                        activityServer.setTimeStartEmptyCard(true);
-                        activityServer.setTimeEndEmptyCard(true);
-                        activityServer.setMinuteCard(0);
-                        activityServer.setHourCard(0);
-                        activityServer.setMinuteEndCard(59);
-                        activityServer.setHourEndCard(23);
+                ActivityServer myCommitActivity = response.getMyCommitAct().get(j);
+                ActivityServer activity = new ActivityServer(myCommitActivity);
+
+                Calendar calendar = Calendar.getInstance();
+                Calendar calendar2 = Calendar.getInstance();
+                calendar.set(activity.getYearStart(), activity.getMonthStart() - 1, activity.getDayStart(), activity.getHourStart(), activity.getMinuteStart());
+                calendar2.set(activity.getYearEnd(), activity.getMonthEnd() - 1, activity.getDayEnd(), activity.getHourEnd(), activity.getMinuteEnd());
+
+                int qty = activity.getRepeatQty() < 0 ? 0 : activity.getRepeatQty();
+
+                for (int k = 0; k <= qty; k++) {
+                    ActivityServer activityServer = new ActivityServer(myCommitActivity);
+
+                    if (k > 0) {
+                        switch (activityServer.getRepeatType()) {
+                            case Constants.DAILY:
+                                calendar.add(Calendar.DAY_OF_WEEK, 1);
+                                calendar2.add(Calendar.DAY_OF_WEEK, 1);
+                                break;
+                            case Constants.WEEKLY:
+                                calendar.add(Calendar.DAY_OF_WEEK, 7);
+                                calendar2.add(Calendar.DAY_OF_WEEK, 7);
+                                break;
+                            case Constants.MONTHLY:
+                                calendar.add(Calendar.MONTH, 1);
+                                calendar2.add(Calendar.MONTH, 1);
+                                break;
+                            default:
+                                break;
+                        }
                     } else {
-                        activityServer.setTimeStartEmptyCard(false);
-                        activityServer.setTimeEndEmptyCard(false);
-                        activityServer.setMinuteCard(activityServer.getMinuteStart());
-                        activityServer.setHourCard(activityServer.getHourStart());
-                        activityServer.setMinuteEndCard(activityServer.getMinuteEnd());
-                        activityServer.setHourEndCard(activityServer.getHourEnd());
+
                     }
 
-                    weekModel.addPlans(activityServer);
+                    long dateTimeStart = calendar.getTimeInMillis();
+                    int dayStart = calendar.get(Calendar.DAY_OF_MONTH);
+                    int monthStart = calendar.get(Calendar.MONTH) + 1;
+                    int yearStart = calendar.get(Calendar.YEAR);
+                    long dateTimeEnd = calendar2.getTimeInMillis();
+                    int dayEnd = calendar2.get(Calendar.DAY_OF_MONTH);
+                    int monthEnd = calendar2.get(Calendar.MONTH) + 1;
+                    int yearEnd = calendar2.get(Calendar.YEAR);
+
+                    if (Utilities.isActivityInRange(yearStart, yearEnd, dayStart, monthStart, dayEnd, monthEnd, day)) {
+                        boolean start = Utilities.isStartedFinishedToday(day, dayStart);
+                        boolean finish = Utilities.isStartedFinishedToday(day, dayEnd);
+                        if (!start && finish) {
+                            activityServer.setTimeStartEmptyCard(true);
+                            activityServer.setTimeEndEmptyCard(false);
+                            activityServer.setMinuteCard(0);
+                            activityServer.setHourCard(0);
+                            activityServer.setMinuteEndCard(activityServer.getMinuteEnd());
+                            activityServer.setHourEndCard(activityServer.getHourEnd());
+                        } else if (start && !finish) {
+                            activityServer.setTimeStartEmptyCard(false);
+                            activityServer.setTimeEndEmptyCard(true);
+                            activityServer.setMinuteCard(activityServer.getMinuteStart());
+                            activityServer.setHourCard(activityServer.getHourStart());
+                            activityServer.setMinuteEndCard(59);
+                            activityServer.setHourEndCard(23);
+                        } else if (!start && !finish) {
+                            activityServer.setTimeStartEmptyCard(true);
+                            activityServer.setTimeEndEmptyCard(true);
+                            activityServer.setMinuteCard(0);
+                            activityServer.setHourCard(0);
+                            activityServer.setMinuteEndCard(59);
+                            activityServer.setHourEndCard(23);
+                        } else {
+                            activityServer.setTimeStartEmptyCard(false);
+                            activityServer.setTimeEndEmptyCard(false);
+                            activityServer.setMinuteCard(activityServer.getMinuteStart());
+                            activityServer.setHourCard(activityServer.getHourStart());
+                            activityServer.setMinuteEndCard(activityServer.getMinuteEnd());
+                            activityServer.setHourEndCard(activityServer.getHourEnd());
+                        }
+                        weekModel.addPlans(activityServer);
+                    }
                 }
             }
             for (j = 0; j < response.getMyCommitFlag().size(); j++) {
-                FlagServer flag = response.getMyCommitFlag().get(j);
-                FlagServer flagServer = new FlagServer(flag);
-                if (Utilities.isActivityInRange(flagServer.getYearStart(), flagServer.getYearEnd(), flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getDayEnd(), flagServer.getMonthEnd(), day)) {
-                    boolean start = Utilities.isStartedFinishedToday(day, flagServer.getDayStart());
-                    boolean finish = Utilities.isStartedFinishedToday(day, flagServer.getDayEnd());
-                    if (!start && finish) {
-                        flagServer.setTimeStartEmptyCard(true);
-                        flagServer.setTimeEndEmptyCard(false);
-                        flagServer.setMinuteCard(0);
-                        flagServer.setHourCard(0);
-                        flagServer.setMinuteEndCard(flagServer.getMinuteEnd());
-                        flagServer.setHourEndCard(flagServer.getHourEnd());
-                    } else if (start && !finish) {
-                        flagServer.setTimeStartEmptyCard(false);
-                        flagServer.setTimeEndEmptyCard(true);
-                        flagServer.setMinuteCard(flagServer.getMinuteStart());
-                        flagServer.setHourCard(flagServer.getHourStart());
-                        flagServer.setMinuteEndCard(59);
-                        flagServer.setHourEndCard(23);
-                    } else if (!start && !finish) {
-                        flagServer.setTimeStartEmptyCard(true);
-                        flagServer.setTimeEndEmptyCard(true);
-                        flagServer.setMinuteCard(0);
-                        flagServer.setHourCard(0);
-                        flagServer.setMinuteEndCard(59);
-                        flagServer.setHourEndCard(23);
+                FlagServer myCommitFlag = response.getMyCommitFlag().get(j);
+                FlagServer flag = new FlagServer(myCommitFlag);
+
+                Calendar calendar = Calendar.getInstance();
+                Calendar calendar2 = Calendar.getInstance();
+                calendar.set(flag.getYearStart(), flag.getMonthStart() - 1, flag.getDayStart(), flag.getHourStart(), flag.getMinuteStart());
+                calendar2.set(flag.getYearEnd(), flag.getMonthEnd() - 1, flag.getDayEnd(), flag.getHourEnd(), flag.getMinuteEnd());
+
+                int qty = flag.getRepeatQty() < 0 ? 0 : flag.getRepeatQty();
+
+                for (int k = 0; k <= qty; k++) {
+                    FlagServer flagServer = new FlagServer(myCommitFlag);
+
+                    if (k > 0) {
+                        switch (flagServer.getRepeatType()) {
+                            case Constants.DAILY:
+                                calendar.add(Calendar.DAY_OF_WEEK, 1);
+                                calendar2.add(Calendar.DAY_OF_WEEK, 1);
+                                break;
+                            case Constants.WEEKLY:
+                                calendar.add(Calendar.DAY_OF_WEEK, 7);
+                                calendar2.add(Calendar.DAY_OF_WEEK, 7);
+                                break;
+                            case Constants.MONTHLY:
+                                calendar.add(Calendar.MONTH, 1);
+                                calendar2.add(Calendar.MONTH, 1);
+                                break;
+                            default:
+                                break;
+                        }
                     } else {
-                        flagServer.setTimeStartEmptyCard(false);
-                        flagServer.setTimeEndEmptyCard(false);
-                        flagServer.setMinuteCard(flagServer.getMinuteStart());
-                        flagServer.setHourCard(flagServer.getHourStart());
-                        flagServer.setMinuteEndCard(flagServer.getMinuteEnd());
-                        flagServer.setHourEndCard(flagServer.getHourEnd());
+
                     }
-                    weekModel.addPlans(flagServer);
+
+                    long dateTimeStart = calendar.getTimeInMillis();
+                    int dayStart = calendar.get(Calendar.DAY_OF_MONTH);
+                    int monthStart = calendar.get(Calendar.MONTH) + 1;
+                    int yearStart = calendar.get(Calendar.YEAR);
+                    long dateTimeEnd = calendar2.getTimeInMillis();
+                    int dayEnd = calendar2.get(Calendar.DAY_OF_MONTH);
+                    int monthEnd = calendar2.get(Calendar.MONTH) + 1;
+                    int yearEnd = calendar2.get(Calendar.YEAR);
+
+                    if (Utilities.isActivityInRange(yearStart, yearEnd, dayStart, monthStart, dayEnd, monthEnd, day)) {
+                        boolean start = Utilities.isStartedFinishedToday(day, dayStart);
+                        boolean finish = Utilities.isStartedFinishedToday(day, dayEnd);
+                        if (!start && finish) {
+                            flagServer.setTimeStartEmptyCard(true);
+                            flagServer.setTimeEndEmptyCard(false);
+                            flagServer.setMinuteCard(0);
+                            flagServer.setHourCard(0);
+                            flagServer.setMinuteEndCard(flagServer.getMinuteEnd());
+                            flagServer.setHourEndCard(flagServer.getHourEnd());
+                        } else if (start && !finish) {
+                            flagServer.setTimeStartEmptyCard(false);
+                            flagServer.setTimeEndEmptyCard(true);
+                            flagServer.setMinuteCard(flagServer.getMinuteStart());
+                            flagServer.setHourCard(flagServer.getHourStart());
+                            flagServer.setMinuteEndCard(59);
+                            flagServer.setHourEndCard(23);
+                        } else if (!start && !finish) {
+                            flagServer.setTimeStartEmptyCard(true);
+                            flagServer.setTimeEndEmptyCard(true);
+                            flagServer.setMinuteCard(0);
+                            flagServer.setHourCard(0);
+                            flagServer.setMinuteEndCard(59);
+                            flagServer.setHourEndCard(23);
+                        } else {
+                            flagServer.setTimeStartEmptyCard(false);
+                            flagServer.setTimeEndEmptyCard(false);
+                            flagServer.setMinuteCard(flagServer.getMinuteStart());
+                            flagServer.setHourCard(flagServer.getHourStart());
+                            flagServer.setMinuteEndCard(flagServer.getMinuteEnd());
+                            flagServer.setHourEndCard(flagServer.getHourEnd());
+                        }
+                        weekModel.addPlans(flagServer);
+                    }
                 }
             }
             for (j = 0; j < response.getMyCommitReminder().size(); j++) {
@@ -522,9 +605,9 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                 calendar.set(reminder.getYearStart(), reminder.getMonthStart() - 1, reminder.getDayStart(), reminder.getHourStart(), reminder.getMinuteStart());
                 calendar2.set(reminder.getYearEnd(), reminder.getMonthEnd() - 1, reminder.getDayEnd(), reminder.getHourEnd(), reminder.getMinuteEnd());
 
-                reminder.setRepeatQty(reminder.getRepeatQty() < 0 ? 0 : reminder.getRepeatQty());
+                int qty = reminder.getRepeatQty() < 0 ? 0 : reminder.getRepeatQty();
 
-                for (int k = 0; k <= reminder.getRepeatQty(); k++) {
+                for (int k = 0; k <= qty; k++) {
                     ReminderServer reminderServer = new ReminderServer(myCommitReminder);
 
                     if (k > 0) {
@@ -548,18 +631,18 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
 
                     }
 
-                    reminderServer.setDateTimeStart(calendar.getTimeInMillis());
-                    reminderServer.setDayStart(calendar.get(Calendar.DAY_OF_MONTH));
-                    reminderServer.setMonthStart(calendar.get(Calendar.MONTH) + 1);
-                    reminderServer.setYearStart(calendar.get(Calendar.YEAR));
-                    reminderServer.setDateTimeEnd(calendar2.getTimeInMillis());
-                    reminderServer.setDayEnd(calendar2.get(Calendar.DAY_OF_MONTH));
-                    reminderServer.setMonthEnd(calendar2.get(Calendar.MONTH) + 1);
-                    reminderServer.setYearEnd(calendar2.get(Calendar.YEAR));
+                    long dateTimeStart = calendar.getTimeInMillis();
+                    int dayStart = calendar.get(Calendar.DAY_OF_MONTH);
+                    int monthStart = calendar.get(Calendar.MONTH) + 1;
+                    int yearStart = calendar.get(Calendar.YEAR);
+                    long dateTimeEnd = calendar2.getTimeInMillis();
+                    int dayEnd = calendar2.get(Calendar.DAY_OF_MONTH);
+                    int monthEnd = calendar2.get(Calendar.MONTH) + 1;
+                    int yearEnd = calendar2.get(Calendar.YEAR);
 
-                    if (Utilities.isActivityInRange(reminderServer.getYearStart(), reminderServer.getYearEnd(), reminderServer.getDayStart(), reminderServer.getMonthStart(), reminderServer.getDayEnd(), reminderServer.getMonthEnd(), day)) {
-                        boolean start = Utilities.isStartedFinishedToday(day, reminderServer.getDayStart());
-                        boolean finish = Utilities.isStartedFinishedToday(day, reminderServer.getDayEnd());
+                    if (Utilities.isActivityInRange(yearStart, yearEnd, dayStart, monthStart, dayEnd, monthEnd, day)) {
+                        boolean start = Utilities.isStartedFinishedToday(day, dayStart);
+                        boolean finish = Utilities.isStartedFinishedToday(day, dayEnd);
                         if (!start && finish) {
                             reminderServer.setTimeStartEmptyCard(true);
                             reminderServer.setTimeEndEmptyCard(false);

@@ -437,14 +437,26 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String time;
                 boolean act_as_red_flag = false;
 
-                if (activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty())
+                if ((activityServer.getTimeStartEmpty() && activityServer.getTimeEndEmpty()) || (activityServer.getTimeStartEmptyCard() && activityServer.getTimeEndEmptyCard())) {
                     time = context.getResources().getString(R.string.suspension_points);
-                else if (activityServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                else if (activityServer.getTimeStartEmpty())
-                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                else
-                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                } else if (!activityServer.getTimeStartEmptyCard() && activityServer.getTimeEndEmptyCard()) {
+                    if (activityServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                } else if (activityServer.getTimeStartEmptyCard() && !activityServer.getTimeEndEmptyCard()) {
+                    if (activityServer.getTimeEndEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                } else {
+                    if (activityServer.getTimeEndEmpty())
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                    else if (activityServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
 
                 String email_user = context.getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getString(Constants.EMAIL, "");
 
@@ -481,16 +493,26 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String time;
                 boolean act_as_red_flag = false;
 
-                if (flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty())
+                if ((flagServer.getTimeStartEmpty() && flagServer.getTimeEndEmpty()) || (flagServer.getTimeStartEmptyCard() && flagServer.getTimeEndEmptyCard())) {
                     time = context.getResources().getString(R.string.suspension_points);
-                else if (flagServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                else if (flagServer.getTimeStartEmpty())
-                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                else if (flagServer.getHourCard() == flagServer.getHourEndCard() && flagServer.getMinuteCard() == flagServer.getMinuteEndCard())
-                    time = hour_start + ":" + minute_start;
-                else
-                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                } else if (!flagServer.getTimeStartEmptyCard() && flagServer.getTimeEndEmptyCard()) {
+                    if (flagServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                } else if (flagServer.getTimeStartEmptyCard() && !flagServer.getTimeEndEmptyCard()) {
+                    if (flagServer.getTimeEndEmpty())
+                        time = context.getResources().getString(R.string.suspension_points);
+                    else
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                } else {
+                    if (flagServer.getTimeEndEmpty())
+                        time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
+                    else if (flagServer.getTimeStartEmpty())
+                        time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
+                    else
+                        time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
 
                 if (flagServer.getType() && flagServer.getParticipates() == 0)
                     act_as_red_flag = true;
@@ -521,16 +543,12 @@ public class CompareAdapter extends RecyclerView.Adapter<CompareAdapter.CompareU
                 String minute_end = String.format("%02d", reminderServer.getMinuteEnd());
                 String time;
 
-                if (reminderServer.getTimeStartEmpty() && reminderServer.getTimeEndEmpty())
-                    time = context.getResources().getString(R.string.suspension_points);
-                else if (reminderServer.getTimeEndEmpty())
-                    time = hour_start + ":" + minute_start + "\n" + context.getResources().getString(R.string.suspension_points);
-                else if (reminderServer.getTimeStartEmpty())
-                    time = context.getResources().getString(R.string.suspension_points) + "\n" + hour_end + ":" + minute_end;
-                else if (reminderServer.getHourStart() == reminderServer.getHourEnd() && reminderServer.getMinuteStart() == reminderServer.getMinuteEnd())
+                if (reminderServer.getTimeStartEmpty()){
+                    time = "";
+                }
+                else{
                     time = hour_start + ":" + minute_start;
-                else
-                    time = hour_start + ":" + minute_start + "\n" + hour_end + ":" + minute_end;
+                }
 
                 list.add(new Reminder(reminderServer.getText(), time, reminderServer));
             } else if (object instanceof FreeTimeServer) {
