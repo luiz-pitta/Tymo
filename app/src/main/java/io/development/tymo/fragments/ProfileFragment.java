@@ -1152,9 +1152,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
             commitmentTitle.setLines(2);
             commitmentTitle.setText(getActivity().getResources().getString(R.string.empty_commitments));
             timer.setVisibility(View.GONE);
-            timerIcon.setVisibility(View.VISIBLE);
+            timerIcon.setVisibility(View.GONE);
             timerIcon.setImageResource(R.drawable.ic_alarm);
-            timerIcon.setColorFilter(getResources().getColor(R.color.white));
+            timerIcon.setColorFilter(getResources().getColor(R.color.grey_50_opacity_90));
             progressBar.setValue(0);
         }
         settingsBox.setClickable(true);

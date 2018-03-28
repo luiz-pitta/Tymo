@@ -971,8 +971,10 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             if (isInPast) {
                 Calendar now = Calendar.getInstance();
+                Calendar last = Calendar.getInstance();
+                last.setTimeInMillis(flagServer.getLastDateTime());
 
-                createDialogMessageAddInPast(flagServer.getYearEnd(), flagServer.getMonthEnd(), flagServer.getDayEnd(), flagServer.getHourEnd(), flagServer.getMinuteEnd(),
+                createDialogMessageAddInPast(last.get(Calendar.YEAR), last.get(Calendar.MONTH) + 1, last.get(Calendar.DAY_OF_MONTH), flagServer.getHourEnd(), flagServer.getMinuteEnd(),
                         now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
             } else {
                 startActivityForResult(intent, ADD_GUEST);
@@ -1208,9 +1210,11 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
         int year = c.get(Calendar.YEAR);
         int minute = c.get(Calendar.MINUTE);
         int hour = c.get(Calendar.HOUR_OF_DAY);
+        Calendar last = Calendar.getInstance();
+        last.setTimeInMillis(flagServer.getLastDateTime());
 
         boolean isHourBefore = isTimeInBefore(hour + ":" + minute, flagServer.getHourEnd() + ":" + flagServer.getMinuteEnd());
-        boolean isDateBefore = isDateInBefore(flagServer.getYearEnd(), flagServer.getMonthEnd(), flagServer.getDayEnd(), year, month, day);
+        boolean isDateBefore = isDateInBefore(last.get(Calendar.YEAR), last.get(Calendar.MONTH) + 1, last.get(Calendar.DAY_OF_MONTH), year, month, day);
 
         return (isHourBefore && isDateBefore) || isDateBefore;
     }

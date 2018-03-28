@@ -1,6 +1,7 @@
 package io.development.tymo.model_server;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class InviteRequest {
 
@@ -10,6 +11,15 @@ public class InviteRequest {
     private int status;
     private int type;
     private long date_time_now;
+    private List<Integer> repeat_list_accepted = new ArrayList<>();
+
+    public void setRepeatListAccepted(List<Integer> repeat_list_accepted) {
+        this.repeat_list_accepted.addAll(repeat_list_accepted);
+    }
+
+    public List<Integer> getRepeatListAccepted() {
+        return repeat_list_accepted;
+    }
 
     public void setDateTimeNow(long date_time_now) {
         this.date_time_now = date_time_now;

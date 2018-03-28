@@ -1365,8 +1365,10 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
 
             if (isInPast) {
                 Calendar now = Calendar.getInstance();
+                Calendar last = Calendar.getInstance();
                 ActivityServer activityServer = this.getActivity();
-                createDialogMessageAddInPast(activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd(), activityServer.getHourEnd(), activityServer.getMinuteEnd(),
+                last.setTimeInMillis(activityServer.getLastDateTime());
+                createDialogMessageAddInPast(last.get(Calendar.YEAR), last.get(Calendar.MONTH) + 1, last.get(Calendar.DAY_OF_MONTH), activityServer.getHourEnd(), activityServer.getMinuteEnd(),
                         now.get(Calendar.YEAR), now.get(Calendar.MONTH) + 1, now.get(Calendar.DAY_OF_MONTH), now.get(Calendar.HOUR_OF_DAY), now.get(Calendar.MINUTE));
             } else {
                 startActivityForResult(intent, ADD_GUEST);
@@ -2588,9 +2590,11 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
         int year = c.get(Calendar.YEAR);
         int minute = c.get(Calendar.MINUTE);
         int hour = c.get(Calendar.HOUR_OF_DAY);
+        Calendar last = Calendar.getInstance();
+        last.setTimeInMillis(activityServer.getLastDateTime());
 
         boolean isHourBefore = isTimeInBefore(hour + ":" + minute, activityServer.getHourEnd() + ":" + activityServer.getMinuteEnd());
-        boolean isDateBefore = isDateInBefore(activityServer.getYearEnd(), activityServer.getMonthEnd(), activityServer.getDayEnd(), year, month, day);
+        boolean isDateBefore = isDateInBefore(last.get(Calendar.YEAR), last.get(Calendar.MONTH) + 1, last.get(Calendar.DAY_OF_MONTH), year, month, day);
 
         return (isHourBefore && isDateBefore) || isDateBefore;
     }

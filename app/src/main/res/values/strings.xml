@@ -284,8 +284,8 @@
     <string name="facebook_messenger_show">Mostrar Messenger</string>
     <string name="facebook_messenger">Facebook Messenger</string>
     <string name="feed_fit_already">Já Encaixou</string>
-    <string name="feed_invitation_activity_fit">Encaixado na sua agenda!</string>
-    <string name="feed_invitation_activity_ignored">Ignorado!</string>
+    <string name="feed_invitation_activity_fit">Convite encaixado na sua agenda!</string>
+    <string name="feed_invitation_activity_ignored">Convite ignorado!</string>
     <string name="feed_invitation_activity_swiped">Você já encaixou!</string>
     <string name="feed_visibility_1">(exibida somente no FEED dos convidados)</string>
     <string name="feed_visibility_2">(exibida no FEED de todos os usuários do Tymo)</string>

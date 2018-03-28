@@ -39,7 +39,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time = activityServer.getDateTimeStart();
 
-            end_date_time = activityServer.getDateTimeEnd();
+            end_date_time = activityServer.getLastDateTime();
             time_left_to_end = end_date_time - nowTime;
 
             popularity_points = activityServer.getPopularityPoints();
@@ -55,7 +55,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time = flagServer.getDateTimeStart();
 
-            end_date_time = flagServer.getDateTimeEnd();
+            end_date_time = flagServer.getLastDateTime();
             time_left_to_end = end_date_time - nowTime;
 
             popularity_points = flagServer.getPopularityPoints();
@@ -71,7 +71,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time2 = activityServer.getDateTimeStart();
 
-            end_date_time2 = activityServer.getDateTimeEnd();
+            end_date_time2 = activityServer.getLastDateTime();
             time_left_to_end2 = end_date_time2 - nowTime;
 
             popularity_points2 = activityServer.getPopularityPoints();
@@ -87,7 +87,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time2 = flagServer.getDateTimeStart();
 
-            end_date_time2 = flagServer.getDateTimeEnd();
+            end_date_time2 = flagServer.getLastDateTime();
             time_left_to_end2 = end_date_time2 - nowTime;
 
             popularity_points2 = flagServer.getPopularityPoints();
@@ -156,7 +156,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time = activityServer.getDateTimeStart();
 
-            end_date_time = activityServer.getDateTimeEnd();
+            end_date_time = activityServer.getLastDateTime();
             time_left_to_end = end_date_time - nowTime;
 
         }
@@ -168,7 +168,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time = flagServer.getDateTimeStart();
 
-            end_date_time = flagServer.getDateTimeEnd();
+            end_date_time = flagServer.getLastDateTime();
             time_left_to_end = end_date_time - nowTime;
 
         }
@@ -193,7 +193,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time2 = activityServer.getDateTimeStart();
 
-            end_date_time2 = activityServer.getDateTimeEnd();
+            end_date_time2 = activityServer.getLastDateTime();
             time_left_to_end2 = end_date_time2 - nowTime;
 
         }
@@ -205,7 +205,7 @@ public class AlgorithmFeedSearch {
 
             start_date_time2 = flagServer.getDateTimeStart();
 
-            end_date_time2 = flagServer.getDateTimeEnd();
+            end_date_time2 = flagServer.getLastDateTime();
             time_left_to_end2 = end_date_time2 - nowTime;
 
         }

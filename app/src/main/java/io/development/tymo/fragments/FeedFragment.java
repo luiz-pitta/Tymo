@@ -23,6 +23,7 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -1101,7 +1102,7 @@ public class FeedFragment extends Fragment implements View.OnClickListener,
 
     private void updateInviteRequest(InviteRequest inviteRequest) {
 
-        mSubscriptions.add(NetworkUtil.getRetrofit().updateInvitesRequest(inviteRequest)
+        mSubscriptions.add(NetworkUtil.getRetrofit().updateInviteRequest(inviteRequest)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeOn(Schedulers.io())
                 .subscribe(this::handleDeleteIgnoreConfirm,this::handleError));
