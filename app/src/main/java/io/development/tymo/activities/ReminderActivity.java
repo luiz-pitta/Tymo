@@ -547,6 +547,7 @@ public class ReminderActivity extends AppCompatActivity implements View.OnClickL
             getActivityStartToday();
 
         setProgress(false);
+        finish();
     }
 
     private void getActivityStartToday() {
