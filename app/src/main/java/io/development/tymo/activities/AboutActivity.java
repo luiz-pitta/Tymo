@@ -681,7 +681,7 @@ public class AboutActivity extends AppCompatActivity implements DatePickerDialog
 
                 mUser.setPhoto((String) uploadResult.get("secure_url"));
             } catch (Exception e) {
-                if (Utilities.isDeviceOnline(AboutActivity.this))
+                if (!Utilities.isDeviceOnline(AboutActivity.this))
                     Toast.makeText(AboutActivity.this, getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
                 else
                     Toast.makeText(AboutActivity.this, getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

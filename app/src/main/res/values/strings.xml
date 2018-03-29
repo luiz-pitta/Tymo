@@ -277,7 +277,7 @@
     <string name="empty_search">Nenhum item encontrado</string>
     <string name="error_email_validation">Erro na validação do email, digite novamente!</string>
     <string name="error_facebook_login">Erro no login com Facebook</string>
-    <string name="error_internal_app">Ops! Ocorreu um erro inesperado. Tente mais tarde</string>
+    <string name="error_internal_app">Ops! Tente mais tarde</string>
     <string name="error_modify_profile_photo">Erro ao alterar foto do perfil</string>
     <string name="error_network">Sem conexão com a Internet</string>
     <string name="error">Erro</string>

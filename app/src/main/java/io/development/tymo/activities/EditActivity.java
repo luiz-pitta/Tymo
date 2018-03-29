@@ -2481,7 +2481,18 @@ public class EditActivity extends AppCompatActivity implements DatePickerDialog.
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
-                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
+                String title = "";
+                if (flagServer.getTitle().matches("")) {
+                    if (flagServer.getType()) {
+                        title = getString(R.string.flag_available);
+                    }
+                    else{
+                        title = getString(R.string.flag_unavailable);
+                    }
+                } else {
+                    title = flagServer.getTitle();
+                }
+                list_notify.add(new ActivityOfDay(title, flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
                         flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder

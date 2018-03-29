@@ -15,6 +15,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+
+import io.development.tymo.R;
 import io.development.tymo.model_server.ActivityOfDay;
 import io.development.tymo.model_server.ActivityServer;
 import io.development.tymo.model_server.FlagServer;
@@ -273,8 +275,19 @@ public class ActivitySyncJob extends Job {
             // Flag
             else if (list.get(i) instanceof FlagServer) {
                 FlagServer flagServer = (FlagServer) list.get(i);
-                list_notify.add(new ActivityOfDay(flagServer.getTitle(), flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
-                        flagServer.getDayStart(),flagServer.getMonthStart(),flagServer.getYearStart()));
+                String title = "";
+                if (flagServer.getTitle().matches("")) {
+                    if (flagServer.getType()) {
+                        title = getContext().getResources().getString(R.string.flag_available);
+                    }
+                    else{
+                        title = getContext().getResources().getString(R.string.flag_unavailable);
+                    }
+                } else {
+                    title = flagServer.getTitle();
+                }
+                list_notify.add(new ActivityOfDay(title, flagServer.getMinuteStart(), flagServer.getHourStart(), Constants.FLAG,
+                        flagServer.getDayStart(), flagServer.getMonthStart(), flagServer.getYearStart()));
             }
             // Reminder
             else if (list.get(i) instanceof ReminderServer) {
