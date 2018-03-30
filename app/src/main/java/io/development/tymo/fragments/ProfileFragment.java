@@ -329,7 +329,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
     }
 
     private void handleErrorBgProfile(Throwable error) {
-        if(Utilities.isDeviceOnline(getActivity()))
+        if(!Utilities.isDeviceOnline(getActivity()))
             Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
@@ -1198,7 +1198,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         //setProgress(false);
         noInternet = true;
         mSwipeRefreshLayout.setRefreshing(false);
-        if(Utilities.isDeviceOnline(getActivity()))
+        if(!Utilities.isDeviceOnline(getActivity()))
             Toast.makeText(getActivity(), getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         else
             Toast.makeText(getActivity(), getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

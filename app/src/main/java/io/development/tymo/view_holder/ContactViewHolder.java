@@ -393,7 +393,7 @@ public class ContactViewHolder extends BaseViewHolder<User> implements View.OnCl
 
     private void handleError(Throwable error) {
         //setProgress(false);
-        if(Utilities.isDeviceOnline(context))
+        if(!Utilities.isDeviceOnline(context))
             Toast.makeText(context, context.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(context, context.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();

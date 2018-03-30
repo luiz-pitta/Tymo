@@ -663,7 +663,7 @@ public class PersonSearchViewHolder extends BaseViewHolder<User> implements View
     private void handleError(Throwable error) {
         //setProgressFriendRequest(false);
         actionIcon.setOnClickListener(this);
-        if(Utilities.isDeviceOnline(mContext))
+        if(!Utilities.isDeviceOnline(mContext))
             Toast.makeText(mContext, mContext.getResources().getString(R.string.error_network), Toast.LENGTH_LONG).show();
         //else
         //    Toast.makeText(mContext, mContext.getResources().getString(R.string.error_internal_app), Toast.LENGTH_LONG).show();
