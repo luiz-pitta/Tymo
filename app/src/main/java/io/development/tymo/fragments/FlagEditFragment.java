@@ -77,7 +77,8 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
     private Rect rect;
     private FlagServer flagServer;
     private long last_date_time;
-    private boolean isInPast = false, repeat_blocked = false;;
+    private boolean isInPast = false, repeat_blocked = false;
+    ;
 
     private DateFormat dateFormat;
 
@@ -1039,7 +1040,7 @@ public class FlagEditFragment extends Fragment implements DatePickerDialog.OnDat
 
             titleEditText.setText(flagServer.getTitle());
 
-            isInPast = isFlagInPast(flagServer);
+            isInPast = false;
 
             if (flagServer.getDateStartEmpty()) {
                 day_start = -1;

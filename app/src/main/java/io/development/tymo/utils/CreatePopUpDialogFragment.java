@@ -1195,15 +1195,15 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             Intent intent = new Intent(context, AddPart1Activity.class);
 
-                            intent.putExtra("act_free", new ActivityWrapper(activityServerFreeTime));
+                            //intent.putExtra("act_free", new ActivityWrapper(activityServerFreeTime));
 
-                            if (screen != Utilities.TYPE_PLANS) {
+                            /*if (screen != Utilities.TYPE_PLANS) {
                                 if (friend != null)
                                     intent.putExtra("act_free_friend_usr", new UserWrapper(friend));
                                 else if (listFriends.size() > 0) {
                                     intent.putExtra("ListCreateActivityCompare", new UserWrapper(listFriends));
                                 }
-                            }
+                            }*/
 
                             Bundle bundle = new Bundle();
                             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "act_free" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1230,7 +1230,7 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             Intent intent = new Intent(context, ReminderActivity.class);
 
-                            intent.putExtra("reminder_free_time", new ReminderWrapper(reminderServerFreeTime));
+                            //intent.putExtra("reminder_free_time", new ReminderWrapper(reminderServerFreeTime));
 
                             Bundle bundle = new Bundle();
                             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "reminder_free_time" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
@@ -1265,15 +1265,15 @@ public class CreatePopUpDialogFragment extends SwipeAwayDialogFragment {
 
                             Intent intent = new Intent(context, FlagActivity.class);
 
-                            intent.putExtra("flag_free", new FlagWrapper(flagServerFreeTime));
+                            //intent.putExtra("flag_free", new FlagWrapper(flagServerFreeTime));
 
-                            if (screen != Utilities.TYPE_PLANS) {
+                            /*if (screen != Utilities.TYPE_PLANS) {
                                 intent.putExtra("flag_free_friend", true);
                                 if (friend != null)
                                     intent.putExtra("flag_free_friend_usr", new UserWrapper(friend));
                                 else if (listFriends.size() > 0)
                                     intent.putExtra("ListCreateActivityCompare", new UserWrapper(listFriends));
-                            }
+                            }*/
 
                             Bundle bundle = new Bundle();
                             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "flag_free" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
