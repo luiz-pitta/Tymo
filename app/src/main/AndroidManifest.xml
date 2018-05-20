@@ -46,7 +46,7 @@
         <!-- <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://392512249626575:883M2n_JJty1Fcx7kVYg6qvCoyw@hvfrjtvkm"/> -->
 
         <!-- tymo-server -->
-        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://381773179253939:z4lejziSvxEMuWx9tux3RVzd1JU@hzkeshb5l"/>
+        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://243637232917561:bVlHP7J_CHZPrPiNEVst8fT4gu4@huepdezfi"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

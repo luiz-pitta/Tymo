@@ -55,7 +55,6 @@
 
     </android.support.v4.widget.NestedScrollView>
 
-
     <include
         layout="@layout/btn_clean_apply"
         android:layout_width="wrap_content"
@@ -66,18 +65,18 @@
         android:id="@+id/upperLayout"
         android:layout_width="match_parent"
         android:layout_height="280dp"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true">
 
-        <com.christophesmet.android.views.colorpicker.ColorPickerView
+        <com.skydoves.colorpickerpreference.ColorPickerView
             android:id="@+id/colorpicker"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="280dp"
             android:layout_centerHorizontal="true"
-            app:radiusOffset="28dp"
-            app:thumbDrawable="@drawable/ic_color_palette_handle"
-            app:wheelDrawable="@drawable/ic_color_palette" />
+            android:layout_gravity="center"
+            android:layout_marginTop="10dp"
+            app:palette="@drawable/ic_color_palette"
+            app:selector="@drawable/ic_color_palette_handle"/>
 
         <RelativeLayout
             android:id="@+id/pieceBox"

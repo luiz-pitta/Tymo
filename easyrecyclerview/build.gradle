@@ -1,12 +1,12 @@
 apply plugin: 'com.android.library'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
         versionName "1.0"
     }
@@ -19,7 +19,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:recyclerview-v7:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
 }
 ext {
     bintrayRepo = 'maven'
@@ -44,5 +44,5 @@ ext {
     licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
     allLicenses = ["Apache-2.0"]
 }
-apply from:'https://raw.githubusercontent.com/Jude95/JCenter/master/install.gradle'
-apply from:'https://raw.githubusercontent.com/Jude95/JCenter/master/bintray.gradle'
+//apply from:'https://raw.githubusercontent.com/Jude95/JCenter/master/install.gradle'
+//apply from:'https://raw.githubusercontent.com/Jude95/JCenter/master/bintray.gradle'

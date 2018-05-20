@@ -41,14 +41,14 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
     }
-    buildToolsVersion '26.0.2'
+    buildToolsVersion '27.0.3'
 }
 
 dependencies {
-    provided rootProject.ext.facebookRebound
-    compile rootProject.ext.supportAnnotation
+    compileOnly rootProject.ext.facebookRebound
+    implementation rootProject.ext.supportAnnotation
 
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 checkstyle {
@@ -77,7 +77,7 @@ android.libraryVariants.all { variant ->
     task("javadoc${variant.name}", type: Javadoc) {
         source = variant.javaCompile.source
         ext.androidJar = "${android.sdkDirectory}/platforms/${android.compileSdkVersion}/android.jar"
-        classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar)
+        doFirst { classpath = files(variant.javaCompile.classpath.files) + files(ext.androidJar) }
         options.links("http://docs.oracle.com/javase/7/docs/api/")
         options.linksOffline("http://developer.android.com/reference/", "${android.sdkDirectory}/docs/reference/")
         options.links("http://facebook.github.io/rebound/javadocs/")

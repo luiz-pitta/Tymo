@@ -27,10 +27,12 @@ import android.widget.Toast;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.skydoves.colorpickerpreference.ColorEnvelope;
+import com.skydoves.colorpickerpreference.ColorListener;
+import com.skydoves.colorpickerpreference.ColorPickerView;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 import com.wdullaer.materialdatetimepicker.time.TimePickerDialog;
-import com.christophesmet.android.views.colorpicker.ColorPickerView;
 import com.facebook.rebound.SpringSystem;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
@@ -608,8 +610,6 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         ImageView closeButton = (ImageView) customView.findViewById(R.id.closeButton);
         RecyclerView recyclerIcons = (RecyclerView) customView.findViewById(R.id.recyclerIcons);
 
-        customizeColorPicker.setDrawDebug(false);
-
         final MaterialDialog dialog = new MaterialDialog.Builder(this)
                 .customView(customView, false)
                 .build();
@@ -769,118 +769,13 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
                 new RecyclerItemClickListener(getApplicationContext(), recyclerIcons, onItemClickListener)
         );
 
-        customizeColorPicker.setColorListener(new ColorPickerView.ColorListener() {
+        customizeColorPicker.setColorListener(new ColorListener() {
             @Override
-            public void onColorSelected(int color) {
-
-                if (first_open && (cubeUpperBoxIcon.getTag() != null || (activityServer != null && activityServer.getCubeIcon().contains("http")))) {
-                    if (activityServer != null) {
-                        customizeCubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
-                        customizeCubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
-                        customizeCubeLowerBoxIcon.setTag(activityServer.getCubeColor());
-                        customizeCubeUpperBoxIcon.setTag(activityServer.getCubeColorUpper());
-                    } else {
-                        customizeCubeLowerBoxIcon.setColorFilter((int) cubeLowerBoxIcon.getTag());
-                        customizeCubeUpperBoxIcon.setColorFilter((int) cubeUpperBoxIcon.getTag());
-                        customizeCubeLowerBoxIcon.setTag(cubeLowerBoxIcon.getTag());
-                        customizeCubeUpperBoxIcon.setTag(cubeUpperBoxIcon.getTag());
-                    }
-                    first_open = false;
-                } else {
-                    if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.green_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500_light));
-                    } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900)) {
-                        customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900));
-                        customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900_light));
-                        customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900));
-                        customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900_light));
-                    }
-                }
+            public void onColorSelected(ColorEnvelope colorEnvelope) {
+                setLayoutColor(colorEnvelope.getColor());
             }
         });
+
 
         if (activityServer == null || !activityServer.getCubeIcon().contains("http")) {
             if (cubeUpperBoxIcon.getTag() == null) {
@@ -919,6 +814,116 @@ public class AddPart1Activity extends AppCompatActivity implements DatePickerDia
         });
 
         dialog.show();
+    }
+
+    public void setLayoutColor(int color) {
+
+        if (first_open && (cubeUpperBoxIcon.getTag() != null || (activityServer != null && activityServer.getCubeIcon().contains("http")))) {
+            if (activityServer != null) {
+                customizeCubeLowerBoxIcon.setColorFilter(activityServer.getCubeColor());
+                customizeCubeUpperBoxIcon.setColorFilter(activityServer.getCubeColorUpper());
+                customizeCubeLowerBoxIcon.setTag(activityServer.getCubeColor());
+                customizeCubeUpperBoxIcon.setTag(activityServer.getCubeColorUpper());
+            } else {
+                customizeCubeLowerBoxIcon.setColorFilter((int) cubeLowerBoxIcon.getTag());
+                customizeCubeUpperBoxIcon.setColorFilter((int) cubeUpperBoxIcon.getTag());
+                customizeCubeLowerBoxIcon.setTag(cubeLowerBoxIcon.getTag());
+                customizeCubeUpperBoxIcon.setTag(cubeUpperBoxIcon.getTag());
+            }
+            first_open = false;
+        } else {
+            if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.red_A700_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.pink_900_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.purple_500_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_purple_800_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_800_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.cyan_800_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.green_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.green_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.lime_600_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.deep_orange_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_400_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.brown_700_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.grey_500_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_500_light));
+            } else if (color == ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900)) {
+                customizeCubeLowerBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900));
+                customizeCubeUpperBoxIcon.setColorFilter(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900_light));
+                customizeCubeLowerBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900));
+                customizeCubeUpperBoxIcon.setTag(ContextCompat.getColor(AddPart1Activity.this, R.color.blue_grey_900_light));
+            }
+        }
     }
 
     private void register() {

@@ -8,7 +8,7 @@ public class Constants {
     /* tymo-server */
     public static final String BASE_URL = "https://tymo-server.herokuapp.com/api/v1/";
 
-    public static final String IC_ADD_CUBE_URL = "http://res.cloudinary.com/hzkeshb5l/image/upload/v1495322251/activity_icons/ic_add_cube_mfrzul.png";
+    public static final String IC_ADD_CUBE_URL = "http://res.cloudinary.com/huepdezfi/image/upload/v1526770559/activity_icons/ic_add_cube.png";
     public static final String EMAIL = "email";
     public static final String LOCATION = "location";
     public static final String NOTIFICATION = "notification";

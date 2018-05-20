@@ -1,9 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     lintOptions {
         disable 'MissingTranslation'
@@ -12,7 +11,7 @@ android {
     defaultConfig {
         applicationId "io.development.tymo"
         minSdkVersion 16
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 32
         versionName "1.00.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -25,9 +24,9 @@ android {
             preDexLibraries = false
         }
 
-        dataBinding {
+        /*dataBinding {
             enabled = true
-        }
+        }*/
     }
 
     dexOptions {
@@ -67,73 +66,71 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:26.1.0'
-    compile 'com.android.support:support-v4:26.1.0'
-    compile 'com.android.support:support-v13:26.1.0'
-    compile 'com.android.support:design:26.1.0'
-    compile 'com.android.support:recyclerview-v7:26.1.0'
-    compile 'com.google.android.gms:play-services-places:11.8.0'
-    compile 'com.google.android.gms:play-services-location:11.8.0'
-
-    compile 'com.google.android.gms:play-services-auth:11.8.0'
-    compile 'pub.devrel:easypermissions:0.3.0'
-    compile('com.google.api-client:google-api-client-android:1.22.0') {
+    testImplementation 'junit:junit:4.12'
+    implementation 'com.android.support:appcompat-v7:27.1.1'
+    implementation 'com.android.support:support-v4:27.1.1'
+    implementation 'com.android.support:support-v13:27.1.1'
+    implementation 'com.android.support:design:27.1.1'
+    implementation 'com.android.support:recyclerview-v7:27.1.1'
+    implementation 'com.google.android.gms:play-services-places:15.0.1'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
+    implementation 'pub.devrel:easypermissions:0.3.0'
+    implementation('com.google.api-client:google-api-client-android:1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    compile('com.google.apis:google-api-services-calendar:v3-rev254-1.22.0') {
+    implementation('com.google.apis:google-api-services-calendar:v3-rev254-1.22.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-
-    compile 'com.google.firebase:firebase-core:11.8.0'
-    compile 'com.google.firebase:firebase-messaging:11.8.0'
-    compile 'com.google.firebase:firebase-config:11.8.0'
-    compile 'com.android.support:multidex:1.0.2'
-    compile "com.google.android.gms:play-services-gcm:11.8.0"
-    compile 'com.github.bumptech.glide:glide:3.7.0'
-    compile 'com.afollestad.material-dialogs:core:0.9.0.2'
-    compile 'jp.wasabeef:recyclerview-animators:2.2.3'
-    compile 'com.facebook.rebound:rebound:0.3.8'
-    compile 'com.tumblr:backboard:0.1.0'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
-    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
-    compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
-    compile 'com.squareup.okhttp3:okhttp:3.8.0'
-    compile 'com.squareup.okio:okio:1.13.0'
-    compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
-    compile 'io.reactivex.rxjava2:rxjava:2.1.0'
-    compile 'com.jakewharton:butterknife:8.4.0'
-    compile 'org.jasypt:jasypt:1.9.2'
-    compile 'com.facebook.android:facebook-android-sdk:4.+'
-    compile 'com.cloudinary:cloudinary-android:1.2.2'
-    compile 'joda-time:joda-time:2.9.9'
-    compile 'com.facebook.stetho:stetho:1.4.2'
-    compile 'com.evernote:android-job:1.1.11'
-    compile 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.google.firebase:firebase-core:15.0.2'
+    implementation 'com.google.firebase:firebase-messaging:15.0.2'
+    implementation 'com.google.firebase:firebase-config:15.0.2'
+    implementation 'com.android.support:multidex:1.0.3'
+    implementation 'com.google.android.gms:play-services-gcm:15.0.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'com.afollestad.material-dialogs:core:0.9.0.2'
+    implementation 'jp.wasabeef:recyclerview-animators:2.2.3'
+    implementation 'com.facebook.rebound:rebound:0.3.8'
+    implementation 'com.tumblr:backboard:0.1.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.3.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.8.0'
+    implementation 'com.squareup.okio:okio:1.13.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+    implementation 'io.reactivex.rxjava2:rxjava:2.1.0'
+    implementation 'com.jakewharton:butterknife:8.4.0'
+    implementation 'org.jasypt:jasypt:1.9.2'
+    implementation 'com.facebook.android:facebook-android-sdk:4.+'
+    implementation 'com.cloudinary:cloudinary-android:1.2.2'
+    implementation 'joda-time:joda-time:2.9.9'
+    implementation 'com.facebook.stetho:stetho:1.4.2'
+    implementation 'com.evernote:android-job:1.1.11'
+    implementation 'com.google.code.gson:gson:2.8.0'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.4.0'
-    compile project(':MaterialSearchView')
-    compile project(':FragmentNavigator')
-    compile project(':ExpandableLayout')
-    compile project(':MaterialSpinner')
-    compile project(':MaterialDateRangePicker')
-    compile project(':MaterialDateTimePicker')
-    compile project(':TagView')
-    compile project(':AndroidImageSlider')
-    compile project(':colorpicker')
-    compile project(':easyrecyclerview')
-    compile project(':SwipeAwayDialog')
-    compile project(':ReadMoreTextView')
-    compile project(':RecyclerViewPager')
-    compile project(':revealator')
-    compile project(':circular-music-progressbar')
-    compile project(':backboard')
-    compile project(':library:multichoicerecyclerview')
-    compile project(':cropper')
-    compile project(':material-intro-screen')
+    implementation project(':MaterialSearchView')
+    implementation project(':FragmentNavigator')
+    implementation project(':ExpandableLayout')
+    implementation project(':MaterialSpinner')
+    implementation project(':MaterialDateRangePicker')
+    implementation project(':MaterialDateTimePicker')
+    implementation project(':TagView')
+    implementation project(':AndroidImageSlider')
+    implementation project(':easyrecyclerview')
+    implementation project(':SwipeAwayDialog')
+    implementation project(':ReadMoreTextView')
+    implementation project(':RecyclerViewPager')
+    implementation project(':revealator')
+    implementation project(':circular-music-progressbar')
+    implementation project(':backboard')
+    implementation project(':library:multichoicerecyclerview')
+    implementation project(':cropper')
+    implementation project(':material-intro-screen')
+    implementation project(':colorpickerpreference')
 }
 
 apply plugin: 'com.google.gms.google-services'
