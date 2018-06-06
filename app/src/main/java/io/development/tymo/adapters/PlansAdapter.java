@@ -45,15 +45,15 @@ public class PlansAdapter extends RecyclerArrayAdapter<WeekModel> {
     @Override
     public void onViewAttachedToWindow(BaseViewHolder holder) {
         WeekModel week = getAllData().get(holder.getAdapterPosition());
-        Calendar before3Months = Calendar.getInstance();
-        before3Months.add(Calendar.MONTH, -3);
+        Calendar before1Month = Calendar.getInstance();
+        before1Month.add(Calendar.MONTH, -1);
 
         boolean isPast12Months = isInThePast(week.getYear(), week.getMonth(), week.getDay(),
-                before3Months.get(Calendar.YEAR), before3Months.get(Calendar.MONTH) + 1, before3Months.get(Calendar.DAY_OF_MONTH));
+                before1Month.get(Calendar.YEAR), before1Month.get(Calendar.MONTH) + 1, before1Month.get(Calendar.DAY_OF_MONTH));
 
         if(isPast12Months){
             PlansViewHolder viewHolder = (PlansViewHolder)holder;
-            viewHolder.setBefore3Months();
+            viewHolder.setBefore1Month();
         }
     }
 

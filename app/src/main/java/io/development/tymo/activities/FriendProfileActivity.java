@@ -1113,9 +1113,9 @@ public class FriendProfileActivity extends AppCompatActivity implements DatePick
                     now.get(Calendar.MONTH),
                     now.get(Calendar.DAY_OF_MONTH)
             );
-            Calendar before3Months = Calendar.getInstance();
-            before3Months.add(Calendar.MONTH, -3);
-            dpd.setMinDate(before3Months);
+            Calendar before1Month = Calendar.getInstance();
+            before1Month.add(Calendar.MONTH, -1);
+            dpd.setMinDate(before1Month);
             dpd.setAccentColor(ContextCompat.getColor(FriendProfileActivity.this, R.color.deep_purple_400));
             dpd.show(getFragmentManager(), "Datepickerdialog");
         } else if (view == freeTimeButton) {

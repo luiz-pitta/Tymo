@@ -1159,9 +1159,9 @@ public class PlansFragment extends Fragment implements DatePickerDialog.OnDateSe
                     now.get(Calendar.DAY_OF_MONTH)
             );
 
-            Calendar before3Months = Calendar.getInstance();
-            before3Months.add(Calendar.MONTH, -3);
-            dpd.setMinDate(before3Months);
+            Calendar before1Month = Calendar.getInstance();
+            before1Month.add(Calendar.MONTH, -1);
+            dpd.setMinDate(before1Month);
             Bundle bundle = new Bundle();
             bundle.putString(FirebaseAnalytics.Param.ITEM_ID, "mDateBox" + "=>=" + getClass().getName().substring(20, getClass().getName().length()));
             bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "=>=" + getClass().getName().substring(20, getClass().getName().length()));
