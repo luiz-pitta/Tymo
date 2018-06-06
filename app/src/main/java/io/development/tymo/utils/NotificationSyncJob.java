@@ -60,6 +60,11 @@ public class NotificationSyncJob extends Job {
         boolean notification2 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_FLAG, true);
         boolean notification3 = getContext().getSharedPreferences(Constants.USER_CREDENTIALS, MODE_PRIVATE).getBoolean(Constants.NOTIFICATION_REMINDER, true);
 
+        // XXX MUDAR QUANDO ESTIVER FUNCIONANDO CORRETAMENTE
+        notification1 = false;
+        notification2 = false;
+        notification3 = false;
+
         int qty = list_json.get(position).getCommitmentSameHour();
         int size = qty;
 

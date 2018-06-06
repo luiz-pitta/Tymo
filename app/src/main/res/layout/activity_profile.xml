@@ -154,8 +154,7 @@
                             android:layout_width="50dp"
                             android:layout_height="50dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_alarm"
-                            android:visibility="gone" />
+                            android:src="@drawable/ic_alarm" />
 
                         <TextView
                             android:id="@+id/timer"
@@ -197,7 +196,8 @@
                                 android:text="Commitment Title"
                                 android:textColor="@color/white"
                                 android:textSize="16sp"
-                                android:textStyle="bold" />
+                                android:textStyle="bold"
+                                android:visibility="gone" />
 
                         </RelativeLayout>
 
@@ -209,7 +209,8 @@
                             android:lines="1"
                             android:text="Commitment Start Time"
                             android:textColor="@color/white"
-                            android:textSize="14sp" />
+                            android:textSize="14sp"
+                            android:visibility="gone" />
 
                     </LinearLayout>
 

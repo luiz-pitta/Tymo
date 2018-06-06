@@ -179,7 +179,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
 
         mSwipeRefreshLayout.setColorSchemeColors(ContextCompat.getColor(getActivity(), R.color.deep_purple_400));
 
-        timerBox.setOnClickListener(this);
+        //timerBox.setOnClickListener(this);
         contactsBox.setOnClickListener(this);
         settingsBox.setOnClickListener(this);
         myRemindersBox.setOnClickListener(this);
@@ -193,9 +193,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
 
         Animation rotation = AnimationUtils.loadAnimation(getActivity(), R.anim.clockwise_rotation);
 
-        progressBar.setValue(0);
-        progressBar.startAnimation(rotation);
-        progressBar.bringToFront();
+        //progressBar.setValue(0);
+        //progressBar.startAnimation(rotation);
+        //progressBar.bringToFront();
 
         mFirebaseAnalytics = FirebaseAnalytics.getInstance(getActivity());
         mFirebaseAnalytics.setCurrentScreen(getActivity(), "=>=" + getClass().getName().substring(20,getClass().getName().length()), null /* class override */);
@@ -1110,52 +1110,52 @@ public class ProfileFragment extends Fragment implements View.OnClickListener, V
         if (commitments) {
             if (count_is_happening > 0) {
                 if (count_is_happening == 1) {
-                    commitmentTitle.setText(title_is_happening);
+                    //commitmentTitle.setText(title_is_happening);
                 } else {
-                    commitmentTitle.setText(getResources().getString(R.string.commitments_of_the_day_qty, count_is_happening));
+                    //commitmentTitle.setText(getResources().getString(R.string.commitments_of_the_day_qty, count_is_happening));
                 }
-                commitmentStartTime.setVisibility(View.VISIBLE);
-                commitmentStartTime.setText(R.string.commitments_of_the_day_happening_now);
-                commitmentTitle.setLines(1);
-                timer.setVisibility(View.GONE);
-                timerIcon.setVisibility(View.VISIBLE);
-                timerIcon.setImageResource(R.drawable.ic_add_cube);
-                timerIcon.setColorFilter(getResources().getColor(R.color.white));
-                progressBar.setValue(35.0f);
+                //commitmentStartTime.setVisibility(View.VISIBLE);
+                //commitmentStartTime.setText(R.string.commitments_of_the_day_happening_now);
+                //commitmentTitle.setLines(1);
+                //timer.setVisibility(View.GONE);
+                //timerIcon.setVisibility(View.VISIBLE);
+                //timerIcon.setImageResource(R.drawable.ic_add_cube);
+                //timerIcon.setColorFilter(getResources().getColor(R.color.white));
+                //progressBar.setValue(35.0f);
             } else if (count_will_happen > 0) {
                 if (count_will_happen_at_same_time > 1) {
-                    commitmentTitle.setText(getResources().getString(R.string.commitments_of_the_day_qty, count_will_happen_at_same_time));
-                    commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at, startsAtHourText, startsAtMinuteText));
+                    //commitmentTitle.setText(getResources().getString(R.string.commitments_of_the_day_qty, count_will_happen_at_same_time));
+                    //commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at, startsAtHourText, startsAtMinuteText));
                 } else {
-                    commitmentTitle.setText(title_will_happen);
-                    commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at_one, startsAtHourText, startsAtMinuteText));
+                    //commitmentTitle.setText(title_will_happen);
+                    //commitmentStartTime.setText(getResources().getString(R.string.commitments_of_the_day_starts_at_one, startsAtHourText, startsAtMinuteText));
                 }
-                commitmentTitle.setLines(1);
-                commitmentStartTime.setVisibility(View.VISIBLE);
-                timer.setVisibility(View.VISIBLE);
-                timer.setText(String.valueOf(hourMinToStart) + hourMinText);
-                timerIcon.setVisibility(View.GONE);
-                progressBar.setValue(percent);
+                //commitmentTitle.setLines(1);
+                //commitmentStartTime.setVisibility(View.VISIBLE);
+                //timer.setVisibility(View.VISIBLE);
+                //timer.setText(String.valueOf(hourMinToStart) + hourMinText);
+                //timerIcon.setVisibility(View.GONE);
+                //progressBar.setValue(percent);
 
             } else {
-                commitmentStartTime.setVisibility(View.GONE);
-                commitmentTitle.setText(R.string.commitments_of_the_day_all_already_finished);
-                commitmentTitle.setLines(2);
-                timer.setVisibility(View.GONE);
-                timerIcon.setVisibility(View.VISIBLE);
-                timerIcon.setImageResource(R.drawable.ic_alarm);
-                timerIcon.setColorFilter(getResources().getColor(R.color.white));
-                progressBar.setValue(0);
+                //commitmentStartTime.setVisibility(View.GONE);
+                //commitmentTitle.setText(R.string.commitments_of_the_day_all_already_finished);
+                //commitmentTitle.setLines(2);
+                //timer.setVisibility(View.GONE);
+                //timerIcon.setVisibility(View.VISIBLE);
+                //timerIcon.setImageResource(R.drawable.ic_alarm);
+                //timerIcon.setColorFilter(getResources().getColor(R.color.white));
+                //progressBar.setValue(0);
             }
         } else {
-            commitmentStartTime.setVisibility(View.GONE);
-            commitmentTitle.setLines(2);
-            commitmentTitle.setText(getActivity().getResources().getString(R.string.empty_commitments));
-            timer.setVisibility(View.GONE);
-            timerIcon.setVisibility(View.GONE);
-            timerIcon.setImageResource(R.drawable.ic_alarm);
-            timerIcon.setColorFilter(getResources().getColor(R.color.grey_50_opacity_90));
-            progressBar.setValue(0);
+            //commitmentStartTime.setVisibility(View.GONE);
+            //commitmentTitle.setLines(2);
+            //commitmentTitle.setText(getActivity().getResources().getString(R.string.empty_commitments));
+            //timer.setVisibility(View.GONE);
+            //timerIcon.setVisibility(View.GONE);
+            //timerIcon.setImageResource(R.drawable.ic_alarm);
+            //timerIcon.setColorFilter(getResources().getColor(R.color.grey_50_opacity_90));
+            //progressBar.setValue(0);
         }
         settingsBox.setClickable(true);
         setProgress(false);
