@@ -264,6 +264,14 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                 .subscribe(this::handleResponse,this::handleError));
     }
 
+    private void preLoginProcessFacebook(User usr) {
+
+        mSubscriptions.add(NetworkUtil.getRetrofit().loginFacebook(usr)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeOn(Schedulers.io())
+                .subscribe(this::handleResponse2,this::handleError));
+    }
+
     private void setPushNotification(UserPushNotification pushNotification) {
 
         mSubscriptions.add(NetworkUtil.getRetrofit().setPushNotification(pushNotification)
@@ -274,6 +282,19 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
 
     private void handleResponsePush(Response response) {
 
+    }
+
+    private void handleResponse2(Response response) {
+        String token = FirebaseInstanceId.getInstance().getToken();
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
+        User usr = response.getUser();
+        String id = usr.getIdFacebook();
+        String id2 = user.getIdFacebook();
+        if(!id.matches(id2)) {
+            Toast.makeText(this, getResources().getString(R.string.register_account_not_linked_with_facebook), Toast.LENGTH_LONG).show();
+            progressBox.setVisibility(View.GONE);
+        }else
+            uploadCloudinaryFacebook.execute(usr);
     }
 
     private void handleResponse(Response response) {
@@ -455,8 +476,7 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                     user.setDescription("");
                                     user.setUrl("");
 
-
-                                    uploadCloudinaryFacebook.execute(user);
+                                    preLoginProcessFacebook(user);
 
                                     clickFacebook = false;
                                 }
