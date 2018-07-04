@@ -2,6 +2,8 @@ package io.development.tymo.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
@@ -21,9 +23,11 @@ import com.google.firebase.analytics.FirebaseAnalytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.jaredrummler.materialspinner.MaterialSpinner;
+import com.theartofdev.edmodo.cropper.CropImage;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.HttpURLConnection;
 import java.util.Map;
 
 import io.development.tymo.R;
@@ -50,6 +54,8 @@ public class RegisterPart2Activity extends AppCompatActivity implements View.OnC
     private SharedPreferences mSharedPreferences;
     private UploadCloudinary uploadCloudinary;
 
+    private UploadCloudinaryFacebook uploadCloudinaryFacebook;
+
     private int visibilityCalendar = 0;
     private UserWrapper wrap;
 
@@ -68,6 +74,7 @@ public class RegisterPart2Activity extends AppCompatActivity implements View.OnC
         advanceButton = (TextView) findViewById(R.id.advanceButton);
         progressBox = (LinearLayout) findViewById(R.id.progressBox);
         uploadCloudinary = new UploadCloudinary();
+        uploadCloudinaryFacebook  = new UploadCloudinaryFacebook();
 
         mBackButton.setOnClickListener(this);
         advanceButton.setOnClickListener(this);
@@ -131,12 +138,37 @@ public class RegisterPart2Activity extends AppCompatActivity implements View.OnC
             User user = wrap.getUser();
 
             user.setPrivacy(visibilityCalendar);
-                if (inputStream != null)
-                    uploadCloudinary.execute(user);
-                else
-                    registerProcess(user);
+
+            if (inputStream != null)
+                uploadCloudinary.execute(user);
+            else
+                uploadCloudinaryFacebook.execute(user);
         }
     }
+
+    private class UploadCloudinaryFacebook extends AsyncTask<User, Void, User> {
+
+        private Exception exception;
+
+        protected User doInBackground(User... users) {
+            User mUser = users[0];
+            try {
+                Map options = ObjectUtils.asMap(
+                        "transformation", new Transformation().width(600).height(600).crop("limit").quality(10).fetchFormat("png")
+                );
+                Map uploadResult = cloudinary.uploader().upload(mUser.getPhoto(), options);
+                mUser.setPhoto((String) uploadResult.get("secure_url"));
+            } catch (Exception e) {
+                this.exception = e;
+            }
+            return mUser;
+        }
+
+        protected void onPostExecute(User user) {
+            registerProcess(user);
+        }
+    }
+
 
     private class UploadCloudinary extends AsyncTask<User, Void, User> {
 

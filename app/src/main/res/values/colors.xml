@@ -300,6 +300,27 @@
     <color name="blue_grey_500_light">#879fab</color>
     <color name="blue_grey_900_light">#485f6a</color>
 
+    <!--  Fix Problem
+    ********************************************************** -->
+    <color name="red_A700_2">#F70000</color>
+    <color name="pink_400_2">#FF407C</color>
+    <color name="pink_900_2">#9E0E51</color>
+    <color name="purple_500_2">#B427B3</color>
+    <color name="deep_purple_400_2">#8A57C5</color>
+    <color name="deep_purple_800_2">#4E27A3</color>
+    <color name="blue_400_2">#00A5F8</color>
+    <color name="blue_800_2">#0065C2</color>
+    <color name="cyan_400_2">#00C6DB</color>
+    <color name="cyan_800_2">#00838F</color>
+    <color name="green_400_2">#00BB65</color>
+    <color name="lime_600_2">#BCCA18</color>
+    <color name="deep_orange_400_2">#FF7041</color>
+    <color name="brown_400_2">#976E63</color>
+    <color name="brown_700_2">#664037</color>
+    <color name="grey_500_2">#9E9E9E</color>
+    <color name="blue_grey_500_2">#517D8B</color>
+    <color name="blue_grey_900_2">#203239</color>
+
     <!-- Google Colors Opacity
     **********************************************************
     100% FF

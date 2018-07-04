@@ -201,6 +201,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:background="@color/white"
+            android:clickable="true"
+            android:focusable="true"
             android:orientation="vertical">
 
             <View
@@ -212,7 +214,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_select_item_white"
-                android:clickable="true"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:lines="1"
