@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.design.widget.Snackbar;
@@ -17,6 +18,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.Transformation;
+import com.cloudinary.android.Utils;
+import com.cloudinary.utils.ObjectUtils;
 import com.daimajia.slider.library.Animations.DescriptionAnimation;
 import com.daimajia.slider.library.Indicators.PagerIndicator;
 import com.daimajia.slider.library.SliderLayout;
@@ -45,6 +50,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Map;
 
 import io.development.tymo.activities.IntroActivity;
 import io.development.tymo.activities.MainActivity;
@@ -79,7 +85,11 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
     private CompositeDisposable mSubscriptions;
     private FirebaseAnalytics mFirebaseAnalytics;
 
+    private UploadCloudinaryFacebook uploadCloudinaryFacebook;
+    private Cloudinary cloudinary;
+
     private LinearLayout progressBox;
+
 
     private User user;
 
@@ -101,6 +111,9 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
         mDemoSlider = (SliderLayout)findViewById(R.id.slider);
         progressBox = (LinearLayout) findViewById(R.id.progressBox);
         facebookLoginButton = (TextView) findViewById(R.id.facebookLoginButton);
+
+        uploadCloudinaryFacebook  = new UploadCloudinaryFacebook();
+        cloudinary = new Cloudinary(Utils.cloudinaryUrlFromContext(this));
 
         loginButton.setOnClickListener(this);
         facebookLoginButton.setOnClickListener(this);
@@ -442,7 +455,9 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                                     user.setDescription("");
                                     user.setUrl("");
 
-                                    loginProcessFacebook(user);
+
+                                    uploadCloudinaryFacebook.execute(user);
+
                                     clickFacebook = false;
                                 }
                                 catch (Exception  e){
@@ -468,6 +483,31 @@ public class Login1Activity extends AppCompatActivity implements View.OnClickLis
                 progressBox.setVisibility(View.GONE);
             }
         });
+    }
+
+    private class UploadCloudinaryFacebook extends AsyncTask<User, Void, User> {
+
+        private Exception exception;
+
+        protected User doInBackground(User... users) {
+            User mUser = users[0];
+            try {
+                if(!mUser.getPhoto().contains("cloudinary")) {
+                    Map options = ObjectUtils.asMap(
+                            "transformation", new Transformation().width(600).height(600).crop("limit").quality(10).fetchFormat("png")
+                    );
+                    Map uploadResult = cloudinary.uploader().upload(mUser.getPhoto(), options);
+                    mUser.setPhoto((String) uploadResult.get("secure_url"));
+                }
+            } catch (Exception e) {
+                this.exception = e;
+            }
+            return mUser;
+        }
+
+        protected void onPostExecute(User user) {
+            loginProcessFacebook(user);
+        }
     }
 
     private void showSnackbarFacebookError(){
