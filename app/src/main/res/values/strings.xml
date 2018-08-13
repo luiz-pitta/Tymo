@@ -3,7 +3,7 @@
     <string name="app_name">Tymo</string>
 
     <!-- Facebook App ID -->
-    <string name="facebook_app_id">1167785553307401</string>
+    <string name="facebook_app_id">000000000000</string>
 
     <!-- Array Week Days -->
     <string-array name="array_week_days_first_letter">

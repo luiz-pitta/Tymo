@@ -36,21 +36,16 @@
         </activity>
 
 
-        <meta-data android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
         <meta-data android:name="com.facebook.sdk.ApplicationId"
             android:value="@string/facebook_app_id"/>
 
-        <!-- floating-plateau-35187 -->
-        <!-- <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://392512249626575:883M2n_JJty1Fcx7kVYg6qvCoyw@hvfrjtvkm"/> -->
 
         <!-- tymo-server -->
-        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://243637232917561:bVlHP7J_CHZPrPiNEVst8fT4gu4@huepdezfi"/>
+        <meta-data android:name="CLOUDINARY_URL" android:value="cloudinary://xxxxxxxxxxxxxxxxxxxxxxx"/>
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCJ-Vy89GmAE6mU3Zro9eQIXlrJzBbkFaA" />
+            android:value="xxxxxxxxxxxxxxxxxxxxxxxxxxxxx" />
 
         <activity
             android:name=".activities.AddPart1Activity"
